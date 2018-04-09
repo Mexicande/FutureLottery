@@ -1,7 +1,9 @@
-package cn.com.myapplication;
+package cn.com.futurelottery.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import cn.com.futurelottery.R;
 
 public class MainActivity extends AppCompatActivity {
 

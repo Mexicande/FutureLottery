@@ -1,4 +1,4 @@
-package cn.com.myapplication;
+package cn.com.futurelottery;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
