@@ -1,10 +1,9 @@
-package cn.com.virtualbitcoin.adapter;
+package cn.com.futurelottery.ui.adapter;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 
 /**
  * 使ViewPager不能滑动

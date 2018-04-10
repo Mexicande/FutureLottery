@@ -1,7 +1,7 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab;
+package cn.com.futurelottery.view.pagerBottomTab;
 
 
-import cn.com.futurelottery.ui.view.pagerBottomTab.listener.OnTabItemSelectedListener;
+import cn.com.futurelottery.view.pagerBottomTab.listener.OnTabItemSelectedListener;
 
 public interface ItemController
 {
@@ -11,19 +11,6 @@ public interface ItemController
      */
     void setSelect(int index);
 
-    /**
-     * 设置导航按钮上显示的圆形消息数字，通过顺序索引。
-     * @param index     顺序索引
-     * @param number    消息数字
-     */
-    void setMessageNumber(int index, int number);
-
-    /**
-     * 设置显示无数字的消息小原点
-     * @param index         顺序索引
-     * @param hasMessage    true显示
-     */
-    void setHasMessage(int index, boolean hasMessage);
 
     /**
      * 导航栏按钮点击监听

@@ -1,9 +1,9 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab;
+package cn.com.futurelottery.view.pagerBottomTab;
 
 
 import android.support.v4.view.ViewPager;
 
-import cn.com.futurelottery.ui.view.pagerBottomTab.listener.OnTabItemSelectedListener;
+import cn.com.futurelottery.view.pagerBottomTab.listener.OnTabItemSelectedListener;
 
 
 public class NavigationController implements ItemController,BottomLayoutController{
@@ -21,15 +21,6 @@ public class NavigationController implements ItemController,BottomLayoutControll
         mItemController.setSelect(index);
     }
 
-    @Override
-    public void setMessageNumber(int index, int number) {
-        mItemController.setMessageNumber(index,number);
-    }
-
-    @Override
-    public void setHasMessage(int index, boolean hasMessage) {
-        mItemController.setHasMessage(index,hasMessage);
-    }
 
     @Override
     public void addTabItemSelectedListener(OnTabItemSelectedListener listener) {

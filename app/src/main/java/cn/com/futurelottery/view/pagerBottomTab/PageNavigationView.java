@@ -1,4 +1,4 @@
-package cn.com.futurelottery.view;
+package cn.com.futurelottery.view.pagerBottomTab;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -20,7 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.view.pagerBottomTab.NavigationController;
+import cn.com.futurelottery.view.pagerBottomTab.internal.CustomItemLayout;
+import cn.com.futurelottery.view.pagerBottomTab.internal.MaterialItemLayout;
+import cn.com.futurelottery.view.pagerBottomTab.internal.Utils;
+import cn.com.futurelottery.view.pagerBottomTab.item.BaseTabItem;
+import cn.com.futurelottery.view.pagerBottomTab.item.MaterialItemView;
+import cn.com.futurelottery.view.pagerBottomTab.listener.OnTabItemSelectedListener;
 
 
 /**

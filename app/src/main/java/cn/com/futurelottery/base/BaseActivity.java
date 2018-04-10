@@ -15,4 +15,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    /**
+     * 版本检测
+     */
+    protected  void checkVersion(){
+
+    }
 }

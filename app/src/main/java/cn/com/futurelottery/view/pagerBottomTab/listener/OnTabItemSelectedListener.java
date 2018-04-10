@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab.listener;
+package cn.com.futurelottery.view.pagerBottomTab.listener;
 
 /**
  * 导航栏按钮选中事件监听

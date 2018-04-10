@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab;
+package cn.com.futurelottery.view.pagerBottomTab;
 
 import android.support.v4.view.ViewPager;
 

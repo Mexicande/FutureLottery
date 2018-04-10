@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab.internal;
+package cn.com.futurelottery.view.pagerBottomTab.internal;
 
 
 import android.animation.LayoutTransition;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.com.futurelottery.ui.view.pagerBottomTab.ItemController;
-import cn.com.futurelottery.ui.view.pagerBottomTab.item.BaseTabItem;
-import cn.com.futurelottery.ui.view.pagerBottomTab.listener.OnTabItemSelectedListener;
+import cn.com.futurelottery.view.pagerBottomTab.ItemController;
+import cn.com.futurelottery.view.pagerBottomTab.item.BaseTabItem;
+import cn.com.futurelottery.view.pagerBottomTab.listener.OnTabItemSelectedListener;
 
 
 /**
@@ -143,15 +143,7 @@ public class CustomItemLayout extends ViewGroup implements ItemController {
         }
     }
 
-    @Override
-    public void setMessageNumber(int index, int number) {
-        mItems.get(index).setMessageNumber(number);
-    }
 
-    @Override
-    public void setHasMessage(int index, boolean hasMessage) {
-        mItems.get(index).setHasMessage(hasMessage);
-    }
 
     @Override
     public void addTabItemSelectedListener(OnTabItemSelectedListener listener) {

@@ -1,10 +1,9 @@
-package me.weyye.todaynews.ui.fragment;
+package cn.com.futurelottery.ui.fragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
 
 import java.util.ArrayList;
 
@@ -42,11 +41,10 @@ public class FragmentController {
     private void initFragment() {
         fragments = new ArrayList<>();
         if (isReload) {
-
-            fragments.add(new HomeFragment());
+          /*  fragments.add(new HomeFragment());
             fragments.add(new VideoFragment());
             fragments.add(new AttentionFragment());
-            fragments.add(new MeFragment());
+            fragments.add(new MeFragment());*/
 
             FragmentTransaction ft = fm.beginTransaction();
             for (int i = 0; i < fragments.size(); i++) {
@@ -65,7 +63,6 @@ public class FragmentController {
         hideFragments();
         Fragment fragment = fragments.get(position);
         FragmentTransaction ft = fm.beginTransaction();
-        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.show(fragment);
         ft.commitAllowingStateLoss();
     }

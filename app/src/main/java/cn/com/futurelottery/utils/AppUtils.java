@@ -1,4 +1,4 @@
-package cn.com.virtualbitcoin.utils;
+package cn.com.futurelottery.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -18,14 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.com.virtualbitcoin.MainActivity;
-import cn.com.virtualbitcoin.common.Api;
-import cn.com.virtualbitcoin.view.update.AppUpdateUtils;
-import cn.com.virtualbitcoin.view.update.CProgressDialogUtils;
-import cn.com.virtualbitcoin.view.update.OkGoUpdateHttpUtil;
-import cn.com.virtualbitcoin.view.update.UpdateAppBean;
-import cn.com.virtualbitcoin.view.update.UpdateAppManager;
-import cn.com.virtualbitcoin.view.update.UpdateCallback;
+import cn.com.futurelottery.base.BaseApplication;
 
 /**
  * <pre>
@@ -51,7 +44,7 @@ public final class AppUtils {
     public static boolean isInstallApp(final String action, final String category) {
         Intent intent = new Intent(action);
         intent.addCategory(category);
-        PackageManager pm = Utils.getApp().getPackageManager();
+        PackageManager pm = BaseApplication.getInstance().getPackageManager();
         ResolveInfo info = pm.resolveActivity(intent, 0);
         return info != null;
     }
@@ -63,7 +56,7 @@ public final class AppUtils {
      * @return App 包名
      */
     public static String getAppPackageName() {
-        return Utils.getApp().getPackageName();
+        return BaseApplication.getInstance().getPackageName();
     }
 
 
@@ -74,7 +67,7 @@ public final class AppUtils {
      * @return App 名称
      */
     public static String getAppName() {
-        return getAppName(Utils.getApp().getPackageName());
+        return getAppName(BaseApplication.getInstance().getPackageName());
     }
 
     /**
@@ -84,9 +77,11 @@ public final class AppUtils {
      * @return App 名称
      */
     public static String getAppName(final String packageName) {
-        if (isSpace(packageName)) return null;
+        if (isSpace(packageName)) {
+            return null;
+        }
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.loadLabel(pm).toString();
         } catch (PackageManager.NameNotFoundException e) {
@@ -101,7 +96,7 @@ public final class AppUtils {
      * @return App 图标
      */
     public static Drawable getAppIcon() {
-        return getAppIcon(Utils.getApp().getPackageName());
+        return getAppIcon(BaseApplication.getInstance().getPackageName());
     }
 
     /**
@@ -110,10 +105,12 @@ public final class AppUtils {
      * @param packageName 包名
      * @return App 图标
      */
-    public static Drawable getAppIcon(final String packageName) {
-        if (isSpace(packageName)) return null;
+    private static Drawable getAppIcon(final String packageName) {
+        if (isSpace(packageName)) {
+            return null;
+        }
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.loadIcon(pm);
         } catch (PackageManager.NameNotFoundException e) {
@@ -128,7 +125,7 @@ public final class AppUtils {
      * @return App 路径
      */
     public static String getAppPath() {
-        return getAppPath(Utils.getApp().getPackageName());
+        return getAppPath(BaseApplication.getInstance().getPackageName());
     }
 
     /**
@@ -138,9 +135,11 @@ public final class AppUtils {
      * @return App 路径
      */
     public static String getAppPath(final String packageName) {
-        if (isSpace(packageName)) return null;
+        if (isSpace(packageName)) {
+            return null;
+        }
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.sourceDir;
         } catch (PackageManager.NameNotFoundException e) {
@@ -155,7 +154,7 @@ public final class AppUtils {
      * @return App 版本号
      */
     public static String getAppVersionName() {
-        return getAppVersionName(Utils.getApp().getPackageName());
+        return getAppVersionName(BaseApplication.getInstance().getPackageName());
     }
 
     /**
@@ -165,9 +164,11 @@ public final class AppUtils {
      * @return App 版本号
      */
     public static String getAppVersionName(final String packageName) {
-        if (isSpace(packageName)) return null;
+        if (isSpace(packageName)) {
+            return null;
+        }
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.versionName;
         } catch (PackageManager.NameNotFoundException e) {
@@ -182,7 +183,7 @@ public final class AppUtils {
      * @return App 版本码
      */
     public static int getAppVersionCode() {
-        return getAppVersionCode(Utils.getApp().getPackageName());
+        return getAppVersionCode(BaseApplication.getInstance().getPackageName());
     }
 
     /**
@@ -192,9 +193,11 @@ public final class AppUtils {
      * @return App 版本码
      */
     public static int getAppVersionCode(final String packageName) {
-        if (isSpace(packageName)) return -1;
+        if (isSpace(packageName)) {
+            return -1;
+        }
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? -1 : pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -210,9 +213,11 @@ public final class AppUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isSystemApp(final String packageName) {
-        if (isSpace(packageName)) return false;
+        if (isSpace(packageName)) {
+            return false;
+        }
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
             return ai != null && (ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
         } catch (PackageManager.NameNotFoundException e) {
@@ -227,7 +232,7 @@ public final class AppUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isAppDebug() {
-        return isAppDebug(Utils.getApp().getPackageName());
+        return isAppDebug(BaseApplication.getInstance().getPackageName());
     }
 
     /**
@@ -239,7 +244,7 @@ public final class AppUtils {
     public static boolean isAppDebug(final String packageName) {
         if (isSpace(packageName)) return false;
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
             return ai != null && (ai.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (PackageManager.NameNotFoundException e) {
@@ -259,12 +264,14 @@ public final class AppUtils {
      */
     public static boolean isAppForeground() {
         ActivityManager manager =
-                (ActivityManager) Utils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
+                (ActivityManager) BaseApplication.getInstance().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> info = manager != null ? manager.getRunningAppProcesses() : null;
-        if (info == null || info.size() == 0) return false;
+        if (info == null || info.size() == 0) {
+            return false;
+        }
         for (ActivityManager.RunningAppProcessInfo aInfo : info) {
             if (aInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                return aInfo.processName.equals(Utils.getApp().getPackageName());
+                return aInfo.processName.equals(BaseApplication.getInstance().getPackageName());
             }
         }
         return false;
@@ -378,7 +385,7 @@ public final class AppUtils {
      * @return 当前应用的 AppInfo
      */
     public static AppInfo getAppInfo() {
-        return getAppInfo(Utils.getApp().getPackageName());
+        return getAppInfo(BaseApplication.getInstance().getPackageName());
     }
 
     /**
@@ -390,7 +397,7 @@ public final class AppUtils {
      */
     public static AppInfo getAppInfo(final String packageName) {
         try {
-            PackageManager pm = Utils.getApp().getPackageManager();
+            PackageManager pm = BaseApplication.getInstance().getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return getBean(pm, pi);
         } catch (PackageManager.NameNotFoundException e) {
@@ -436,112 +443,5 @@ public final class AppUtils {
         }
         return true;
     }
-    public static void updateDiy(int versionCode, final Activity context) {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("versioncode", versionCode+"");
-        final int finalVersionCode = versionCode;
-        new UpdateAppManager
-                .Builder()
-                .setActivity(context)
-                //必须设置，实现httpManager接口的对象
-                .setHttpManager(new OkGoUpdateHttpUtil())
-                //必须设置，更新地址
-                .setUpdateUrl(Api.GET_UPDATE)
-                //以下设置，都是可选
-                .setPost(true)
-                //不显示通知栏进度条
-//                .dismissNotificationProgress()
-                //是否忽略版本
-//                .showIgnoreVersion()
-                //添加自定义参数，默认version=1.0.0（app的versionName）；apkKey=唯一表示（在AndroidManifest.xml配置）
-                .setParams(params)
-                //设置点击升级后，消失对话框，默认点击升级后，对话框显示下载进度
-                .hideDialogOnDownloading(false)
-                //设置头部，不设置显示默认的图片，设置图片后自动识别主色调，然后为按钮，进度条设置颜色
-                //为按钮，进度条设置颜色。
-                //.setThemeColor(0xffffac5d)
-                //设置apk下砸路径，默认是在下载到sd卡下/Download/1.0.0/test.apk
-//                .setTargetPath(path)
-                //设置appKey，默认从AndroidManifest.xml获取，如果，使用自定义参数，则此项无效
-//                .setAppKey("ab55ce55Ac4bcP408cPb8c1Aaeac179c5f6f")
-                .build()
-                //检测是否有新版本
-                .checkNewApp(new UpdateCallback() {
-                    /**
-                     * 解析json,自定义协议
-                     *
-                     * @param json 服务器返回的json
-                     * @return UpdateAppBean
-                     */
-                    @Override
-                    protected UpdateAppBean parseJson(String json) {
 
-                        UpdateAppBean updateAppBean = new UpdateAppBean();
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(json);
-                            JSONObject date = jsonObject.getJSONObject("data");
-                            JSONObject version = date.getJSONObject("version");
-                            int size = Integer.parseInt(version.getString("size"));
-                            Double i = (double) size / 1024/1024;
-                            DecimalFormat df = new DecimalFormat("0.0");
-                            String format = df.format(i);
-                            int versioncode = Integer.parseInt(version.getString("versioncode"));
-
-                            String update="No";
-                            if(versioncode> finalVersionCode){
-                                update="Yes";
-                            }
-                            updateAppBean
-                                    //（必须）是否更新Yes,No
-                                    .setUpdate(update)
-                                    //（必须）新版本号，
-                                    .setNewVersion(version.getString("versionname"))
-                                    //（必须）下载地址
-                                    .setApkFileUrl(version.getString("url"))
-                                    //测试下载路径是重定向路径
-//                                    .setApkFileUrl("http://openbox.mobilem.360.cn/index/d/sid/3282847")
-                                    //（必须）更新内容
-//                                    .setUpdateLog(jsonObject.optString("update_log"))
-                                    //测试内容过度
-//                                    .setUpdateLog("测试")
-                                    .setUpdateLog(version.getString("updatecontent"))
-//                                    .setUpdateLog("今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说相对于其他行业来说今天我们来聊一聊程序员枯燥的编程生活，相对于其他行业来说\r\n")
-                                    //大小，不设置不显示大小，可以不设置
-                                    .setTargetSize(String.valueOf(format)+"M")
-                                    //是否强制更新，可以不设置
-                                    .setConstraint(!"0".equals(version.getString("is_force")))
-                                    //设置md5，可以不设置
-                                    .setNewMd5(version.getString("md5"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        return updateAppBean;
-                    }
-
-                    @Override
-                    protected void hasNewApp(UpdateAppBean updateApp, UpdateAppManager updateAppManager) {
-                        updateAppManager.showDialogFragment();
-                    }
-                    /**
-                     * 网络请求之前
-                     */
-                    @Override
-                    public void onBefore() {
-                        // CProgressDialogUtils.showProgressDialog(MainActivity.this);
-
-                    }
-                    /**
-                     * 网路请求之后
-                     */
-                    @Override
-                    public void onAfter() {
-                        CProgressDialogUtils.cancelProgressDialog(context);
-
-                    }
-                });
-
-
-
-    }
 }

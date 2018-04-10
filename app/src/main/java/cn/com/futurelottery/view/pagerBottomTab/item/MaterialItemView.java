@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab.item;
+package cn.com.futurelottery.view.pagerBottomTab.item;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -17,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.ui.view.pagerBottomTab.internal.RoundMessageView;
-import cn.com.futurelottery.ui.view.pagerBottomTab.internal.Utils;
+import cn.com.futurelottery.view.pagerBottomTab.internal.RoundMessageView;
+import cn.com.futurelottery.view.pagerBottomTab.internal.Utils;
 
 
 /**
@@ -151,17 +151,6 @@ public class MaterialItemView extends BaseTabItem {
         }
     }
 
-    @Override
-    public void setMessageNumber(int number) {
-        mMessages.setVisibility(View.VISIBLE);
-        mMessages.setMessageNumber(number);
-    }
-
-    @Override
-    public void setHasMessage(boolean hasMessage) {
-        mMessages.setVisibility(View.VISIBLE);
-        mMessages.setHasMessage(hasMessage);
-    }
 
     @Override
     public String getTitle() {

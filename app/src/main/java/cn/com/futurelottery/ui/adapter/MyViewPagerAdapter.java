@@ -1,4 +1,4 @@
-package cn.com.virtualbitcoin.adapter;
+package cn.com.futurelottery.ui.adapter;
 
 
 import android.support.v4.app.Fragment;

@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab.internal;
+package cn.com.futurelottery.view.pagerBottomTab.internal;
 
 
 import android.animation.Animator;
@@ -25,10 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.ui.view.pagerBottomTab.ItemController;
-import cn.com.futurelottery.ui.view.pagerBottomTab.MaterialMode;
-import cn.com.futurelottery.ui.view.pagerBottomTab.item.MaterialItemView;
-import cn.com.futurelottery.ui.view.pagerBottomTab.listener.OnTabItemSelectedListener;
+import cn.com.futurelottery.view.pagerBottomTab.ItemController;
+import cn.com.futurelottery.view.pagerBottomTab.MaterialMode;
+import cn.com.futurelottery.view.pagerBottomTab.item.MaterialItemView;
+import cn.com.futurelottery.view.pagerBottomTab.listener.OnTabItemSelectedListener;
 
 
 /**
@@ -281,15 +281,6 @@ public class MaterialItemLayout extends ViewGroup implements ItemController {
         setSelect(index,v.getX() + v.getWidth() / 2f,v.getY() + v.getHeight() / 2f);
     }
 
-    @Override
-    public void setMessageNumber(int index, int number) {
-        mItems.get(index).setMessageNumber(number);
-    }
-
-    @Override
-    public void setHasMessage(int index, boolean hasMessage) {
-        mItems.get(index).setHasMessage(hasMessage);
-    }
 
     @Override
     public void addTabItemSelectedListener(OnTabItemSelectedListener listener) {

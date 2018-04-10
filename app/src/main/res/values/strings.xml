@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">幸运彩</string>
+    <string name="buy_lottery">购彩</string>
+    <string name="open_lottery">开奖</string>
+    <string name="user_center">我的</string>
+
+
+    <string name="lottery_title">开奖信息</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

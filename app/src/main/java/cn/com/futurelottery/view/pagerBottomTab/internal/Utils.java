@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.view.pagerBottomTab.internal;
+package cn.com.futurelottery.view.pagerBottomTab.internal;
 
 import android.content.Context;
 import android.content.res.Resources;
