@@ -7,10 +7,14 @@
 
 
 
+
+    <color name="red">#E14142</color>
     <color name="bg_color_ff">#ffffff</color>
     <color name="bg_color_f4">#f4f4f4</color>
     <color name="bg_color_de">#dedede</color>
     <color name="bg_color_e1">#e1e1e1</color>
+    <color name="bg_color_d4">#d4d4d4</color>
+    <color name="bg_color_b3">#b3b3b3</color>
 
 
 
