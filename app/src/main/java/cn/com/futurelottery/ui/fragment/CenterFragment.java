@@ -14,13 +14,13 @@ import cn.com.futurelottery.base.BaseFragment;
  * 我的
  */
 
-public class MeFragment extends BaseFragment{
+public class CenterFragment extends BaseFragment{
     private View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = View.inflate(getActivity(), R.layout.me_fragment, null);
+            view = View.inflate(getActivity(), R.layout.center_fragment, null);
         return view;
     }
 

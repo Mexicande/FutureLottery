@@ -11,7 +11,7 @@
         android:background="@mipmap/me_fragment_bg1">
 
         <ImageView
-            android:id="@+id/me_fragment_iv"
+            android:id="@+id/center_fragment_iv"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
@@ -19,12 +19,12 @@
             android:src="@mipmap/me_fragment_head1" />
 
         <TextView
-            android:id="@+id/me_fragment_number_tv"
+            android:id="@+id/center_fragment_number_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/length_17"
-            android:layout_toRightOf="@+id/me_fragment_iv"
+            android:layout_toRightOf="@+id/center_fragment_iv"
             android:lines="1"
             android:text="登陆/注册"
             android:textColor="@color/text_color_fe"
@@ -32,7 +32,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/me_fragment_money_ll"
+        android:id="@+id/center_fragment_money_ll"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:background="@color/white"
@@ -41,7 +41,7 @@
         android:layout_marginTop="@dimen/length_10">
 
         <LinearLayout
-            android:id="@+id/me_fragment_money_ll1"
+            android:id="@+id/center_fragment_money_ll1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -62,7 +62,7 @@
             android:layout_height="@dimen/length_25"
             android:background="@color/bg_color_de"/>
         <LinearLayout
-            android:id="@+id/me_fragment_money_ll2"
+            android:id="@+id/center_fragment_money_ll2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -72,7 +72,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/me_fragment_money_tv1"
+                android:id="@+id/center_fragment_money_tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0.00"
@@ -95,7 +95,7 @@
             android:background="@color/bg_color_de"/>
 
         <LinearLayout
-            android:id="@+id/me_fragment_money_ll3"
+            android:id="@+id/center_fragment_money_ll3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -116,7 +116,7 @@
 
 
     <LinearLayout
-        android:id="@+id/me_fragment_order_ll"
+        android:id="@+id/center_fragment_order_ll"
         android:layout_width="match_parent"
         android:layout_height="82dp"
         android:background="@color/white"
@@ -124,7 +124,7 @@
         android:layout_marginTop="@dimen/length_10">
 
         <LinearLayout
-            android:id="@+id/me_fragment_order_ll1"
+            android:id="@+id/center_fragment_order_ll1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -147,7 +147,7 @@
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/me_fragment_order_ll2"
+            android:id="@+id/center_fragment_order_ll2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -170,7 +170,7 @@
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/me_fragment_order_ll3"
+            android:id="@+id/center_fragment_order_ll3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -193,7 +193,7 @@
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/me_fragment_order_ll4"
+            android:id="@+id/center_fragment_order_ll4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -225,14 +225,14 @@
         android:background="@color/white"
         android:layout_marginTop="@dimen/length_10">
         <RelativeLayout
-            android:id="@+id/me_fragment_rl1"
+            android:id="@+id/center_fragment_rl1"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true">
 
             <ImageView
-                android:id="@+id/me_fragment_record_iv"
+                android:id="@+id/center_fragment_record_iv"
                 android:layout_width="@dimen/length_16"
                 android:layout_height="@dimen/length_17"
                 android:layout_centerVertical="true"
@@ -244,7 +244,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/length_10"
-                android:layout_toRightOf="@+id/me_fragment_record_iv"
+                android:layout_toRightOf="@+id/center_fragment_record_iv"
                 android:text="我的红包"
                 android:textColor="@color/text_color_32"
                 android:textSize="@dimen/size_12" />
@@ -264,14 +264,14 @@
             android:background="@color/bg_color_e1"
             android:layout_marginLeft="@dimen/length_13"/>
         <RelativeLayout
-            android:id="@+id/me_fragment_rl2"
+            android:id="@+id/center_fragment_rl2"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true">
 
             <ImageView
-                android:id="@+id/me_fragment_share_iv"
+                android:id="@+id/center_fragment_share_iv"
                 android:layout_width="@dimen/length_17"
                 android:layout_height="@dimen/length_18"
                 android:layout_centerVertical="true"
@@ -283,7 +283,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/length_10"
-                android:layout_toRightOf="@+id/me_fragment_share_iv"
+                android:layout_toRightOf="@+id/center_fragment_share_iv"
                 android:text="分享给朋友"
                 android:textColor="@color/text_color_32"
                 android:textSize="@dimen/size_12" />
@@ -308,7 +308,6 @@
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             >
-
             <ImageView
                 android:id="@+id/me_fragment_set_iv"
                 android:layout_width="@dimen/length_19"

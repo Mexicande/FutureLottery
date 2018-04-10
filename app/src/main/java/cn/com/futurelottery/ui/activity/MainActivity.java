@@ -12,9 +12,9 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
 import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
+import cn.com.futurelottery.ui.fragment.CenterFragment;
 import cn.com.futurelottery.ui.fragment.HomeFragment;
 import cn.com.futurelottery.ui.fragment.LotteryFragment;
-import cn.com.futurelottery.ui.fragment.MeFragment;
 import cn.com.futurelottery.view.pagerBottomTab.NavigationController;
 import cn.com.futurelottery.view.pagerBottomTab.PageNavigationView;
 import cn.com.futurelottery.view.pagerBottomTab.item.BaseTabItem;
@@ -45,9 +45,8 @@ public class MainActivity extends BaseActivity {
         List<Fragment> list = new ArrayList<>();
         list.add(new HomeFragment());
         list.add(new LotteryFragment());
-        list.add(new MeFragment());
+        list.add(new CenterFragment());
         appItem.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), list));
-        //自动适配ViewPager页面切换
         navigationController.setupWithViewPager(appItem);
     }
     private BaseTabItem newItem(int drawable, int checkedDrawable, String text) {
