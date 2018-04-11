@@ -40,7 +40,7 @@ public class LotteryFragment extends BaseFragment {
 
     @Override
     protected void setTitle() {
-            tvTitle.setText(R.string.lottery_title);
+        tvTitle.setText(R.string.lottery_title);
     }
 
     @Override
