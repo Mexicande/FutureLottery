@@ -3,13 +3,15 @@
     <color name="colorPrimary">#E14142</color>
     <color name="colorPrimaryDark">#E14142</color>
     <color name="colorAccent">#FF4081</color>
-
+    <color name="black">#000000</color>
+    <color name="red_color_f3">#FF3333</color>
 
 
 
     <color name="color_666">#666666</color>
+    <color name="color_999">#999999</color>
     <color name="white">#ffffff</color>
-    <color name="black">#000000</color>
+    <color name="white_bg">#efefef</color>
     <color name="red">#E14142</color>
     <color name="red_ball">#E74C3C</color>
     <color name="blue_ball">#00A0FF</color>
