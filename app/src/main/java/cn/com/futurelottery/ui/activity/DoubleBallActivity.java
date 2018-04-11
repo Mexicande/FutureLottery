@@ -6,9 +6,7 @@ import android.os.Bundle;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseActivity;
 
-public class LoginActivity extends BaseActivity {
-
-
+public class DoubleBallActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +15,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_login;
+        return R.layout.activity_double_ball;
     }
 }
