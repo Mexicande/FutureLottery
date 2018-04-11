@@ -183,6 +183,7 @@ public class CommonUtil {
         return result;
     }
 
+
     /**
      * 将Bitmap转换成Base64字符串
      *

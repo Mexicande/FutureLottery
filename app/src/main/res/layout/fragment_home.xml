@@ -6,5 +6,18 @@
     android:background="@color/bg_color_f4"
     tools:context="cn.com.futurelottery.ui.fragment.HomeFragment">
    <include layout="@layout/normal_toolbar_item"/>
-
+   <com.scwang.smartrefresh.layout.SmartRefreshLayout
+       android:id="@+id/refreshLayout"
+       android:background="@color/white"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+      <com.scwang.smartrefresh.layout.header.ClassicsHeader
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/main_Recycler"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+      </android.support.v7.widget.RecyclerView>
+   </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

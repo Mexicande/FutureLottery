@@ -2,15 +2,35 @@ package cn.com.futurelottery.ui.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.model.Product;
+import cn.com.futurelottery.ui.adapter.ProductAdapter;
+import cn.com.futurelottery.utils.CommonUtil;
+import cn.com.futurelottery.utils.ProductItemDecoration;
+import cn.com.futurelottery.view.marqueeview.MarqueeView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,11 +39,19 @@ public class HomeFragment extends BaseFragment {
 
 
     Unbinder unbinder;
-
+    @BindView(R.id.main_Recycler)
+    RecyclerView mMainRecycler;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout mRefreshLayout;
+    BGABanner mConvenientBanner;
+    MarqueeView marqueeView;
+    ArrayList<String> mList=new ArrayList<>();
+    List<String> info = new ArrayList<>();
+    private ProductAdapter mProductAdapter;
+    private ArrayList<Product>mProductList=new ArrayList<>();
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,19 +59,89 @@ public class HomeFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
-
+        initView();
+        initDate();
+        setListener();
         return view;
     }
 
-    @Override
-    protected void setTitle() {
 
+    private void initView() {
+        LinearLayout temp = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.head_layout, null);
+        marqueeView=temp.findViewById(R.id.marqueeView);
+        mConvenientBanner=temp.findViewById(R.id.banner_fresco_demo_content);
+        mConvenientBanner.setAdapter(new BGABanner.Adapter<ImageView, String>() {
+            @Override
+            public void fillBannerItem(BGABanner banner, ImageView itemView, String model, int position) {
+                Glide.with(getActivity())
+                        .load(model)
+                        .into(itemView);
+            }
+        });
+        mConvenientBanner.setDelegate(new BGABanner.Delegate<ImageView, String>() {
+            @Override
+            public void onBannerItemClick(BGABanner banner, ImageView itemView, String model, int position) {
+
+            }
+        });
+        mProductAdapter=new ProductAdapter(null);
+        mMainRecycler.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        mMainRecycler.addItemDecoration(new ProductItemDecoration(CommonUtil.dip2px(5)));
+        mMainRecycler.setAdapter(mProductAdapter);
+        mProductAdapter.addHeaderView(temp);
+    }
+    private void initDate() {
+        mList.clear();
+        info.clear();
+        mProductList.clear();
+        mList.add("http://doll.anwenqianbao.com/data/upload/20180408/5ac9d5621f04f.png");
+        mList.add("http://doll.anwenqianbao.com/data/upload/20180408/5ac9d5235553d.png");
+        mList.add("http://doll.anwenqianbao.com/data/upload/20180408/5ac9903910141.png");
+        for(int i=0;i<10;i++){
+            Product product=new Product();
+            product.setName("双色球");
+            product.setDesc("奖池超7亿");
+            product.setImg("http://orqk6filp.bkt.clouddn.com/double_ball.png");
+            mProductList.add(product);
+
+        }
+        info.add("恭喜！9410.00元竞彩足球奖金已被**02收入囊中");
+        info.add("恭喜！10000.00元双色球奖金已被**05收入囊中");
+        mConvenientBanner.setData(mList,null);
+        marqueeView.startWithList(info);
+        mProductAdapter.setNewData(mProductList);
     }
 
+    private void setListener() {
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        initDate();
+                        mRefreshLayout.finishRefresh();
+                    }
+                },500);
+
+            }
+        });
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        marqueeView.startFlipping();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        marqueeView.stopFlipping();
     }
 
 }

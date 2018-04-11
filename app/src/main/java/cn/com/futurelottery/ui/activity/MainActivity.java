@@ -15,6 +15,7 @@ import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
 import cn.com.futurelottery.ui.fragment.CenterFragment;
 import cn.com.futurelottery.ui.fragment.HomeFragment;
 import cn.com.futurelottery.ui.fragment.LotteryFragment;
+import cn.com.futurelottery.utils.StatusBarUtil;
 import cn.com.futurelottery.view.pagerBottomTab.NavigationController;
 import cn.com.futurelottery.view.pagerBottomTab.PageNavigationView;
 import cn.com.futurelottery.view.pagerBottomTab.item.BaseTabItem;
@@ -30,11 +31,17 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         initBottom();
     }
 
+    @Override
+    public int getLayoutResource() {
+        return R.layout.activity_main;
+    }
+    @Override
+    protected void setStatusBar() {
+        StatusBarUtil.setTranslucentForImageViewInFragment(MainActivity.this, null);
+    }
 
     private void initBottom() {
         NavigationController navigationController = tab.custom()
