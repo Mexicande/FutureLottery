@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * @author Tobin
- * @since 2016/7/29 11:10
+ * 随机球
  */
 
 public class RandomMadeBall {
@@ -14,10 +13,10 @@ public class RandomMadeBall {
      *
      * @return 装载随机验证码的的数组randomword
      */
-    public static ArrayList<String> getRedBall() {
+    public static ArrayList<String> getManyBall(int count,int chooseCount) {
         ArrayList<Integer> randomRed = new ArrayList<Integer>();
-        for (int i = 0; i < 6; i++) {
-            int hong = (int) (Math.random() * 33);
+        for (int i = 0; i < count; i++) {
+            int hong = (int) (Math.random() * chooseCount);
             if (i == 0) {
                 randomRed.add(hong);
             } else {
@@ -42,11 +41,11 @@ public class RandomMadeBall {
      *
      * @return 装载随机验证码的的数组randomword
      */
-    public static ArrayList<String> getBlueBall() {
+    public static ArrayList<String> getOneBall(int count) {
 
         ArrayList<String> blueBall = new ArrayList<String>();
         for (int i = 0; i < 1; i++) {
-            int blue = (int) (Math.random() * 16);
+            int blue = (int) (Math.random() * count);
             if (i == 0) {
                 blueBall.add(blue + "");
             } else {

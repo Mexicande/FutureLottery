@@ -25,27 +25,32 @@ public class DoubleBallBlueAdapter extends BaseAdapter {
     private ArrayList<String> arrBlueBall = new ArrayList<>();
     private ArrayList<String> arrRandomBlue;
     //记录Ckeckbox的选中状态
-    public static Map<Integer, Boolean> lisSelected;
+    public Map<Integer, Boolean> lisSelected= new HashMap<>();
+    //是否显示遗漏
     private int isShow;
+    //总球数
+    private int ballCount;
 
-    public DoubleBallBlueAdapter(Context context, ArrayList<String> arrRandomBlue) {
+    public DoubleBallBlueAdapter(Context context, ArrayList<String> arrRandomBlue, int isShow, int ballCount) {
         this.context = context;
         this.arrRandomBlue = arrRandomBlue;
-        for (int i = 1; i < 17; i++) {
+        this.isShow = isShow;
+        this.ballCount = ballCount;
+
+        for (int i = 1; i <= ballCount; i++) {
             if (i < 10) {
                 arrBlueBall.add("0" + i);
             } else {
                 arrBlueBall.add(i + "");
             }
         }
-        lisSelected = new HashMap<>();
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < ballCount; i++) {
             lisSelected.put(i, false);
         }
     }
     //是否显示遗漏，0不显示，1显示
     public void updateData(int isShow,ArrayList<String> arrRandomBlue){
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < ballCount; i++) {
             lisSelected.put(i, false);
         }
         this.isShow=isShow;
@@ -54,7 +59,7 @@ public class DoubleBallBlueAdapter extends BaseAdapter {
     }
 
     public void clearData(){
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < ballCount; i++) {
             lisSelected.put(i, false);
         }
         if (this.arrRandomBlue != null)

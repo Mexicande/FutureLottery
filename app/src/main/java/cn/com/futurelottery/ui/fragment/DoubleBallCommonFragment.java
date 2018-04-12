@@ -23,7 +23,7 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.ui.adapter.DoubleBallBlueAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallRedAdapter;
-import cn.com.futurelottery.utils.DoubleBallCalculator;
+import cn.com.futurelottery.utils.Calculator;
 import cn.com.futurelottery.utils.RandomMadeBall;
 import cn.com.futurelottery.utils.ShakeListener;
 import cn.com.futurelottery.utils.ViewSetHinghUtil;
@@ -51,8 +51,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
     TextView bottomResultCountTv;
     @BindView(R.id.bottom_result_money_tv)
     TextView bottomResultMoneyTv;
-    @BindView(R.id.bottom_result_clear_btn)
-    Button bottomResultClearBtn;
+    @BindView(R.id.bottom_result_next_btn)
+    Button bottomResultNextBtn;
     private View view;
     private Vibrator mVibrator;
     private ShakeListener mShakeListener;
@@ -119,7 +119,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
                 chooseblueBall.clear();
                 for (int i = 0; i < doubleBallBlueGv.getCount(); i++) {
                     DoubleBallBlueAdapter.LanGridViewHolder vHolder_Blue = (DoubleBallBlueAdapter.LanGridViewHolder) doubleBallBlueGv.getChildAt(i).getTag();
-                    if (DoubleBallBlueAdapter.lisSelected.get(i)) {
+                    if (blueBallAdapter.lisSelected.get(i)) {
                         ++tempBlue;
                         selectBlueNumber = tempBlue;
                         vHolder_Blue.chkBlue.setTextColor(getResources().getColor(android.R.color.white));
@@ -185,7 +185,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
 
     //计算注数并显示
     private void calculatorResult() {
-        zhushu = DoubleBallCalculator.calculateBetNum(selectRedNumber, selectBlueNumber);
+        zhushu = Calculator.calculateBetNum(selectRedNumber, selectBlueNumber);
         bottomResultCountTv.setText(String.valueOf(zhushu));
         bottomResultMoneyTv.setText(String.valueOf(zhushu * 2));
     }
@@ -196,8 +196,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
         // 实例化加速度传感器检测类
         mShakeListener = new ShakeListener(getContext());
 
-        redBallAdapter = new DoubleBallRedAdapter(getContext(), chooseRedBall);
-        blueBallAdapter = new DoubleBallBlueAdapter(getContext(), chooseblueBall);
+        redBallAdapter = new DoubleBallRedAdapter(getContext(), chooseRedBall,isShow,33);
+        blueBallAdapter = new DoubleBallBlueAdapter(getContext(), chooseblueBall,isShow,16);
 
         doubleBallRedGv.setAdapter(redBallAdapter);
         doubleBallBlueGv.setAdapter(blueBallAdapter);
@@ -205,6 +205,10 @@ public class DoubleBallCommonFragment extends BaseFragment {
         //重新设置高度
         ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
         ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
+
+        //底部显示机选
+        bottomResultChooseTv.setVisibility(View.VISIBLE);
+        bottomResultClearTv.setVisibility(View.GONE);
     }
 
     @Override
@@ -213,7 +217,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.shake_choose_iv, R.id.bottom_result_clear_tv, R.id.bottom_result_choose_tv, R.id.bottom_result_clear_btn})
+    @OnClick({R.id.shake_choose_iv, R.id.bottom_result_clear_tv, R.id.bottom_result_choose_tv, R.id.bottom_result_next_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.shake_choose_iv:
@@ -228,13 +232,13 @@ public class DoubleBallCommonFragment extends BaseFragment {
                 calculatorResult();
                 //是否选择了求
                 isChooseBall();
-                //清楚选中的球
+                //清除选中的球
                 redBallAdapter.clearData();
                 blueBallAdapter.clearData();
                 break;
             case R.id.bottom_result_choose_tv:
                 break;
-            case R.id.bottom_result_clear_btn:
+            case R.id.bottom_result_next_btn:
                 break;
         }
     }
@@ -267,9 +271,9 @@ public class DoubleBallCommonFragment extends BaseFragment {
     //获取随机数据
     private void getBallNumber() {
         chooseRedBall.clear();
-        chooseRedBall.addAll(RandomMadeBall.getRedBall());
+        chooseRedBall.addAll(RandomMadeBall.getManyBall(33,6));
         chooseblueBall.clear();
-        chooseblueBall.addAll(RandomMadeBall.getBlueBall());
+        chooseblueBall.addAll(RandomMadeBall.getOneBall(16));
     }
 
     @Override

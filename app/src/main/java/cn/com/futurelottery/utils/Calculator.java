@@ -1,6 +1,6 @@
 package cn.com.futurelottery.utils;
 
-public class DoubleBallCalculator {
+public class Calculator {
     public final static int RED = 6;
 
     public final static int BLUE = 1;
@@ -62,7 +62,10 @@ public class DoubleBallCalculator {
         return rewardSum;
     }
 
-    public static int combination(int m,int n){			//Cmn，组合算法
+    /**
+     * Cmn，组合算法
+     */
+    public static int combination(int m,int n){
         int k = 1;
         int j = 1;
         for(int i = n; i>=1;i--){
@@ -74,7 +77,28 @@ public class DoubleBallCalculator {
         return k/j;
     }
 
-    public static long calculateBetNum(int redBallNum, int blueBallNum) {			//根据红篮球数，算出投注注数
+    /**
+     * 双色球普通方式算法
+     * 根据红篮球数，算出投注注数
+     */
+
+    public static long calculateBetNum(int redBallNum, int blueBallNum) {
         return combination(redBallNum, 6) * blueBallNum;
+    }
+
+    /**
+     * 双色球胆拖方式算法
+     * 根据红篮球数，算出投注注数
+     */
+
+    public static long calculateDanTuoNum(int redDanBallNum, int redTuoBallNum,int blueBallNum) {
+        long number;
+        if (redDanBallNum+redTuoBallNum<6||blueBallNum==0||redDanBallNum==0||redTuoBallNum==0){
+            number=0;
+        }else {
+            number=combination(redTuoBallNum, 6-redDanBallNum) * blueBallNum;
+
+        }
+        return number;
     }
 }

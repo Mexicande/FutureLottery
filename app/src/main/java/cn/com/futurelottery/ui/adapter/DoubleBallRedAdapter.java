@@ -25,41 +25,45 @@ public class DoubleBallRedAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<String> arrRedBall = new ArrayList<>();
     public Map<Integer, Boolean> hisSelected  = new HashMap<>();
-    private ArrayList<String> arrRandomRed;
+    private ArrayList<String> chooseBall;
     private int isShow;
+    private int ballCount;
 
-    public DoubleBallRedAdapter(Context context, ArrayList<String> arrRandomRed) {
+    public DoubleBallRedAdapter(Context context, ArrayList<String> chooseBall, int isShow, int ballCount) {
         this.context = context;
-        // 33 个红球
-        for (int i = 1; i < 34; i++) {
+        this.chooseBall = chooseBall;
+        this.isShow = isShow;
+        this.ballCount = ballCount;
+        // 总球数
+        for (int i = 1; i <= ballCount; i++) {
             if (i < 10) {
                 arrRedBall.add("0" + i);
             } else {
                 arrRedBall.add(i + "");
             }
         }
-        this.arrRandomRed = arrRandomRed;
-        for (int i = 0; i < 33; i++) {
+        // 选择球数
+        for (int i = 0; i < ballCount; i++) {
             hisSelected.put(i, false);
         }
     }
 
     //是否显示遗漏，0不显示，1显示
     public void updateData(int isShow, ArrayList<String> arrRandomRed){
-        for (int i = 0; i < 33; i++) {
+        for (int i = 0; i < ballCount; i++) {
             hisSelected.put(i, false);
         }
         this.isShow=isShow;
-        this.arrRandomRed = arrRandomRed;
+        this.chooseBall = arrRandomRed;
         notifyDataSetChanged();
     }
 
     public void clearData(){
-        for (int i = 0; i < 33; i++) {
+        for (int i = 0; i < ballCount; i++) {
             hisSelected.put(i, false);
         }
-        if (this.arrRandomRed != null)
-            this.arrRandomRed.clear();
+        if (this.chooseBall != null)
+            this.chooseBall.clear();
         notifyDataSetChanged();
     }
 
@@ -102,7 +106,7 @@ public class DoubleBallRedAdapter extends BaseAdapter {
         holder.chkRed.setText(this.getItem(position).toString());
         holder.chkRed.setTextColor(ContextCompat.getColor(context, R.color.red_ball));
         holder.chkRed.setChecked(false);
-        if (arrRandomRed!= null && arrRandomRed.indexOf(String.valueOf(position)) != -1) {
+        if (chooseBall!= null && chooseBall.indexOf(String.valueOf(position)) != -1) {
             hisSelected.put(position, true);
             holder.chkRed.setChecked(hisSelected.get(position));
             holder.chkRed.setTextColor(ContextCompat.getColor(context, android.R.color.white));
