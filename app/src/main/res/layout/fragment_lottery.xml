@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="cn.com.futurelottery.ui.fragment.LotteryFragment">
 
-   <include layout="@layout/normal_toolbar_item"/>
+   <include layout="@layout/toolbar_normal"/>
 
    <ScrollView
        android:layout_width="match_parent"
@@ -216,10 +216,10 @@
                    android:id="@+id/doubleBall_red_tv3"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:background="@drawable/lottery_fragment_redball"
-                   android:text="1"
                    android:textColor="@color/white"
                    android:textSize="@dimen/size_12"
+                   android:background="@drawable/lottery_fragment_redball"
+                   android:text="1"
                    android:gravity="center"
                    android:layout_marginLeft="@dimen/length_13"
                    />
@@ -369,13 +369,13 @@
          </RelativeLayout>
 
 
-      <!--隐藏布局，去掉是直接删掉-->
-      <LinearLayout
+         <include layout="@layout/line_e1"/>
+         <!--隐藏布局，去掉是直接删掉-->
+         <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:orientation="vertical"
           android:visibility="gone">
-         <include layout="@layout/line_e1"/>
 
          <RelativeLayout
              android:id="@+id/choose5_rl"

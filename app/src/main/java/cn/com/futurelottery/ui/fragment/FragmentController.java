@@ -20,10 +20,10 @@ public class FragmentController {
     private static FragmentController controller;
     private static boolean isReload;
 
-    public static FragmentController getInstance(FragmentActivity activity, int containerId, boolean isReload) {
+    public static FragmentController getInstance(FragmentActivity activity, int containerId, boolean isReload,ArrayList<Fragment>mList) {
         FragmentController.isReload = isReload;
         if (controller == null) {
-            controller = new FragmentController(activity, containerId);
+            controller = new FragmentController(activity, containerId,mList);
         }
         return controller;
     }
@@ -32,20 +32,15 @@ public class FragmentController {
         controller = null;
     }
 
-    private FragmentController(FragmentActivity activity, int containerId) {
+    private FragmentController(FragmentActivity activity, int containerId,ArrayList<Fragment>mList) {
         this.containerId = containerId;
+        fragments=mList;
         fm = activity.getSupportFragmentManager();
         initFragment();
     }
 
     private void initFragment() {
-        fragments = new ArrayList<>();
         if (isReload) {
-          /*  fragments.add(new HomeFragment());
-            fragments.add(new VideoFragment());
-            fragments.add(new AttentionFragment());
-            fragments.add(new MeFragment());*/
-
             FragmentTransaction ft = fm.beginTransaction();
             for (int i = 0; i < fragments.size(); i++) {
                 ft.add(containerId, fragments.get(i), "" + i);

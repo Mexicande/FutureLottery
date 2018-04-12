@@ -22,36 +22,16 @@ public class ProductItemDecoration extends RecyclerView.ItemDecoration {
         outRect.top = 0;
         outRect.bottom = 20;
         outRect.right = 3;*/
-        if(parent.getChildLayoutPosition(view)%2 == 0){
-            outRect.right = 20;
-            outRect.top = 40;
-            outRect.bottom = 0;
-            outRect.left = 30;
-        }else{
-            outRect.left = 30;
-            outRect.top = 40;
-            outRect.bottom = 0;
-            outRect.right = 10;
-        }
         if (parent.getChildLayoutPosition(view) == 0) {
             outRect.left = 0;
             outRect.bottom = 0;
             outRect.right = 0;
             outRect.top = 0;
+        }else {
+            outRect.left = space;
+            outRect.top = 40;
+            outRect.bottom = 0;
+            outRect.right = space;
         }
-       /* if(parent.getChildLayoutPosition(view)<4){
-            outRect.top = 20;
-        }*/
-
-
-
-      /*  if(space!=0){
-            if (parent.getChildLayoutPosition(view) == 0) {
-                outRect.left = 0;
-                outRect.bottom = 20;
-                outRect.right = 0;
-                outRect.top = 0;
-            }
-        }*/
     }
 }

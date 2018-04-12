@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <View
         android:id="@+id/fake_status_bar"
         android:layout_width="match_parent"
@@ -14,8 +13,19 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:orientation="vertical"
+        app:contentInsetStart="0dp"
         android:background="@color/colorPrimary"
         android:layout_height="50dp">
+        <ImageView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/layout_top_back"
+            android:layout_width="43dp"
+            android:layout_height="28dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/iv_back"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"

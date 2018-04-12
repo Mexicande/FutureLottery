@@ -3,6 +3,7 @@ package cn.com.futurelottery.ui.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,6 @@ public class DoubleBallCommonFragment extends BaseFragment {
     GridView doubleBallRedGv;
     @BindView(R.id.doubleBall_blue_gv)
     GridView doubleBallBlueGv;
-    Unbinder unbinder;
     @BindView(R.id.bottom_result_clear_tv)
     TextView bottomResultClearTv;
     @BindView(R.id.bottom_result_choose_tv)
@@ -64,20 +64,24 @@ public class DoubleBallCommonFragment extends BaseFragment {
     //是否显示遗漏
     private int isShow;
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_double_ball_common, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initView();
         setListener();
-        return view;
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.fragment_double_ball_common;
     }
 
 
     private void setListener() {
         // 对红球GridView进行监听，获得红球选中的数。
         doubleBallRedGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 在每次获取点击的item时将对应的checkbox状态改变，同时修改map的值。
                 DoubleBallRedAdapter.redGridViewHolder vHolder = (DoubleBallRedAdapter.redGridViewHolder) view.getTag();
@@ -110,6 +114,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
 
         // 对篮球GridView进行监听，获取选球状态。
         doubleBallBlueGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DoubleBallBlueAdapter.LanGridViewHolder vHollder = (DoubleBallBlueAdapter.LanGridViewHolder) view.getTag();
                 vHollder.chkBlue.toggle();
@@ -142,6 +147,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
 
         // 当手机摇晃时
         mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
+            @Override
             public void onShake() {
                 //机选
                 randomChoose();
@@ -211,11 +217,6 @@ public class DoubleBallCommonFragment extends BaseFragment {
         bottomResultClearTv.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @OnClick({R.id.shake_choose_iv, R.id.bottom_result_clear_tv, R.id.bottom_result_choose_tv, R.id.bottom_result_next_btn})
     public void onViewClicked(View view) {
@@ -239,6 +240,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
             case R.id.bottom_result_choose_tv:
                 break;
             case R.id.bottom_result_next_btn:
+                break;
+            default:
                 break;
         }
     }

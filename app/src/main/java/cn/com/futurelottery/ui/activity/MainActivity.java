@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity {
     }
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setTranslucentForImageViewInFragment(MainActivity.this, null);
+        StatusBarUtil.setTranslucentForImageViewInFragment(MainActivity.this, 0,null);
     }
 
     private void initBottom() {

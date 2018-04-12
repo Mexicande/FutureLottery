@@ -68,6 +68,8 @@ dependencies {
     //walle
     implementation 'com.meituan.android.walle:library:1.1.6'
     //Okgo
+    compile 'com.github.mancj:SlideUp-Android:2.2.5'
+
     implementation 'com.lzy.net:okserver:2.0.5'
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.lzy.net:okrx2:2.0.2'

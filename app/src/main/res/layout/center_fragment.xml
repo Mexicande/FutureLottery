@@ -20,9 +20,9 @@
             android:layout_weight="1"
             android:layout_height="wrap_content">
             <ImageView
+                android:id="@+id/center_fragment_iv"
                 android:layout_gravity="center_vertical"
                 android:layout_centerVertical="true"
-                android:id="@+id/center_fragment_iv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="@dimen/length_33"

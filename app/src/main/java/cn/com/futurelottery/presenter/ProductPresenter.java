@@ -5,4 +5,6 @@ package cn.com.futurelottery.presenter;
  */
 
 public class ProductPresenter {
+
+
 }
