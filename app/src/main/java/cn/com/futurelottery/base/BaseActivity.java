@@ -21,6 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutResource());
         ButterKnife.bind(this);
         setStatusBar();
+        setTitle();
     }
 
     public abstract int getLayoutResource();
@@ -30,9 +31,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected  void checkVersion(){
 
+    }
+    protected  void setTitle(){
 
     }
     protected void setStatusBar() {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary));
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.colorPrimary),0);
     }
 }

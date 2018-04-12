@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.utils.StatusBarUtil;
 
@@ -16,17 +18,28 @@ import cn.com.futurelottery.utils.StatusBarUtil;
 
 public abstract class BaseFragment extends Fragment {
 
+    Unbinder unbinder;
 
-
+    @Nullable
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setTitle();
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = View.inflate(getActivity(),getLayoutResource(), null);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
+
+
+    public abstract int getLayoutResource();
+
 
     protected  void setTitle(){
 
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
 }

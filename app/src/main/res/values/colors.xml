@@ -13,17 +13,22 @@
     <color name="white">#ffffff</color>
     <color name="white_bg">#efefef</color>
     <color name="red">#E14142</color>
+    <color name="red_ball">#E74C3C</color>
+    <color name="blue_ball">#00A0FF</color>
+    <color name="green">#3FB559</color>
     <color name="bg_color_f4">#f4f4f4</color>
     <color name="bg_color_de">#dedede</color>
     <color name="bg_color_e1">#e1e1e1</color>
     <color name="bg_color_d4">#d4d4d4</color>
     <color name="bg_color_b3">#b3b3b3</color>
+    <color name="common_pressed">#20000000</color>  <!--白色背景按下去的颜色-->
 
 
 
     <color name="text_color_32">#323232</color>
     <color name="text_color_fe">#fefefe</color>
     <color name="text_color_90">#909090</color>
+    <color name="text_color_99">#999999</color>
 
 
 </resources>

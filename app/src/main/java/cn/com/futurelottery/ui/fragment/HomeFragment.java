@@ -3,6 +3,7 @@ package cn.com.futurelottery.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,6 @@ import cn.com.futurelottery.view.marqueeview.MarqueeView;
 public class HomeFragment extends BaseFragment {
 
 
-    Unbinder unbinder;
     @BindView(R.id.main_Recycler)
     RecyclerView mMainRecycler;
     @BindView(R.id.refreshLayout)
@@ -54,15 +54,16 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    public int getLayoutResource() {
+        return R.layout.fragment_home;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initView();
         initDate();
         setListener();
-        return view;
     }
 
 
@@ -126,11 +127,6 @@ public class HomeFragment extends BaseFragment {
 
             }
         });
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
     @Override
     public void onStart() {
