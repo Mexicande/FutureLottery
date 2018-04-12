@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -24,11 +25,12 @@ public class LotteryFragment extends BaseFragment {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.layout_top_back)
+    ImageView layoutTopBack;
 
     public LotteryFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -39,11 +41,14 @@ public class LotteryFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        layoutTopBack.setVisibility(View.GONE);
+
     }
 
     @Override
     protected void setTitle() {
         tvTitle.setText(R.string.lottery_title);
     }
+
 
 }

@@ -27,7 +27,7 @@ import cn.com.futurelottery.utils.LogUtils;
  * Created by Jooyer on 2017/2/10
  */
 public class TopRightMenu {
-    private static final String TAG = "TopRightMenu";
+    private static final String TAG = "TopRightMenuUtils";
     private static final int DEFAULT_AMEND = 200;
     private Context mContext;
 
@@ -88,15 +88,6 @@ public class TopRightMenu {
         mTopmenuAdapter=new TopMenuAdapter(R.layout.top_right_menu_item,mItemList,isShowIcon,this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-
-          /*      break;
-            case 2:
-                mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
-                mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-                mTopmenuAdapter=new TopMenuAdapter(R.layout.showdown_menu,mItemList,isShowIcon,this);
-                break;
-            default:
-                break;*/
         mRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
@@ -195,7 +186,6 @@ public class TopRightMenu {
 
     public TopRightMenu setOnTopRightMenuItemClickListener(OnTopRightMenuItemClickListener listener) {
         mTopmenuAdapter.setOnTopRightMenuItemClickListener(listener);
-
         return this;
     }
 

@@ -7,11 +7,11 @@ import android.view.View;
 /**
  * Created by fengjh on 16/7/31.
  */
-public class ProductItemDecoration extends RecyclerView.ItemDecoration {
+public class MenuDecoration extends RecyclerView.ItemDecoration {
 
     private int space;
 
-    public ProductItemDecoration(int space) {
+    public MenuDecoration(int space) {
         this.space = space;
     }
 
@@ -21,16 +21,20 @@ public class ProductItemDecoration extends RecyclerView.ItemDecoration {
       /*  outRect.left = 3;
         outRect.top = 0;
         outRect.bottom = 20;
-        outRect.right = 3;*/
-        if (parent.getChildLayoutPosition(view) == 0) {
-            outRect.left = 0;
-            outRect.bottom = 0;
-            outRect.right = 0;
-            outRect.top = 0;
-        }else {
+/*        outRect.right = 3;*//*
+        outRect.left = space;
+        outRect.top = 40;
+        outRect.bottom = 40;
+        outRect.right = space;*/
+        if (parent.getChildLayoutPosition(view) % 2 == 0) {
             outRect.left = space;
             outRect.top = 40;
-            outRect.bottom = 0;
+            outRect.bottom = 40;
+            outRect.right = 0;
+        } else {
+            outRect.left = space;
+            outRect.top = 40;
+            outRect.bottom = 40;
             outRect.right = space;
         }
     }
