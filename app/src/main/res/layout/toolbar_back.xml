@@ -4,11 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <View
-        android:id="@+id/fake_status_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/statusbar_view_height"
-        android:background="@color/colorPrimary"/>
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,7 +11,17 @@
         app:contentInsetStart="0dp"
         android:background="@color/colorPrimary"
         android:layout_height="50dp">
-
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/layout_top_back"
+            android:layout_width="43dp"
+            android:layout_height="28dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/iv_back"/>
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"

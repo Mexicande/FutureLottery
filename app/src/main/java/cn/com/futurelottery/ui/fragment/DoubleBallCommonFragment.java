@@ -56,7 +56,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
     private View view;
     private Vibrator mVibrator;
     private ShakeListener mShakeListener;
-    private DoubleBallRedAdapter redBallAdapter;
+    public DoubleBallRedAdapter redBallAdapter;
     private DoubleBallBlueAdapter blueBallAdapter;
     private ArrayList<String> chooseRedBall = new ArrayList<>(), chooseblueBall = new ArrayList<>();
     private int selectRedNumber, selectBlueNumber;
@@ -167,7 +167,6 @@ public class DoubleBallCommonFragment extends BaseFragment {
                 mShakeListener.start();
             }
         }, 500);
-        mShakeListener.start();
 
     }
 

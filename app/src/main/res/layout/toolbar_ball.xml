@@ -4,20 +4,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="wrap_content">
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:orientation="vertical"
         app:contentInsetStart="0dp"
         android:background="@color/colorPrimary"
-        android:layout_height="45dp">
+        android:layout_height="50dp">
         <ImageView
             android:layout_marginLeft="10dp"
             android:id="@+id/layout_top_back"
             android:layout_width="43dp"
             android:layout_height="28dp"
             android:paddingTop="5dp"
+            android:layout_gravity="center_vertical"
             android:paddingBottom="5dp"
             android:paddingRight="20dp"
             android:layout_centerVertical="true"

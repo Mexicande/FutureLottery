@@ -10,6 +10,7 @@
 
     <color name="color_666">#666666</color>
     <color name="color_999">#999999</color>
+    <color name="color_333">#333333</color>
     <color name="white">#ffffff</color>
     <color name="white_bg">#efefef</color>
     <color name="red">#E14142</color>
@@ -22,6 +23,7 @@
     <color name="bg_color_d4">#d4d4d4</color>
     <color name="bg_color_b3">#b3b3b3</color>
     <color name="common_pressed">#20000000</color>  <!--白色背景按下去的颜色-->
+    <color name="divider">#CCCCCC</color>
 
 
 

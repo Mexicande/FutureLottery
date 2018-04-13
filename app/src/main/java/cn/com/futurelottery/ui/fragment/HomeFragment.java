@@ -50,8 +50,6 @@ public class HomeFragment extends BaseFragment {
     MarqueeView marqueeView;
     ArrayList<String> mList = new ArrayList<>();
     List<String> info = new ArrayList<>();
-    @BindView(R.id.layout_top_back)
-    ImageView layoutTopBack;
     private ProductAdapter mProductAdapter;
     private ArrayList<Product> mProductList = new ArrayList<>();
 
@@ -67,7 +65,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        layoutTopBack.setVisibility(View.GONE);
         initView();
         initDate();
         setListener();

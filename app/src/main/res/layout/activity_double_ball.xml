@@ -9,7 +9,7 @@
     <include layout="@layout/toolbar_ball"/>
     <FrameLayout
         android:id="@+id/fragment"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>

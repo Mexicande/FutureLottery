@@ -25,8 +25,6 @@ public class LotteryFragment extends BaseFragment {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.layout_top_back)
-    ImageView layoutTopBack;
 
     public LotteryFragment() {
         // Required empty public constructor
@@ -41,14 +39,10 @@ public class LotteryFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        layoutTopBack.setVisibility(View.GONE);
-
     }
-
     @Override
     protected void setTitle() {
         tvTitle.setText(R.string.lottery_title);
     }
-
 
 }

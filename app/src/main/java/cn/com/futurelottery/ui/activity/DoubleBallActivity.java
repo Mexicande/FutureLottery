@@ -24,6 +24,7 @@ import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.ui.fragment.DoubleBallCommonFragment;
 import cn.com.futurelottery.ui.fragment.DoubleBallDuplexFragment;
 import cn.com.futurelottery.ui.fragment.FragmentController;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.RoteteUtils;
@@ -66,19 +67,26 @@ public class DoubleBallActivity extends BaseActivity {
     private TopRightMenu mtopRightMenu;
     final ArrayList<MenuItem> mlist = new ArrayList<>();
     private  FragmentController instance;
+
+    @Override
+    protected void setTitle() {
+        tvTitle.setText(R.string.double_title);
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.activity_double_ball;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTopTitlePop();
         initView();
         setListener();
+
     }
 
-
-    @Override
-    public int getLayoutResource() {
-        return R.layout.activity_double_ball;
-    }
 
     @OnClick({R.id.iv_menu, R.id.layout_title, R.id.layout_top_back, R.id.layoutGo})
     public void onViewClicked(View view) {
@@ -111,7 +119,6 @@ public class DoubleBallActivity extends BaseActivity {
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(40)));
         mTRMenuAdapter = new TRMenuAdapter(mlist);
         trmRecyclerview.setAdapter(mTRMenuAdapter);
-
         mFragmentList.add(new DoubleBallCommonFragment());
         mFragmentList.add(new DoubleBallDuplexFragment());
         instance = FragmentController.getInstance(this, R.id.fragment, true, mFragmentList);
@@ -173,16 +180,19 @@ public class DoubleBallActivity extends BaseActivity {
         mtopRightMenu.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
             @Override
             public void onTopRightMenuItemClick(int position) {
+                switch (position){
+                    case 0:
+                        ActivityUtils.startActivity(AutoSelectActivity.class);
+                        break;
+                    default:
+                        break;
+                }
                 ToastUtils.showToast(list.get(position).getContent());
             }
         });
 
     }
 
-    @Override
-    protected void setTitle() {
-        tvTitle.setText(R.string.double_title);
-    }
 
     @Override
     protected void onDestroy() {

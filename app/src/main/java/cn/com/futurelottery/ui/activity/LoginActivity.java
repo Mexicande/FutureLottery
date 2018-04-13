@@ -21,8 +21,6 @@ import cn.com.futurelottery.view.topRightMenu.TopRightMenu;
 
 public class LoginActivity extends BaseActivity {
 
-    @BindView(R.id.iv_arrow)
-    ImageView ivArrow;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.iv_menu)
@@ -54,9 +52,5 @@ public class LoginActivity extends BaseActivity {
         tvTitle.setText(R.string.login);
     }
 
-    @Override
-    protected void setStatusBar() {
-        StatusBarUtil.setTranslucentForImageViewInFragment(LoginActivity.this, 0, null);
-    }
 
 }

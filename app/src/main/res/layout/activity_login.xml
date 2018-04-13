@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="cn.com.futurelottery.ui.activity.LoginActivity">
-    <include layout="@layout/toolbar_normal"/>
+    <include layout="@layout/toolbar_back"/>
     <RelativeLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
