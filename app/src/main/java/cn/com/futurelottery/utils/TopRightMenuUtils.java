@@ -41,17 +41,6 @@ public class TopRightMenuUtils {
         mtopRightMenu.showAsDropDown(view,-50,0);
         return mtopRightMenu;
     }
-    public static TitleMenu setTitlePop(ArrayList<MenuItem> mList, View view, Activity mContext){
-        WindowManager wm1 = mContext.getWindowManager();
-        int width1 = wm1.getDefaultDisplay().getWidth();
-        TitleMenu mtopRightMenu = new TitleMenu(mContext);
-        mtopRightMenu.addMenuList(mList);
-        mtopRightMenu.setWidth(width1)
-                .needAnimationStyle(false)
-                .dimBackground(true);
-        mtopRightMenu.showAsDropDown(view,0,0);
-        return mtopRightMenu;
-    }
 
 
     public static void initActionBar(Toolbar mToolbar, final Activity mContext) {
