@@ -51,7 +51,9 @@ public class ShakeListener implements SensorEventListener {
 		// 注册
 		if (sensor != null) {
 			 // 还有SENSOR_DELAY_UI、SENSOR_DELAY_FASTEST、SENSOR_DELAY_GAME等，根据不同应用，需要的反应速率不同，具体根据实际情况设定
-			sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+			if (sensorManager != null) {
+				sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+			}
 		}
 
 	}

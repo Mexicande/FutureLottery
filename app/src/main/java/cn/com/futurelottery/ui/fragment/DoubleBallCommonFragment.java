@@ -159,14 +159,16 @@ public class DoubleBallCommonFragment extends BaseFragment {
     private void randomChoose() {
         mShakeListener.stop();
         startVibrato(); // 开始 震动
-        randomSelect();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mShakeListener.start();
+                randomSelect();
                 mVibrator.cancel();
+                mShakeListener.start();
             }
         }, 500);
+        mShakeListener.start();
+
     }
 
     // 定义震动
@@ -289,5 +291,15 @@ public class DoubleBallCommonFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         mShakeListener.start();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            if(mShakeListener!=null){
+                mShakeListener.stop();
+            }
+        }
     }
 }

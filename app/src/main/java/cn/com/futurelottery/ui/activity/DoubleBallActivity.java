@@ -1,11 +1,13 @@
 package cn.com.futurelottery.ui.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +21,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.ui.fragment.DoubleBallCommonFragment;
+import cn.com.futurelottery.ui.fragment.DoubleBallDuplexFragment;
+import cn.com.futurelottery.ui.fragment.FragmentController;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.RoteteUtils;
@@ -46,17 +51,21 @@ public class DoubleBallActivity extends BaseActivity {
     @BindView(R.id.iv_arrow)
     ImageView ivArrow;
     ArrayList<MenuItem> list = new ArrayList<>();
+    ArrayList<Fragment>mFragmentList=new ArrayList<>();
     @BindView(R.id.layout_top_back)
     ImageView layoutTopBack;
     @BindView(R.id.trm_recyclerview)
     RecyclerView trmRecyclerview;
     @BindView(R.id.slideView)
     LinearLayout slideView;
+    @BindView(R.id.fragment)
+    FrameLayout fragment;
     private boolean flag = false;
     private SlideUp slideUp;
     private TRMenuAdapter mTRMenuAdapter;
-    private TopRightMenu  mtopRightMenu;
-    final ArrayList<MenuItem> mlist=new ArrayList<>();
+    private TopRightMenu mtopRightMenu;
+    final ArrayList<MenuItem> mlist = new ArrayList<>();
+    private  FragmentController instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,29 +75,23 @@ public class DoubleBallActivity extends BaseActivity {
     }
 
 
-
     @Override
     public int getLayoutResource() {
         return R.layout.activity_double_ball;
     }
 
-    @OnClick({R.id.iv_menu, R.id.layout_title, R.id.layout_top_back,R.id.layoutGo})
+    @OnClick({R.id.iv_menu, R.id.layout_title, R.id.layout_top_back, R.id.layoutGo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_menu:
-                mtopRightMenu.showAsDropDown(ivMenu,-50,0);
+                mtopRightMenu.showAsDropDown(ivMenu, -50, 0);
                 break;
             case R.id.layout_title:
-                if (flag) {
-                    RoteteUtils.rotateArrow(ivArrow, true);
-                    flag = false;
-                } else {
-                    RoteteUtils.rotateArrow(ivArrow, false);
-                    flag = true;
-                }
-                if(slideUp.isVisible()){
+                RoteteUtils.rotateArrow(ivArrow, flag);
+                flag=!flag;
+                if (slideUp.isVisible()) {
                     slideUp.hide();
-                }else {
+                } else {
                     slideUp.show();
                 }
                 break;
@@ -102,12 +105,17 @@ public class DoubleBallActivity extends BaseActivity {
                 break;
         }
     }
+
     private void initView() {
         trmRecyclerview.setLayoutManager(new GridLayoutManager(this, 2));
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(40)));
         mTRMenuAdapter = new TRMenuAdapter(mlist);
         trmRecyclerview.setAdapter(mTRMenuAdapter);
 
+        mFragmentList.add(new DoubleBallCommonFragment());
+        mFragmentList.add(new DoubleBallDuplexFragment());
+        instance = FragmentController.getInstance(this, R.id.fragment, true, mFragmentList);
+        instance.showFragment(0);
     }
 
     private void setTopTitlePop() {
@@ -136,6 +144,7 @@ public class DoubleBallActivity extends BaseActivity {
                 .setShowBackground(true)
                 .setArrowPosition(CommonUtil.dip2px(55f));
 
+
     }
 
     private void setListener() {
@@ -145,19 +154,20 @@ public class DoubleBallActivity extends BaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 MenuItem menuItem = mlist.get(position);
                 menuItem.setIcon(1);
-                mlist.set(position,menuItem);
+                mlist.set(position, menuItem);
                 mTRMenuAdapter.notifyItemChanged(position);
-                for(int i=0;i<mlist.size();i++){
-                    if(i!=position){
-                        if(mlist.get(i).getIcon()==1){
+                for (int i = 0; i < mlist.size(); i++) {
+                    if (i != position) {
+                        if (mlist.get(i).getIcon() == 1) {
                             MenuItem menuItem1 = mlist.get(i);
                             menuItem1.setIcon(0);
-                            mlist.set(i,menuItem1);
+                            mlist.set(i, menuItem1);
                             mTRMenuAdapter.notifyItemChanged(i);
                         }
                     }
                 }
                 slideUp.hide();
+                instance.showFragment(position);
             }
         });
         mtopRightMenu.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
@@ -174,4 +184,9 @@ public class DoubleBallActivity extends BaseActivity {
         tvTitle.setText(R.string.double_title);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FragmentController.onDestroy();
+    }
 }

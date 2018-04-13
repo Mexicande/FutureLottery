@@ -27,7 +27,9 @@
         <activity android:name=".ui.activity.LoginActivity"
             android:label="@string/login"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.DoubleBallActivity"></activity>
+        <activity android:name=".ui.activity.DoubleBallActivity"
+            android:label="@string/double_title"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
