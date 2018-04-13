@@ -22,8 +22,10 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity;
 import cn.com.futurelottery.ui.adapter.DoubleBallBlueAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallRedAdapter;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.Calculator;
 import cn.com.futurelottery.utils.RandomMadeBall;
 import cn.com.futurelottery.utils.ShakeListener;
@@ -159,10 +161,10 @@ public class DoubleBallCommonFragment extends BaseFragment {
     private void randomChoose() {
         mShakeListener.stop();
         startVibrato(); // 开始 震动
+        randomSelect();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                randomSelect();
                 mVibrator.cancel();
                 mShakeListener.start();
             }
@@ -241,6 +243,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
             case R.id.bottom_result_choose_tv:
                 break;
             case R.id.bottom_result_next_btn:
+                ActivityUtils.startActivity(ChooseBallPaymentActivity.class);
                 break;
             default:
                 break;
@@ -280,25 +283,17 @@ public class DoubleBallCommonFragment extends BaseFragment {
         chooseblueBall.addAll(RandomMadeBall.getOneBall(16));
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mShakeListener.stop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mShakeListener.start();
-    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(!hidden){
-            if(mShakeListener!=null){
+        if(mShakeListener!=null){
+            if(hidden){
                 mShakeListener.stop();
+            }else {
+                mShakeListener.start();
             }
+
         }
     }
 }
