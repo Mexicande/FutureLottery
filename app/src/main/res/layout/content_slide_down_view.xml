@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:layout_marginTop="45dp"
     android:background="@android:color/transparent"
     tools:showIn="@layout/activity_double_ball">
     <LinearLayout

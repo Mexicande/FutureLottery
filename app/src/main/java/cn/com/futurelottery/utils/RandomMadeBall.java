@@ -15,8 +15,8 @@ public class RandomMadeBall {
      */
     public static ArrayList<String> getManyBall(int count,int chooseCount) {
         ArrayList<Integer> randomRed = new ArrayList<Integer>();
-        for (int i = 0; i < count; i++) {
-            int hong = (int) (Math.random() * chooseCount);
+        for (int i = 0; i < chooseCount; i++) {
+            int hong = (int) (Math.random() * count);
             if (i == 0) {
                 randomRed.add(hong);
             } else {

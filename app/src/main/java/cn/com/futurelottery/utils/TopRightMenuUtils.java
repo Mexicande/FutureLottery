@@ -43,6 +43,7 @@ public class TopRightMenuUtils {
     }
 
 
+
     public static void initActionBar(Toolbar mToolbar, final Activity mContext) {
         mToolbar.setNavigationIcon(R.drawable.iv_back);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {

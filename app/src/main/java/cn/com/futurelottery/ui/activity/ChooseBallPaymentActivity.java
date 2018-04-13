@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.utils.StatusBarUtil;
 
 public class ChooseBallPaymentActivity extends BaseActivity {
 
@@ -15,5 +16,9 @@ public class ChooseBallPaymentActivity extends BaseActivity {
     @Override
     public int getLayoutResource() {
         return R.layout.activity_choose_ball_payment;
+    }
+    @Override
+    protected void setStatusBar() {
+        StatusBarUtil.setTranslucentForImageViewInFragment(ChooseBallPaymentActivity.this, 0, null);
     }
 }
