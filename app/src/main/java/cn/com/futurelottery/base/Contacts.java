@@ -15,5 +15,17 @@ public   interface    Contacts {
     int TOP_MENU=               2;
 
 
+    //token
+    String  TOKEN                    =              "token";
+    //注数
+    String  NOTES                    =              "notes";
+    //钱数
+    String  MONEY                    =              "money";
+    //期数
+    String  PERIODS                  =              "periods";
+    //倍数
+    String  MULTIPLE                 =              "multiple";
+
+
 
 }

@@ -138,16 +138,24 @@
                 android:textSize="13sp"
                 android:text="每期机选 :"/>
             <cn.com.futurelottery.view.AmountView
-                android:id="@+id/one_AutoAmount"
+                android:id="@+id/AutoAmount_zhu"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="right"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="10dp"
                 app:btnTextSize="14sp"
-                app:btnWidth="36dp"
+                app:btnWidth="46dp"
+                app:btnHight="35dp"
                 app:tvWidth="50dp"/>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="注"/>
         </LinearLayout>
         <LinearLayout
             android:layout_marginLeft="10dp"
@@ -162,15 +170,23 @@
                 android:textSize="13sp"
                 android:text="每  期  投 :"/>
             <cn.com.futurelottery.view.AmountView
-                android:id="@+id/amount_view"
+                android:id="@+id/amount_bei"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="10dp"
                 app:btnTextSize="14sp"
-                app:btnWidth="36dp"
+                app:btnWidth="46dp"
+                app:btnHight="35dp"
                 app:tvWidth="50dp"/>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="倍"/>
         </LinearLayout>
         <LinearLayout
             android:layout_marginLeft="10dp"
@@ -202,6 +218,7 @@
                     android:text="中奖累计"/>
             </LinearLayout>
             <EditText
+                android:id="@+id/et_stop_money"
                 android:layout_marginLeft="10dp"
                 android:layout_width="100dp"
                 android:layout_height="24dp"

@@ -10,7 +10,7 @@
     android:orientation="horizontal">
     <RelativeLayout
         android:id="@+id/btnDecrease"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="30dp"
         android:background="@drawable/btn_amount"
        >
@@ -33,7 +33,7 @@
         android:text="1"/>
     <RelativeLayout
         android:id="@+id/btnIncrease"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="30dp"
         android:background="@drawable/btn_amount"
         >
