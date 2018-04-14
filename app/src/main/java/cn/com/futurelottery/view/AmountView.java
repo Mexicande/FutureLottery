@@ -47,13 +47,14 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
         etAmount.addTextChangedListener(this);
 
         TypedArray obtainStyledAttributes = getContext().obtainStyledAttributes(attrs, R.styleable.AmountView);
+        int btnWidth = obtainStyledAttributes.getDimensionPixelSize(R.styleable.AmountView_btnWidth, 35);
+        int btnHight = obtainStyledAttributes.getDimensionPixelSize(R.styleable.AmountView_btnHight, 35);
         int tvWidth = obtainStyledAttributes.getDimensionPixelSize(R.styleable.AmountView_tvWidth, 80);
         int tvTextSize = obtainStyledAttributes.getDimensionPixelSize(R.styleable.AmountView_tvTextSize, 0);
         obtainStyledAttributes.recycle();
-
-    /*    LayoutParams btnParams = new LayoutParams(btnWidth, LayoutParams.MATCH_PARENT);
+        LayoutParams btnParams = new LayoutParams(btnWidth, btnHight);
         btnDecrease.setLayoutParams(btnParams);
-        btnIncrease.setLayoutParams(btnParams);*/
+        btnIncrease.setLayoutParams(btnParams);
       /*  if (btnTextSize != 0) {
             btnDecrease.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnTextSize);
             btnIncrease.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnTextSize);
@@ -113,7 +114,7 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
         }
         amount = Integer.valueOf(s.toString());
         if (amount > goodsStorage) {
-            ToastUtils.showToast("×î¶à¿ÉÂò"+ goodsStorage +"×¢");
+            ToastUtils.showToast("æœ€å¤šå¯ä¸‹"+ goodsStorage +"æ³¨");
             etAmount.setText(goodsStorage + "");
             return;
         }
@@ -123,6 +124,10 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
         }
     }
 
+    public int getValue(){
+
+        return amount;
+    }
 
     public interface OnAmountChangeListener {
         void onAmountChange(View view, int amount);

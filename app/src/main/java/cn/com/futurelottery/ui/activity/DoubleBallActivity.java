@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,7 +53,7 @@ public class DoubleBallActivity extends BaseActivity {
     @BindView(R.id.iv_arrow)
     ImageView ivArrow;
     ArrayList<MenuItem> list = new ArrayList<>();
-    ArrayList<Fragment>mFragmentList=new ArrayList<>();
+    ArrayList<Fragment> mFragmentList = new ArrayList<>();
     @BindView(R.id.layout_top_back)
     ImageView layoutTopBack;
     @BindView(R.id.trm_recyclerview)
@@ -66,7 +67,7 @@ public class DoubleBallActivity extends BaseActivity {
     private TRMenuAdapter mTRMenuAdapter;
     private TopRightMenu mtopRightMenu;
     final ArrayList<MenuItem> mlist = new ArrayList<>();
-    private  FragmentController instance;
+    private FragmentController instance;
 
     @Override
     protected void setTitle() {
@@ -96,7 +97,7 @@ public class DoubleBallActivity extends BaseActivity {
                 break;
             case R.id.layout_title:
                 RoteteUtils.rotateArrow(ivArrow, flag);
-                flag=!flag;
+                flag = !flag;
                 if (slideUp.isVisible()) {
                     slideUp.hide();
                 } else {
@@ -180,14 +181,14 @@ public class DoubleBallActivity extends BaseActivity {
         mtopRightMenu.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
             @Override
             public void onTopRightMenuItemClick(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         ActivityUtils.startActivity(AutoSelectActivity.class);
                         break;
                     default:
                         break;
                 }
-                ToastUtils.showToast(list.get(position).getContent());
+
             }
         });
 

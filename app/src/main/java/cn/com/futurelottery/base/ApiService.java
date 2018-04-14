@@ -24,37 +24,8 @@ public class ApiService {
      * @param listener
      * banner
      */
-    public static void GET_BANNER(final Context context, JSONObject params, final OnRequestDataListener listener) {
-        newExcuteJsonPost(Api.GET_BANNER, context, params,listener);
-    }
-
-    /**
-     * @param context
-     * @param params
-     * @param listener
-     * 弹窗
-     */
-    public static void GET_POPUP(final Context context, JSONObject params, final OnRequestDataListener listener) {
-        newExcuteJsonPost(Api.GET_POPUP, context, params,listener);
-    }
-
-    /**
-     * @param context
-     * @param params
-     * @param listener
-     * 往期中奖和截止时间
-     */
-    public static void GET_BYTIME(final Context context, JSONObject params, final OnRequestDataListener listener) {
-        newExcuteJsonPost(Api.GET_BYTIME, context, params,listener);
-    }
-    /**
-     * @param context
-     * @param params
-     * @param listener
-     * 双色球下注
-     */
-    public static void POST_DOUBLE_BALL(final Context context, JSONObject params, final OnRequestDataListener listener) {
-        newExcuteJsonPost(Api.POST_DOUBLE_BALL, context, params,listener);
+    public static void GET_SERVICE(String url,final Context context, JSONObject params, final OnRequestDataListener listener) {
+        newExcuteJsonPost(url, context, params,listener);
     }
 
     private static void newExcuteJsonPost(String url, final Context context, JSONObject params, final OnRequestDataListener listener){
