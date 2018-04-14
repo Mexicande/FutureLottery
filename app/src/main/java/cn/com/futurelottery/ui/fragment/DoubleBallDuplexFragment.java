@@ -133,6 +133,7 @@ public class DoubleBallDuplexFragment extends Fragment {
                     }
                 }
 
+                selectDanNumber=chooseDanBalls.size();
                 //计算
                 calculatorResult();
             }
@@ -174,6 +175,7 @@ public class DoubleBallDuplexFragment extends Fragment {
                         chooseTuoBalls.add(i + "");
                     }
                 }
+                selectTuoNumber=chooseTuoBalls.size();
                 //计算
                 calculatorResult();
             }
@@ -203,7 +205,7 @@ public class DoubleBallDuplexFragment extends Fragment {
                         chooseBlueBalls.add(i + "");
                     }
                 }
-
+                selectBlueNumber=chooseBlueBalls.size();
                 //计算
                 calculatorResult();
             }

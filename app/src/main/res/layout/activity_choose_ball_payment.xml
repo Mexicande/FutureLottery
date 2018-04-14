@@ -134,14 +134,11 @@
                 android:text="暂无投注内容，机选1注试试手气"
                 android:gravity="center"
                 android:textSize="@dimen/size_13"/>
-            <ListView
-                android:id="@+id/choose_zhu_lv"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/choose_zhu_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@drawable/payment_bg_line_devide"
-                android:dividerHeight="@dimen/length_2"
-                android:visibility="gone"
-                ></ListView>
+                ></android.support.v7.widget.RecyclerView>
 
             <View
                 android:layout_width="match_parent"
@@ -157,11 +154,12 @@
             >
             <CheckBox
                 android:id="@+id/agreement_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/length_17"
+                android:layout_height="@dimen/length_17"
+                android:background="@drawable/check_win"
+                android:button="@null"
                 android:checked="true"
-                android:scaleY="0.9"
-                android:scaleX="0.9"
+                android:layout_marginRight="@dimen/length_5"
                 />
             <TextView
                 android:id="@+id/agreement_tv"
@@ -179,8 +177,69 @@
         android:layout_width="match_parent"
         android:layout_height="41dp"
         android:background="@color/white"
+        android:orientation="horizontal"
         >
 
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="追"
+                android:textSize="@dimen/size_14"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/periods_count"
+                android:textColor="@color/black"/>
+            <cn.com.futurelottery.view.AmountView
+                android:id="@+id/periods_count"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_centerInParent="true"
+                app:btnTextSize="13sp"
+                app:btnWidth="36dp"
+                app:tvWidth="50dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="期"
+                android:textSize="@dimen/size_14"
+                android:textColor="@color/black"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/periods_count"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="投"
+                android:textSize="@dimen/size_14"
+                android:textColor="@color/black"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/multiply_count"/>
+            <cn.com.futurelottery.view.AmountView
+                android:id="@+id/multiply_count"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_centerInParent="true"
+                app:btnTextSize="13sp"
+                app:btnWidth="36dp"
+                app:tvWidth="50dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="倍"
+                android:textSize="@dimen/size_14"
+                android:textColor="@color/black"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/multiply_count"/>
+        </RelativeLayout>
     </LinearLayout>
     <include layout="@layout/line_e1"/>
     <RelativeLayout

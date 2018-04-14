@@ -113,7 +113,7 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
         }
         amount = Integer.valueOf(s.toString());
         if (amount > goodsStorage) {
-            ToastUtils.showToast("×î¶à¿ÉÂò"+ goodsStorage +"×¢");
+            ToastUtils.showToast("æœ€å¤šå¯ä¹°"+ goodsStorage +"æ³¨");
             etAmount.setText(goodsStorage + "");
             return;
         }
