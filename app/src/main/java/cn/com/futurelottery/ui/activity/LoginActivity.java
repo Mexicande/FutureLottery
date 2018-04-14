@@ -23,10 +23,6 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.iv_menu)
-    ImageView ivMenu;
-    @BindView(R.id.layout_title)
-    LinearLayout layoutTitle;
     @BindView(R.id.layout_top_back)
     ImageView layoutTopBack;
 

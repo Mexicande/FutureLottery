@@ -114,7 +114,7 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
         }
         amount = Integer.valueOf(s.toString());
         if (amount > goodsStorage) {
-            ToastUtils.showToast("最多可下"+ goodsStorage +"注");
+            ToastUtils.showToast("最多可买"+ goodsStorage +"注");
             etAmount.setText(goodsStorage + "");
             return;
         }

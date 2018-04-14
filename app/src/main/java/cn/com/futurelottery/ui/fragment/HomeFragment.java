@@ -9,31 +9,44 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.Api;
+import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
-import cn.com.futurelottery.model.Product;
+import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.model.Banner;
+import cn.com.futurelottery.model.Notification;
+import cn.com.futurelottery.model.Lottery;
+import cn.com.futurelottery.model.Popup;
 import cn.com.futurelottery.ui.activity.DoubleBallActivity;
-import cn.com.futurelottery.ui.adapter.ProductAdapter;
+import cn.com.futurelottery.ui.adapter.LotteryAdapter;
+import cn.com.futurelottery.ui.dialog.AdialogFragment;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.ProductItemDecoration;
+import cn.com.futurelottery.utils.SPUtils;
+import cn.com.futurelottery.utils.TimeUtils;
 import cn.com.futurelottery.view.marqueeview.MarqueeView;
 
 /**
@@ -48,10 +61,9 @@ public class HomeFragment extends BaseFragment {
     SmartRefreshLayout mRefreshLayout;
     BGABanner mConvenientBanner;
     MarqueeView marqueeView;
-    ArrayList<String> mList = new ArrayList<>();
     List<String> info = new ArrayList<>();
-    private ProductAdapter mProductAdapter;
-    private ArrayList<Product> mProductList = new ArrayList<>();
+    private LotteryAdapter mProductAdapter;
+    private ArrayList<Lottery> mProductList = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -70,26 +82,25 @@ public class HomeFragment extends BaseFragment {
         setListener();
     }
 
-
     private void initView() {
         LinearLayout temp = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.head_layout, null);
         marqueeView = temp.findViewById(R.id.marqueeView);
         mConvenientBanner = temp.findViewById(R.id.banner_fresco_demo_content);
-        mConvenientBanner.setAdapter(new BGABanner.Adapter<ImageView, String>() {
+        mConvenientBanner.setAdapter(new BGABanner.Adapter<ImageView, Banner>() {
             @Override
-            public void fillBannerItem(BGABanner banner, ImageView itemView, String model, int position) {
+            public void fillBannerItem(BGABanner banner, ImageView itemView, Banner string, int position) {
                 Glide.with(getActivity())
-                        .load(model)
+                        .load(string.getImg())
                         .into(itemView);
             }
         });
-        mConvenientBanner.setDelegate(new BGABanner.Delegate<ImageView, String>() {
+        mConvenientBanner.setDelegate(new BGABanner.Delegate<ImageView, Banner>() {
             @Override
-            public void onBannerItemClick(BGABanner banner, ImageView itemView, String model, int position) {
+            public void onBannerItemClick(BGABanner banner, ImageView itemView, Banner model, int position) {
 
             }
         });
-        mProductAdapter = new ProductAdapter(null);
+        mProductAdapter = new LotteryAdapter(null);
         mMainRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mMainRecycler.addItemDecoration(new ProductItemDecoration(CommonUtil.dip2px(10)));
         mMainRecycler.setAdapter(mProductAdapter);
@@ -97,25 +108,64 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initDate() {
-        mList.clear();
-        info.clear();
-        mProductList.clear();
-        mList.add("http://doll.anwenqianbao.com/data/upload/20180408/5ac9d5621f04f.png");
-        mList.add("http://doll.anwenqianbao.com/data/upload/20180408/5ac9d5235553d.png");
-        mList.add("http://doll.anwenqianbao.com/data/upload/20180408/5ac9903910141.png");
-        for (int i = 0; i < 10; i++) {
-            Product product = new Product();
-            product.setName("双色球");
-            product.setDesc("奖池超7亿");
-            product.setImg("http://orqk6filp.bkt.clouddn.com/double_ball.png");
-            mProductList.add(product);
+        //Banner
+        ApiService.GET_SERVICE(Api.GET_BANNER, getActivity(), new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONArray bannerArray = data.getJSONArray("data");
+                    Gson gson=new Gson();
+                    Type bannerType=new TypeToken<ArrayList<Banner>>(){}.getType();
+                    ArrayList<Banner> jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
+                    mConvenientBanner.setData(jsonArray,null);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void requestFailure(int code, String msg) {
 
-        }
-        info.add("恭喜！9410.00元竞彩足球奖金已被**02收入囊中");
-        info.add("恭喜！10000.00元双色球奖金已被**05收入囊中");
-        mConvenientBanner.setData(mList, null);
-        marqueeView.startWithList(info);
-        mProductAdapter.setNewData(mProductList);
+            }
+        });
+        //Notice
+        ApiService.GET_SERVICE(Api.GET_NOTIFITION, getActivity(), new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONArray bannerArray = data.getJSONArray("data");
+                    Gson gson=new Gson();
+                    Type bannerType=new TypeToken<ArrayList<Notification>>(){}.getType();
+                    ArrayList<Notification> jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
+                    marqueeView.startWithList(jsonArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
+        ApiService.GET_SERVICE(Api.GET_LOTTERY, getActivity(), new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONArray bannerArray = data.getJSONArray("data");
+                    Gson gson=new Gson();
+                    Type bannerType=new TypeToken<ArrayList<Lottery>>(){}.getType();
+                    ArrayList<Lottery> jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
+                    mProductAdapter.setNewData(jsonArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
+
+
     }
 
     private void setListener() {

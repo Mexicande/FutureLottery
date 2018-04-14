@@ -26,6 +26,16 @@ public   interface    Contacts {
     //倍数
     String  MULTIPLE                 =              "multiple";
 
-
+    /**
+     * 彩种
+     */
+    interface Lottery{
+        //双色球
+        String  SSQ                  =                 "ssq";
+        //大乐透
+        String  DIL                  =                 "dlt";
+        //竞彩足球
+        String  FTB                  =                 "ftb";
+    }
 
 }
