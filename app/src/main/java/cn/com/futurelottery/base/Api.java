@@ -51,7 +51,16 @@ public interface Api {
 
     }
 
-
+    interface Login{
+        /**
+         * 验证码获取
+         */
+        String GET_CODE               =         HOST+"sms/getcode";
+        /**
+         * 登陆
+         */
+        String LOGIN               =            HOST+"login/login";
+    }
 
 
 

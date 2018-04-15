@@ -16,7 +16,9 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.utils.ToastUtils;
 
 /**
- * Created by hiwhitley on 2016/7/4.
+ *
+ * @author hiwhitley
+ * @date 2016/7/4
  */
 public class AmountView extends LinearLayout implements View.OnClickListener, TextWatcher {
 
@@ -114,7 +116,7 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
         }
         amount = Integer.valueOf(s.toString());
         if (amount > goodsStorage) {
-            ToastUtils.showToast("最多可买"+ goodsStorage +"注");
+            ToastUtils.showToast("最多可下"+ goodsStorage +"注");
             etAmount.setText(goodsStorage + "");
             return;
         }

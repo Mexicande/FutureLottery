@@ -38,15 +38,11 @@ import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.Banner;
 import cn.com.futurelottery.model.Notification;
 import cn.com.futurelottery.model.Lottery;
-import cn.com.futurelottery.model.Popup;
 import cn.com.futurelottery.ui.activity.DoubleBallActivity;
 import cn.com.futurelottery.ui.adapter.LotteryAdapter;
-import cn.com.futurelottery.ui.dialog.AdialogFragment;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.ProductItemDecoration;
-import cn.com.futurelottery.utils.SPUtils;
-import cn.com.futurelottery.utils.TimeUtils;
 import cn.com.futurelottery.view.marqueeview.MarqueeView;
 
 /**

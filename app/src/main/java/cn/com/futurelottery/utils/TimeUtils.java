@@ -2,7 +2,6 @@ package cn.com.futurelottery.utils;
 
 import android.annotation.SuppressLint;
 
-import com.deerlive.zhuawawa.constant.TimeConstants;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -587,11 +586,6 @@ public final class TimeUtils {
      * @param millis 毫秒时间戳
      * @param unit   单位类型
      *               <ul>
-     *               <li>{@link TimeConstants#MSEC}: 毫秒</li>
-     *               <li>{@link TimeConstants#SEC }: 秒</li>
-     *               <li>{@link TimeConstants#MIN }: 分</li>
-     *               <li>{@link TimeConstants#HOUR}: 小时</li>
-     *               <li>{@link TimeConstants#DAY }: 天</li>
      *               </ul>
      * @return unit 时间戳
      */

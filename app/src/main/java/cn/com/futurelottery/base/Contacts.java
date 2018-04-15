@@ -17,6 +17,12 @@ public   interface    Contacts {
 
     //token
     String  TOKEN                    =              "token";
+    //mobile
+    String  MOBILE                    =              "mobile";
+    //amount
+    String  AMOUNT                    =              "amount";
+    //amount
+    String  NICK                    =              "user_name";
     //注数
     String  NOTES                    =              "notes";
     //钱数
@@ -36,6 +42,14 @@ public   interface    Contacts {
         String  DIL                  =                 "dlt";
         //竞彩足球
         String  FTB                  =                 "ftb";
+    }
+    class Times {
+        /** 启动页显示时间 **/
+        public static final int LAUCHER_DIPLAY_MILLIS = 2000;
+        /** 倒计时时间 **/
+        public static final int MILLIS_IN_TOTAL = 60000;
+        /** 时间间隔 **/
+        public static final int COUNT_DOWN_INTERVAL = 1000;
     }
 
 }

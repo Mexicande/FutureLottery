@@ -20,4 +20,6 @@
     <string name="anto_text">根据您指定的注数,每期系统将自动为您机选不同的号码 进行投注，快捷省心，追击大奖！</string>
     <string name="one_auto">每期机选:</string>
     <string name="machine_selection_title">多期机选</string>
+    <string name="captcha_btn_resend">重发验证码</string>
+    <string name="validate_btn_hint">获取验证码</string>
 </resources>
