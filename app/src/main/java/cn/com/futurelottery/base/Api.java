@@ -7,16 +7,25 @@ package cn.com.futurelottery.base;
 
 public interface Api {
 
-      String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
+    String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
+
     /**
      * 弹窗广告
      */
-    String GET_POPUP=HOST+"home/popup";
-
+     String GET_POPUP=HOST+"home/popup";
     /**
      * 首页bannner
      */
      String GET_BANNER=HOST+"home/banner";
+
+    /**
+     * 首页消息
+     */
+    String GET_NOTIFITION=HOST+"home/notice";
+    /**
+     * 首页彩种
+     */
+    String GET_LOTTERY=HOST+"home/list";
 
     interface Double_Ball{
         /**

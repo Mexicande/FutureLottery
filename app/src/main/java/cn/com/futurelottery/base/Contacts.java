@@ -25,7 +25,33 @@ public   interface    Contacts {
     String  PERIODS                  =              "periods";
     //倍数
     String  MULTIPLE                 =              "multiple";
+    //红球
+    String  RED                 =              "red";
+    //拖号
+    String  TUO                 =              "tuo";
+    //绿号
+    String  BLU                 =              "blue";
+    //方式
+    String  TYPE                 =              "type";
+    //用户下注的奖期
+    String  PHASE                 =              "phase";
+    //是否通知追期
+    String  IS_STOP                 =              "is_stop";
+    //停止追期金额
+    String  STOP_MONEY                 =              "stop_money";
+    //总的
+    String  TOTAL                 =              "total";
 
-
+    /**
+     * 彩种
+     */
+    interface Lottery{
+        //双色球
+        String  SSQ                  =                 "ssq";
+        //大乐透
+        String  DIL                  =                 "dlt";
+        //竞彩足球
+        String  FTB                  =                 "ftb";
+    }
 
 }

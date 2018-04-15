@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.model.Notification;
 
 /**
  * Created by sunfusheng on 16/5/31.
@@ -189,7 +190,7 @@ public class MarqueeView extends ViewFlipper {
      *
      * @param notices 字符串列表
      */
-    public void startWithList(List<? extends CharSequence> notices) {
+    public void startWithList(List<Notification> notices) {
         startWithList(notices, inAnimResId, outAnimResId);
     }
 
@@ -200,11 +201,15 @@ public class MarqueeView extends ViewFlipper {
      * @param inAnimResId  进入动画的resID
      * @param outAnimResID 离开动画的resID
      */
-    public void startWithList(List<? extends CharSequence> notices, @AnimRes int inAnimResId, @AnimRes int outAnimResID) {
+    public void startWithList(List<Notification> notices, @AnimRes int inAnimResId, @AnimRes int outAnimResID) {
         if (Utils.isEmpty(notices)) {
             return;
         }
-        setNotices(notices);
+        ArrayList<String>strArrays=new ArrayList<>();
+        for(Notification s:notices){
+            strArrays.add(s.getContent());
+        }
+        setNotices(strArrays);
         postStart(inAnimResId, outAnimResID);
     }
 
@@ -292,6 +297,7 @@ public class MarqueeView extends ViewFlipper {
     }
 
     public void setNotices(List<? extends CharSequence> notices) {
+        this.notices.clear();
         this.notices = notices;
     }
 

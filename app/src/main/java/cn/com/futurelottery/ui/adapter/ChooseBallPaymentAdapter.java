@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.model.DoubleBall;
-import cn.com.futurelottery.model.Product;
 
 /**
  * Created by tantan on 2018/4/13.
@@ -37,7 +36,7 @@ public class ChooseBallPaymentAdapter extends BaseQuickAdapter<DoubleBall,BaseVi
         if (TextUtils.isEmpty(item.getDan())){
             balls=item.getRed().replace(","," ")+" "+item.getBlu();
         }else {
-            balls="("+item.getDan().replace(","," ")+")"+item.getRed().replace(","," ")+" <font color='#00A0FF'>"+item.getBlu()+"</font>";
+            balls="("+item.getDan().replace(","," ")+")"+item.getRed().replace(","," ")+" "+item.getBlu();
         }
         //改变篮球的颜色
         SpannableStringBuilder builder = new SpannableStringBuilder(balls);
@@ -46,14 +45,8 @@ public class ChooseBallPaymentAdapter extends BaseQuickAdapter<DoubleBall,BaseVi
 
 
         helper.setText(R.id.payment_item_balls,builder)
-        .setText(R.id.payment_item_balls_type,type[item.getType()]+"  "+item.getZhushu()+"注 "+item.getMoney()+"元");
-        helper.getView(R.id.payment_item_delet_tv).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                data.remove(item);
-                notifyDataSetChanged();
-            }
-        });
+        .setText(R.id.payment_item_balls_type,type[item.getType()]+"  "+item.getZhushu()+"注 "+item.getMoney()+"元")
+        .addOnClickListener(R.id.payment_item_delet_iv);
     }
 
 }

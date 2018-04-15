@@ -39,8 +39,8 @@ public class ApiService {
                         if(response.body()!=null){
                             try {
                                 JSONObject jsonObject=new JSONObject(response.body());
-                                int code = jsonObject.getInt("code");
-                                if(code==200){
+                                int code = jsonObject.getInt("error_code");
+                                if(code==0){
                                     listener.requestSuccess(0, jsonObject);
                                 }else {
                                     listener.requestFailure(-1, jsonObject.getString("descrp"));

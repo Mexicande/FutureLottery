@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -18,6 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.model.DoubleBall;
+import cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity;
 import cn.com.futurelottery.ui.adapter.DoubleBallBlueAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallRedAdapter;
 import cn.com.futurelottery.utils.Calculator;
@@ -59,6 +63,8 @@ public class DoubleBallDuplexFragment extends Fragment {
     private int selectDanNumber,selectTuoNumber,selectBlueNumber;
     //总共的注数
     private long zhushu;
+    private ArrayList<String> omitsRed=new ArrayList<>();
+    private ArrayList<String> omitsBlue=new ArrayList<>();
 
     public DoubleBallDuplexFragment() {
         // Required empty public constructor
@@ -108,7 +114,7 @@ public class DoubleBallDuplexFragment extends Fragment {
                     if (chooseTuoBalls.get(i).equals(position+"")){
                         chooseTuoBalls.remove(i);
                         selectTuoNumber--;
-                        tuoBallAdapter.updateData(isShow,chooseTuoBalls);
+                        tuoBallAdapter.updateData(isShow,chooseTuoBalls,omitsRed);
                     }
                 }
                 // 在每次获取点击的item时将对应的checkbox状态改变，同时修改map的值。
@@ -151,7 +157,7 @@ public class DoubleBallDuplexFragment extends Fragment {
                     if (chooseDanBalls.get(i).equals(position+"")){
                         chooseDanBalls.remove(i);
                         selectDanNumber--;
-                        danBallAdapter.updateData(isShow,chooseDanBalls);
+                        danBallAdapter.updateData(isShow,chooseDanBalls,omitsRed);
                     }
                 }
                 // 在每次获取点击的item时将对应的checkbox状态改变，同时修改map的值。
@@ -252,6 +258,46 @@ public class DoubleBallDuplexFragment extends Fragment {
                 blueBallAdapter.clearData();
                 break;
             case R.id.bottom_result_next_btn:
+                if (zhushu==0){
+                    ToastUtils.showToast("至少选择一注");
+                    return;
+                }
+                DoubleBall db=new DoubleBall();
+                String dan="";
+                String tuo="";
+                String blue="";
+                for (int i=0;i<chooseDanBalls.size();i++){
+                    int number = Integer.parseInt(chooseDanBalls.get(i))+ 1;
+                    if (i==0){
+                        dan=dan+((number<10)?("0"+number):number);
+                    }else {
+                        dan=dan+","+((number<10)?("0"+number):number);
+                    }
+                }
+                for (int i=0;i<chooseTuoBalls.size();i++){
+                    int number = Integer.parseInt(chooseTuoBalls.get(i))+ 1;
+                    if (i==0){
+                        tuo=tuo+((number<10)?("0"+number):number);
+                    }else {
+                        tuo=tuo+","+((number<10)?("0"+number):number);
+                    }
+                }
+                int number = Integer.parseInt(chooseBlueBalls.get(0))+ 1;
+                blue=""+((number<10)?("0"+number):number);
+                //判断单复式胆拖
+                db.setType(2);
+                db.setDan(dan);
+                db.setRed(tuo);
+                db.setBlu(blue);
+                db.setZhushu(zhushu);
+                db.setMoney(zhushu*2);
+
+                ArrayList<DoubleBall> balls=new ArrayList<>();
+                balls.add(db);
+                Intent intent=new Intent(getContext(),ChooseBallPaymentActivity.class);
+                intent.putExtra("kinds","1");
+                intent.putExtra("balls",(Serializable) balls);
+                startActivity(intent);
                 break;
         }
     }
@@ -261,6 +307,33 @@ public class DoubleBallDuplexFragment extends Fragment {
         zhushu = Calculator.calculateDanTuoNum(selectDanNumber,selectTuoNumber, selectBlueNumber);
         bottomResultCountTv.setText(String.valueOf(zhushu));
         bottomResultMoneyTv.setText(String.valueOf(zhushu * 2));
+    }
+
+    //显示遗漏
+    public void showOmit(ArrayList<String> omitsRed,ArrayList<String> omitsBlue) {
+        isShow=1;
+        this.omitsRed=omitsRed;
+        this.omitsBlue=omitsBlue;
+        danBallAdapter.updateData(isShow,chooseDanBalls,omitsRed);
+        tuoBallAdapter.updateData(isShow,chooseTuoBalls,omitsRed);
+        blueBallAdapter.updateData(isShow,chooseBlueBalls,omitsBlue);
+        //重新设置高度
+        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
+        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
+        ViewSetHinghUtil.resetGridViewHight7(buleGv);
+    }
+    //显示遗漏
+    public void unShowOmit() {
+        isShow=2;
+        omitsRed.clear();
+        omitsBlue.clear();
+        danBallAdapter.updateData(isShow,chooseDanBalls,omitsRed);
+        tuoBallAdapter.updateData(isShow,chooseTuoBalls,omitsRed);
+        blueBallAdapter.updateData(isShow,chooseBlueBalls,omitsBlue);
+        //重新设置高度
+        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
+        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
+        ViewSetHinghUtil.resetGridViewHight7(buleGv);
     }
 
 }

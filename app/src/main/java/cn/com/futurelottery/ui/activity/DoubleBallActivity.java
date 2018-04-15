@@ -68,6 +68,11 @@ public class DoubleBallActivity extends BaseActivity {
     private TopRightMenu mtopRightMenu;
     final ArrayList<MenuItem> mlist = new ArrayList<>();
     private FragmentController instance;
+    private int isShow;
+    private DoubleBallCommonFragment commonFragment;
+    private DoubleBallDuplexFragment duplexFragment;
+    private ArrayList<String> omitsRed=new ArrayList<>();
+    private ArrayList<String> omitsBlue=new ArrayList<>();
 
     @Override
     protected void setTitle() {
@@ -120,8 +125,10 @@ public class DoubleBallActivity extends BaseActivity {
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(40)));
         mTRMenuAdapter = new TRMenuAdapter(mlist);
         trmRecyclerview.setAdapter(mTRMenuAdapter);
-        mFragmentList.add(new DoubleBallCommonFragment());
-        mFragmentList.add(new DoubleBallDuplexFragment());
+        commonFragment=new DoubleBallCommonFragment();
+        duplexFragment=new DoubleBallDuplexFragment();
+        mFragmentList.add(commonFragment);
+        mFragmentList.add(duplexFragment);
         instance = FragmentController.getInstance(this, R.id.fragment, true, mFragmentList);
         instance.showFragment(0);
     }
@@ -184,6 +191,17 @@ public class DoubleBallActivity extends BaseActivity {
                 switch (position) {
                     case 0:
                         ActivityUtils.startActivity(AutoSelectActivity.class);
+                        break;
+                    case 1:
+                        if (isShow==0){
+                            isShow=1;
+                            commonFragment.showOmit(omitsRed,omitsBlue);
+                            duplexFragment.showOmit(omitsRed,omitsBlue);
+                        }else {
+                            isShow=0;
+                            commonFragment.unShowOmit();
+                            duplexFragment.unShowOmit();
+                        }
                         break;
                     default:
                         break;

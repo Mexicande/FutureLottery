@@ -89,6 +89,14 @@ public class AutoSelectActivity extends BaseActivity {
         setListener();
     }
 
+    private void initView() {
+        tvPeriod.setText("期  ");
+        bottomResultClearTv.setVisibility(View.GONE);
+        bottomResultCountTv.setText("共"+5);
+        bottomResultMoneyTv.setText(Note*1*1*2+"");
+        bottomResultNextBtn.setText("确定");
+    }
+
     private void setListener() {
         //每期机选
         AutoAmountZhu.setGoodsStorage(99);
@@ -108,14 +116,6 @@ public class AutoSelectActivity extends BaseActivity {
             }
         });
 
-    }
-
-    private void initView() {
-        tvPeriod.setText("期  ");
-        bottomResultClearTv.setVisibility(View.GONE);
-        bottomResultCountTv.setText("共"+5);
-        bottomResultMoneyTv.setText(Note*1*1*2+"");
-        bottomResultNextBtn.setText("确定");
     }
 
 
@@ -168,7 +168,6 @@ public class AutoSelectActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         ApiService.GET_SERVICE(Api.Double_Ball.POST_MULTI, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {

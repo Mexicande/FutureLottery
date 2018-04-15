@@ -140,36 +140,8 @@
                 android:layout_height="wrap_content"
                 ></android.support.v7.widget.RecyclerView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="12.5dp"
-                android:background="@mipmap/payment_bg_bottom"/>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/choose_ball_ll"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/length_7"
-            >
-            <CheckBox
-                android:id="@+id/agreement_cb"
-                android:layout_width="@dimen/length_17"
-                android:layout_height="@dimen/length_17"
-                android:background="@drawable/check_win"
-                android:button="@null"
-                android:checked="true"
-                android:layout_marginRight="@dimen/length_5"
-                />
-            <TextView
-                android:id="@+id/agreement_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我已阅读并同意《委托投注规则》"
-                android:textSize="@dimen/size_13"
-                android:textColor="@color/text_color_99"
-                />
-        </LinearLayout>
+
     </RelativeLayout>
 
     <include layout="@layout/line_e1"/>
@@ -199,8 +171,12 @@
                 android:layout_height="26dp"
                 android:layout_centerInParent="true"
                 app:btnTextSize="13sp"
-                app:btnWidth="36dp"
-                app:tvWidth="50dp"/>
+                app:btnWidth="26dp"
+                app:btnHight="25dp"
+                app:tvWidth="50dp"
+                android:layout_marginRight="@dimen/length_3"
+                android:layout_marginLeft="@dimen/length_3"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -229,8 +205,12 @@
                 android:layout_height="26dp"
                 android:layout_centerInParent="true"
                 app:btnTextSize="13sp"
-                app:btnWidth="36dp"
-                app:tvWidth="50dp"/>
+                app:btnWidth="26dp"
+                app:btnHight="25dp"
+                app:tvWidth="50dp"
+                android:layout_marginRight="@dimen/length_3"
+                android:layout_marginLeft="@dimen/length_3"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -240,6 +220,66 @@
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@+id/multiply_count"/>
         </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/accumulative_ll"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/white"
+        android:visibility="gone">
+        <LinearLayout
+            android:id="@+id/bt_check_box"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp">
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:gravity="center_vertical"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/check_win"
+                android:button="@null"
+                android:checked="false"
+                android:enabled="true" />
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:textSize="13sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="中奖累计"/>
+        </LinearLayout>
+        <EditText
+            android:id="@+id/et_stop_money"
+            android:layout_marginLeft="10dp"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:gravity="center_vertical"
+            android:digits="0123456789"
+            android:maxLength="8"
+            android:text="5000"
+            android:background="@drawable/bg_amount_layout"/>
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:textSize="13sp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="元后停止"/>
+        <ImageView
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/iv_question_mark"
+            android:gravity="center_vertical"/>
     </LinearLayout>
     <include layout="@layout/line_e1"/>
     <RelativeLayout

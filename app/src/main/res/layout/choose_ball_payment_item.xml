@@ -5,7 +5,7 @@
     android:background="?android:attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/payment_item_delet_tv"
+        android:id="@+id/payment_item_delet_iv"
         android:layout_width="@dimen/length_19"
         android:layout_height="@dimen/length_19"
         android:src="@mipmap/item_delet"
@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/payment_item_delet_tv"
+        android:layout_toRightOf="@+id/payment_item_delet_iv"
         android:layout_toLeftOf="@+id/payment_item_enter_iv"
         android:layout_marginLeft="@dimen/length_10"
         android:layout_marginRight="@dimen/length_10"

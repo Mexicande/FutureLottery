@@ -3,19 +3,33 @@ package cn.com.futurelottery.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.Api;
+import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.model.Popup;
 import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
 import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
+import cn.com.futurelottery.ui.dialog.AdialogFragment;
 import cn.com.futurelottery.ui.fragment.CenterFragment;
 import cn.com.futurelottery.ui.fragment.HomeFragment;
 import cn.com.futurelottery.ui.fragment.LotteryFragment;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.StatusBarUtil;
+import cn.com.futurelottery.utils.TimeUtils;
 import cn.com.futurelottery.view.pagerBottomTab.NavigationController;
 import cn.com.futurelottery.view.pagerBottomTab.PageNavigationView;
 import cn.com.futurelottery.view.pagerBottomTab.item.BaseTabItem;
@@ -32,6 +46,38 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBottom();
+        aPopupDialog();
+    }
+
+    private void aPopupDialog() {
+        ApiService.GET_SERVICE(Api.GET_POPUP, this, new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONArray bannerArray = data.getJSONArray("data");
+                    Gson gson=new Gson();
+                    Type bannerType=new TypeToken<ArrayList<Popup>>(){}.getType();
+                    ArrayList<Popup> jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
+                    if(jsonArray.get(0)!=null&&jsonArray.get(0).getImg()!=null){
+                        long advertTime = (long) SPUtils.get(MainActivity.this,"AdvertTime",1111111111111L);
+                        boolean today = TimeUtils.isToday(advertTime);
+                        if (!today) {
+                            AdialogFragment adialogFragment= AdialogFragment.newInstance(jsonArray.get(0));
+                            adialogFragment.show(getSupportFragmentManager(),"adialogFragment");
+                            long timeMillis = System.currentTimeMillis();
+                            SPUtils.put(MainActivity.this,"AdvertTime", timeMillis);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
     }
 
     @Override

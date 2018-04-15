@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -14,6 +15,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -22,6 +24,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.model.DoubleBall;
 import cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity;
 import cn.com.futurelottery.ui.adapter.DoubleBallBlueAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallRedAdapter;
@@ -29,6 +32,7 @@ import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.Calculator;
 import cn.com.futurelottery.utils.RandomMadeBall;
 import cn.com.futurelottery.utils.ShakeListener;
+import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.utils.ViewSetHinghUtil;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -61,9 +65,11 @@ public class DoubleBallCommonFragment extends BaseFragment {
     public DoubleBallRedAdapter redBallAdapter;
     private DoubleBallBlueAdapter blueBallAdapter;
     private ArrayList<String> chooseRedBall = new ArrayList<>(), chooseblueBall = new ArrayList<>();
+    private ArrayList<String> omitsRed =new ArrayList<>();
+    private ArrayList<String> omitsBlue =new ArrayList<>();
     private int selectRedNumber, selectBlueNumber;
     private long zhushu;
-    //是否显示遗漏
+    //是否显示遗漏1显示0不显示
     private int isShow;
 
 
@@ -243,7 +249,45 @@ public class DoubleBallCommonFragment extends BaseFragment {
             case R.id.bottom_result_choose_tv:
                 break;
             case R.id.bottom_result_next_btn:
-                ActivityUtils.startActivity(ChooseBallPaymentActivity.class);
+                if (chooseRedBall.size()==0&&chooseblueBall.size()==0){
+                    randomChoose();
+                    return;
+                }
+                if (zhushu==0){
+                    ToastUtils.showToast("至少选择一注");
+                    return;
+                }
+                DoubleBall db=new DoubleBall();
+                String red="";
+                String blue="";
+                for (int i=0;i<chooseRedBall.size();i++){
+                    int number = Integer.parseInt(chooseRedBall.get(i))+ 1;
+                    if (i==0){
+                        red=red+((number<10)?("0"+number):number);
+                    }else {
+                        red=red+","+((number<10)?("0"+number):number);
+                    }
+                }
+                int number = Integer.parseInt(chooseblueBall.get(0))+ 1;
+                blue=""+((number<10)?("0"+number):number);
+                //判断单复式
+                if (chooseRedBall.size()>6||chooseblueBall.size()>1){
+                    db.setType(1);
+                }else {
+                    db.setType(0);
+                }
+
+                db.setRed(red);
+                db.setBlu(blue);
+                db.setZhushu(zhushu);
+                db.setMoney(zhushu*2);
+
+                ArrayList<DoubleBall> balls=new ArrayList<>();
+                balls.add(db);
+                Intent intent=new Intent(getContext(),ChooseBallPaymentActivity.class);
+                intent.putExtra("kinds","1");
+                intent.putExtra("balls",(Serializable) balls);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -253,8 +297,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
     //随机选球
     private void randomSelect() {
         getBallNumber();
-        redBallAdapter.updateData(isShow,chooseRedBall);
-        blueBallAdapter.updateData(isShow,chooseblueBall);
+        redBallAdapter.updateData(isShow,chooseRedBall,omitsRed);
+        blueBallAdapter.updateData(isShow,chooseblueBall,omitsBlue);
         selectRedNumber = 6;
         selectBlueNumber = 1;
 //        String hq = "";
@@ -283,6 +327,45 @@ public class DoubleBallCommonFragment extends BaseFragment {
         chooseblueBall.addAll(RandomMadeBall.getOneBall(16));
     }
 
+    //显示遗漏
+    public void showOmit(ArrayList<String> omitsRed,ArrayList<String> omitsBlue) {
+        isShow=1;
+        this.omitsRed=omitsRed;
+        this.omitsBlue=omitsBlue;
+        redBallAdapter.updateData(isShow,chooseRedBall,omitsRed);
+        blueBallAdapter.updateData(isShow,chooseblueBall,omitsBlue);
+        //重新设置高度
+        ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
+        ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
+    }
+    //显示遗漏
+    public void unShowOmit() {
+        isShow=2;
+        omitsRed.clear();
+        omitsBlue.clear();
+        redBallAdapter.updateData(isShow,chooseRedBall,omitsRed);
+        blueBallAdapter.updateData(isShow,chooseblueBall,omitsBlue);
+        //重新设置高度
+        ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
+        ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mShakeListener!=null){
+            mShakeListener.start();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mShakeListener!=null){
+            mShakeListener.stop();
+        }
+    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
