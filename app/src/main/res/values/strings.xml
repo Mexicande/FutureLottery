@@ -5,6 +5,7 @@
     <string name="user_center">我的</string>
     <string name="login">登录</string>
     <string name="double_title">双色球</string>
+    <string name="doubleBile_title">双色球胆拖</string>
     <string name="payment">下单</string>
 
 
@@ -20,6 +21,9 @@
     <string name="anto_text">根据您指定的注数,每期系统将自动为您机选不同的号码 进行投注，快捷省心，追击大奖！</string>
     <string name="one_auto">每期机选:</string>
     <string name="machine_selection_title">多期机选</string>
-    <string name="title_activity_super_lotto">SuperLottoActivity</string>
+    <string name="captcha_btn_resend">重发验证码</string>
+    <string name="validate_btn_hint">获取验证码</string>
+    <string name="expand">收起</string>
+    <string name="un_expand">下拉</string>
 
 </resources>
