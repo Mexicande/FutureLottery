@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 允许使用震动权限 -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".base.BaseApplication"
@@ -24,20 +24,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity"
+        <activity
+            android:name=".ui.activity.LoginActivity"
             android:label="@string/login"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.DoubleBallActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.DoubleBallActivity"
             android:label="@string/double_title"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.AutoSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.AutoSelectActivity"
             android:label="@string/machine_selection_title"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ChooseBallPaymentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ChooseBallPaymentActivity"
             android:label="@string/payment"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.WebViewActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SuperLottoActivity"
+            android:label="@string/title_activity_super_lotto"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

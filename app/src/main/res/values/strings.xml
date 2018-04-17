@@ -20,4 +20,5 @@
     <string name="anto_text">根据您指定的注数,每期系统将自动为您机选不同的号码 进行投注，快捷省心，追击大奖！</string>
     <string name="one_auto">每期机选:</string>
     <string name="machine_selection_title">多期机选</string>
+    <string name="title_activity_super_lotto">SuperLottoActivity</string>
 </resources>
