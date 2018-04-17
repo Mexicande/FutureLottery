@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_color_f4"
+    android:orientation="vertical">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12.5dp"
+        android:background="@mipmap/payment_bg_bottom"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/choose_ball_ll"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/length_7"
+        android:layout_marginBottom="@dimen/length_7"
+        >
+        <CheckBox
+            android:id="@+id/agreement_cb"
+            android:layout_width="@dimen/length_17"
+            android:layout_height="@dimen/length_17"
+            android:background="@drawable/check_win"
+            android:button="@null"
+            android:checked="true"
+            android:layout_marginRight="@dimen/length_5"
+            android:enabled="false"
+            />
+        <TextView
+            android:id="@+id/agreement_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我已阅读并同意《委托投注规则》"
+            android:textSize="@dimen/size_13"
+            android:textColor="@color/text_color_99"
+            />
+    </LinearLayout>
+
+</LinearLayout>

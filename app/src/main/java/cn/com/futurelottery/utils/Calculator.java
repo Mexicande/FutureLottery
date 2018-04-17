@@ -93,7 +93,7 @@ public class Calculator {
 
     public static long calculateDanTuoNum(int redDanBallNum, int redTuoBallNum,int blueBallNum) {
         long number;
-        if (redDanBallNum+redTuoBallNum<6||blueBallNum==0||redDanBallNum==0||redTuoBallNum==0){
+        if (redDanBallNum+redTuoBallNum<6||blueBallNum==0||redDanBallNum==0||redTuoBallNum==0||redDanBallNum+redTuoBallNum<7){
             number=0;
         }else {
             number=combination(redTuoBallNum, 6-redDanBallNum) * blueBallNum;

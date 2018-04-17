@@ -36,23 +36,15 @@ public class ChooseBallPaymentAdapter extends BaseQuickAdapter<DoubleBall,BaseVi
         if (TextUtils.isEmpty(item.getDan())){
             balls=item.getRed().replace(","," ")+" "+item.getBlu();
         }else {
-            balls="("+item.getDan().replace(","," ")+")"+item.getRed().replace(","," ")+" <font color='#00A0FF'>"+item.getBlu()+"</font>";
+            balls="("+item.getDan().replace(","," ")+")"+item.getRed().replace(","," ")+" "+item.getBlu();
         }
         //改变篮球的颜色
         SpannableStringBuilder builder = new SpannableStringBuilder(balls);
         ForegroundColorSpan yellowSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.blue_ball));
         builder.setSpan(yellowSpan, balls.length()-2,balls.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
         helper.setText(R.id.payment_item_balls,builder)
-        .setText(R.id.payment_item_balls_type,type[item.getType()]+"  "+item.getZhushu()+"注 "+item.getMoney()+"元");
-        helper.getView(R.id.payment_item_delet_tv).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                data.remove(item);
-                notifyDataSetChanged();
-            }
-        });
+        .setText(R.id.payment_item_balls_type,type[item.getType()]+"  "+item.getZhushu()+"注 "+item.getMoney()+"元")
+        .addOnClickListener(R.id.payment_item_delet_iv);
     }
 
 }

@@ -17,9 +17,9 @@
         />
     <TextView
         android:id="@+id/bottom_result_choose_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/length_15"
+        android:layout_width="60dp"
+        android:gravity="center"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:text="机选"
         android:textColor="@color/red"

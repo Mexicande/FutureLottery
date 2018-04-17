@@ -25,6 +25,7 @@ public class DoubleBallRedAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<String> arrRedBall = new ArrayList<>();
     public Map<Integer, Boolean> hisSelected  = new HashMap<>();
+    ArrayList<String> omits=new ArrayList<>();
     private ArrayList<String> chooseBall;
     private int isShow;
     private int ballCount;
@@ -49,10 +50,11 @@ public class DoubleBallRedAdapter extends BaseAdapter {
     }
 
     //是否显示遗漏，0不显示，1显示
-    public void updateData(int isShow, ArrayList<String> arrRandomRed){
+    public void updateData(int isShow, ArrayList<String> arrRandomRed,ArrayList<String> omits){
         for (int i = 0; i < ballCount; i++) {
             hisSelected.put(i, false);
         }
+        this.omits=omits;
         this.isShow=isShow;
         this.chooseBall = arrRandomRed;
         notifyDataSetChanged();
@@ -98,11 +100,18 @@ public class DoubleBallRedAdapter extends BaseAdapter {
         }else{
             holder = (redGridViewHolder) convertView.getTag();
         }
+
+        //遗漏
         if (1==isShow){
             holder.tv.setVisibility(View.VISIBLE);
         }else {
             holder.tv.setVisibility(View.GONE);
         }
+        if (position<omits.size()){
+            holder.tv.setText(omits.get(position));
+        }
+
+
         holder.chkRed.setText(this.getItem(position).toString());
         holder.chkRed.setTextColor(ContextCompat.getColor(context, R.color.red_ball));
         holder.chkRed.setChecked(false);

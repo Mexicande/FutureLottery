@@ -30,6 +30,7 @@ public class DoubleBallBlueAdapter extends BaseAdapter {
     private int isShow;
     //总球数
     private int ballCount;
+    private ArrayList<String> omits=new ArrayList<>();
 
     public DoubleBallBlueAdapter(Context context, ArrayList<String> arrRandomBlue, int isShow, int ballCount) {
         this.context = context;
@@ -49,10 +50,11 @@ public class DoubleBallBlueAdapter extends BaseAdapter {
         }
     }
     //是否显示遗漏，0不显示，1显示
-    public void updateData(int isShow,ArrayList<String> arrRandomBlue){
+    public void updateData(int isShow,ArrayList<String> arrRandomBlue,ArrayList<String> omits){
         for (int i = 0; i < ballCount; i++) {
             lisSelected.put(i, false);
         }
+        this.omits=omits;
         this.isShow=isShow;
         this.arrRandomBlue = arrRandomBlue;
         notifyDataSetChanged();
@@ -98,11 +100,18 @@ public class DoubleBallBlueAdapter extends BaseAdapter {
         }else{
             holder = (LanGridViewHolder) convertView.getTag();
         }
+
+
         if (1==isShow){
             holder.tv.setVisibility(View.VISIBLE);
         }else {
             holder.tv.setVisibility(View.GONE);
         }
+        if (position<omits.size()){
+            holder.tv.setText(omits.get(position));
+        }
+
+
         holder.chkBlue.setText(this.getItem(position).toString());
         holder.chkBlue.setTextColor(ContextCompat.getColor(context, R.color.blue_ball));
         holder.chkBlue.setChecked(false);

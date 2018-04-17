@@ -42,6 +42,7 @@ public class TopMenuAdapter extends BaseQuickAdapter<MenuItem,BaseViewHolder> {
                 if (null != mItemClickListener) {
                     mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
                     mTopRightMenu.dismiss();
+
                 }
             }
         });
