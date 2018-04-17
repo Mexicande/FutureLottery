@@ -35,6 +35,9 @@ import cn.com.futurelottery.view.pagerBottomTab.PageNavigationView;
 import cn.com.futurelottery.view.pagerBottomTab.item.BaseTabItem;
 import cn.com.futurelottery.view.pagerBottomTab.item.NormalItemView;
 
+/**
+ * @author apple
+ */
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.tab)
@@ -58,7 +61,7 @@ public class MainActivity extends BaseActivity {
                     Gson gson=new Gson();
                     Type bannerType=new TypeToken<ArrayList<Popup>>(){}.getType();
                     ArrayList<Popup> jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
-                    if(jsonArray.get(0)!=null&&jsonArray.get(0).getImg()!=null){
+                    if(jsonArray.get(0)!=null&&!jsonArray.get(0).getImg().isEmpty()){
                         long advertTime = (long) SPUtils.get(MainActivity.this,"AdvertTime",1111111111111L);
                         boolean today = TimeUtils.isToday(advertTime);
                         if (!today) {

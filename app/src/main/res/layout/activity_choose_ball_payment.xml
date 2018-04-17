@@ -226,7 +226,8 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="@color/white"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
         <LinearLayout
             android:id="@+id/bt_check_box"
             android:layout_gravity="center_vertical"
@@ -256,10 +257,11 @@
         <EditText
             android:id="@+id/et_stop_money"
             android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
             android:layout_width="100dp"
             android:layout_height="20dp"
             android:textSize="13sp"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:digits="0123456789"
             android:maxLength="8"
             android:text="5000"

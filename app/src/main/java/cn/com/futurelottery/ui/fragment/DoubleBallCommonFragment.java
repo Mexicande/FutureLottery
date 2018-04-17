@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +16,18 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -23,17 +35,26 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.Api;
+import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.model.AwardPeriod;
 import cn.com.futurelottery.model.DoubleBall;
 import cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity;
+import cn.com.futurelottery.ui.adapter.AwardPeriodAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallBlueAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallRedAdapter;
-import cn.com.futurelottery.utils.ActivityUtils;
+import cn.com.futurelottery.utils.AppBarStateChangeListener;
 import cn.com.futurelottery.utils.Calculator;
 import cn.com.futurelottery.utils.RandomMadeBall;
+import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ShakeListener;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.utils.ViewSetHinghUtil;
+import cn.com.futurelottery.view.popup.EasyPopup;
+import cn.com.futurelottery.view.popup.HorizontalGravity;
+import cn.com.futurelottery.view.popup.VerticalGravity;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -59,30 +80,83 @@ public class DoubleBallCommonFragment extends BaseFragment {
     TextView bottomResultMoneyTv;
     @BindView(R.id.bottom_result_next_btn)
     Button bottomResultNextBtn;
-    private View view;
+    @BindView(R.id.lion)
+    LinearLayout lion;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.tv_award)
+    TextView tvAward;
+    @BindView(R.id.limite_date)
+    TextView limiteDate;
+    @BindView(R.id.tv_expand)
+    TextView tv_expand;
+    @BindView(R.id.iv_expand)
+    ImageView ivExpand;
+    @BindView(R.id.appBar)
+    AppBarLayout appBar;
+
     private Vibrator mVibrator;
     private ShakeListener mShakeListener;
     public DoubleBallRedAdapter redBallAdapter;
     private DoubleBallBlueAdapter blueBallAdapter;
     private ArrayList<String> chooseRedBall = new ArrayList<>(), chooseblueBall = new ArrayList<>();
-    private ArrayList<String> omitsRed =new ArrayList<>();
-    private ArrayList<String> omitsBlue =new ArrayList<>();
+    private ArrayList<String> omitsRed = new ArrayList<>();
+    private ArrayList<String> omitsBlue = new ArrayList<>();
     private int selectRedNumber, selectBlueNumber;
     private long zhushu;
     //是否显示遗漏1显示0不显示
     private int isShow;
-
+    private EasyPopup mCirclePop;
+    private AwardPeriodAdapter mAwardPeriodAdapter;
+    private boolean IsXpand=false;
+    private ArrayList<AwardPeriod> jsonArray;
+    @Override
+    public int getLayoutResource() {
+        return R.layout.fragment_double_ball_common;
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+        initDate();
         setListener();
     }
 
-    @Override
-    public int getLayoutResource() {
-        return R.layout.fragment_double_ball_common;
+    private void initDate() {
+        //往期中奖
+        ApiService.GET_SERVICE(Api.Double_Ball.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONArray bannerArray = data.getJSONArray("data");
+                    Gson gson = new Gson();
+                    Type bannerType = new TypeToken<ArrayList<AwardPeriod>>() {
+                    }.getType();
+                    jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
+        //遗漏
+        ApiService.GET_SERVICE(Api.Double_Ball.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
+
+
     }
 
 
@@ -142,7 +216,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
 
                     if (blueBallAdapter.getSelected().get(i)) {
                         lq = lq + (i + 1) + "  ";
-                        chooseblueBall.add(i+"");
+                        chooseblueBall.add(i + "");
                     }
                 }
 
@@ -159,6 +233,55 @@ public class DoubleBallCommonFragment extends BaseFragment {
             public void onShake() {
                 //机选
                 randomChoose();
+            }
+        });
+        //机选
+
+        bottomResultChooseTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCirclePop.showAtAnchorView(bottomResultChooseTv, VerticalGravity.ABOVE, HorizontalGravity.ALIGN_LEFT);
+
+
+            }
+        });
+
+        tvOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCirclePop.dismiss();
+            }
+        });
+        tvFive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCirclePop.dismiss();
+
+            }
+        });
+        tvTen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCirclePop.dismiss();
+            }
+        });
+        appBar.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if( state == State.EXPANDED ) {
+                    IsXpand=true;
+                    tv_expand.setText(R.string.expand);
+                    RoteteUtils.rotateArrow(ivExpand, !IsXpand);
+                    //展开状态
+                }else if(state == State.COLLAPSED){
+                    IsXpand=false;
+                    tv_expand.setText(R.string.un_expand);
+                    RoteteUtils.rotateArrow(ivExpand, !IsXpand);
+                    //折叠状态
+                }else {
+                    mAwardPeriodAdapter.setNewData(jsonArray);
+                    //中间状态
+                }
             }
         });
     }
@@ -180,7 +303,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
 
     // 定义震动
     public void startVibrato() {
-        mVibrator.vibrate(new long[] { 0, 400, 0, 0 }, -1);
+        mVibrator.vibrate(new long[]{0, 400, 0, 0}, -1);
         // 第一个｛｝里面是节奏数组，第一个参数为等待指定时间后开始震动，震动时间为第二个参数。后边的参数依次为等待震动和震动的时间
         // 第二个参数是重复次数，-1为不重复，0为一直震动，非-1则从pattern的指定下标开始重复
     }
@@ -189,10 +312,10 @@ public class DoubleBallCommonFragment extends BaseFragment {
      * 检查是否选择了球，以切换清空与机选按钮
      */
     private void isChooseBall() {
-        if (chooseblueBall.size()==0&&chooseRedBall.size()==0){
+        if (chooseblueBall.size() == 0 && chooseRedBall.size() == 0) {
             bottomResultChooseTv.setVisibility(View.VISIBLE);
             bottomResultClearTv.setVisibility(View.GONE);
-        }else {
+        } else {
             bottomResultChooseTv.setVisibility(View.GONE);
             bottomResultClearTv.setVisibility(View.VISIBLE);
         }
@@ -205,18 +328,24 @@ public class DoubleBallCommonFragment extends BaseFragment {
         bottomResultMoneyTv.setText(String.valueOf(zhushu * 2));
     }
 
+    private TextView tvOne;
+    private TextView tvFive;
+    private TextView tvTen;
+
     private void initView() {
         // 获得振动器服务
         mVibrator = (Vibrator) getActivity().getApplication().getSystemService(VIBRATOR_SERVICE);
         // 实例化加速度传感器检测类
         mShakeListener = new ShakeListener(getContext());
 
-        redBallAdapter = new DoubleBallRedAdapter(getContext(), chooseRedBall,isShow,33);
-        blueBallAdapter = new DoubleBallBlueAdapter(getContext(), chooseblueBall,isShow,16);
+        redBallAdapter = new DoubleBallRedAdapter(getContext(), chooseRedBall, isShow, 33);
+        blueBallAdapter = new DoubleBallBlueAdapter(getContext(), chooseblueBall, isShow, 16);
 
         doubleBallRedGv.setAdapter(redBallAdapter);
         doubleBallBlueGv.setAdapter(blueBallAdapter);
-
+        mAwardPeriodAdapter = new AwardPeriodAdapter(null);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(mAwardPeriodAdapter);
         //重新设置高度
         ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
         ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
@@ -224,10 +353,22 @@ public class DoubleBallCommonFragment extends BaseFragment {
         //底部显示机选
         bottomResultChooseTv.setVisibility(View.VISIBLE);
         bottomResultClearTv.setVisibility(View.GONE);
+
+        mCirclePop = new EasyPopup(getActivity())
+                .setContentView(R.layout.auto_select_layout)
+                .setBackgroundDimEnable(true)
+                .setDimValue(0.4f)
+                //是否允许点击PopupWindow之外的地方消失
+                .setFocusAndOutsideEnable(true)
+                .createPopup();
+        tvOne = mCirclePop.getView(R.id.one);
+        tvFive = mCirclePop.getView(R.id.five);
+        tvTen = mCirclePop.getView(R.id.ten);
     }
 
 
-    @OnClick({R.id.shake_choose_iv, R.id.bottom_result_clear_tv, R.id.bottom_result_choose_tv, R.id.bottom_result_next_btn})
+    @OnClick({R.id.shake_choose_iv, R.id.bottom_result_clear_tv, R.id.bottom_result_choose_tv,
+            R.id.bottom_result_next_btn,R.id.layout_expand})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.shake_choose_iv:
@@ -249,45 +390,52 @@ public class DoubleBallCommonFragment extends BaseFragment {
             case R.id.bottom_result_choose_tv:
                 break;
             case R.id.bottom_result_next_btn:
-                if (chooseRedBall.size()==0&&chooseblueBall.size()==0){
+                if (chooseRedBall.size() == 0 && chooseblueBall.size() == 0) {
                     randomChoose();
                     return;
                 }
-                if (zhushu==0){
+                if (zhushu == 0) {
                     ToastUtils.showToast("至少选择一注");
                     return;
                 }
-                DoubleBall db=new DoubleBall();
-                String red="";
-                String blue="";
-                for (int i=0;i<chooseRedBall.size();i++){
-                    int number = Integer.parseInt(chooseRedBall.get(i))+ 1;
-                    if (i==0){
-                        red=red+((number<10)?("0"+number):number);
-                    }else {
-                        red=red+","+((number<10)?("0"+number):number);
+                DoubleBall db = new DoubleBall();
+                String red = "";
+                String blue = "";
+                for (int i = 0; i < chooseRedBall.size(); i++) {
+                    int number = Integer.parseInt(chooseRedBall.get(i)) + 1;
+                    if (i == 0) {
+                        red = red + ((number < 10) ? ("0" + number) : number);
+                    } else {
+                        red = red + "," + ((number < 10) ? ("0" + number) : number);
                     }
                 }
-                int number = Integer.parseInt(chooseblueBall.get(0))+ 1;
-                blue=""+((number<10)?("0"+number):number);
+                int number = Integer.parseInt(chooseblueBall.get(0)) + 1;
+                blue = "" + ((number < 10) ? ("0" + number) : number);
                 //判断单复式
-                if (chooseRedBall.size()>6||chooseblueBall.size()>1){
+                if (chooseRedBall.size() > 6 || chooseblueBall.size() > 1) {
                     db.setType(1);
-                }else {
+                } else {
                     db.setType(0);
                 }
 
                 db.setRed(red);
                 db.setBlu(blue);
                 db.setZhushu(zhushu);
-                db.setMoney(zhushu*2);
+                db.setMoney(zhushu * 2);
 
-                ArrayList<DoubleBall> balls=new ArrayList<>();
+                ArrayList<DoubleBall> balls = new ArrayList<>();
                 balls.add(db);
-                Intent intent=new Intent(getContext(),ChooseBallPaymentActivity.class);
-                intent.putExtra("kinds","1");
-                intent.putExtra("balls",(Serializable) balls);
+                Intent intent = new Intent(getContext(), ChooseBallPaymentActivity.class);
+                intent.putExtra("kinds", "1");
+                intent.putExtra("balls", (Serializable) balls);
                 startActivity(intent);
+                break;
+            case R.id.layout_expand:
+                if(!IsXpand){
+                    appBar.setExpanded(true);
+                }else {
+                    appBar.setExpanded(false);
+                }
                 break;
             default:
                 break;
@@ -297,22 +445,10 @@ public class DoubleBallCommonFragment extends BaseFragment {
     //随机选球
     private void randomSelect() {
         getBallNumber();
-        redBallAdapter.updateData(isShow,chooseRedBall,omitsRed);
-        blueBallAdapter.updateData(isShow,chooseblueBall,omitsBlue);
+        redBallAdapter.updateData(isShow, chooseRedBall, omitsRed);
+        blueBallAdapter.updateData(isShow, chooseblueBall, omitsBlue);
         selectRedNumber = 6;
         selectBlueNumber = 1;
-//        String hq = "";
-//        for (int i = 0; i < arrRandomRed.size(); i++) {
-//            hq = hq + (Integer.parseInt(arrRandomRed.get(i)) + 1) + "  ";
-//        }
-//        txtShowRedBall.setText(hq);
-//
-//        String lq = "";
-//        for (int i = 0; i < arrRandomBlue.size(); i++) {
-//            lq = lq + (Integer.parseInt(arrRandomBlue.get(i)) + 1) + "  ";
-//        }
-//        txtShowBlueBall.setText(lq);
-
         //计算
         calculatorResult();
         //是否选择了求
@@ -322,29 +458,30 @@ public class DoubleBallCommonFragment extends BaseFragment {
     //获取随机数据
     private void getBallNumber() {
         chooseRedBall.clear();
-        chooseRedBall.addAll(RandomMadeBall.getManyBall(33,6));
+        chooseRedBall.addAll(RandomMadeBall.getManyBall(33, 6));
         chooseblueBall.clear();
         chooseblueBall.addAll(RandomMadeBall.getOneBall(16));
     }
 
     //显示遗漏
-    public void showOmit(ArrayList<String> omitsRed,ArrayList<String> omitsBlue) {
-        isShow=1;
-        this.omitsRed=omitsRed;
-        this.omitsBlue=omitsBlue;
-        redBallAdapter.updateData(isShow,chooseRedBall,omitsRed);
-        blueBallAdapter.updateData(isShow,chooseblueBall,omitsBlue);
+    public void showOmit(ArrayList<String> omitsRed, ArrayList<String> omitsBlue) {
+        isShow = 1;
+        this.omitsRed = omitsRed;
+        this.omitsBlue = omitsBlue;
+        redBallAdapter.updateData(isShow, chooseRedBall, omitsRed);
+        blueBallAdapter.updateData(isShow, chooseblueBall, omitsBlue);
         //重新设置高度
         ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
         ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
     }
+
     //显示遗漏
     public void unShowOmit() {
-        isShow=2;
+        isShow = 2;
         omitsRed.clear();
         omitsBlue.clear();
-        redBallAdapter.updateData(isShow,chooseRedBall,omitsRed);
-        blueBallAdapter.updateData(isShow,chooseblueBall,omitsBlue);
+        redBallAdapter.updateData(isShow, chooseRedBall, omitsRed);
+        blueBallAdapter.updateData(isShow, chooseblueBall, omitsBlue);
         //重新设置高度
         ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
         ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
@@ -354,7 +491,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mShakeListener!=null){
+        if (mShakeListener != null) {
             mShakeListener.start();
         }
     }
@@ -362,7 +499,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(mShakeListener!=null){
+        if (mShakeListener != null) {
             mShakeListener.stop();
         }
     }
@@ -370,13 +507,17 @@ public class DoubleBallCommonFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(mShakeListener!=null){
-            if(hidden){
+        if (mShakeListener != null) {
+            if (hidden) {
                 mShakeListener.stop();
-            }else {
+                appBar.setExpanded(false);
+            } else {
                 mShakeListener.start();
             }
 
         }
     }
+
+
+
 }

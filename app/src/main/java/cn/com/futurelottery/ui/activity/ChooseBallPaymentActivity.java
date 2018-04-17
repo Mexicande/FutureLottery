@@ -205,8 +205,8 @@ public class ChooseBallPaymentActivity extends BaseActivity {
                 map.put(Contacts.RED, ball.getRed());
                 map.put(Contacts.TYPE, "1");
             }
+
             map.put(Contacts.BLU, ball.getBlu());
-            map.put(Contacts.RED, ball.getRed());
             map.put(Contacts.MONEY, ball.getMoney() + "");
             map.put(Contacts.NOTES, ball.getZhushu() + "");
 

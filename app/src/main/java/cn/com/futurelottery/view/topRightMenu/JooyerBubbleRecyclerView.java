@@ -57,6 +57,10 @@ public class JooyerBubbleRecyclerView extends RecyclerView {
         setPadding();
     }
 
+    public void setArrow(JooyerBubbleDrawable.ArrowDirection mArrow){
+       mArrowDirection=mArrow;
+    }
+
     private void setPadding() {
         int left = getPaddingLeft();
         int top = getPaddingTop();

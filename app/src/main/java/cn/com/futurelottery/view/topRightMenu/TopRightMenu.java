@@ -32,7 +32,7 @@ public class TopRightMenu {
     private Context mContext;
 
     private PopupWindow mPopupWindow;
-    private RecyclerView mRecyclerView;
+    private JooyerBubbleRecyclerView mRecyclerView;
     private View mParent;
 
     private TopMenuAdapter mTopmenuAdapter;
@@ -58,7 +58,7 @@ public class TopRightMenu {
      * 默认显示背景 --> 背景变暗
      */
     private boolean isShowBackground = true;
-
+    private JooyerBubbleDrawable.ArrowDirection mArrowDirection= JooyerBubbleDrawable.ArrowDirection.TOP;
     /**
      * 默认显示动画
      */
@@ -84,7 +84,7 @@ public class TopRightMenu {
 
         mItemList = new ArrayList<>();
         mParent = LayoutInflater.from(mContext).inflate(R.layout.top_right_menu, null);
-        mRecyclerView = (RecyclerView) mParent.findViewById(R.id.rv_top_right_menu);
+        mRecyclerView = (JooyerBubbleRecyclerView) mParent.findViewById(R.id.rv_top_right_menu);
         mTopmenuAdapter=new TopMenuAdapter(R.layout.top_right_menu_item,mItemList,isShowIcon,this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
@@ -98,6 +98,14 @@ public class TopRightMenu {
         if (height > 0) {
             this.mPopupHeight = height;
         }
+        return this;
+    }
+    /**
+     * 设置箭头方向
+     */
+    public TopRightMenu setArrow(JooyerBubbleDrawable.ArrowDirection arrow) {
+            this.mArrowDirection = arrow;
+            mRecyclerView.setArrow(mArrowDirection);
         return this;
     }
 
@@ -180,6 +188,7 @@ public class TopRightMenu {
      * 添加多个菜单
      */
     public TopRightMenu addMenuItems(List<MenuItem> list) {
+        mItemList.clear();
         mItemList.addAll(list);
         return this;
     }
@@ -206,6 +215,7 @@ public class TopRightMenu {
         }
 
         if (!mPopupWindow.isShowing()) {
+            mTopmenuAdapter.notifyItemChanged(1);
             mPopupWindow.showAsDropDown(anchor, offsetX, offsetY);
             if (isShowBackground) {
                 setBackgroundAlpha(1f, mAlpha, 300);
@@ -268,6 +278,8 @@ public class TopRightMenu {
             anchor.getWindowVisibleDisplayFrame(frame);
         }
         LogUtils.i(TAG, "====2====" + (origin.x + location[0]) + "=====" + (origin.y + location[1]));
+
+
         return location;
     }
 

@@ -182,6 +182,18 @@ public class DoubleBallActivity extends BaseActivity {
                     }
                 }
                 slideUp.hide();
+                switch (position){
+                    case 0:
+                        tvTitle.setText(R.string.double_title);
+                        break;
+                    case 1:
+                        tvTitle.setText(R.string.doubleBile_title);
+                        break;
+                    default:
+                        break;
+                }
+                RoteteUtils.rotateArrow(ivArrow, flag);
+                flag = !flag;
                 instance.showFragment(position);
             }
         });
@@ -194,10 +206,14 @@ public class DoubleBallActivity extends BaseActivity {
                         break;
                     case 1:
                         if (isShow==0){
+                            list.set(1,new MenuItem(0, "隐藏遗漏"));
+                            mtopRightMenu.addMenuItems(list);
                             isShow=1;
                             commonFragment.showOmit(omitsRed,omitsBlue);
                             duplexFragment.showOmit(omitsRed,omitsBlue);
                         }else {
+                            list.set(1,new MenuItem(0, "显示遗漏"));
+                            mtopRightMenu.addMenuItems(list);
                             isShow=0;
                             commonFragment.unShowOmit();
                             duplexFragment.unShowOmit();

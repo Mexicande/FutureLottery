@@ -30,6 +30,8 @@
     <color name="text_color_fe">#fefefe</color>
     <color name="text_color_90">#909090</color>
     <color name="text_color_99">#999999</color>
+    <color name="color_press">#c12e2f</color>
+    <color name="color_dispress">#20000000</color>
 
 
 </resources>

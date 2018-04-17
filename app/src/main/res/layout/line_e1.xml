@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/length_1"
-    android:background="@color/bg_color_e1">
+    android:id="@+id/lion"
+    android:background="@color/bg_color_e1"
+    android:orientation="horizontal">
 
 </LinearLayout>

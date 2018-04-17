@@ -2,69 +2,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     tools:context="cn.com.futurelottery.ui.fragment.DoubleBallCommonFragment">
+    <android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:layout_height="0dp">
 
-    <ScrollView
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-        <LinearLayout
+        android:id="@+id/appBar"
+        android:background="@color/white"
+        app:expanded="false"
+        app:elevation="0dp"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"            android:layout_height="wrap_content">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <RelativeLayout
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_14"
-                >
-                <ImageView
-                    android:id="@+id/shake_choose_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:background="@mipmap/shake_choose"
-                    android:layout_marginLeft="@dimen/length_13"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="至少选择6个红球，1个篮球"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/length_13"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/color_666"/>
-            </RelativeLayout>
-            <GridView
-                android:id="@+id/doubleBall_red_gv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:numColumns="7"
-                android:verticalSpacing="5dp"
-                android:layout_marginTop="@dimen/length_14"
-                android:layout_marginBottom="@dimen/length_15"
-                >
-            </GridView>
-
-            <include layout="@layout/line_e1"/>
-
-            <GridView
-                android:id="@+id/doubleBall_blue_gv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:horizontalSpacing="5dp"
-                android:numColumns="7"
-                android:verticalSpacing="5dp"
-                android:layout_marginTop="@dimen/length_15"
-                android:layout_marginBottom="@dimen/length_15">
-            </GridView>
-
-        </LinearLayout>
-    </ScrollView>
-
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:background="@color/white_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+                    <TextView
+                        android:layout_marginLeft="53dp"
+                        android:textColor="@color/color_333"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:textSize="13dp"
+                        android:layout_height="wrap_content"
+                        android:text="期号"/>
+                    <TextView
+                        android:textSize="13dp"
+                        android:layout_marginRight="82dp"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/color_333"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开奖号码"/>
+                </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+        <include layout="@layout/double_layout"/>
+    </android.support.design.widget.AppBarLayout>
+</android.support.design.widget.CoordinatorLayout>
     <include layout="@layout/bottom_result"/>
 </LinearLayout>

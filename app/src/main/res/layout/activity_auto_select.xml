@@ -225,6 +225,9 @@
                 android:textSize="13sp"
                 android:gravity="center"
                 android:text="5000"
+                android:maxLines="1"
+                android:maxLength="8"
+                android:inputType="number"
                 android:background="@drawable/bg_amount_layout"/>
             <TextView
                 android:layout_gravity="center_vertical"
