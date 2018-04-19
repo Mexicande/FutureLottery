@@ -1,10 +1,14 @@
 package cn.com.futurelottery.model;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+import java.io.Serializable;
+
 /**
  * Created by apple on 2018/4/16.
  */
 
-public class AwardPeriod {
+public class AwardPeriod implements Serializable {
 
     /**
      * winning : 03,06,07,08,25,17,04

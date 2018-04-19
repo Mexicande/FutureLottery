@@ -55,4 +55,5 @@ public class TopMenuAdapter extends BaseQuickAdapter<MenuItem,BaseViewHolder> {
     void setOnTopRightMenuItemClickListener(OnTopRightMenuItemClickListener listener) {
         mItemClickListener = listener;
     }
+
 }

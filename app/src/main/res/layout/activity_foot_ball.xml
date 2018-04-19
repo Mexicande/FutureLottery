@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.com.futurelottery.ui.activity.Football.FootBallActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <include layout="@layout/toolbar_football"/>
+        <FrameLayout
+            android:id="@+id/foot_fragment"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+        <include layout="@layout/content_slide_down_view"
+            />
+    </RelativeLayout>
+    <include layout="@layout/screen_bootom_sheet_layout"/>
+</android.support.design.widget.CoordinatorLayout>

@@ -21,9 +21,8 @@ import cn.com.futurelottery.R;
 
 public class TRMenuAdapter extends BaseQuickAdapter<MenuItem,BaseViewHolder> {
 
-
-    public TRMenuAdapter(List<MenuItem> menuItemList) {
-        super(R.layout.item_constellation_layout, menuItemList);
+    public TRMenuAdapter(int layout,List<MenuItem> menuItemList) {
+        super(layout, menuItemList);
     }
 
     @Override
@@ -31,9 +30,12 @@ public class TRMenuAdapter extends BaseQuickAdapter<MenuItem,BaseViewHolder> {
         helper.setText(R.id.text,item.getContent());
         TextView view = helper.getView(R.id.text);
         if(item.getIcon()==0){
-            view.setTextColor(mContext.getResources().getColor(R.color.color_999));
+            view.setTextColor(mContext.getResources().getColor(R.color.color_333));
             view.setBackgroundResource(R.drawable.uncheck_bg);
-        }else {
+        }else if(item.getIcon()==3){
+            view.setTextColor(mContext.getResources().getColor(R.color.red_ball));
+            view.setBackgroundResource(R.drawable.un_red_check_bg);
+        } else {
             view.setTextColor(mContext.getResources().getColor(R.color.white));
             view.setBackgroundResource(R.drawable.check_bg);
         }

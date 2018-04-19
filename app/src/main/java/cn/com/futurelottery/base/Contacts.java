@@ -18,11 +18,11 @@ public   interface    Contacts {
     //token
     String  TOKEN                    =              "token";
     //mobile
-    String  MOBILE                    =              "mobile";
+    String  MOBILE                   =              "mobile";
     //amount
-    String  AMOUNT                    =              "amount";
+    String  AMOUNT                   =              "amount";
     //amount
-    String  NICK                    =              "user_name";
+    String  NICK                     =              "user_name";
     //注数
     String  NOTES                    =              "notes";
     //钱数
@@ -32,21 +32,21 @@ public   interface    Contacts {
     //倍数
     String  MULTIPLE                 =              "multiple";
     //红球
-    String  RED                 =              "red";
+    String  RED                      =              "red";
     //拖号
-    String  TUO                 =              "tuo";
+    String  TUO                      =              "tuo";
     //绿号
-    String  BLU                 =              "blue";
+    String  BLU                      =              "blue";
     //方式
-    String  TYPE                 =              "type";
+    String  TYPE                     =              "type";
     //用户下注的奖期
-    String  PHASE                 =              "phase";
+    String  PHASE                    =              "phase";
     //是否通知追期
-    String  IS_STOP                 =              "is_stop";
+    String  IS_STOP                  =              "is_stop";
     //停止追期金额
-    String  STOP_MONEY                 =              "stop_money";
+    String  STOP_MONEY               =              "stop_money";
     //总的
-    String  TOTAL                 =              "total";
+    String  TOTAL                    =              "total";
 
     /**
      * 彩种
@@ -66,6 +66,25 @@ public   interface    Contacts {
         public static final int MILLIS_IN_TOTAL = 60000;
         /** 时间间隔 **/
         public static final int COUNT_DOWN_INTERVAL = 1000;
+    }
+
+    /**
+     * 竞彩足球
+     */
+    class FootBall{
+        //胜平负
+        public static final String FTOO1    =       "FT001";
+        //让分胜平负
+        public static final String FTOO6    =       "FTOO6";
+        //比分
+        public static final String FT002    =       "FT002";
+        //总进
+        public static final String FT003    =       "FT003";
+        //半场胜平负
+        public static final String FT004    =       "FT004";
+
+
+
     }
 
 }
