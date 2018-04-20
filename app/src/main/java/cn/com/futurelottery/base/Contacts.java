@@ -41,12 +41,20 @@ public   interface    Contacts {
     String  TYPE                 =              "type";
     //用户下注的奖期
     String  PHASE                 =              "phase";
+    //用户下注的奖期的截止日期
+    String  END_TIME                 =              "end_time";
     //是否通知追期
     String  IS_STOP                 =              "is_stop";
     //停止追期金额
     String  STOP_MONEY                 =              "stop_money";
     //总的
     String  TOTAL                 =              "total";
+    //大乐透里的红拖
+    String  RED_TUO                 =              "red_tuo";
+    //大乐透里的蓝拖
+    String  BLUE_TUO                 =              "blue_tuo";
+    //大乐透里是否追加
+    String  IS_ADD                 =              "is_add";
 
     /**
      * 彩种
@@ -59,6 +67,22 @@ public   interface    Contacts {
         //竞彩足球
         String  FTB                  =                 "ftb";
     }
+
+
+    //双色球列表缓存
+    String  doubleBallSave                 =              "doubleBalls";
+    //大乐透列表缓存
+    String  superLottoSave                 =              "superLottos";
+
+
+    // 双色球下单到选球的请求码
+    int REQUEST_CODE_PAYMENT_TO_CHOOSE = 101;
+    // 大乐透下单到选球的请求码
+    int REQUEST_CODE_SL_PAYMENT_TO_CHOOSE = 102;
+
+
+
+
     class Times {
         /** 启动页显示时间 **/
         public static final int LAUCHER_DIPLAY_MILLIS = 2000;

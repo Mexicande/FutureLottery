@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.inter.DialogListener;
+import cn.com.futurelottery.inter.SaveDialogListener;
 
 
 /**
@@ -27,9 +28,8 @@ import cn.com.futurelottery.inter.DialogListener;
  */
 public class QuitDialogFragment extends DialogFragment {
 
-
+    private SaveDialogListener listener;
     Unbinder unbinder;
-    private DialogListener callback;
 
     public QuitDialogFragment() {
         // Required empty public constructor
@@ -38,7 +38,7 @@ public class QuitDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback = (DialogListener) context;
+        listener = (SaveDialogListener) context;
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,9 +75,11 @@ public class QuitDialogFragment extends DialogFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_save:
+                listener.saveDate();
                 dismiss();
                 break;
             case R.id.bt_clear:
+                listener.clearDate();
                 dismiss();
                 break;
             default:

@@ -50,6 +50,29 @@ public interface Api {
         String POST_MULTI             =       HOST+"ssq/multi";
 
     }
+    interface Super_Lotto{
+        /**
+         * 大乐透下单
+         */
+        String POST_DOUBLE_BALL     =       HOST+"dlt/order";
+        /**
+         * 大乐透截止时间
+         */
+        String GET_BYTIME           =       HOST+"dlt/purchase";
+        /**
+         * 大乐透往期
+         */
+         String GET_DROP            =       HOST+"dlt/drop";
+        /**
+         * 遗漏
+         */
+        String GET_MISS             =       HOST+"dlt/miss";
+        /**
+         * 多期机选
+         */
+        String POST_MULTI             =       HOST+"dlt/multi";
+
+    }
 
     interface Login{
         /**

@@ -46,7 +46,8 @@
         <activity
             android:name=".ui.activity.SuperLottoActivity"
             android:label="@string/title_activity_super_lotto"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.activity.SuperLottoPaymentActivity"></activity>
     </application>
 
 </manifest>

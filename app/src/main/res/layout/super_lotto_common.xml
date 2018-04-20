@@ -31,13 +31,13 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/length_13"
-                android:text="至少选择6个红球，1个篮球"
+                android:text="至少选择5个红球，2个蓝球"
                 android:textColor="@color/color_666"
                 android:textSize="@dimen/size_12" />
         </RelativeLayout>
 
         <GridView
-            android:id="@+id/doubleBall_red_gv"
+            android:id="@+id/red_gv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/length_15"
@@ -49,7 +49,7 @@
         <include layout="@layout/line_e1" />
 
         <GridView
-            android:id="@+id/doubleBall_blue_gv"
+            android:id="@+id/blue_gv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/length_15"

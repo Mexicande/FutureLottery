@@ -34,14 +34,14 @@ public class ChooseBallPaymentAdapter extends BaseQuickAdapter<DoubleBall,BaseVi
     protected void convert(final BaseViewHolder helper, final DoubleBall item) {
         String balls="";
         if (TextUtils.isEmpty(item.getDan())){
-            balls=item.getRed().replace(","," ")+" "+item.getBlu();
+            balls=item.getRed().replace(","," ")+" "+item.getBlu().replace(","," ");
         }else {
-            balls="("+item.getDan().replace(","," ")+")"+item.getRed().replace(","," ")+" "+item.getBlu();
+            balls="("+item.getDan().replace(","," ")+")"+item.getRed().replace(","," ")+" "+item.getBlu().replace(","," ");
         }
         //改变篮球的颜色
         SpannableStringBuilder builder = new SpannableStringBuilder(balls);
         ForegroundColorSpan yellowSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.blue_ball));
-        builder.setSpan(yellowSpan, balls.length()-2,balls.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(yellowSpan, balls.length()-item.getBlu().length(),balls.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         helper.setText(R.id.payment_item_balls,builder)
         .setText(R.id.payment_item_balls_type,type[item.getType()]+"  "+item.getZhushu()+"注 "+item.getMoney()+"元")
         .addOnClickListener(R.id.payment_item_delet_iv);

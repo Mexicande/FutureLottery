@@ -101,4 +101,32 @@ public class Calculator {
         }
         return number;
     }
+
+
+    /**
+     * 大乐透普通方式算法
+     * 根据红篮球数，算出投注注数
+     */
+
+    public static long calculateSLNum(int redBallNum, int blueBallNum) {
+        return combination(redBallNum, 5) * combination(blueBallNum, 2);
+    }
+
+
+    /**
+     * 大乐透胆拖方式算法
+     * 根据红篮球数，算出投注注数
+     */
+
+    public static long calculateSLDanTuoNum(int redDanBallNum, int redTuoBallNum,int blueDanBallNum,int blueTuoBallNum) {
+        long number;
+        if (redDanBallNum+redTuoBallNum<5||redDanBallNum==0||redTuoBallNum==0||blueTuoBallNum<2||blueDanBallNum+blueTuoBallNum<2||redDanBallNum+redTuoBallNum+blueDanBallNum+blueTuoBallNum<8){
+            number=0;
+        }else {
+            number=combination(redTuoBallNum, 5-redDanBallNum) * combination(blueTuoBallNum, 2-blueDanBallNum);
+
+        }
+        return number;
+    }
+
 }

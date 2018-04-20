@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,8 +40,8 @@ import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.AwardPeriod;
-import cn.com.futurelottery.model.DoubleBall;
-import cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity;
+import cn.com.futurelottery.model.SuperLotto;
+import cn.com.futurelottery.ui.activity.SuperLottoPaymentActivity;
 import cn.com.futurelottery.ui.adapter.AwardPeriodAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallBlueAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallRedAdapter;
@@ -51,34 +51,13 @@ import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.utils.ViewSetHinghUtil;
 
+public class SuperLottoDuplexFragment extends BaseFragment {
 
-/**
- * 双色球胆拖
- */
-public class DoubleBallDuplexFragment extends BaseFragment {
 
-    @BindView(R.id.danhao_red_gv)
-    GridView danhaoRedGv;
-    @BindView(R.id.tuohao_red_gv)
-    GridView tuohaoRedGv;
-    @BindView(R.id.bule_gv)
-    GridView buleGv;
-    @BindView(R.id.bottom_result_clear_tv)
-    TextView bottomResultClearTv;
-    @BindView(R.id.bottom_result_count_tv)
-    TextView bottomResultCountTv;
-    @BindView(R.id.bottom_result_money_tv)
-    TextView bottomResultMoneyTv;
-    @BindView(R.id.bottom_result_next_btn)
-    Button bottomResultNextBtn;
-    @BindView(R.id.bottom_result_choose_tv)
-    TextView bottomResultChooseTv;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.appBar)
-    AppBarLayout appBar;
-    @BindView(R.id.tv_period)
-    TextView tvPeriod;
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout toolbarLayout;
     @BindView(R.id.tv_award)
     TextView tvAward;
     @BindView(R.id.limite_date)
@@ -87,36 +66,60 @@ public class DoubleBallDuplexFragment extends BaseFragment {
     TextView tvExpand;
     @BindView(R.id.iv_expand)
     ImageView ivExpand;
-    @BindView(R.id.lion)
-    LinearLayout lion;
+    @BindView(R.id.layout_expand)
+    LinearLayout layoutExpand;
+    @BindView(R.id.appBar)
+    AppBarLayout appBar;
+    @BindView(R.id.danhao_red_gv)
+    GridView danhaoRedGv;
+    @BindView(R.id.tuohao_red_gv)
+    GridView tuohaoRedGv;
+    @BindView(R.id.bottom_result_clear_tv)
+    TextView bottomResultClearTv;
+    @BindView(R.id.bottom_result_choose_tv)
+    TextView bottomResultChooseTv;
+    @BindView(R.id.bottom_result_count_tv)
+    TextView bottomResultCountTv;
+    @BindView(R.id.tv_period)
+    TextView tvPeriod;
+    @BindView(R.id.bottom_result_money_tv)
+    TextView bottomResultMoneyTv;
+    @BindView(R.id.bottom_result_next_btn)
+    Button bottomResultNextBtn;
+    @BindView(R.id.danhao_bule_gv)
+    GridView danhaoBuleGv;
+    @BindView(R.id.tuohao_bule_gv)
+    GridView tuohaoBuleGv;
     private ArrayList<String> chooseDanBalls = new ArrayList<>();
     private ArrayList<String> chooseTuoBalls = new ArrayList<>();
-    private ArrayList<String> chooseBlueBalls = new ArrayList<>();
+    private ArrayList<String> chooseBlueDanBalls = new ArrayList<>();
+    private ArrayList<String> chooseBlueTuoBalls = new ArrayList<>();
     //是否遗漏
     private int isShow;
     private DoubleBallRedAdapter danBallAdapter;
     private DoubleBallRedAdapter tuoBallAdapter;
-    private DoubleBallBlueAdapter blueBallAdapter;
-    private int selectDanNumber, selectTuoNumber, selectBlueNumber;
+    private DoubleBallBlueAdapter blueDanBallAdapter;
+    private DoubleBallBlueAdapter blueTuoBallAdapter;
+    private int selectDanNumber, selectTuoNumber, selectBlueDanNumber,selectBlueTuoNumber;
     //总共的注数
     private long zhushu;
     private ArrayList<String> omitsRed = new ArrayList<>();
     private ArrayList<String> omitsBlue = new ArrayList<>();
-    private boolean IsXpand=false;
+    private boolean IsXpand = false;
     private ArrayList<AwardPeriod> jsonArray;
     private AwardPeriodAdapter mAwardPeriodAdapter;
     //第多少期
     private String phase;
     private int intentType;
 
-    public DoubleBallDuplexFragment() {
+    public SuperLottoDuplexFragment() {
         // Required empty public constructor
     }
 
 
     @Override
     public int getLayoutResource() {
-        return R.layout.fragment_double_ball_duplex;
+        return R.layout.fragment_super_lotto_duplex;
     }
 
 
@@ -131,13 +134,13 @@ public class DoubleBallDuplexFragment extends BaseFragment {
 
     private void getData() {
         Intent intent = getActivity().getIntent();
-        intentType=intent.getIntExtra("data",0);
+        intentType = intent.getIntExtra("data", 0);
     }
 
 
     private void initDate() {
         //往期中奖
-        ApiService.GET_SERVICE(Api.Double_Ball.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
+        ApiService.GET_SERVICE(Api.Super_Lotto.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
@@ -146,12 +149,6 @@ public class DoubleBallDuplexFragment extends BaseFragment {
                     Type bannerType = new TypeToken<ArrayList<AwardPeriod>>() {
                     }.getType();
                     jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
-                    for (int i=0;i<jsonArray.size();i++){
-                        AwardPeriod ja = jsonArray.get(i);
-                        jsonArray.remove(i);
-                        ja.setType(1);
-                        jsonArray.add(i,ja);
-                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -163,14 +160,14 @@ public class DoubleBallDuplexFragment extends BaseFragment {
             }
         });
         //期
-        ApiService.GET_SERVICE(Api.Double_Ball.GET_BYTIME, getActivity(), new JSONObject(), new OnRequestDataListener() {
+        ApiService.GET_SERVICE(Api.Super_Lotto.GET_BYTIME, getActivity(), new JSONObject(), new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
                     JSONObject jo = data.getJSONArray("data").getJSONObject(0);
-                    phase=jo.getString(Contacts.PHASE);
-                    tvAward.setText("第"+phase+"期");
-                    limiteDate.setText(jo.getString(Contacts.END_TIME)+" 截止");
+                    phase = jo.getString(Contacts.PHASE);
+                    tvAward.setText("第" + phase + "期");
+                    limiteDate.setText(jo.getString(Contacts.END_TIME) + " 截止");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -186,13 +183,15 @@ public class DoubleBallDuplexFragment extends BaseFragment {
     }
 
     private void initView() {
-        danBallAdapter = new DoubleBallRedAdapter(getContext(), chooseDanBalls, isShow, 33);
-        tuoBallAdapter = new DoubleBallRedAdapter(getContext(), chooseTuoBalls, isShow, 33);
-        blueBallAdapter = new DoubleBallBlueAdapter(getContext(), chooseBlueBalls, isShow, 16);
+        danBallAdapter = new DoubleBallRedAdapter(getContext(), chooseDanBalls, isShow, 35);
+        tuoBallAdapter = new DoubleBallRedAdapter(getContext(), chooseTuoBalls, isShow, 35);
+        blueDanBallAdapter = new DoubleBallBlueAdapter(getContext(), chooseBlueDanBalls, isShow, 12);
+        blueTuoBallAdapter = new DoubleBallBlueAdapter(getContext(), chooseBlueTuoBalls, isShow, 12);
 
         danhaoRedGv.setAdapter(danBallAdapter);
         tuohaoRedGv.setAdapter(tuoBallAdapter);
-        buleGv.setAdapter(blueBallAdapter);
+        danhaoBuleGv.setAdapter(blueDanBallAdapter);
+        tuohaoBuleGv.setAdapter(blueTuoBallAdapter);
 
         mAwardPeriodAdapter = new AwardPeriodAdapter(null);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -201,7 +200,8 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         //重新设置高度
         ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
         ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(buleGv);
+        ViewSetHinghUtil.resetGridViewHight7(danhaoBuleGv);
+        ViewSetHinghUtil.resetGridViewHight7(tuohaoBuleGv);
 
         //底部显示清空
         bottomResultChooseTv.setVisibility(View.GONE);
@@ -213,11 +213,11 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         danhaoRedGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //限制球数
-                if (limit(5, position, chooseDanBalls)) {
-                    ToastUtils.showToast("最多选择5个胆码");
+                if (limit(4, position, chooseDanBalls)) {
+                    ToastUtils.showToast("最多选择4个前区胆码");
                     return;
                 }
-                //判断是否包含此位置的球
+                //判断相应的拖是否包含此位置的球
                 for (int i = 0; i < chooseTuoBalls.size(); i++) {
                     if (chooseTuoBalls.get(i).equals(position + "")) {
                         chooseTuoBalls.remove(i);
@@ -258,10 +258,10 @@ public class DoubleBallDuplexFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //限制球数
                 if (limit(20, position, chooseTuoBalls)) {
-                    ToastUtils.showToast("最多选择20个拖码");
+                    ToastUtils.showToast("最多选择20个前区拖码");
                     return;
                 }
-                //判断是否此位置的球
+                //判断胆是否已选此位置的球
                 for (int i = 0; i < chooseDanBalls.size(); i++) {
                     if (chooseDanBalls.get(i).equals(position + "")) {
                         chooseDanBalls.remove(i);
@@ -297,31 +297,88 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         });
 
         // 对篮球GridView进行监听，获取选球状态。
-        buleGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        danhaoBuleGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //限制球数
+                if (limit(1, position, chooseBlueDanBalls)) {
+                    ToastUtils.showToast("最多选择1个后区胆码");
+                    return;
+                }
+                //判断胆是否已选此位置的球
+                for (int i = 0; i < chooseBlueTuoBalls.size(); i++) {
+                    if (chooseBlueTuoBalls.get(i).equals(position + "")) {
+                        chooseBlueTuoBalls.remove(i);
+                        selectBlueTuoNumber--;
+                        blueTuoBallAdapter.updateData(isShow, chooseBlueTuoBalls, omitsBlue);
+                    }
+                }
+
+
                 DoubleBallBlueAdapter.LanGridViewHolder vHollder = (DoubleBallBlueAdapter.LanGridViewHolder) view.getTag();
                 vHollder.chkBlue.toggle();
-                blueBallAdapter.getSelected().put(position, vHollder.chkBlue.isChecked());
+                blueDanBallAdapter.getSelected().put(position, vHollder.chkBlue.isChecked());
                 int tempBlue = 0;
                 String lq = "";
-                chooseBlueBalls.clear();
-                for (int i = 0; i < buleGv.getCount(); i++) {
-                    DoubleBallBlueAdapter.LanGridViewHolder vHolder_Blue = (DoubleBallBlueAdapter.LanGridViewHolder) buleGv.getChildAt(i).getTag();
-                    if (blueBallAdapter.lisSelected.get(i)) {
+                chooseBlueDanBalls.clear();
+                for (int i = 0; i < danhaoBuleGv.getCount(); i++) {
+                    DoubleBallBlueAdapter.LanGridViewHolder vHolder_Blue = (DoubleBallBlueAdapter.LanGridViewHolder) danhaoBuleGv.getChildAt(i).getTag();
+                    if (blueDanBallAdapter.lisSelected.get(i)) {
                         ++tempBlue;
-                        selectBlueNumber = tempBlue;
+                        selectBlueDanNumber = tempBlue;
                         vHolder_Blue.chkBlue.setTextColor(getResources().getColor(android.R.color.white));
                     } else {
                         vHolder_Blue.chkBlue.setTextColor(getResources().getColor(R.color.blue_ball));
                     }
 
-                    if (blueBallAdapter.getSelected().get(i)) {
+                    if (blueDanBallAdapter.getSelected().get(i)) {
                         lq = lq + (i + 1) + "  ";
-                        chooseBlueBalls.add(i + "");
+                        chooseBlueDanBalls.add(i + "");
                     }
                 }
-                selectBlueNumber = chooseBlueBalls.size();
+                selectBlueDanNumber = chooseBlueDanBalls.size();
+                //计算
+                calculatorResult();
+            }
+        });
+
+        // 对篮球GridView进行监听，获取选球状态。
+        tuohaoBuleGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //判断胆是否已选此位置的球
+                for (int i = 0; i < chooseBlueDanBalls.size(); i++) {
+                    if (chooseBlueDanBalls.get(i).equals(position + "")) {
+                        chooseBlueDanBalls.remove(i);
+                        selectBlueDanNumber--;
+                        blueDanBallAdapter.updateData(isShow, chooseBlueDanBalls, omitsBlue);
+                    }
+                }
+
+                DoubleBallBlueAdapter.LanGridViewHolder vHollder = (DoubleBallBlueAdapter.LanGridViewHolder) view.getTag();
+                vHollder.chkBlue.toggle();
+                blueTuoBallAdapter.getSelected().put(position, vHollder.chkBlue.isChecked());
+                int tempBlue = 0;
+                String lq = "";
+                chooseBlueTuoBalls.clear();
+                for (int i = 0; i < tuohaoBuleGv.getCount(); i++) {
+                    DoubleBallBlueAdapter.LanGridViewHolder vHolder_Blue = (DoubleBallBlueAdapter.LanGridViewHolder) tuohaoBuleGv.getChildAt(i).getTag();
+                    if (blueTuoBallAdapter.lisSelected.get(i)) {
+                        ++tempBlue;
+                        selectBlueTuoNumber = tempBlue;
+                        vHolder_Blue.chkBlue.setTextColor(getResources().getColor(android.R.color.white));
+                    } else {
+                        vHolder_Blue.chkBlue.setTextColor(getResources().getColor(R.color.blue_ball));
+                    }
+
+                    if (blueTuoBallAdapter.getSelected().get(i)) {
+                        lq = lq + (i + 1) + "  ";
+                        chooseBlueTuoBalls.add(i + "");
+                    }
+                }
+                selectBlueTuoNumber = chooseBlueTuoBalls.size();
                 //计算
                 calculatorResult();
             }
@@ -330,17 +387,17 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         appBar.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                if( state == State.EXPANDED ) {
-                    IsXpand=true;
+                if (state == State.EXPANDED) {
+                    IsXpand = true;
                     tvExpand.setText(R.string.expand);
                     RoteteUtils.rotateArrow(ivExpand, !IsXpand);
                     //展开状态
-                }else if(state == State.COLLAPSED){
-                    IsXpand=false;
+                } else if (state == State.COLLAPSED) {
+                    IsXpand = false;
                     tvExpand.setText(R.string.un_expand);
                     RoteteUtils.rotateArrow(ivExpand, !IsXpand);
                     //折叠状态
-                }else {
+                } else {
                     mAwardPeriodAdapter.setNewData(jsonArray);
                     //中间状态
                 }
@@ -364,33 +421,37 @@ public class DoubleBallDuplexFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.bottom_result_clear_tv, R.id.bottom_result_next_btn,R.id.layout_expand})
+    @OnClick({R.id.bottom_result_clear_tv, R.id.bottom_result_next_btn, R.id.layout_expand})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bottom_result_clear_tv:
                 //数据清空
                 chooseDanBalls.clear();
                 chooseTuoBalls.clear();
-                chooseBlueBalls.clear();
+                chooseBlueDanBalls.clear();
+                chooseBlueTuoBalls.clear();
                 selectDanNumber = 0;
                 selectTuoNumber = 0;
-                selectBlueNumber = 0;
+                selectBlueDanNumber = 0;
+                selectBlueTuoNumber = 0;
                 //计算
                 calculatorResult();
                 //清除选中的球
                 danBallAdapter.clearData();
                 tuoBallAdapter.clearData();
-                blueBallAdapter.clearData();
+                blueDanBallAdapter.clearData();
+                blueTuoBallAdapter.clearData();
                 break;
             case R.id.bottom_result_next_btn:
                 if (zhushu == 0) {
                     ToastUtils.showToast("至少选择一注");
                     return;
                 }
-                DoubleBall db = new DoubleBall();
+                SuperLotto db = new SuperLotto();
                 String dan = "";
                 String tuo = "";
-                String blue = "";
+                String blueDan = "";
+                String blueTuo = "";
                 for (int i = 0; i < chooseDanBalls.size(); i++) {
                     int number = Integer.parseInt(chooseDanBalls.get(i)) + 1;
                     if (i == 0) {
@@ -407,32 +468,39 @@ public class DoubleBallDuplexFragment extends BaseFragment {
                         tuo = tuo + "," + ((number < 10) ? ("0" + number) : number);
                     }
                 }
-                for (int i = 0; i < chooseBlueBalls.size(); i++) {
-                    int number = Integer.parseInt(chooseBlueBalls.get(i)) + 1;
+                if (chooseBlueDanBalls.size()>0){
+                    int number = Integer.parseInt(chooseBlueDanBalls.get(0)) + 1;
+                    blueDan = "" + ((number < 10) ? ("0" + number) : number);
+                }
+
+                for (int i = 0; i < chooseBlueTuoBalls.size(); i++) {
+                    int number = Integer.parseInt(chooseBlueTuoBalls.get(i)) + 1;
                     if (i == 0) {
-                        blue = blue + ((number < 10) ? ("0" + number) : number);
+                        blueTuo = blueTuo + ((number < 10) ? ("0" + number) : number);
                     } else {
-                        blue = blue + "," + ((number < 10) ? ("0" + number) : number);
+                        blueTuo = blueTuo + "," + ((number < 10) ? ("0" + number) : number);
                     }
                 }
+
                 //判断单复式胆拖
                 db.setType(2);
-                db.setDan(dan);
+                db.setDanRed(dan);
                 db.setRed(tuo);
-                db.setBlu(blue);
+                db.setDanBlu(blueDan);
+                db.setBlu(blueTuo);
                 db.setZhushu(zhushu);
                 db.setMoney(zhushu * 2);
 
-                ArrayList<DoubleBall> balls = new ArrayList<>();
+                ArrayList<SuperLotto> balls = new ArrayList<>();
                 balls.add(db);
 
 
                 intent(balls);
                 break;
             case R.id.layout_expand:
-                if(!IsXpand){
+                if (!IsXpand) {
                     appBar.setExpanded(true);
-                }else {
+                } else {
                     appBar.setExpanded(false);
                 }
                 break;
@@ -443,24 +511,24 @@ public class DoubleBallDuplexFragment extends BaseFragment {
 
 
     //跳转
-    private void intent(ArrayList<DoubleBall> balls) {
-        if (intentType==0){
-            Intent intent = new Intent(getContext(), ChooseBallPaymentActivity.class);
+    private void intent(ArrayList<SuperLotto> balls) {
+        if (intentType == 0) {
+            Intent intent = new Intent(getContext(), SuperLottoPaymentActivity.class);
             intent.putExtra("balls", (Serializable) balls);
             intent.putExtra("phase", phase);
             startActivity(intent);
-        }else {
+        } else {
             Intent intent = new Intent();
             intent.putExtra("balls", (Serializable) balls);
             intent.putExtra("phase", phase);
-            getActivity().setResult(-1,intent);
+            getActivity().setResult(-1, intent);
         }
         getActivity().finish();
     }
 
     //计算注数并显示
     private void calculatorResult() {
-        zhushu = Calculator.calculateDanTuoNum(selectDanNumber, selectTuoNumber, selectBlueNumber);
+        zhushu = Calculator.calculateSLDanTuoNum(selectDanNumber, selectTuoNumber, selectBlueDanNumber,selectBlueTuoNumber);
         bottomResultCountTv.setText(String.valueOf(zhushu));
         bottomResultMoneyTv.setText(String.valueOf(zhushu * 2));
     }
@@ -472,11 +540,13 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         this.omitsBlue = omitsBlue;
         danBallAdapter.updateData(isShow, chooseDanBalls, omitsRed);
         tuoBallAdapter.updateData(isShow, chooseTuoBalls, omitsRed);
-        blueBallAdapter.updateData(isShow, chooseBlueBalls, omitsBlue);
+        blueDanBallAdapter.updateData(isShow, chooseBlueDanBalls, omitsBlue);
+        blueTuoBallAdapter.updateData(isShow, chooseBlueTuoBalls, omitsBlue);
         //重新设置高度
         ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
         ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(buleGv);
+        ViewSetHinghUtil.resetGridViewHight7(danhaoBuleGv);
+        ViewSetHinghUtil.resetGridViewHight7(tuohaoBuleGv);
     }
 
     //显示遗漏
@@ -486,20 +556,22 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         omitsBlue.clear();
         danBallAdapter.updateData(isShow, chooseDanBalls, omitsRed);
         tuoBallAdapter.updateData(isShow, chooseTuoBalls, omitsRed);
-        blueBallAdapter.updateData(isShow, chooseBlueBalls, omitsBlue);
+        blueDanBallAdapter.updateData(isShow, chooseBlueDanBalls, omitsBlue);
+        blueTuoBallAdapter.updateData(isShow, chooseBlueTuoBalls, omitsBlue);
         //重新设置高度
         ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
         ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(buleGv);
+        ViewSetHinghUtil.resetGridViewHight7(danhaoBuleGv);
+        ViewSetHinghUtil.resetGridViewHight7(tuohaoBuleGv);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-            if (hidden) {
-                appBar.setExpanded(false);
-            } else {
-            }
+        if (hidden) {
+            appBar.setExpanded(false);
+        } else {
+        }
 
     }
 }

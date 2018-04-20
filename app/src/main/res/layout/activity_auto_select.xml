@@ -189,6 +189,39 @@
                 android:text="倍"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/plus_ll"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/checkbox_plus"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:button="@drawable/check_win"
+                android:checked="false"
+                android:enabled="true"
+                android:scaleY="1.3"
+                android:scaleX="1.3"
+                android:layout_marginLeft="@dimen/length_3"/>
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="追加投注"/>
+            <ImageView
+                android:id="@+id/plus_iv"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/iv_question_mark"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
@@ -201,17 +234,18 @@
                 <CheckBox
                     android:id="@+id/checkbox"
                     android:gravity="center_vertical"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
-                    android:background="@drawable/check_win"
-                    android:button="@null"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:button="@drawable/check_win"
                     android:checked="false"
-                    android:enabled="true" />
+                    android:enabled="true"
+                    android:scaleY="1.3"
+                    android:scaleX="1.3"
+                    android:layout_marginLeft="@dimen/length_3"/>
                 <TextView
                     android:layout_gravity="center_vertical"
                     android:textSize="13sp"
-                    android:layout_marginLeft="10dp"
                     android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -238,6 +272,7 @@
                 android:layout_height="wrap_content"
                 android:text="元后停止"/>
             <ImageView
+                android:id="@+id/isstop_iv"
                 android:layout_marginLeft="5dp"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"

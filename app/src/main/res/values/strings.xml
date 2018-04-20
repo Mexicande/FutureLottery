@@ -7,6 +7,8 @@
     <string name="double_title">双色球</string>
     <string name="doubleBile_title">双色球胆拖</string>
     <string name="payment">下单</string>
+    <string name="title_activity_super_lotto">大乐透</string>
+    <string name="title_activity_super_lotto_dan">大乐透胆拖</string>
 
 
     <!-- error-->
@@ -25,5 +27,6 @@
     <string name="validate_btn_hint">获取验证码</string>
     <string name="expand">收起</string>
     <string name="un_expand">下拉</string>
+
 
 </resources>

@@ -43,7 +43,7 @@ public class ApiService {
                                 if(code==0){
                                     listener.requestSuccess(0, jsonObject);
                                 }else {
-                                    listener.requestFailure(-1, jsonObject.getString("descrp"));
+                                    listener.requestFailure(-1, jsonObject.getString("error_message"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
