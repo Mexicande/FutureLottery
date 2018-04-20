@@ -84,7 +84,33 @@ public interface Api {
          */
         String LOGIN               =            HOST+"login/login";
     }
+    interface  FOOTBALL{
 
+        String  PASS_RULE                   =           "pass_rules";
+        String  PLAY_RULE                =               "play_rules";
+
+        //胜平负
+        String  FT001           =           "FT001";
+        //让球胜平负
+        String  FT006           =           "FT006";
+        //比分
+        String  FT002           =           "FT002";
+        //总进球
+        String  FT003           =           "FT003";
+        //半全场
+        String  FT004           =           "FT004";
+        //单关
+        String pass_rules_o        =            "0";
+        //过关
+        String pass_rules_1        =            "1";
+
+    }
+
+    class FootBall_Api{
+
+       public static final String  FOOTBALL_LSIT  =   HOST+"football/list";
+
+    }
 
 
 }

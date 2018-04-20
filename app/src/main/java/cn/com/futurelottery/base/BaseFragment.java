@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
@@ -29,7 +31,6 @@ public abstract class BaseFragment extends Fragment {
         return view;
     }
 
-
     public abstract int getLayoutResource();
 
 
@@ -39,7 +40,5 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
-
 }

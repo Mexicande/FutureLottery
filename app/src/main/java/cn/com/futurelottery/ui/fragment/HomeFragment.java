@@ -34,11 +34,13 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.Banner;
 import cn.com.futurelottery.model.Notification;
 import cn.com.futurelottery.model.Lottery;
 import cn.com.futurelottery.ui.activity.DoubleBallActivity;
+import cn.com.futurelottery.ui.activity.Football.FootBallActivity;
 import cn.com.futurelottery.ui.adapter.LotteryAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
@@ -182,7 +184,20 @@ public class HomeFragment extends BaseFragment {
         mProductAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ActivityUtils.startActivity(DoubleBallActivity.class);
+                Lottery item = mProductAdapter.getItem(position);
+                if (item != null) {
+                    String  lotid = item.getLotid();
+                    if(Contacts.Lottery.SSQ.equals(lotid)){
+                        ActivityUtils.startActivity(DoubleBallActivity.class);
+                        //双色球
+                    }else if(Contacts.Lottery.DIL.equals(lotid)){
+                        //大乐透
+
+                    }else if(Contacts.Lottery.FTB.equals(lotid)){
+                        //足彩
+                        ActivityUtils.startActivity(FootBallActivity.class);
+                    }
+                }
             }
         });
     }

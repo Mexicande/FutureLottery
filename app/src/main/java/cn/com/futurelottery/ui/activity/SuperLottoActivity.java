@@ -166,8 +166,8 @@ public class SuperLottoActivity extends BaseActivity {
 
     private void initView() {
         trmRecyclerview.setLayoutManager(new GridLayoutManager(this, 2));
-        trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(40)));
-        mTRMenuAdapter = new TRMenuAdapter(mlist);
+        trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(40),2));
+        mTRMenuAdapter = new TRMenuAdapter(R.layout.item_constellation_layout,mlist);
         trmRecyclerview.setAdapter(mTRMenuAdapter);
         commonFragment=new SuperLottoCommonFragment();
         duplexFragment=new SuperLottoDuplexFragment();

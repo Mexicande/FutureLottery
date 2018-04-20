@@ -4,13 +4,15 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 /**
- * Created by apple on 2018/4/11.
+ * @author apple
+ * @date 2018/4/11
  * 角度旋转
  */
 
 public class RoteteUtils {
 
     private RoteteUtils() {
+
     }
 
     public static void rotateArrow(ImageView arrow, boolean flag) {
@@ -26,16 +28,16 @@ public class RoteteUtils {
             fromDegrees = 0f;
             toDegrees = 180f;
         }
-//旋转动画效果   参数值 旋转的开始角度  旋转的结束角度  pivotX x轴伸缩值
+    //旋转动画效果   参数值 旋转的开始角度  旋转的结束角度  pivotX x轴伸缩值
         RotateAnimation animation = new RotateAnimation(fromDegrees, toDegrees,
                 pivotX, pivotY);
-//该方法用于设置动画的持续时间，以毫秒为单位
-        animation.setDuration(200);
-//设置重复次数
-//animation.setRepeatCount(int repeatCount);
-//动画终止时停留在最后一帧
+    //该方法用于设置动画的持续时间，以毫秒为单位
+        animation.setDuration(300);
+    //设置重复次数
+    //animation.setRepeatCount(int repeatCount);
+    //动画终止时停留在最后一帧
         animation.setFillAfter(true);
-//启动动画
+    //启动动画
         arrow.startAnimation(animation);
     }
 }

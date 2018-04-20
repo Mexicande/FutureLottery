@@ -165,8 +165,8 @@ public class DoubleBallActivity extends BaseActivity {
 
     private void initView() {
         trmRecyclerview.setLayoutManager(new GridLayoutManager(this, 2));
-        trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(40)));
-        mTRMenuAdapter = new TRMenuAdapter(mlist);
+        trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(40),2));
+        mTRMenuAdapter = new TRMenuAdapter(R.layout.item_constellation_layout,mlist);
         trmRecyclerview.setAdapter(mTRMenuAdapter);
         commonFragment=new DoubleBallCommonFragment();
         duplexFragment=new DoubleBallDuplexFragment();
@@ -201,12 +201,8 @@ public class DoubleBallActivity extends BaseActivity {
                 .setAnimationStyle(R.style.TopRightMenu_Anim)
                 .setShowBackground(true)
                 .setArrowPosition(CommonUtil.dip2px(55f));
-
-
     }
-
     private void setListener() {
-
         mTRMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -224,6 +220,7 @@ public class DoubleBallActivity extends BaseActivity {
                         }
                     }
                 }
+                instance.showFragment(position);
                 slideUp.hide();
                 switch (position){
                     case 0:

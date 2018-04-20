@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:id="@+id/layout_head"
+    android:layout_height="40dp">
+    <TextView
+        android:id="@+id/tv_hot"
+        android:visibility="gone"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="热门"
+        android:gravity="center_vertical"
+        android:textSize="13dp"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@mipmap/iv_hot"
+        android:textColor="@color/red_ball"
+        />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/color_333"
+        android:text="今日有一场热门比赛可投"/>
+    <ImageView
+        android:id="@+id/iv_arrow"
+        android:padding="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/iv_down_arrow"/>
+</RelativeLayout>

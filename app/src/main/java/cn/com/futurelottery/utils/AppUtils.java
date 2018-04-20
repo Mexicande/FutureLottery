@@ -13,6 +13,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -522,6 +524,16 @@ public final class AppUtils {
             }
         }
         return true;
+    }
+    public static int[]getScreenSize(Activity activity)
+    {
+        int[]a=new int[2];
+        WindowManager wm=activity.getWindowManager();
+        DisplayMetrics displayMetrics=new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        a[0]=displayMetrics.widthPixels;
+        a[1]=displayMetrics.heightPixels;
+        return a;
     }
 
 }

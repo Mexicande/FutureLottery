@@ -10,9 +10,10 @@ import android.view.View;
 public class MenuDecoration extends RecyclerView.ItemDecoration {
 
     private int space;
-
-    public MenuDecoration(int space) {
+    private int mSpanCount;
+    public MenuDecoration(int space,int spanCount) {
         this.space = space;
+        this.mSpanCount=spanCount;
     }
 
     @Override
@@ -26,16 +27,30 @@ public class MenuDecoration extends RecyclerView.ItemDecoration {
         outRect.top = 40;
         outRect.bottom = 40;
         outRect.right = space;*/
-        if (parent.getChildLayoutPosition(view) % 2 == 0) {
-            outRect.left = space;
-            outRect.top = 40;
-            outRect.bottom = 40;
-            outRect.right = 0;
-        } else {
-            outRect.left = space;
-            outRect.top = 40;
-            outRect.bottom = 40;
-            outRect.right = space;
+        if(mSpanCount==3){
+            if (parent.getChildLayoutPosition(view) % 2 == 0) {
+                outRect.left = space;
+                outRect.bottom = 40;
+                outRect.right = space;
+            } else {
+                outRect.left = space;
+                outRect.bottom = 40;
+                outRect.right = space;
+            }
+
+        }else {
+            if (parent.getChildLayoutPosition(view) % 2 == 0) {
+                outRect.left = space;
+                outRect.bottom = 40;
+                outRect.right = 0;
+            } else {
+                outRect.left = space;
+                outRect.bottom = 40;
+                outRect.right = space;
+            }
         }
+
+
+
     }
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white">
+    <include layout="@layout/line_e1"/>
+    <ImageView
+        android:id="@+id/bottom_result_clear_tv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@mipmap/bottom_result_delet"
+        android:layout_centerVertical="true"
+        />
+    <View
+        android:layout_toRightOf="@id/bottom_result_clear_tv"
+        android:layout_width="0.8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/color_999"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/bottom_result_clear_tv"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/tv_select"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请至少选择1场比赛"/>
+        <TextView
+            android:textSize="12sp"
+            android:textColor="@color/color_333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/foot_explain"/>
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/bottom_result_next_btn"
+        android:layout_width="61dp"
+        android:layout_height="31dp"
+        android:background="@drawable/login_button_bg"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/length_15"
+        android:text="@string/str_sure"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_13"/>
+</RelativeLayout>

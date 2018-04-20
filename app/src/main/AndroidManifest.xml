@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- 允许使用震动权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -48,6 +49,9 @@
             android:label="@string/title_activity_super_lotto"
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.activity.SuperLottoPaymentActivity"></activity>
+        <activity android:name=".ui.activity.Football.FootBallActivity"
+            android:label="@string/football_title"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

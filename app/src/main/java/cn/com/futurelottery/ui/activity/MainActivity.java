@@ -24,6 +24,7 @@ import cn.com.futurelottery.model.Popup;
 import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
 import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
 import cn.com.futurelottery.ui.dialog.AdialogFragment;
+import cn.com.futurelottery.ui.dialog.ScoreDialogFragment;
 import cn.com.futurelottery.ui.fragment.CenterFragment;
 import cn.com.futurelottery.ui.fragment.HomeFragment;
 import cn.com.futurelottery.ui.fragment.LotteryFragment;
@@ -50,6 +51,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         initBottom();
         aPopupDialog();
+        ScoreDialogFragment scoreDialogFragment=new ScoreDialogFragment();
+        scoreDialogFragment.show(getSupportFragmentManager(),"1111");
     }
 
     private void aPopupDialog() {
