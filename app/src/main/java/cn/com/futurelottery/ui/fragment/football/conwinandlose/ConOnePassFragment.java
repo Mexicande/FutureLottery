@@ -87,7 +87,6 @@ public class ConOnePassFragment extends BaseFragment {
                 }
                 mWinAndLoseAdapter = new WinAndLoseAdapter(res);
                 conOneRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                conOneRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
                 conOneRecycler.setAdapter(mWinAndLoseAdapter);
                 ((SimpleItemAnimator)conOneRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
                 mWinAndLoseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

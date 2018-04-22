@@ -26,9 +26,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseActivity;
-import cn.com.futurelottery.presenter.FooterTypeEvent;
+import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
 import cn.com.futurelottery.ui.fragment.football.ScoreFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
+import cn.com.futurelottery.ui.fragment.football.sizefootball.SizeFragment;
 import cn.com.futurelottery.ui.fragment.football.winandlose.WinAndLoseFragment;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.MenuDecoration;
@@ -105,7 +106,6 @@ public class FootBallActivity extends BaseActivity {
                 RoteteUtils.rotateArrow(ivArrow, flag);
                 flag = !flag;
                 switchPages(position);
-                EventBus.getDefault().post(new FooterTypeEvent(position));
             }
         });
     }
@@ -200,6 +200,8 @@ public class FootBallActivity extends BaseActivity {
         mFragmentList.add(new WinAndLoseFragment());
         mFragmentList.add(new ConWinAndFragment());
         mFragmentList.add(new ScoreFragment());
+        mFragmentList.add(new SizeFragment());
+        mFragmentList.add(new HalfFragment());
         switchPages(0);
     }
 
@@ -303,6 +305,5 @@ public class FootBallActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 }

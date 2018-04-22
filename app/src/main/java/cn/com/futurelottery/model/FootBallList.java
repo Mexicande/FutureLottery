@@ -172,7 +172,79 @@ public class FootBallList implements Serializable, MultiItemEntity {
             private int vsType;
             private int awayType;
 
+            private int fistfrom;
+            private int secondfrom;
+            private int thirdfrom;
+            private int fourthfrom;
+            private int fifthfrom;
+            private int sixthfrom;
+            private int seventhfrom;
+            private int eighthfrom;
             private String select;
+
+            public int getFistfrom() {
+                return fistfrom;
+            }
+
+            public void setFistfrom(int fistfrom) {
+                this.fistfrom = fistfrom;
+            }
+
+            public int getSecondfrom() {
+                return secondfrom;
+            }
+
+            public void setSecondfrom(int secondfrom) {
+                this.secondfrom = secondfrom;
+            }
+
+            public int getThirdfrom() {
+                return thirdfrom;
+            }
+
+            public void setThirdfrom(int thirdfrom) {
+                this.thirdfrom = thirdfrom;
+            }
+
+            public int getFourthfrom() {
+                return fourthfrom;
+            }
+
+            public void setFourthfrom(int fourthfrom) {
+                this.fourthfrom = fourthfrom;
+            }
+
+            public int getFifthfrom() {
+                return fifthfrom;
+            }
+
+            public void setFifthfrom(int fifthfrom) {
+                this.fifthfrom = fifthfrom;
+            }
+
+            public int getSixthfrom() {
+                return sixthfrom;
+            }
+
+            public void setSixthfrom(int sixthfrom) {
+                this.sixthfrom = sixthfrom;
+            }
+
+            public int getSeventhfrom() {
+                return seventhfrom;
+            }
+
+            public void setSeventhfrom(int seventhfrom) {
+                this.seventhfrom = seventhfrom;
+            }
+
+            public int getEighthfrom() {
+                return eighthfrom;
+            }
+
+            public void setEighthfrom(int eighthfrom) {
+                this.eighthfrom = eighthfrom;
+            }
 
             public String getSelect() {
                 return select;

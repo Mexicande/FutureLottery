@@ -1,30 +1,183 @@
 package cn.com.futurelottery.ui.fragment.football.sizefootball;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import cn.com.myapplication.R;
+import net.lucode.hackware.magicindicator.FragmentContainerHelper;
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.BaseApplication;
+import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.presenter.FootSizeType;
+import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
+import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
+
 
 /**
  * A simple {@link Fragment} subclass.
+ * 总进球
  */
-public class SizeFragment extends Fragment {
+public class SizeFragment extends BaseFragment {
 
 
+    @BindView(R.id.magic_indicator)
+    MagicIndicator magicIndicator;
+    @BindView(R.id.viewPager)
+    NoTouchViewPager viewPager;
+    @BindView(R.id.bottom_result_clear_tv)
+    ImageView bottomResultClearTv;
+    @BindView(R.id.tv_select)
+    TextView tvSelect;
+    @BindView(R.id.bottom_result_next_btn)
+    Button bottomResultNextBtn;
+    private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
+    private List<String> mDataList = new ArrayList<>();
+    ArrayList<Fragment> mFragmentList = new ArrayList<>();
+    private int AllNumber=0;
+    private int OneNumber=0;
     public SizeFragment() {
         // Required empty public constructor
     }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_size, container, false);
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Override
+    public int getLayoutResource() {
+        return R.layout.fragment_size;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initFragment();
+    }
+    private void initFragment() {
+        mDataList.add("过关 (至少选两场)");
+        mDataList.add("单关 (猜一场,奖金固定)");
+
+        mFragmentList.add(new SizeAllFragment());
+        mFragmentList.add(new SizeOneFragment());
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager(), mFragmentList);
+        viewPager.setAdapter(myViewPagerAdapter);
+        CommonNavigator commonNavigator = new CommonNavigator(getActivity());
+        commonNavigator.setAdjustMode(true);
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+            @Override
+            public int getCount() {
+                return mDataList == null ? 0 : mDataList.size();
+            }
+
+            @Override
+            public IPagerTitleView getTitleView(Context context, final int i) {
+                BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
+
+                SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
+                simplePagerTitleView.setText(mDataList.get(i));
+                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.color_333));
+                simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.red_ball));
+                simplePagerTitleView.setTextSize(13);
+                simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mFragmentContainerHelper.handlePageSelected(i);
+                        viewPager.setCurrentItem(i);
+                        if (i == 0) {
+                            if(AllNumber==0){
+                                tvSelect.setText("请至少选择2场比赛");
+                            }else {
+                                tvSelect.setText("已选择"+AllNumber+"场");
+                            }
+                        }else if(i==1){
+                            if(OneNumber==0){
+                                tvSelect.setText("请至少选择1场比赛");
+                            }else {
+                                tvSelect.setText("已选择"+OneNumber+"场");
+                            }
+
+                        }
+
+                    }
+                });
+                badgePagerTitleView.setInnerPagerTitleView(simplePagerTitleView);
+                return badgePagerTitleView;
+            }
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
+                indicator.setLineHeight(3);
+                indicator.setColors(getResources().getColor(R.color.red_ball));
+                return indicator;
+            }
+        });
+        magicIndicator.setNavigator(commonNavigator);
+        LinearLayout titleContainer = commonNavigator.getTitleContainer();
+        mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
+        titleContainer.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        titleContainer.setDividerPadding(UIUtil.dip2px(BaseApplication.getInstance(), 15));
+        titleContainer.setDividerDrawable(getResources().getDrawable(R.drawable.simple_splitter));
+
+        final FragmentContainerHelper fragmentContainerHelper = new FragmentContainerHelper(magicIndicator);
+        fragmentContainerHelper.setInterpolator(new OvershootInterpolator(2.0f));
+        fragmentContainerHelper.setDuration(300);
+
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                fragmentContainerHelper.handlePageSelected(position);
+            }
+        });
+
+    }
+
+    @Subscribe
+    public void setSelectUn(FootSizeType event){
+        if(event.getmAll()!=0){
+            AllNumber=event.getmAll();
+            tvSelect.setText("已选择"+AllNumber+"场");
+        }else {
+            tvSelect.setText("请至少选择2场比赛");
+        }
+        if(event.getmOne()!=0){
+            OneNumber=event.getmOne();
+            tvSelect.setText("已选择"+OneNumber+"场");
+        }else {
+            tvSelect.setText("请至少选择1场比赛");
+        }
+    }
 }

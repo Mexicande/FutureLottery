@@ -1,6 +1,5 @@
 package cn.com.futurelottery.ui.adapter.football;
 
-import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -11,7 +10,7 @@ import java.util.List;
 
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 /**
  * Created by apple on 2018/4/18.
@@ -25,6 +24,9 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
+    private OnTopRightMenuItemClickListener mItemClickListener;
+
+    private int nu=0;
 
     public static final int TYPE_LEVEL_0 = 0;
     public static final int TYPE_LEVEL_1 = 1;
@@ -68,9 +70,6 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         .setText(R.id.vs_describe,"平"+odds.get(1).getOdds())
                         .setText(R.id.away_odd,matchBean.getAwayTeam())
                         .setText(R.id.away_describe,"客胜"+odds.get(2).getOdds())
-                        /*.addOnClickListener(R.id.layout_home)
-                        .addOnClickListener(R.id.layout_vs)
-                        .addOnClickListener(R.id.layout_away)*/
                         ;
                 View home = helper.getView(R.id.layout_home);
                 View vs = helper.getView(R.id.layout_vs);
@@ -85,6 +84,7 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                             matchBean.setHomeType(0);
                         }
                         notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
                     }
                 });
                 vs.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +96,8 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                             matchBean.setVsType(0);
                         }
                         notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
                     }
                 });
                 awaw.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +109,8 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                             matchBean.setAwayType(0);
                         }
                         notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
                     }
                 });
 
@@ -119,7 +123,6 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                     helper.setTextColor(R.id.home_odds,mContext.getResources().getColor(R.color.white));
                     helper.setTextColor(R.id.tv_homedescribe,mContext.getResources().getColor(R.color.white));
                 }
-
                 if (matchBean.getVsType()==0){
                         vs.setBackgroundColor(mContext.getResources().getColor(R.color.white));
                         helper.setTextColor(R.id.vs_odd,mContext.getResources().getColor(R.color.black));
@@ -144,13 +147,12 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                     FootBallList.DataBean.MatchBean.OddsBean oddsBean = matchBean.getOdds().get(3);
                     int odd = Integer.parseInt(oddsBean.getOdds());
                     if(odd>0){
-                        helper.setText(R.id.tv_conBall,"+"+odd);
+                        helper.setText(R.id.tv_conBall,odd+"");
                         helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.red_ball));
                     }else {
-                        helper.setText(R.id.tv_conBall,"-"+odd);
+                        helper.setText(R.id.tv_conBall,odd+"");
                         helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.green_1A));
                     }
-
                 }
 
                 break;
@@ -159,4 +161,9 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
         }
 
     }
+
+    public void setOnTopRightMenuItemClickListener(OnTopRightMenuItemClickListener listener) {
+        mItemClickListener = listener;
+    }
+
 }

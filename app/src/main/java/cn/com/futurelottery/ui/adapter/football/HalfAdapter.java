@@ -12,7 +12,6 @@ import java.util.List;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.ScoreList;
-import cn.com.futurelottery.utils.ToastUtils;
 
 /**
  *
@@ -21,7 +20,7 @@ import cn.com.futurelottery.utils.ToastUtils;
  * football 比分
  */
 
-public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
+public class HalfAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
@@ -32,7 +31,7 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
     public static final int TYPE_LEVEL_0 = 0;
     public static final int TYPE_LEVEL_1 = 1;
 
-    public ScoreListAdapter(List<MultiItemEntity> data) {
+    public HalfAdapter(List<MultiItemEntity> data) {
         super(data);
         addItemType(0, R.layout.football_item);
         addItemType(1, R.layout.score_layout);
@@ -41,7 +40,7 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
     protected void convert(final BaseViewHolder helper, final MultiItemEntity item) {
         switch (helper.getItemViewType()){
             case TYPE_LEVEL_0:
-                final ScoreList.DataBean bean= (ScoreList.DataBean) item;
+                final FootBallList.DataBean bean= (FootBallList.DataBean) item;
                 final int pos = helper.getAdapterPosition();
                 helper.setImageResource(R.id.iv_arrow, bean.isExpanded() ? R.mipmap.iv_up_arrow : R.mipmap.iv_down_arrow);
                     helper.setText(R.id.tv_title,bean.getDate()+" "+bean.getWeek()+" "+bean.getCount()+"场比赛可投");
@@ -61,7 +60,7 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
                     }});
                 break;
             case TYPE_LEVEL_1:
-                final ScoreList.DataBean.MatchBean matchBean= (ScoreList.DataBean.MatchBean) item;
+                final FootBallList.DataBean.MatchBean matchBean= (FootBallList.DataBean.MatchBean) item;
                 helper.setText(R.id.tv_name,matchBean.getLeague())
                         .setText(R.id.tv_week,matchBean.getWeek()+matchBean.getTeamid())
                         .setText(R.id.tv_endTime,matchBean.getEndtime()+"截止")
@@ -80,7 +79,6 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
                     select.setBackground(mContext.getResources().getDrawable(R.drawable.bg_foot_layout));
                     helper.setText(R.id.tv_score,"点击选择比分");
                     helper.setTextColor(R.id.tv_score,mContext.getResources().getColor(R.color.black));
-
                 }
 
                 break;

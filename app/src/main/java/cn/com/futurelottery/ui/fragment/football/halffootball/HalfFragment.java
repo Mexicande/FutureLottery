@@ -1,26 +1,33 @@
-package cn.com.futurelottery.ui.fragment.football;
+package cn.com.futurelottery.ui.fragment.football.halffootball;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import net.lucode.hackware.magicindicator.FragmentContainerHelper;
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +36,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.base.Api;
-import cn.com.futurelottery.base.ApiService;
+import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
-import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.model.ScoreList;
+import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
+import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
 import cn.com.futurelottery.ui.adapter.football.HalfAdapter;
-import cn.com.futurelottery.ui.adapter.football.ScoreListAdapter;
-import cn.com.futurelottery.ui.dialog.ScoreDialogFragment;
-import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.ui.fragment.football.winandlose.AllPassFragment;
+import cn.com.futurelottery.ui.fragment.football.winandlose.OnePassFragment;
 
 
 /**
@@ -50,19 +55,24 @@ import cn.com.futurelottery.utils.LogUtils;
 public class HalfFragment extends BaseFragment {
 
 
-    @BindView(R.id.halfRecycler)
-    RecyclerView halfRecycler;
+    @BindView(R.id.magic_indicator)
+    MagicIndicator magicIndicator;
+    @BindView(R.id.viewPager)
+    NoTouchViewPager viewPager;
     @BindView(R.id.bottom_result_clear_tv)
     ImageView bottomResultClearTv;
     @BindView(R.id.tv_select)
     TextView tvSelect;
     @BindView(R.id.bottom_result_next_btn)
     Button bottomResultNextBtn;
-    private HalfAdapter mHalfAdapter;
-    private ArrayList<MultiItemEntity> res;
-    private List<FootBallList.DataBean> beans;
+
+    private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
+    private List<String> mDataList = new ArrayList<>();
+    ArrayList<Fragment> mFragmentList = new ArrayList<>();
+
+
     public HalfFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -73,57 +83,77 @@ public class HalfFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDate();
+        initFragment();
     }
 
-    private void getDate() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(Api.FOOTBALL.PASS_RULE, Api.FOOTBALL.pass_rules_1);
-            jsonObject.put(Api.FOOTBALL.PLAY_RULE, Api.FOOTBALL.FT004);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        ApiService.GET_SERVICE(Api.FootBall_Api.FOOTBALL_LSIT, getActivity(), jsonObject, new OnRequestDataListener() {
+    private void initFragment() {
+        mDataList.add("过关 (至少选两场)");
+        mDataList.add("单关 (猜一场,奖金固定)");
+        mFragmentList.add(new AllHalfFragment());
+        mFragmentList.add(new OneHalfFragment());
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager(), mFragmentList);
+        viewPager.setAdapter(myViewPagerAdapter);
+        CommonNavigator commonNavigator = new CommonNavigator(getActivity());
+        commonNavigator.setAdjustMode(true);
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
             @Override
-            public void requestSuccess(int code, JSONObject data) {
-                Gson gson = new Gson();
-                FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
-                beans = footBallList.getData();
-                res = new ArrayList<>();
-                for (int i = 0; i < beans.size(); i++) {
-                    FootBallList.DataBean dataBean = beans.get(i);
-                    dataBean.setSubItems(beans.get(i).getMatch());
-                    res.add(dataBean);
-                }
-                mHalfAdapter = new HalfAdapter(res);
-                halfRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                halfRecycler.setAdapter(mHalfAdapter);
-                ((SimpleItemAnimator) halfRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-                mHalfAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        for (FootBallList.DataBean s : beans) {
-                            LogUtils.i(s.toString());
-                        }
-                    }
-                });
-
-                mHalfAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-                    @Override
-                    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                        ScoreDialogFragment scoreDialogFragment = new ScoreDialogFragment();
-                        scoreDialogFragment.show(getChildFragmentManager(), "scoreDialogFragment");
-                    }
-                });
-
+            public int getCount() {
+                return mDataList == null ? 0 : mDataList.size();
             }
 
             @Override
-            public void requestFailure(int code, String msg) {
+            public IPagerTitleView getTitleView(Context context, final int i) {
+                BadgePagerTitleView badgePagerTitleView = new BadgePagerTitleView(context);
 
+                SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
+                simplePagerTitleView.setText(mDataList.get(i));
+                simplePagerTitleView.setNormalColor(getResources().getColor(R.color.color_333));
+                simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.red_ball));
+                simplePagerTitleView.setTextSize(13);
+                simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mFragmentContainerHelper.handlePageSelected(i);
+                        viewPager.setCurrentItem(i);
+                        if (i == 0) {
+                            tvSelect.setText("请至少选择2场比赛");
+                        } else if (i == 1) {
+                            tvSelect.setText("请至少选择1场比赛");
+                        }
+
+                    }
+                });
+                badgePagerTitleView.setInnerPagerTitleView(simplePagerTitleView);
+                return badgePagerTitleView;
+            }
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
+                indicator.setLineHeight(3);
+                indicator.setColors(getResources().getColor(R.color.red_ball));
+                return indicator;
             }
         });
+        magicIndicator.setNavigator(commonNavigator);
+        LinearLayout titleContainer = commonNavigator.getTitleContainer();
+        mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
+        // must after setNavigator
+        titleContainer.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        titleContainer.setDividerPadding(UIUtil.dip2px(BaseApplication.getInstance(), 15));
+        titleContainer.setDividerDrawable(getResources().getDrawable(R.drawable.simple_splitter));
+
+        final FragmentContainerHelper fragmentContainerHelper = new FragmentContainerHelper(magicIndicator);
+        fragmentContainerHelper.setInterpolator(new OvershootInterpolator(2.0f));
+        fragmentContainerHelper.setDuration(300);
+
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                fragmentContainerHelper.handlePageSelected(position);
+            }
+        });
+
     }
 }

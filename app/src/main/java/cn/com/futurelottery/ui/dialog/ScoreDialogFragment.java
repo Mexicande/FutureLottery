@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.model.Popup;
 import cn.com.futurelottery.ui.adapter.ScoreDialogAdapter;
 import cn.com.futurelottery.ui.adapter.football.ScoreListAdapter;
 
@@ -35,10 +36,6 @@ import cn.com.futurelottery.ui.adapter.football.ScoreListAdapter;
  */
 public class ScoreDialogFragment extends DialogFragment {
 
-
-    /*    @BindView(R.id.flexbox_layout)
-        FlexboxLayout flexboxLayout;
-        */
     Unbinder unbinder;
     @BindView(R.id.tv_home)
     TextView tvHome;
@@ -55,12 +52,18 @@ public class ScoreDialogFragment extends DialogFragment {
     public ScoreDialogFragment() {
         // Required empty public constructor
     }
+    public static AdialogFragment newInstance(Popup mPopupBean) {
+        AdialogFragment instance = new AdialogFragment();
+        Bundle args = new Bundle();
+        //args.putSerializable(popup, mPopupBean);
+        instance.setArguments(args);
+        return instance;
 
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Base_AlertDialog);
-
     }
 
     @Override
@@ -78,27 +81,7 @@ public class ScoreDialogFragment extends DialogFragment {
             window.setAttributes(wlp);
         }
         unbinder = ButterKnife.bind(this, view);
-/*
-        TextView textView = new TextView(getContext());
-        textView.setText("1:0\n18.00");
-        textView.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
-        textView.setPadding(10,10,10,10);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(10);
-        TextView textView1 = new TextView(getContext());
-        textView1.setText("1:0\n18.00");
-        textView1.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
-        textView1.setPadding(10,10,10,10);
-        textView1.setGravity(Gravity.CENTER);
-        textView1.setTextSize(10);
-        flexboxLayout.addView(textView1);
-        flexboxLayout.addView(textView);
-        ViewGroup.LayoutParams params = textView.getLayoutParams();
-        if(params instanceof FlexboxLayout.LayoutParams){
-            FlexboxLayout.LayoutParams layoutParams = (FlexboxLayout.LayoutParams) params;
-            layoutParams.setFlexBasisPercent(0.5f);
-            layoutParams.setFlexGrow(1);
-        }*/
+
         return view;
     }
 

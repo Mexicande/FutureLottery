@@ -1,6 +1,5 @@
 package cn.com.futurelottery.ui.adapter.football;
 
-import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -11,28 +10,29 @@ import java.util.List;
 
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 /**
  * Created by apple on 2018/4/18.
  * football 胜平负
  */
 
-public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
+public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
+    private OnTopRightMenuItemClickListener mItemClickListener;
 
     public static final int TYPE_LEVEL_0 = 0;
     public static final int TYPE_LEVEL_1 = 1;
 
-    public WinAndLoseAdapter(List<MultiItemEntity> data) {
+    public SizeAdapter(List<MultiItemEntity> data) {
         super(data);
         addItemType(0, R.layout.football_item);
-        addItemType(1, R.layout.win_lose_item);
+        addItemType(1, R.layout.size_item);
     }
     @Override
     protected void convert(final BaseViewHolder helper, final MultiItemEntity item) {
@@ -64,93 +64,222 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         .setText(R.id.tv_week,matchBean.getWeek()+matchBean.getTeamid())
                         .setText(R.id.tv_endTime,matchBean.getEndtime()+"截止")
                         .setText(R.id.home_odds,matchBean.getHomeTeam())
-                        .setText(R.id.tv_homedescribe,"客胜"+odds.get(0).getOdds())
-                        .setText(R.id.vs_describe,"平"+odds.get(1).getOdds())
                         .setText(R.id.away_odd,matchBean.getAwayTeam())
-                        .setText(R.id.away_describe,"客胜"+odds.get(2).getOdds())
+
+                        .setText(R.id.name1,odds.get(0).getName())
+                        .setText(R.id.name2,odds.get(1).getName())
+                        .setText(R.id.name3,odds.get(2).getName())
+                        .setText(R.id.name4,odds.get(3).getName())
+                        .setText(R.id.name5,odds.get(4).getName())
+                        .setText(R.id.name6,odds.get(5).getName())
+                        .setText(R.id.name7,odds.get(6).getName())
+                        .setText(R.id.name8,odds.get(7).getName())
+
+                        .setText(R.id.odd1,odds.get(0).getOdds())
+                        .setText(R.id.odd2,odds.get(1).getOdds())
+                        .setText(R.id.odd3,odds.get(2).getOdds())
+                        .setText(R.id.odd4,odds.get(3).getOdds())
+                        .setText(R.id.odd5,odds.get(4).getOdds())
+                        .setText(R.id.odd6,odds.get(5).getOdds())
+                        .setText(R.id.odd7,odds.get(6).getOdds())
+                        .setText(R.id.odd8,odds.get(7).getOdds())
                         /*.addOnClickListener(R.id.layout_home)
                         .addOnClickListener(R.id.layout_vs)
                         .addOnClickListener(R.id.layout_away)*/
                         ;
-                View home = helper.getView(R.id.layout_home);
-                View vs = helper.getView(R.id.layout_vs);
-                View awaw = helper.getView(R.id.layout_away);
+                View form1 = helper.getView(R.id.form1);
+                View form2 = helper.getView(R.id.form2);
+                View form3 = helper.getView(R.id.form3);
+                View form4 = helper.getView(R.id.form4);
+                View form5 = helper.getView(R.id.form5);
+                View form6 = helper.getView(R.id.form6);
+                View form7 = helper.getView(R.id.form7);
+                View form8 = helper.getView(R.id.form8);
 
-                home.setOnClickListener(new View.OnClickListener() {
+                form1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(matchBean.getHomeType()==0){
-                            matchBean.setHomeType(1);
+                        if(matchBean.getFistfrom()==0){
+                            matchBean.setFistfrom(1);
                         }else {
-                            matchBean.setHomeType(0);
+                            matchBean.setFistfrom(0);
+                        }
+                        notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+                    }
+
+                });
+                form2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(matchBean.getSecondfrom()==0){
+                            matchBean.setSecondfrom(1);
+
+                        }else {
+                            matchBean.setSecondfrom(0);
+
+                        }
+                        notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
+                    }
+                });
+                form3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(matchBean.getThirdfrom()==0){
+                            matchBean.setThirdfrom(1);
+                        }else {
+                            matchBean.setThirdfrom(0);
+                        }
+                        notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
+                    }
+                });
+                form4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(matchBean.getFourthfrom()==0){
+                            matchBean.setFourthfrom(1);
+                        }else {
+                            matchBean.setFourthfrom(0);
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                     }
                 });
-                vs.setOnClickListener(new View.OnClickListener() {
+                form5.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(matchBean.getVsType()==0){
-                            matchBean.setVsType(1);
+                        if(matchBean.getFifthfrom()==0){
+                            matchBean.setFifthfrom(1);
                         }else {
-                            matchBean.setVsType(0);
+                            matchBean.setFifthfrom(0);
                         }
                         notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
                     }
                 });
-                awaw.setOnClickListener(new View.OnClickListener() {
+                form6.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(matchBean.getAwayType()==0){
-                            matchBean.setAwayType(1);
+                        if(matchBean.getSixthfrom()==0){
+                            matchBean.setSixthfrom(1);
                         }else {
-                            matchBean.setAwayType(0);
+                            matchBean.setSixthfrom(0);
                         }
                         notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
+                    }
+                });
+                form7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(matchBean.getSeventhfrom()==0){
+                            matchBean.setSeventhfrom(1);
+                        }else {
+                            matchBean.setSeventhfrom(0);
+                        }
+                        notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
+                    }
+                });
+                form8.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(matchBean.getEighthfrom()==0){
+                            matchBean.setEighthfrom(1);
+                        }else {
+                            matchBean.setEighthfrom(0);
+                        }
+                        notifyItemChanged(helper.getAdapterPosition());
+                        mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
+
                     }
                 });
 
-                if (matchBean.getHomeType()==0){
-                        home.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-                        helper.setTextColor(R.id.home_odds,mContext.getResources().getColor(R.color.black));
-                        helper.setTextColor(R.id.tv_homedescribe,mContext.getResources().getColor(R.color.color_333));
+
+                if (matchBean.getFistfrom()==0){
+                        form1.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name1,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd1,mContext.getResources().getColor(R.color.color_333));
                 }else {
-                    home.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
-                    helper.setTextColor(R.id.home_odds,mContext.getResources().getColor(R.color.white));
-                    helper.setTextColor(R.id.tv_homedescribe,mContext.getResources().getColor(R.color.white));
+                    form1.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name1,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd1,mContext.getResources().getColor(R.color.white));
                 }
 
-                if (matchBean.getVsType()==0){
-                        vs.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-                        helper.setTextColor(R.id.vs_odd,mContext.getResources().getColor(R.color.black));
-                        helper.setTextColor(R.id.vs_describe,mContext.getResources().getColor(R.color.color_333));
+                if (matchBean.getSecondfrom()==0){
+                    form2.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name2,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd2,mContext.getResources().getColor(R.color.color_333));
                 }else {
-                    vs.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
-                    helper.setTextColor(R.id.vs_odd,mContext.getResources().getColor(R.color.white));
-                    helper.setTextColor(R.id.vs_describe,mContext.getResources().getColor(R.color.white));
+                    form2.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name2,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd2,mContext.getResources().getColor(R.color.white));
                 }
 
-                if (matchBean.getAwayType()==0){
-                    awaw.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-                        helper.setTextColor(R.id.away_odd,mContext.getResources().getColor(R.color.black));
-                        helper.setTextColor(R.id.away_describe,mContext.getResources().getColor(R.color.color_333));
+                if (matchBean.getThirdfrom()==0){
+                    form3.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name3,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd3,mContext.getResources().getColor(R.color.color_333));
                 }else {
-                    awaw.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
-                    helper.setTextColor(R.id.away_odd,mContext.getResources().getColor(R.color.white));
-                    helper.setTextColor(R.id.away_describe,mContext.getResources().getColor(R.color.white));
+                    form3.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name3,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd3,mContext.getResources().getColor(R.color.white));
                 }
-                if(matchBean.getOdds().size()>3){
-                    helper.setVisible(R.id.layout_odd,true);
-                    FootBallList.DataBean.MatchBean.OddsBean oddsBean = matchBean.getOdds().get(3);
-                    int odd = Integer.parseInt(oddsBean.getOdds());
-                    if(odd>0){
-                        helper.setText(R.id.tv_conBall,"+"+odd);
-                        helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.red_ball));
-                    }else {
-                        helper.setText(R.id.tv_conBall,"-"+odd);
-                        helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.green_1A));
-                    }
 
+                if (matchBean.getFourthfrom()==0){
+                    form4.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name4,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd4,mContext.getResources().getColor(R.color.color_333));
+                }else {
+                    form4.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name4,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd4,mContext.getResources().getColor(R.color.white));
+                }
+
+                if (matchBean.getFifthfrom()==0){
+                    form5.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name5,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd5,mContext.getResources().getColor(R.color.color_333));
+                }else {
+                    form5.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name5,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd5,mContext.getResources().getColor(R.color.white));
+                }
+
+                if (matchBean.getSixthfrom()==0){
+                    form6.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name6,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd6,mContext.getResources().getColor(R.color.color_333));
+                }else {
+                    form6.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name6,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd6,mContext.getResources().getColor(R.color.white));
+                }
+
+                if (matchBean.getSeventhfrom()==0){
+                    form7.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name7,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd7,mContext.getResources().getColor(R.color.color_333));
+                }else {
+                    form7.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name7,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd7,mContext.getResources().getColor(R.color.white));
+                }
+
+                if (matchBean.getEighthfrom()==0){
+                    form8.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        helper.setTextColor(R.id.name8,mContext.getResources().getColor(R.color.black));
+                        helper.setTextColor(R.id.odd8,mContext.getResources().getColor(R.color.color_333));
+                }else {
+                    form8.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
+                    helper.setTextColor(R.id.name8,mContext.getResources().getColor(R.color.white));
+                    helper.setTextColor(R.id.odd8,mContext.getResources().getColor(R.color.white));
                 }
 
                 break;
@@ -158,5 +287,8 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                 break;
         }
 
+    }
+    public void setOnTopRightMenuItemClickListener(OnTopRightMenuItemClickListener listener) {
+        mItemClickListener = listener;
     }
 }

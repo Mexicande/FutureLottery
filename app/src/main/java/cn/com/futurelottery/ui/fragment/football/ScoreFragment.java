@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
@@ -36,7 +37,9 @@ import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.adapter.football.ScoreListAdapter;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
+import cn.com.futurelottery.ui.dialog.ScoreDialogFragment;
 import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.utils.ToastUtils;
 
 
 /**
@@ -95,7 +98,6 @@ public class ScoreFragment extends BaseFragment {
                 mScoreListAdapter = new ScoreListAdapter(res);
                 AllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                 AllRecycler.setAdapter(mScoreListAdapter);
-                AllRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
                 ((SimpleItemAnimator) AllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
                 mScoreListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                     @Override
@@ -103,6 +105,14 @@ public class ScoreFragment extends BaseFragment {
                         for (ScoreList.DataBean s : beans) {
                             LogUtils.i(s.toString());
                         }
+                    }
+                });
+
+                mScoreListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+                    @Override
+                    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                          ScoreDialogFragment scoreDialogFragment=new ScoreDialogFragment();
+                          scoreDialogFragment.show(getChildFragmentManager(),"scoreDialogFragment");
                     }
                 });
 

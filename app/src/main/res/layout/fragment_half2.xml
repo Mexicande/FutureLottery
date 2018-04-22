@@ -1,13 +1,124 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.com.futurelottery.ui.dialog.HalfFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="cn.com.futurelottery.ui.dialog.HalfDialogFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.CardView
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="#EAEAEA"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_home"
+                    android:textColor="@color/black"
+                    android:text="罗马"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:text="VS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/tv_away"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:text="巴萨"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <include layout="@layout/line_e1"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="11dp"
+                android:textColor="@color/color_666"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/score_90"/>
+            <LinearLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="胜"
+                    android:background="@color/red_ball"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:ems="1"
+                    android:textSize="11dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/one_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="胜"
+                    android:background="#1A83C7"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:ems="1"
+                    android:textSize="11dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/two_recyclerView"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="胜"
+                    android:background="@color/green_1A"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:ems="1"
+                    android:textSize="11dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/three_recyclerView"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
