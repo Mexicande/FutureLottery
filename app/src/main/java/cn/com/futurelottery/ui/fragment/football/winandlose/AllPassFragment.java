@@ -33,6 +33,7 @@ import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.presenter.FootCleanType;
 import cn.com.futurelottery.presenter.FootSureType;
 import cn.com.futurelottery.presenter.FooterAllEvent;
+import cn.com.futurelottery.presenter.FooterOneEvent;
 import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
@@ -55,7 +56,6 @@ public class AllPassFragment extends BaseFragment {
     private WinAndLoseAdapter mWinAndLoseAdapter;
     private ArrayList<MultiItemEntity> res;
     private List<FootBallList.DataBean> beans;
-    private FootBallList footBallList;
     private int nu=0;
     private boolean mTrue =false;
 
@@ -131,8 +131,12 @@ public class AllPassFragment extends BaseFragment {
                         }
                     }
                 }
-                intent.putExtra("bean",(Serializable)list);
-                startActivity(intent);
+                if(list.size()>=2){
+                    intent.putExtra("bean",(Serializable)list);
+                    startActivity(intent);
+                }else {
+                    ToastUtils.showToast("请至少选择2场比赛");
+                }
             }
         }
     }
@@ -174,7 +178,7 @@ public class AllPassFragment extends BaseFragment {
                 }
             }
         }
-        EventBus.getDefault().post(new FooterAllEvent(nu));
+        EventBus.getDefault().post(new FooterOneEvent(nu,1));
     }
 
     private void initView() {

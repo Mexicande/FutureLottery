@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.adapter.football;
 
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -20,7 +21,7 @@ public class FootChooseWinAdapter extends BaseQuickAdapter<FootBallList.DataBean
         super(R.layout.foot_choose_win_item, data);
     }
     @Override
-    protected void convert(BaseViewHolder helper, FootBallList.DataBean.MatchBean item) {
+    protected void convert(final BaseViewHolder helper, final FootBallList.DataBean.MatchBean item) {
         int oddsBean = item.getOdds().size();
         //区别胜平负和让胜平负
         if(oddsBean>3){
@@ -28,11 +29,14 @@ public class FootChooseWinAdapter extends BaseQuickAdapter<FootBallList.DataBean
         }else {
             helper.setText(R.id.home_odds,item.getHomeTeam());
         }
-          helper .setText(R.id.tv_homedescribe,item.getOdds().get(0).getOdds())
-                .setText(R.id.vs_describe,item.getOdds().get(1).getOdds())
+          helper .setText(R.id.tv_homedescribe,"主胜"+item.getOdds().get(0).getOdds())
+                .setText(R.id.vs_describe,"平"+item.getOdds().get(1).getOdds())
                 .setText(R.id.away_odd,item.getAwayTeam())
-                .setText(R.id.away_describe,item.getOdds().get(2).getOdds())
+                .setText(R.id.away_describe,"客胜"+item.getOdds().get(2).getOdds())
                 .addOnClickListener(R.id.iv_delete)
+                .addOnClickListener(R.id.layout_home)
+                .addOnClickListener(R.id.layout_vs)
+                .addOnClickListener(R.id.layout_away)
                 ;
         if(item.getHomeType()==1){
             helper.setBackgroundColor(R.id.layout_home,mContext.getResources().getColor(R.color.red_ball));
@@ -61,5 +65,44 @@ public class FootChooseWinAdapter extends BaseQuickAdapter<FootBallList.DataBean
             helper.setTextColor(R.id.vs_odd,mContext.getResources().getColor(R.color.black))
                     .setTextColor(R.id.vs_describe,mContext.getResources().getColor(R.color.color_333));
         }
+
+       /* View home = helper.getView(R.id.layout_home);
+        View vs = helper.getView(R.id.layout_vs);
+        View awaw = helper.getView(R.id.layout_away);
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(item.getHomeType()==0){
+                    item.setHomeType(1);
+                }else {
+                    item.setHomeType(0);
+                }
+                notifyItemChanged(helper.getAdapterPosition());
+            }
+        });
+        vs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(item.getVsType()==0){
+                    item.setVsType(1);
+                }else {
+                    item.setVsType(0);
+                }
+                notifyItemChanged(helper.getAdapterPosition());
+
+            }
+        });
+        awaw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(item.getAwayType()==0){
+                    item.setAwayType(1);
+                }else {
+                    item.setAwayType(0);
+                }
+                notifyItemChanged(helper.getAdapterPosition());
+            }
+        });*/
     }
 }

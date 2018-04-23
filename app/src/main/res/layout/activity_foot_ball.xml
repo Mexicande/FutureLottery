@@ -19,5 +19,6 @@
         <include layout="@layout/content_slide_down_view"
             />
     </RelativeLayout>
-    <include layout="@layout/screen_bootom_sheet_layout"/>
+    <include layout="@layout/screen_bootom_sheet_layout"
+        />
 </android.support.design.widget.CoordinatorLayout>

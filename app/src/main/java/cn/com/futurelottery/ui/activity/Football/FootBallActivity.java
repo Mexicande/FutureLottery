@@ -123,6 +123,7 @@ public class FootBallActivity extends BaseActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.screen_bootom_sheet_layout, null, false);
         mBottomSheetDialog.setContentView(view);
         mBottomSheetDialog.setCanceledOnTouchOutside(true);
+
         mBootRecycler=view.findViewById(R.id.bottom_recyclerView);
         tv_all=view.findViewById(R.id.tv_all);
         tv_unAll=view.findViewById(R.id.tv_un_all);

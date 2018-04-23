@@ -192,33 +192,29 @@ public class WinAndLoseFragment extends BaseFragment {
 
     }
 
+
     /**
-     * 过关已选场次Nu更新
-     * @param event
-     */
-    @Subscribe
-    public void onAll(FooterAllEvent event) {
-        AllNumber = event.getmMeeage();
-        if (event.getmMeeage() != 0) {
-            tvSelect.setText("已选择" + AllNumber + "场");
-        } else {
-            tvSelect.setText("请至少选择2场比赛");
-        }
-    }
-    /**
-     * 单关已选场次Nu更新
+     * 已选场次Nu更新
      * @param event
      */
     @Subscribe
     public void onOne(FooterOneEvent event) {
-        OneNumber = event.getmMeeage();
-        if (event.getmMeeage() != 0) {
-            tvSelect.setText("已选择" + String.valueOf(OneNumber) + "场");
-        } else {
-            tvSelect.setText("请至少选择1场比赛");
+        if(event.getType()==1){
+            AllNumber = event.getmMeeage();
+            if (event.getmMeeage() != 0) {
+                tvSelect.setText("已选择" + AllNumber + "场");
+            } else {
+                tvSelect.setText("请至少选择2场比赛");
+            }
+        }else if(event.getType()==2){
+            OneNumber = event.getmMeeage();
+            if (event.getmMeeage() != 0) {
+                tvSelect.setText("已选择" + String.valueOf(OneNumber) + "场");
+            } else {
+                tvSelect.setText("请至少选择1场比赛");
+            }
         }
     }
-
 
     @OnClick({R.id.bottom_result_clear_tv, R.id.bottom_result_next_btn})
     public void onViewClicked(View view) {
@@ -228,8 +224,12 @@ public class WinAndLoseFragment extends BaseFragment {
                 int currentItem = viewPager.getCurrentItem();
                 if(currentItem==0){
                     EventBus.getDefault().post(new FootCleanType(1));
+                    tvSelect.setText("请至少选择2场比赛");
+                    AllNumber=0;
                 }else {
                     EventBus.getDefault().post(new FootCleanType(2));
+                    tvSelect.setText("请至少选择1场比赛");
+                    OneNumber=0;
                 }
                 break;
             case R.id.bottom_result_next_btn:

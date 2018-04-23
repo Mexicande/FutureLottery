@@ -6,8 +6,8 @@ package cn.com.futurelottery.presenter;
  * @date 2018/4/22
  * 1==AllPassFragment
  * 2==OnePassFragment
- *
- *
+ * 3=ConAllPassFragment
+ * 4=ConOnePassFragment
  */
 
 public class FootCleanType {

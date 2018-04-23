@@ -42,7 +42,7 @@ public class MenuDecoration extends RecyclerView.ItemDecoration {
             if (parent.getChildLayoutPosition(view) % 2 == 0) {
                 outRect.left = space;
                 outRect.bottom = 40;
-                outRect.right = 0;
+                outRect.right = space;
             } else {
                 outRect.left = space;
                 outRect.bottom = 40;

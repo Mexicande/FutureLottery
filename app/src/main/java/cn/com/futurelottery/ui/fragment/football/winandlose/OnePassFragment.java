@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.fragment.football.winandlose;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ import cn.com.futurelottery.presenter.FootSizeType;
 import cn.com.futurelottery.presenter.FootSureType;
 import cn.com.futurelottery.presenter.FooterAllEvent;
 import cn.com.futurelottery.presenter.FooterOneEvent;
+import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
@@ -40,6 +43,8 @@ import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 /**
  * A simple {@link Fragment} subclass.
+ * @author apple
+ * 单关
  */
 public class OnePassFragment extends BaseFragment {
 
@@ -50,6 +55,7 @@ public class OnePassFragment extends BaseFragment {
     private ArrayList<MultiItemEntity> res;
     private List<FootBallList.DataBean> beans=new ArrayList<>();
     private int nu=0;
+    private boolean mTrue =false;
     public OnePassFragment() {
         // Required empty public constructor
     }
@@ -93,7 +99,6 @@ public class OnePassFragment extends BaseFragment {
                         matchBean.setHomeType(0);
                         matchBean.setVsType(0);
                         matchBean.setAwayType(0);
-
                     }
                 }
             }
@@ -107,10 +112,43 @@ public class OnePassFragment extends BaseFragment {
     @Subscribe
     public void nextSubmit(FootSureType type){
         if(type.getmType()==2){
-
+                nextDate();
+                if(mTrue){
+                    Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
+                    intent.putExtra("type",2);
+                    List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
+                    for(FootBallList.DataBean s:beans){
+                        for(int i=0;i<s.getMatch().size();i++){
+                            FootBallList.DataBean.MatchBean matchBean = s.getMatch().get(i);
+                            if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                                list.add(matchBean);
+                            }
+                        }
+                    }
+                    if(list.size()!=0){
+                        intent.putExtra("bean",(Serializable)list);
+                        startActivity(intent);
+                    }else {
+                        ToastUtils.showToast("请至少选择1场比赛");
+                    }
+                }
         }
     }
 
+    private void nextDate(){
+
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                    mTrue=true;
+                    return;
+
+                }
+            }
+        }
+    }
 
     private void setListener() {
 
@@ -134,7 +172,7 @@ public class OnePassFragment extends BaseFragment {
                 }
             }
         }
-        EventBus.getDefault().post(new FooterOneEvent(nu));
+        EventBus.getDefault().post(new FooterOneEvent(nu,2));
     }
 
 
