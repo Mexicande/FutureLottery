@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,11 +116,23 @@ public class AllPassFragment extends BaseFragment {
      */
     @Subscribe
     public void nextSubmit(FootSureType type){
+        LogUtils.i("提交");
         if(type.getmType()==1){
+            nextDate();
             if(mTrue){
-                Intent intent=new Intent();
-                intent.putExtra("bean",footBallList);
-                ActivityUtils.startActivity(FootAllBetActivity.class);
+                Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
+                intent.putExtra("type",1);
+                List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
+                for(FootBallList.DataBean s:beans){
+                    for(int i=0;i<s.getMatch().size();i++){
+                        FootBallList.DataBean.MatchBean matchBean = s.getMatch().get(i);
+                        if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                            list.add(matchBean);
+                        }
+                    }
+                }
+                intent.putExtra("bean",(Serializable)list);
+                startActivity(intent);
             }
         }
     }

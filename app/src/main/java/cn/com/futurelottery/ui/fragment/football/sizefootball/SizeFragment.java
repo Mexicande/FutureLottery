@@ -167,17 +167,6 @@ public class SizeFragment extends BaseFragment {
 
     @Subscribe
     public void setSelectUn(FootSizeType event){
-        if(event.getmAll()!=0){
-            AllNumber=event.getmAll();
-            tvSelect.setText("已选择"+AllNumber+"场");
-        }else {
-            tvSelect.setText("请至少选择2场比赛");
-        }
-        if(event.getmOne()!=0){
-            OneNumber=event.getmOne();
-            tvSelect.setText("已选择"+OneNumber+"场");
-        }else {
-            tvSelect.setText("请至少选择1场比赛");
-        }
+
     }
 }
