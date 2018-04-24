@@ -88,7 +88,15 @@
                     android:id="@+id/bottom_result_count_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0注"
+                    android:text="0"
+                    android:textSize="@dimen/size_13"
+                    android:textColor="@color/black"
+                    />
+                <TextView
+                    android:layout_marginLeft="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="注"
                     android:textSize="@dimen/size_13"
                     android:textColor="@color/black"
                     />

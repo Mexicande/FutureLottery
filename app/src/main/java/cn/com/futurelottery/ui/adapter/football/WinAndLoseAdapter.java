@@ -147,10 +147,10 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                     FootBallList.DataBean.MatchBean.OddsBean oddsBean = matchBean.getOdds().get(3);
                     int odd = Integer.parseInt(oddsBean.getOdds());
                     if(odd>0){
-                        helper.setText(R.id.tv_conBall,odd+"");
+                        helper.setText(R.id.tv_conBall,"+"+odd);
                         helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.red_ball));
                     }else {
-                        helper.setText(R.id.tv_conBall,odd+"");
+                        helper.setText(R.id.tv_conBall,odd);
                         helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.green_1A));
                     }
                 }

@@ -30,4 +30,5 @@
     <string name="foot_explain">页面赔率仅供参考,请以出票赔率为准</string>
     <string name="str_sure">确定</string>
     <string name="score_90">竞猜全场90分钟（含伤停补时）的比分</string>
+    <string name="select_foot">足彩选择</string>
 </resources>

@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.fragment.football.conwinandlose;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +34,13 @@ import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.presenter.FootCleanType;
+import cn.com.futurelottery.presenter.FootSureType;
 import cn.com.futurelottery.presenter.FooterAllEvent;
 import cn.com.futurelottery.presenter.FooterOneEvent;
+import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
 import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 
@@ -129,6 +134,50 @@ public class ConAllPassFragment extends BaseFragment {
         }
         mTrue=false;
     }
+    /**
+     * 提交
+     */
+    @Subscribe
+    public void nextSubmit(FootSureType type){
+        if(type.getmType()==3){
+            nextDate();
+            if(mTrue){
+                Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
+                intent.putExtra("type",1);
+                List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
+                for(FootBallList.DataBean s:beans){
+                    for(int i=0;i<s.getMatch().size();i++){
+                        FootBallList.DataBean.MatchBean matchBean = s.getMatch().get(i);
+                        if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                            list.add(matchBean);
+                        }
+                    }
+                }
+                if(list.size()>=2){
+                    intent.putExtra("bean",(Serializable)list);
+                    startActivity(intent);
+                }else {
+                    ToastUtils.showToast("请至少选择2场比赛");
+                }
+            }
+        }
+    }
+
+    private void nextDate(){
+
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                    mTrue=true;
+                    return;
+
+                }
+            }
+        }
+    }
+
 
     private void getDate() {
         JSONObject jsonObject=new JSONObject();

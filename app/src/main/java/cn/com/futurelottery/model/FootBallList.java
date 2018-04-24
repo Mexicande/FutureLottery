@@ -490,6 +490,7 @@ public class FootBallList implements Serializable, MultiItemEntity {
                     this.describe = describe;
                 }
             }
+
         }
     }
 }

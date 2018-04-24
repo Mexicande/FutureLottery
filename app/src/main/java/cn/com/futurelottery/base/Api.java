@@ -86,6 +86,8 @@ public interface Api {
     class FootBall_Api{
 
        public static final String  FOOTBALL_LSIT  =   HOST+"football/list";
+       public static final String  Payment  =   HOST+"football/confirmThePayment";
+
 
     }
 

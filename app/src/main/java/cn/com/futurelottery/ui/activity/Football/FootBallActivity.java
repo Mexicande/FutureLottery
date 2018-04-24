@@ -124,6 +124,9 @@ public class FootBallActivity extends BaseActivity {
         mBottomSheetDialog.setContentView(view);
         mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
+
+
+
         mBootRecycler=view.findViewById(R.id.bottom_recyclerView);
         tv_all=view.findViewById(R.id.tv_all);
         tv_unAll=view.findViewById(R.id.tv_un_all);

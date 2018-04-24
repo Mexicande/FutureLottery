@@ -25,7 +25,11 @@ public class FootChooseWinAdapter extends BaseQuickAdapter<FootBallList.DataBean
         int oddsBean = item.getOdds().size();
         //区别胜平负和让胜平负
         if(oddsBean>3){
-            helper.setText(R.id.home_odds,item.getHomeTeam()+item.getOdds().get(3).getOdds());
+            if(Integer.parseInt(item.getOdds().get(3).getOdds())>0){
+                helper.setText(R.id.home_odds,item.getHomeTeam()+"+1");
+            }else{
+                helper.setText(R.id.home_odds,item.getHomeTeam()+"-1");
+            }
         }else {
             helper.setText(R.id.home_odds,item.getHomeTeam());
         }
