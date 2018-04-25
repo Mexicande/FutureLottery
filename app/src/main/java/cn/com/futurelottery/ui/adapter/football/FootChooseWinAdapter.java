@@ -33,10 +33,10 @@ public class FootChooseWinAdapter extends BaseQuickAdapter<FootBallList.DataBean
         }else {
             helper.setText(R.id.home_odds,item.getHomeTeam());
         }
-          helper .setText(R.id.tv_homedescribe,"主胜"+item.getOdds().get(0).getOdds())
-                .setText(R.id.vs_describe,"平"+item.getOdds().get(1).getOdds())
+          helper .setText(R.id.tv_homedescribe,"主胜 "+item.getOdds().get(0).getOdds())
+                .setText(R.id.vs_describe,"平 "+item.getOdds().get(1).getOdds())
                 .setText(R.id.away_odd,item.getAwayTeam())
-                .setText(R.id.away_describe,"客胜"+item.getOdds().get(2).getOdds())
+                .setText(R.id.away_describe,"客胜 "+item.getOdds().get(2).getOdds())
                 .addOnClickListener(R.id.iv_delete)
                 .addOnClickListener(R.id.layout_home)
                 .addOnClickListener(R.id.layout_vs)

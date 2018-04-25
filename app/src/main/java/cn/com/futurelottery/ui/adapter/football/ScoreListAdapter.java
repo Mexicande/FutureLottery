@@ -29,6 +29,8 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
+    private OnTopRightMenuItemClickListener mItemClickListener;
+
 
     public static final int TYPE_LEVEL_0 = 0;
     public static final int TYPE_LEVEL_1 = 1;

@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.inter.DialogListener;
 import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
 import cn.com.futurelottery.ui.fragment.football.ScoreFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
@@ -45,7 +46,7 @@ import cn.com.futurelottery.view.topRightMenu.TopRightMenu;
  * @author apple
  *         足彩
  */
-public class FootBallActivity extends BaseActivity {
+public class FootBallActivity extends BaseActivity{
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.iv_arrow)
@@ -310,4 +311,5 @@ public class FootBallActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }

@@ -66,10 +66,10 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         .setText(R.id.tv_week,matchBean.getWeek()+matchBean.getTeamid())
                         .setText(R.id.tv_endTime,matchBean.getEndtime()+"截止")
                         .setText(R.id.home_odds,matchBean.getHomeTeam())
-                        .setText(R.id.tv_homedescribe,"客胜"+odds.get(0).getOdds())
-                        .setText(R.id.vs_describe,"平"+odds.get(1).getOdds())
+                        .setText(R.id.tv_homedescribe,"客胜 "+odds.get(0).getOdds())
+                        .setText(R.id.vs_describe,"平 "+odds.get(1).getOdds())
                         .setText(R.id.away_odd,matchBean.getAwayTeam())
-                        .setText(R.id.away_describe,"客胜"+odds.get(2).getOdds())
+                        .setText(R.id.away_describe,"客胜 "+odds.get(2).getOdds())
                         ;
                 View home = helper.getView(R.id.layout_home);
                 View vs = helper.getView(R.id.layout_vs);
@@ -150,7 +150,7 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         helper.setText(R.id.tv_conBall,"+"+odd);
                         helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.red_ball));
                     }else {
-                        helper.setText(R.id.tv_conBall,odd);
+                        helper.setText(R.id.tv_conBall,odd+"");
                         helper.setBackgroundColor(R.id.layout_odd,mContext.getResources().getColor(R.color.green_1A));
                     }
                 }

@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".base.SplashActivity"
+        <activity
+            android:name=".base.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,11 +53,14 @@
         <activity
             android:name=".ui.activity.SuperLottoActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activity.Football.FootAllBetActivity"
-            android:label="@string/select_foot"/>
-        <activity android:name=".base.WelcomeActivity"
-            android:theme="@style/AppTheme.Splash"/>
-        <activity android:name=".ui.activity.MainActivity"/>
+        <activity
+            android:name=".ui.activity.Football.FootAllBetActivity"
+            android:label="@string/select_foot" />
+        <activity
+            android:name=".base.WelcomeActivity"
+            android:theme="@style/AppTheme.Splash" />
+        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.Football.ScoreBetActivity"></activity>
     </application>
 
 </manifest>

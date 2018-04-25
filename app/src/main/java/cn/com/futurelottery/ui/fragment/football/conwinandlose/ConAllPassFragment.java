@@ -143,7 +143,7 @@ public class ConAllPassFragment extends BaseFragment {
             nextDate();
             if(mTrue){
                 Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
-                intent.putExtra("type",1);
+                intent.putExtra("type",3);
                 List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
                 for(FootBallList.DataBean s:beans){
                     for(int i=0;i<s.getMatch().size();i++){

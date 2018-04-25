@@ -32,11 +32,13 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.inter.DialogListener;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.adapter.football.ScoreListAdapter;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
+import cn.com.futurelottery.ui.dialog.AdialogFragment;
 import cn.com.futurelottery.ui.dialog.ScoreDialogFragment;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -46,7 +48,7 @@ import cn.com.futurelottery.utils.ToastUtils;
  * @author apple
  *         比分
  */
-public class ScoreFragment extends BaseFragment {
+public class ScoreFragment extends BaseFragment implements DialogListener {
 
     @BindView(R.id.AllRecycler)
     RecyclerView AllRecycler;
@@ -59,6 +61,7 @@ public class ScoreFragment extends BaseFragment {
     private ScoreListAdapter mScoreListAdapter;
     private ArrayList<MultiItemEntity> res;
     private List<ScoreList.DataBean> beans;
+    private  ArrayList<ScoreList.DataBean.MatchBean>mMatchBeans;
     public ScoreFragment() {
         // Required empty public constructor
     }
@@ -82,7 +85,6 @@ public class ScoreFragment extends BaseFragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         ApiService.GET_SERVICE(Api.FootBall_Api.FOOTBALL_LSIT, getActivity(), jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
@@ -99,20 +101,21 @@ public class ScoreFragment extends BaseFragment {
                 AllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                 AllRecycler.setAdapter(mScoreListAdapter);
                 ((SimpleItemAnimator) AllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-                mScoreListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        for (ScoreList.DataBean s : beans) {
-                            LogUtils.i(s.toString());
-                        }
-                    }
-                });
+
+                mMatchBeans=new ArrayList<>();
+                for(int i=0;i<beans.size();i++){
+                    mMatchBeans.addAll(beans.get(i).getMatch());
+                }
 
                 mScoreListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
                     @Override
                     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                          ScoreDialogFragment scoreDialogFragment=new ScoreDialogFragment();
-                          scoreDialogFragment.show(getChildFragmentManager(),"scoreDialogFragment");
+                        ScoreList.DataBean.MatchBean matchBean = mMatchBeans.get(position);
+
+                        ScoreDialogFragment adialogFragment = ScoreDialogFragment.newInstance(matchBean,position);
+
+                        adialogFragment.show(getChildFragmentManager(), "timePicker");
+
                     }
                 });
 
@@ -126,4 +129,10 @@ public class ScoreFragment extends BaseFragment {
     }
 
 
+
+    @Override
+    public void onDefeateComplete(int index,ScoreList.DataBean.MatchBean matchBean) {
+        mScoreListAdapter.setData(index,matchBean);
+        mScoreListAdapter.notifyItemChanged(index);
+    }
 }

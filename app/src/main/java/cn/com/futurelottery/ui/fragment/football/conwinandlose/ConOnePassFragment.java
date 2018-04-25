@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.fragment.football.conwinandlose;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +36,12 @@ import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.presenter.FootCleanType;
+import cn.com.futurelottery.presenter.FootSureType;
 import cn.com.futurelottery.presenter.FooterOneEvent;
+import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
 import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 
@@ -113,7 +118,7 @@ public class ConOnePassFragment extends BaseFragment {
      */
     @Subscribe
     public void cleanSelected(FootCleanType type){
-        if(type.getmMeeage()==3){
+        if(type.getmMeeage()==4){
             for (int i = 0; i < beans.size(); i++) {
                 FootBallList.DataBean dataBean = beans.get(i);
                 for(int j=0;j<dataBean.getMatch().size();j++){
@@ -131,6 +136,51 @@ public class ConOnePassFragment extends BaseFragment {
         mTrue=false;
     }
 
+
+    /**
+     * 提交
+     */
+    @Subscribe
+    public void nextSubmit(FootSureType type){
+        if(type.getmType()==4){
+            nextDate();
+            if(mTrue){
+                Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
+                intent.putExtra("type",4);
+                List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
+                for(FootBallList.DataBean s:beans){
+                    for(int i=0;i<s.getMatch().size();i++){
+                        FootBallList.DataBean.MatchBean matchBean = s.getMatch().get(i);
+                        if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                            list.add(matchBean);
+                        }
+                    }
+                }
+                if(list.size()!=0){
+                    intent.putExtra("bean",(Serializable)list);
+                    startActivity(intent);
+                }else {
+                    ToastUtils.showToast("请至少选择1场比赛");
+                }
+            }
+        }
+    }
+
+    private void nextDate(){
+
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                    mTrue=true;
+                    return;
+
+                }
+            }
+        }
+    }
+
     private void getDate() {
         JSONObject jsonObject=new JSONObject();
         try {
@@ -145,6 +195,9 @@ public class ConOnePassFragment extends BaseFragment {
                 Gson gson=new Gson();
                 FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
                 beans = footBallList.getData();
+                if(beans.size()==0){
+                    ToastUtils.showToast("暂无比赛");
+                }
                 res = new ArrayList<>();
                 for (int i = 0; i < beans.size(); i++) {
                     FootBallList.DataBean dataBean = beans.get(i);

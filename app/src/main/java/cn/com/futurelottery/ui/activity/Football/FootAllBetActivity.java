@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,8 +59,6 @@ public class FootAllBetActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.choose_recycler)
     RecyclerView chooseRecycler;
-    @BindView(R.id.choose_ball_ll)
-    LinearLayout chooseBallLl;
     @BindView(R.id.ed_multiple)
     EditText edMultiple;
     @BindView(R.id.bottom_result_count_tv)
@@ -68,8 +67,6 @@ public class FootAllBetActivity extends BaseActivity {
     TextView bottomResultMoneyTv;
     @BindView(R.id.bottom_result_btn)
     Button bottomResultBtn;
-    @BindView(R.id.normal_layout)
-    LinearLayout normalLayout;
     @BindView(R.id.empty_layout)
     LinearLayout emptyLayout;
     @BindView(R.id.foot_all)
@@ -96,6 +93,7 @@ public class FootAllBetActivity extends BaseActivity {
     private List<FootBallList.DataBean.MatchBean> bean;
     private List<MenuItem> mSrceenList;
     private int type = 0;
+    private View view;
 
     @Override
     public int getLayoutResource() {
@@ -107,7 +105,7 @@ public class FootAllBetActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         type = getIntent().getIntExtra("type", 0);
         initView();
-        if (type == 1) {
+        if (type%2!=0) {
             initAllPass();
         } else {
             initOnePass();
@@ -132,6 +130,10 @@ public class FootAllBetActivity extends BaseActivity {
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(10), 4));
         mBottomTRMenuAdapter = new TRMenuAdapter(R.layout.football_menu_item, mSrceenList);
         trmRecyclerview.setAdapter(mBottomTRMenuAdapter);
+        View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
+        mBottomTRMenuAdapter.addFooterView(view);
+
+
 
         slideMultiple.addTextChangedListener(new TextWatcher() {
             @Override
@@ -144,29 +146,29 @@ public class FootAllBetActivity extends BaseActivity {
                 String len = s.toString();
                 if(len.startsWith("0")){
                     String substring = len.substring(1, len.length()-1);
-                    edMultiple.setText(substring);
+                    slideMultiple.setText(substring);
                 }
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 String len = s.toString();
                 if (len.equals("0")) {
                     s.clear();
                 }
-
-                if (s.toString().isEmpty()) {
+                if (TextUtils.isEmpty(s)) {
                     return;
-                }
-                if (Integer.valueOf(s.toString()) < 1) {
-                    ToastUtils.showToast("最小支持1倍");
-                    slideMultiple.setText("1");
                 } else if (Integer.valueOf(s.toString()) > 50) {
                     slideMultiple.setText(String.valueOf(50));
-                    ToastUtils.showToast("最大支持50倍");
+                    return;
                 }
+
+                if (Integer.valueOf(s.toString())<1){
+                    slideMultiple.setText("1");
+                    return;
+                }
+
                 edMultiple.setText(s);
                 upDate();
             }
@@ -215,9 +217,9 @@ public class FootAllBetActivity extends BaseActivity {
                     case R.id.iv_delete:
                         mAdapter.remove(position);
                         if (bean.size() == 0) {
-                            if (type == 1) {
+                            if (type%2!=0) {
                                 footAll.setText("请至少选择2场比赛");
-                            } else if (type == 2) {
+                            } else  {
                                 footAll.setText("请至少选择1场比赛");
                             }
                         }
@@ -274,33 +276,35 @@ public class FootAllBetActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String len = s.toString();
-                if (len.equals("0")) {
-                    s.clear();
+                if (TextUtils.isEmpty(s)) {
+                    return;
+                } else if (Integer.valueOf(s.toString()) > 50) {
+                    edMultiple.setText(String.valueOf(50));
+                    return;
                 }
-                    if (len.isEmpty()) {
-                        edMultiple.setText("1");
-                        return;
-                    }else {
-                        if (Integer.valueOf(len) < 1) {
-                            ToastUtils.showToast("最小支持1倍");
-                            edMultiple.setText("1");
-                        } else if (Integer.valueOf(s.toString()) > 50) {
-                            edMultiple.setText(String.valueOf(50));
-                            ToastUtils.showToast("最大支持50倍");
-                        }
-                        slideMultiple.setText(s);
-                    }
+                if (Integer.valueOf(s.toString())<1){
+                    edMultiple.setText("1");
+                    return;
+                }
                 upDate();
             }
         });
-
+        slideUp.addSlideListener(new SlideUp.Listener.Visibility() {
+            @Override
+            public void onVisibilityChanged(int visibility) {
+                if(visibility==View.VISIBLE){
+                    slideMultiple.setText(edMultiple.getText().toString());
+                }else {
+                    edMultiple.setText(slideMultiple.getText().toString());
+                }
+            }
+        });
     }
 
 
     private void upDate() {
         String bet = edMultiple.getText().toString();
-        if(type==1){
+        if(type%2!=0){
 
             int set=0;
             for(int i=0;i<bean.size();i++){
@@ -313,9 +317,9 @@ public class FootAllBetActivity extends BaseActivity {
                 item.setContent(set+ "串" + 1);
                 mSrceenList.add(item);
             }
-            if (set - mSrceenList.size() <1) {
+            if (set - mSrceenList.size() <=1) {
                 int i1 = mSrceenList.size() + 1 - set;
-                for (int i = 1; i <i1; i++) {
+                for (int i = 0; i <i1-1; i++) {
                     mSrceenList.remove(mSrceenList.size()-1);
                 }
             }
@@ -328,7 +332,6 @@ public class FootAllBetActivity extends BaseActivity {
             }
             mBottomTRMenuAdapter.notifyDataSetChanged();
 
-
             int number = 0;
             for (int i = 0; i < mSrceenList.size(); i++) {
                 if (mSrceenList.get(i).getIcon() == 1) {
@@ -339,7 +342,6 @@ public class FootAllBetActivity extends BaseActivity {
                 }
             }
             updateMinOddsAll();
-
             bottomResultCountTv.setText(String.valueOf(number));
 
             bottomResultMoneyTv.setText(number * Integer.valueOf(bet) * 2 + "");
@@ -632,17 +634,15 @@ public class FootAllBetActivity extends BaseActivity {
                 mAdapter.getData().clear();
                 mAdapter.notifyDataSetChanged();
                 bean.clear();
-                normalLayout.setVisibility(View.GONE);
-                emptyLayout.setVisibility(View.VISIBLE);
                 upDate();
-                if (type == 1) {
+                if (type%2!=0) {
                     footAll.setText("请至少选择2场比赛");
-                } else if (type == 2) {
+                } else  {
                     footAll.setText("请至少选择1场比赛");
                 }
                 break;
             case R.id.layout_bet:
-                if (type == 1) {
+                if (type%2!=0) {
                     slideUp.show();
                     if (mSrceenList.size() == 0) {
                         ToastUtils.showToast("请选择投注方式");
@@ -655,6 +655,10 @@ public class FootAllBetActivity extends BaseActivity {
                 getSelectBet();
                 break;
             case R.id.bottom_result_btn:
+                if(slideUp.isVisible()){
+                    slideUp.hide();
+                }
+
                 paySubmit();
                 break;
             default:
@@ -668,14 +672,14 @@ public class FootAllBetActivity extends BaseActivity {
     private void paySubmit() {
         String text = bottomResultCountTv.getText().toString();
             if(!"0".equals(text)){
-                if (type == 1) {
+                if (type%2!=0) {
                     payMent(text );
 
                 } else {
 
                 }
             }else {
-                if (type == 1) {
+                if (type%2!=0) {
                     slideUp.show();
                     ToastUtils.showToast("请选择投注方式");
 
@@ -717,7 +721,6 @@ public class FootAllBetActivity extends BaseActivity {
 
         String string = sb.toString();
             String substring = string.substring(0, string.length() - 1);
-
             //钱数
             String money = bottomResultMoneyTv.getText().toString();
             //倍数
@@ -736,7 +739,11 @@ public class FootAllBetActivity extends BaseActivity {
                         messageBean.setPlay_rules(Api.FOOTBALL.FT001);
                         break;
                     case 3:
+                        messageBean.setStrand(substring);
+                        messageBean.setPlay_rules(Api.FOOTBALL.FT006);
+                        break;
                     case 4:
+                        messageBean.setStrand("0");
                         messageBean.setPlay_rules(Api.FOOTBALL.FT006);
                         break;
                     case 5:
@@ -745,9 +752,6 @@ public class FootAllBetActivity extends BaseActivity {
                     default:
                         break;
 
-                }
-                if(type==1){
-                    messageBean.setPlay_rules(Api.FOOTBALL.FT001);
                 }
 
 
@@ -775,7 +779,6 @@ public class FootAllBetActivity extends BaseActivity {
 
             }
         });
-
     }
 
     private void getSelectBet() {
@@ -800,5 +803,15 @@ public class FootAllBetActivity extends BaseActivity {
     @Override
     protected void setTitle() {
         tvTitle.setText(R.string.football_title);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK&&slideUp.isVisible()) {
+            slideUp.hide();
+            return true;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }
