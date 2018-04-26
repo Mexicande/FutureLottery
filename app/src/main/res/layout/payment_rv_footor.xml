@@ -5,7 +5,6 @@
     android:background="@color/bg_color_f4"
     android:orientation="vertical">
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="12.5dp"

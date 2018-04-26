@@ -31,4 +31,5 @@
     <string name="str_sure">确定</string>
     <string name="score_90">竞猜全场90分钟（含伤停补时）的比分</string>
     <string name="select_foot">足彩选择</string>
+    <string name="title_activity_size_bet">SizeBetActivity</string>
 </resources>

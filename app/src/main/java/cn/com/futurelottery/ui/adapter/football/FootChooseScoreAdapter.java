@@ -46,8 +46,11 @@ public class FootChooseScoreAdapter extends BaseQuickAdapter<ScoreList.DataBean.
                 sb.append(" ").append(s.getName());
             }
         }
-        helper.setText(R.id.tv_name,item.getHomeTeam())
+        helper.setText(R.id.tv_home,item.getHomeTeam())
                 .setText(R.id.tv_away,item.getAwayTeam())
-                .setText(R.id.tv_score,sb.toString());
+                .setText(R.id.tv_score,sb.toString())
+                .addOnClickListener(R.id.tv_score)
+                .addOnClickListener(R.id.iv_delete)
+                    ;
     }
 }

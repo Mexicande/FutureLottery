@@ -121,4 +121,5 @@
         </RelativeLayout>
         <include layout="@layout/football_botton_item"/>
     </LinearLayout>
+    <include layout="@layout/content_score_bet_down_view"/>
 </RelativeLayout>

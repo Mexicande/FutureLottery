@@ -114,6 +114,24 @@ public class FootAllBetActivity extends BaseActivity {
 
     }
 
+
+    private void initView() {
+        bean = (List<FootBallList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
+        mAdapter = new FootChooseWinAdapter(bean);
+        chooseRecycler.setLayoutManager(new LinearLayoutManager(this));
+        chooseRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        ((SimpleItemAnimator) chooseRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
+        chooseRecycler.setAdapter(mAdapter);
+        View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
+        mAdapter.addFooterView(view);
+
+        slideUp = new SlideUp.Builder(slideView)
+                .withStartGravity(Gravity.BOTTOM)
+                .withLoggingEnabled(true)
+                .withAutoSlideDuration(1)
+                .withStartState(SlideUp.State.HIDDEN)
+                .build();
+    }
     /**
      * 单关
      */
@@ -130,9 +148,6 @@ public class FootAllBetActivity extends BaseActivity {
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(10), 4));
         mBottomTRMenuAdapter = new TRMenuAdapter(R.layout.football_menu_item, mSrceenList);
         trmRecyclerview.setAdapter(mBottomTRMenuAdapter);
-        View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
-        mBottomTRMenuAdapter.addFooterView(view);
-
 
 
         slideMultiple.addTextChangedListener(new TextWatcher() {
@@ -144,8 +159,8 @@ public class FootAllBetActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String len = s.toString();
-                if(len.startsWith("0")){
-                    String substring = len.substring(1, len.length()-1);
+                if (len.startsWith("0")) {
+                    String substring = len.substring(1, len.length() - 1);
                     slideMultiple.setText(substring);
                 }
 
@@ -164,7 +179,7 @@ public class FootAllBetActivity extends BaseActivity {
                     return;
                 }
 
-                if (Integer.valueOf(s.toString())<1){
+                if (Integer.valueOf(s.toString()) < 1) {
                     slideMultiple.setText("1");
                     return;
                 }
@@ -189,6 +204,18 @@ public class FootAllBetActivity extends BaseActivity {
 
             }
         });
+        int set = 0;
+        for (int i = 0; i < bean.size(); i++) {
+            if (bean.get(i).getAwayType() == 1 || bean.get(i).getVsType() == 1 || bean.get(i).getHomeType() == 1) {
+                set++;
+
+
+            }
+        }
+        if(set==2){
+            mSrceenList.get(0).setIcon(1);
+        }
+        upDate();
     }
 
     /**
@@ -294,6 +321,7 @@ public class FootAllBetActivity extends BaseActivity {
             public void onVisibilityChanged(int visibility) {
                 if(visibility==View.VISIBLE){
                     slideMultiple.setText(edMultiple.getText().toString());
+
                 }else {
                     edMultiple.setText(slideMultiple.getText().toString());
                 }
@@ -317,17 +345,19 @@ public class FootAllBetActivity extends BaseActivity {
                 item.setContent(set+ "串" + 1);
                 mSrceenList.add(item);
             }
-            if (set - mSrceenList.size() <=1) {
-                int i1 = mSrceenList.size() + 1 - set;
-                for (int i = 0; i <i1-1; i++) {
+            if (set - mSrceenList.size() >1) {
+                if(set>=2){
                     mSrceenList.remove(mSrceenList.size()-1);
                 }
+                /*int i1 = mSrceenList.size() + 1 - set;
+                for (int i = 0; i <i1-1; i++) {
+                    mSrceenList.remove(mSrceenList.size()-1);
+                }*/
             }
             if(mSrceenList.size()==0){
                 tvSelectBet.setText("投注方式(必选)");
             }
             if(set==2){
-                mSrceenList.get(0).setIcon(1);
                 tvSelectBet.setText(mSrceenList.get(0).getContent());
             }
             mBottomTRMenuAdapter.notifyDataSetChanged();
@@ -408,7 +438,7 @@ public class FootAllBetActivity extends BaseActivity {
      * @return
      */
     private double getOneMax() {
-        int money=0;
+        double money=0;
         for (FootBallList.DataBean.MatchBean s : bean) {
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = s.getOdds();
             ArrayList<String>maxlist=new ArrayList<>();
@@ -604,21 +634,6 @@ public class FootAllBetActivity extends BaseActivity {
         return doubleCount;
     }
 
-
-    private void initView() {
-        bean = (List<FootBallList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
-        mAdapter = new FootChooseWinAdapter(bean);
-        chooseRecycler.setLayoutManager(new LinearLayoutManager(this));
-        chooseRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        ((SimpleItemAnimator) chooseRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-        chooseRecycler.setAdapter(mAdapter);
-        slideUp = new SlideUp.Builder(slideView)
-                .withStartGravity(Gravity.BOTTOM)
-                .withLoggingEnabled(true)
-                .withAutoSlideDuration(1)
-                .withStartState(SlideUp.State.HIDDEN)
-                .build();
-    }
 
     @OnClick({R.id.add_choose, R.id.choose_clear, R.id.layout_top_back, R.id.layout_bet, R.id.layoutGo
             , R.id.layout_slide_bet, R.id.bottom_result_btn})

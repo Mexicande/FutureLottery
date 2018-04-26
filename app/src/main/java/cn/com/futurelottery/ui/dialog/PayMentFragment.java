@@ -38,9 +38,8 @@ import cn.com.futurelottery.ui.adapter.ScoreDialogAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
- * 比分弹窗
  */
-public class ScoreDialogFragment extends DialogFragment {
+public class PayMentFragment extends DialogFragment {
 
     Unbinder unbinder;
     @BindView(R.id.tv_home)
@@ -59,18 +58,17 @@ public class ScoreDialogFragment extends DialogFragment {
 
     private DialogListener callback;
     private int mIndex;
+    public PayMentFragment() {
+        // Required empty public constructor
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback = (DialogListener) getParentFragment();
+        callback = (DialogListener) context;
     }
 
-    public ScoreDialogFragment() {
-
-    }
-
-    public static ScoreDialogFragment newInstance(ScoreList.DataBean.MatchBean mPopupBean,int index,String foot) {
-        ScoreDialogFragment instance = new ScoreDialogFragment();
+    public static PayMentFragment newInstance(ScoreList.DataBean.MatchBean mPopupBean,int index) {
+        PayMentFragment instance = new PayMentFragment();
         Bundle args = new Bundle();
         args.putSerializable("bean", mPopupBean);
         args.putInt("index",index);
@@ -83,12 +81,11 @@ public class ScoreDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Base_AlertDialog);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_score_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_pay_ment, container, false);
         final Window window = getDialog().getWindow();
         if (window != null) {
             window.getDecorView().setPadding(0, 0, 0, 0);
@@ -99,7 +96,6 @@ public class ScoreDialogFragment extends DialogFragment {
             window.setAttributes(wlp);
         }
         unbinder = ButterKnife.bind(this, view);
-
         return view;
     }
 
@@ -110,7 +106,6 @@ public class ScoreDialogFragment extends DialogFragment {
         setListener();
 
     }
-
 
     private void initView() {
 
@@ -266,4 +261,5 @@ public class ScoreDialogFragment extends DialogFragment {
                 break;
         }
     }
+
 }

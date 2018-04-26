@@ -60,7 +60,11 @@
             android:name=".base.WelcomeActivity"
             android:theme="@style/AppTheme.Splash" />
         <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.Football.ScoreBetActivity"></activity>
+        <activity android:name=".ui.activity.Football.ScoreBetActivity" />
+        <activity
+            android:name=".ui.activity.Football.SizeBetActivity"
+            android:label="@string/title_activity_size_bet"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
