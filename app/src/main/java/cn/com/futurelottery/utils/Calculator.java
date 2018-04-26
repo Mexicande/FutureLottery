@@ -120,7 +120,7 @@ public class Calculator {
 
     public static long calculateSLDanTuoNum(int redDanBallNum, int redTuoBallNum,int blueDanBallNum,int blueTuoBallNum) {
         long number;
-        if (redDanBallNum+redTuoBallNum<5||redDanBallNum==0||redTuoBallNum==0||blueTuoBallNum<2||blueDanBallNum+blueTuoBallNum<2||redDanBallNum+redTuoBallNum+blueDanBallNum+blueTuoBallNum<8){
+        if (redDanBallNum+redTuoBallNum<6||redDanBallNum==0||redTuoBallNum==0||blueTuoBallNum<2||blueDanBallNum+blueTuoBallNum<2||redDanBallNum+redTuoBallNum+blueDanBallNum+blueTuoBallNum<8){
             number=0;
         }else {
             number=combination(redTuoBallNum, 5-redDanBallNum) * combination(blueTuoBallNum, 2-blueDanBallNum);

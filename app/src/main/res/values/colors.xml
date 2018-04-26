@@ -35,5 +35,10 @@
     <color name="color_orange">#EAA053</color>
     <color name="green_1A">#1AA664</color>
 
+    <color name="color_a9">#a9a9a9</color>
+    <color name="color_64">#646464</color>
+    <color name="color_0a">#0a0a0a</color>
+    <color name="color_33">#333333</color>
+
 
 </resources>

@@ -12,6 +12,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.logging.Level;
 
 import cn.com.futurelottery.utils.AppUtils;
+import cn.com.futurelottery.utils.SPUtils;
 
 
 /**
@@ -20,17 +21,27 @@ import cn.com.futurelottery.utils.AppUtils;
  */
 public class BaseApplication extends Application {
     private static BaseApplication instance;
+    public String mobile;
+    public String token;
+    public String amount;
+    public String userName;
+    public String integral;
+    public String channel;
+    public String versionName;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        //是否登录
+        getLogin();
         initOkGo();
     }
 
     private void initOkGo() {
         //walle
-        String channel = WalleChannelReader.getChannel(this.getApplicationContext());
+        channel = WalleChannelReader.getChannel(this.getApplicationContext());
 
         //bugle
         CrashReport.initCrashReport(getApplicationContext(), Contacts.BUGLY_KEY, false);
@@ -38,19 +49,31 @@ public class BaseApplication extends Application {
         //umeng
         MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this,Contacts.UMENG_KEY
                 ,channel));
-        String versionName = AppUtils.getAppVersionName();
+        versionName = AppUtils.getAppVersionName();
 
+    }
+
+    private void getLogin() {
+
+        if (SPUtils.contains(this,Contacts.TOKEN)){
+            mobile= (String) SPUtils.get(this,Contacts.MOBILE,"");
+            token= (String) SPUtils.get(this,Contacts.TOKEN,"");
+            amount= (String) SPUtils.get(this,Contacts.AMOUNT,"");
+            userName= (String) SPUtils.get(this,Contacts.NICK,"");
+            userName= (String) SPUtils.get(this,Contacts.INTEGRAL,"");
+        }
         //initokgo
         HttpHeaders headers = new HttpHeaders();
         headers.put("channel", channel);
         headers.put("os", versionName);
-        headers.put(Contacts.TOKEN, "JaGmYZHrbzbDLefWudfnSMCMCPn55A2u");
+//        headers.put(Contacts.TOKEN, token);
+        headers.put(Contacts.TOKEN, "WpdMOe5fnfEpyUHy1WAfyNxCgYGVypV9");
         OkGo.getInstance()
-                    .init(this)
-                    .setCacheMode(CacheMode.NO_CACHE)
-                    .addCommonHeaders(headers)
-                    ;
+                .init(this)
+                .setCacheMode(CacheMode.NO_CACHE)
+                .addCommonHeaders(headers);
     }
+
 
     public static BaseApplication getInstance() {
         return instance;

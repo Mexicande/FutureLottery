@@ -298,7 +298,20 @@ public class AutoSelectActivity extends BaseActivity {
         ApiService.GET_SERVICE(Api.Double_Ball.POST_MULTI, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-                ToastUtils.showToast("Ok,去支付");
+                try {
+                    if (code==Api.Special_Code.notEnoughMoney){
+                        Intent intent=new Intent(AutoSelectActivity.this,PayActivity.class);
+                        intent.putExtra("information","双色球"+" 多期机选");
+                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
+                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
+                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+                    }else if (code==0){
+                        ToastUtils.showToast("下单成功");
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -327,7 +340,20 @@ public class AutoSelectActivity extends BaseActivity {
         ApiService.GET_SERVICE(Api.Super_Lotto.POST_MULTI, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-                ToastUtils.showToast("Ok,去支付");
+                try {
+                    if (code==Api.Special_Code.notEnoughMoney){
+                        Intent intent=new Intent(AutoSelectActivity.this,PayActivity.class);
+                        intent.putExtra("information","大乐透"+" 多期机选");
+                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
+                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
+                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+                    }else if (code==0){
+                        ToastUtils.showToast("下单成功");
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -349,5 +375,17 @@ public class AutoSelectActivity extends BaseActivity {
         ivTen.setVisibility(View.GONE);
         ivFive.setVisibility(View.GONE);
         ivFifteen.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

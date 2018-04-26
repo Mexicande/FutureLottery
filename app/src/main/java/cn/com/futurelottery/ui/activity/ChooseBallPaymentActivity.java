@@ -37,6 +37,7 @@ import cn.com.futurelottery.inter.SaveDialogListener;
 import cn.com.futurelottery.model.DoubleBall;
 import cn.com.futurelottery.ui.adapter.ChooseBallPaymentAdapter;
 import cn.com.futurelottery.ui.dialog.QuitDialogFragment;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.DeviceUtil;
 import cn.com.futurelottery.utils.RandomMadeBall;
 import cn.com.futurelottery.utils.SPUtil;
@@ -293,7 +294,20 @@ public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialo
         ApiService.GET_SERVICE(Api.Double_Ball.POST_DOUBLE_BALL, this, jo, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-                ToastUtils.showToast(data.toString());
+                try {
+                    if (code==Api.Special_Code.notEnoughMoney){
+                        Intent intent=new Intent(ChooseBallPaymentActivity.this,PayActivity.class);
+                        intent.putExtra("information","双色球 第"+phase+"期");
+                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
+                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
+                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+                    }else if (code==0){
+                        ToastUtils.showToast("下单成功");
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -425,6 +439,9 @@ public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialo
                     }
                     adapter.notifyDataSetChanged();
                     show();
+                    break;
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    finish();
                     break;
             }
         }
