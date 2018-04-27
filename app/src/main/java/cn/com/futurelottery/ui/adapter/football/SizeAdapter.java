@@ -59,7 +59,9 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                 break;
             case TYPE_LEVEL_1:
                 final FootBallList.DataBean.MatchBean matchBean= (FootBallList.DataBean.MatchBean) item;
-                List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
+                final List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
+
+
                 helper.setText(R.id.tv_name,matchBean.getLeague())
                         .setText(R.id.tv_week,matchBean.getWeek()+matchBean.getTeamid())
                         .setText(R.id.tv_endTime,matchBean.getEndtime()+"截止")
@@ -101,8 +103,10 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getFistfrom()==0){
                             matchBean.setFistfrom(1);
+                            odds.get(0).setType(1);
                         }else {
                             matchBean.setFistfrom(0);
+                            odds.get(0).setType(0);
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                         mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
@@ -114,9 +118,10 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getSecondfrom()==0){
                             matchBean.setSecondfrom(1);
-
+                            odds.get(1).setType(1);
                         }else {
                             matchBean.setSecondfrom(0);
+                            odds.get(1).setType(0);
 
                         }
                         notifyItemChanged(helper.getAdapterPosition());
@@ -129,8 +134,12 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getThirdfrom()==0){
                             matchBean.setThirdfrom(1);
+                            odds.get(2).setType(1);
+
                         }else {
                             matchBean.setThirdfrom(0);
+                            odds.get(2).setType(0);
+
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                         mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
@@ -142,8 +151,12 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getFourthfrom()==0){
                             matchBean.setFourthfrom(1);
+                            odds.get(3).setType(1);
+
                         }else {
                             matchBean.setFourthfrom(0);
+                            odds.get(3).setType(0);
+
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                     }
@@ -153,8 +166,12 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getFifthfrom()==0){
                             matchBean.setFifthfrom(1);
+                            odds.get(4).setType(1);
+
                         }else {
                             matchBean.setFifthfrom(0);
+                            odds.get(4).setType(0);
+
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                         mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
@@ -166,8 +183,12 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getSixthfrom()==0){
                             matchBean.setSixthfrom(1);
+                            odds.get(5).setType(1);
+
                         }else {
                             matchBean.setSixthfrom(0);
+                            odds.get(5).setType(0);
+
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                         mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
@@ -179,8 +200,12 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getSeventhfrom()==0){
                             matchBean.setSeventhfrom(1);
+                            odds.get(6).setType(1);
+
                         }else {
                             matchBean.setSeventhfrom(0);
+                            odds.get(6).setType(0);
+
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                         mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());
@@ -192,8 +217,12 @@ public class SizeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
                     public void onClick(View v) {
                         if(matchBean.getEighthfrom()==0){
                             matchBean.setEighthfrom(1);
+                            odds.get(7).setType(1);
+
                         }else {
                             matchBean.setEighthfrom(0);
+                            odds.get(7).setType(0);
+
                         }
                         notifyItemChanged(helper.getAdapterPosition());
                         mItemClickListener.onTopRightMenuItemClick(helper.getAdapterPosition());

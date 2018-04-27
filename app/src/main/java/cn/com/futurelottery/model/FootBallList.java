@@ -461,10 +461,18 @@ public class FootBallList implements Serializable, MultiItemEntity {
                  * name : 0
                  * describe : 进0球奖金(赔率)
                  */
-
+                private int type;
                 private String odds;
                 private String name;
                 private String describe;
+
+                public int getType() {
+                    return type;
+                }
+
+                public void setType(int type) {
+                    this.type = type;
+                }
 
                 public String getOdds() {
                     return odds;

@@ -10,13 +10,12 @@
         android:layout_height="match_parent">
         <cn.bingoogolapple.bgabanner.BGABanner
             android:id="@+id/banner_guide_background"
+            style="@style/BannerDefaultStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:banner_pageChangeDuration="1000"
             app:banner_pointAutoPlayAble="false"
             app:banner_pointContainerBackground="@android:color/transparent"
-            app:banner_pointDrawable="@drawable/dot_selector"
-            app:banner_pointTopBottomMargin="15dp"
+            app:banner_pointTopBottomMargin="10dp"
             app:banner_transitionEffect="defaultEffect"/>
     </cn.bingoogolapple.bgabanner.BGAGuideLinkageLayout>
     <TextView
@@ -34,16 +33,15 @@
     <Button
         android:id="@+id/btn_guide_enter"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/button_shape"
         style="?android:attr/borderlessButtonStyle"
-        android:padding="8dp"
         android:text="进入主界面"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
         android:visibility="gone"
         tools:visibility="visible"/>
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.fragment.football.sizefootball;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,9 +13,11 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +28,13 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
+import cn.com.futurelottery.presenter.FootCleanType;
 import cn.com.futurelottery.presenter.FootSizeType;
+import cn.com.futurelottery.presenter.FootSureType;
+import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.adapter.football.SizeAdapter;
+import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 
@@ -45,6 +53,8 @@ public class SizeAllFragment extends BaseFragment {
     private ArrayList<MultiItemEntity> res;
     private List<FootBallList.DataBean> beans;
     private int nu=0;
+    private boolean mTrue =false;
+
     public SizeAllFragment() {
         // Required empty public constructor
     }
@@ -101,7 +111,7 @@ public class SizeAllFragment extends BaseFragment {
         mSizeAdapter.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
             @Override
             public void onTopRightMenuItemClick(int position) {
-                update();
+               // update();
             }
         });
     }
@@ -121,5 +131,93 @@ public class SizeAllFragment extends BaseFragment {
             }
         }
        // EventBus.getDefault().post(new FootSizeType(nu,0));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 清除
+     */
+    @Subscribe
+    public void cleanSelected(FootCleanType type){
+        if(type.getmMeeage()==7){
+            for (int i = 0; i < beans.size(); i++) {
+                FootBallList.DataBean dataBean = beans.get(i);
+                for(int j=0;j<dataBean.getMatch().size();j++){
+                    FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                    if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
+                            ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
+                            ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
+                        matchBean.setFistfrom(0);
+                        matchBean.setSecondfrom(0);
+                        matchBean.setThirdfrom(0);
+                        matchBean.setFourthfrom(0);
+                        matchBean.setFifthfrom(0);
+                        matchBean.setSixthfrom(0);
+                        matchBean.setSeventhfrom(0);
+                        matchBean.setEighthfrom(0);
+
+                    }
+
+                }
+            }
+            mSizeAdapter.notifyDataSetChanged();
+        }
+        mTrue=false;
+
+    }
+
+    /**
+     * 提交
+     */
+    @Subscribe
+    public void nextSubmit(FootSureType type){
+        if(type.getmType()==7){
+                nextDate();
+                Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
+                intent.putExtra("type",7);
+                List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
+                for(FootBallList.DataBean s:beans){
+                    for(int i=0;i<s.getMatch().size();i++){
+                        FootBallList.DataBean.MatchBean matchBean = s.getMatch().get(i);
+                        if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
+                                ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
+                                ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
+                            list.add(matchBean);
+                        }
+                    }
+                }
+                if(nu>=2){
+                    intent.putExtra("bean",(Serializable)list);
+                    startActivity(intent);
+                }else {
+                    ToastUtils.showToast("请至少选择2场比赛");
+                }
+        }
+    }
+
+    private void nextDate(){
+
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
+                        ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
+                        ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
+                    nu++;
+                }
+            }
+        }
     }
 }

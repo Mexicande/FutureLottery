@@ -113,7 +113,9 @@ public class WinAndLoseFragment extends BaseFragment {
     private void initFragment() {
         mDataList.add("过关 (至少选两场)");
         mDataList.add("单关 (猜一场,奖金固定)");
-         allPassFragment = new AllPassFragment();
+        tvSelect.setText("请至少选择2场比赛");
+
+        allPassFragment = new AllPassFragment();
          onePassFragment = new OnePassFragment();
         mFragmentList.add(allPassFragment);
         mFragmentList.add(new OnePassFragment());

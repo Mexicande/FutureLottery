@@ -113,10 +113,8 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
                 mScoreListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
                     @Override
                     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                        ScoreList.DataBean.MatchBean matchBean = mMatchBeans.get(position);
-
+                        ScoreList.DataBean.MatchBean matchBean = mMatchBeans.get(position-1);
                         ScoreDialogFragment adialogFragment = ScoreDialogFragment.newInstance(matchBean, position,Api.FOOTBALL.FT002);
-
                         adialogFragment.show(getChildFragmentManager(), "timePicker");
 
                     }
@@ -134,7 +132,9 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
 
     @Override
     public void onDefeateComplete(int index, ScoreList.DataBean.MatchBean matchBean) {
+        ToastUtils.showToast("index=="+index);
         mScoreListAdapter.setData(index, matchBean);
+        //mMatchBeans.set(index, matchBean);
         mScoreListAdapter.notifyItemChanged(index);
 
     }

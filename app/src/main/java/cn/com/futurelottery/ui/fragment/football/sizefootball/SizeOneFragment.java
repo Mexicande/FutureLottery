@@ -16,6 +16,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
@@ -31,8 +34,12 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
+import cn.com.futurelottery.presenter.FootCleanType;
+import cn.com.futurelottery.presenter.FootSureType;
+import cn.com.futurelottery.presenter.FooterOneEvent;
 import cn.com.futurelottery.ui.adapter.football.SizeAdapter;
 import cn.com.futurelottery.utils.LogUtils;
+import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 
 /**
@@ -48,6 +55,8 @@ public class SizeOneFragment extends BaseFragment {
     private SizeAdapter mSizeAdapter;
     private ArrayList<MultiItemEntity> res;
     private List<FootBallList.DataBean> beans;
+    private int nu=0;
+
     public SizeOneFragment() {
         // Required empty public constructor
     }
@@ -61,6 +70,7 @@ public class SizeOneFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getDate();
+
     }
     private void getDate() {
         JSONObject jsonObject=new JSONObject();
@@ -87,14 +97,7 @@ public class SizeOneFragment extends BaseFragment {
                 conOneRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                 conOneRecycler.setAdapter(mSizeAdapter);
                 ((SimpleItemAnimator)conOneRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-                mSizeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        for( FootBallList.DataBean s :beans){
-                            LogUtils.i(s.toString());
-                        }
-                    }
-                });
+                setListener();
 
             }
 
@@ -105,5 +108,30 @@ public class SizeOneFragment extends BaseFragment {
         });
 
 
+    }
+    private void setListener() {
+
+        mSizeAdapter.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
+            @Override
+            public void onTopRightMenuItemClick(int position) {
+                update();
+            }
+        });
+    }
+    private void update() {
+        nu=0;
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
+                        ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
+                        ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
+                    nu++;
+                }
+
+            }
+        }
+        // EventBus.getDefault().post(new FootSizeType(nu,0));
     }
 }

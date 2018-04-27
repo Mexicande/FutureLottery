@@ -93,6 +93,8 @@ public class ConWinAndFragment extends BaseFragment{
     private void initFragment() {
         mDataList.add("过关 (至少选两场)");
         mDataList.add("单关 (猜一场,奖金固定)");
+        tvSelect.setText("请至少选择2场比赛");
+
         mFragmentList.add(new ConAllPassFragment());
         mFragmentList.add(new ConOnePassFragment());
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager(), mFragmentList);
