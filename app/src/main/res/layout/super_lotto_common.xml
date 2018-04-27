@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_14">
+
+            <ImageView
+                android:id="@+id/shake_choose_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/length_13"
+                android:background="@mipmap/shake_choose" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/length_13"
+                android:text="至少选择5个红球，2个蓝球"
+                android:textColor="@color/color_666"
+                android:textSize="@dimen/size_12" />
+        </RelativeLayout>
+
+        <GridView
+            android:id="@+id/red_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_14"
+            android:gravity="center"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"></GridView>
+
+        <include layout="@layout/line_e1" />
+
+        <GridView
+            android:id="@+id/blue_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_15"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"></GridView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

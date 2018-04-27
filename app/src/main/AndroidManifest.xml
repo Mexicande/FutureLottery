@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 允许使用震动权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -18,9 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".base.SplashActivity"
-            android:theme="@style/SplashTheme">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,24 +46,68 @@
             android:name=".ui.activity.WebViewActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.SuperLottoActivity"
+            android:label="@string/title_activity_super_lotto"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.activity.SuperLottoPaymentActivity" />
+        <activity
             android:name=".ui.activity.Football.FootBallActivity"
             android:label="@string/football_title"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SuperLottoActivity"
+            android:name=".ui.activity.PayActivity"
+            android:label="@string/pay_title"
+            android:screenOrientation="portrait" />
+
+        <!-- 微信支付回调 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="wxe90a89b17657d1ae" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        //注意这个属性一定是true,不然微信不能调用
+
+        <!-- Alipay -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.activity.RechargeActivity"
+            android:label="@string/title_activity_recharge"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.activity.Football.FootAllBetActivity"
-            android:label="@string/select_foot" />
+            android:name=".ui.activity.LotteryInformationActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".base.WelcomeActivity"
-            android:theme="@style/AppTheme.Splash" />
-        <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.Football.ScoreBetActivity" />
+            android:name=".ui.activity.OrderActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.Football.SizeBetActivity"
-            android:label="@string/title_activity_size_bet"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".ui.activity.BallOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.PersonalInformationActivity" />
+        <activity android:name=".ui.activity.WithdrawActivity" />
+        <activity android:name=".ui.activity.SetActivity"></activity>
     </application>
 
 </manifest>

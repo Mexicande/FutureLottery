@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="胆码-前区，最多选4个，最少选1个"
+            android:layout_marginLeft="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_20"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_666"/>
+        <GridView
+            android:id="@+id/danhao_red_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"
+            android:layout_marginTop="@dimen/length_14"
+            android:layout_marginBottom="@dimen/length_15"
+            >
+        </GridView>
+
+        <include layout="@layout/line_e1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="拖码-前区"
+            android:layout_marginLeft="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_20"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_666"/>
+
+        <GridView
+            android:id="@+id/tuohao_red_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"
+            android:layout_marginTop="@dimen/length_14"
+            android:layout_marginBottom="@dimen/length_14">
+        </GridView>
+
+        <include layout="@layout/line_e1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="胆码-后区，最多选1个"
+            android:layout_marginLeft="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_20"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_666"/>
+
+        <GridView
+            android:id="@+id/danhao_bule_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"
+            android:layout_marginTop="@dimen/length_14"
+            android:layout_marginBottom="@dimen/length_14">
+        </GridView>
+
+        <include layout="@layout/line_e1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="拖码-后区，至少选2个"
+            android:layout_marginLeft="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_20"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_666"/>
+
+        <GridView
+            android:id="@+id/tuohao_bule_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"
+            android:layout_marginTop="@dimen/length_14"
+            android:layout_marginBottom="@dimen/length_14">
+        </GridView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -40,10 +40,10 @@ public class ApiService {
                             try {
                                 JSONObject jsonObject=new JSONObject(response.body());
                                 int code = jsonObject.getInt("error_code");
-                                if(code==0){
-                                    listener.requestSuccess(0, jsonObject);
+                                if(code==0||code==Api.Special_Code.notEnoughMoney){
+                                    listener.requestSuccess(code, jsonObject);
                                 }else {
-                                    listener.requestFailure(-1, jsonObject.getString("descrp"));
+                                    listener.requestFailure(code, jsonObject.getString("error_message"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

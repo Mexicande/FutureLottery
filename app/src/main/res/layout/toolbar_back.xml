@@ -30,6 +30,15 @@
             android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="20sp"/>
+
+        <ImageView
+            android:id="@+id/question_mark_iv"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:src="@mipmap/question_mark"
+            android:visibility="gone"/>
     </android.support.v7.widget.Toolbar>
 
 </LinearLayout>

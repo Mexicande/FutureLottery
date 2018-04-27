@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+import com.lzy.okgo.model.HttpHeaders;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +24,7 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.utils.CaptchaTimeCount;
@@ -47,7 +52,7 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.code_tv)
     TextView codeTv;
     private CaptchaTimeCount captchaTimeCount;
-    private final int RESULT_CODE=100;
+    private final int RESULT_CODE=-1;
     @Override
     public int getLayoutResource() {
         return R.layout.activity_login;
@@ -138,18 +143,30 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void requestSuccess(int code, JSONObject data) {
                         try {
-                            String mobile = data.getString("mobile");
-                            String token = data.getString("token");
-                            String amount = data.getString("amount");
-                            String userName = data.getString("user_name");
-                            SPUtils.put(LoginActivity.this,Contacts.MOBILE,mobile);
-                            SPUtils.put(LoginActivity.this,Contacts.TOKEN,token);
-                            SPUtils.put(LoginActivity.this,Contacts.AMOUNT,amount);
-                            SPUtils.put(LoginActivity.this,Contacts.NICK,userName);
-                            Intent intent=new Intent();
-                            intent.putExtra(Contacts.AMOUNT,amount);
-                            intent.putExtra(Contacts.NICK,userName);
-                            setResult(RESULT_CODE,intent);
+                            BaseApplication.getInstance().mobile = data.getString("mobile");
+                            BaseApplication.getInstance().token = data.getString("token");
+                            BaseApplication.getInstance().amount = data.getString("amount");
+                            BaseApplication.getInstance().userName = data.getString("user_name");
+                            BaseApplication.getInstance().integral = data.getString("integral");
+                            SPUtils.put(LoginActivity.this,Contacts.MOBILE,BaseApplication.getInstance().mobile);
+                            SPUtils.put(LoginActivity.this,Contacts.TOKEN,BaseApplication.getInstance().token);
+                            SPUtils.put(LoginActivity.this,Contacts.AMOUNT,BaseApplication.getInstance().amount);
+                            SPUtils.put(LoginActivity.this,Contacts.NICK,BaseApplication.getInstance().userName);
+                            SPUtils.put(LoginActivity.this,Contacts.INTEGRAL,BaseApplication.getInstance().integral);
+
+
+                            //initokgo
+                            HttpHeaders headers = new HttpHeaders();
+                            headers.put("channel", BaseApplication.getInstance().channel);
+                            headers.put("os", BaseApplication.getInstance().versionName);
+                            headers.put(Contacts.TOKEN, BaseApplication.getInstance().token);
+                            OkGo.getInstance()
+                                    .init(getApplication())
+                                    .setCacheMode(CacheMode.NO_CACHE)
+                                    .addCommonHeaders(headers);
+
+
+                            setResult(RESULT_CODE);
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();

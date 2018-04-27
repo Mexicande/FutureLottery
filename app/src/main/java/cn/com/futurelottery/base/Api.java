@@ -50,6 +50,29 @@ public interface Api {
         String POST_MULTI             =       HOST+"ssq/multi";
 
     }
+    interface Super_Lotto{
+        /**
+         * 大乐透下单
+         */
+        String POST_DOUBLE_BALL     =       HOST+"dlt/order";
+        /**
+         * 大乐透截止时间
+         */
+        String GET_BYTIME           =       HOST+"dlt/purchase";
+        /**
+         * 大乐透往期
+         */
+         String GET_DROP            =       HOST+"dlt/drop";
+        /**
+         * 遗漏
+         */
+        String GET_MISS             =       HOST+"dlt/miss";
+        /**
+         * 多期机选
+         */
+        String POST_MULTI             =       HOST+"dlt/multi";
+
+    }
 
     interface Login{
         /**
@@ -60,6 +83,10 @@ public interface Api {
          * 登陆
          */
         String LOGIN               =            HOST+"login/login";
+        /**
+         * 获取余额
+         */
+        String balance               =            HOST+"user/balance";
     }
     interface  FOOTBALL{
 
@@ -95,5 +122,43 @@ public interface Api {
 
     }
 
+
+    interface Pay{
+        //余额不足时支付
+        String pay   =      HOST+"pay/pay";
+        //充值
+        String recharge   =      HOST+"recharge/pay";
+    }
+
+    //特殊code码
+    interface Special_Code{
+        int notEnoughMoney   =      1004;
+    }
+
+    //开奖
+    interface Open{
+        //总的开奖信息
+        String open   =      HOST+"open/open";
+        //二级页面
+        String openssq   =      HOST+"open/openssq";
+    }
+    //订单
+    interface Order{
+        //全部订单
+        String whole   =      HOST+"order/whole";
+        //追号订单
+        String chase   =      HOST+"order/chase";
+        //中奖订单
+        String winning   =      HOST+"order/winning";
+        //待开奖订单
+        String wait   =      HOST+"order/wait";
+        //订单详情
+        String deteails   =      HOST+"order/deteails";
+    }
+    //提现
+    interface Withdraw{
+        //绑定银行卡状态
+        String binding   =      HOST+"extract/binding";
+    }
 
 }

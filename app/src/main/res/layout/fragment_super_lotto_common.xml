@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,67 +7,128 @@
     android:orientation="vertical"
     tools:context="cn.com.futurelottery.ui.fragment.SuperLottoCommonFragment">
 
-
-    <ScrollView
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-        <LinearLayout
+        android:layout_weight="1">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/white"
+            app:elevation="0dp"
+            app:expanded="false"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@color/white_bg">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="53dp"
+                            android:text="期号"
+                            android:textColor="@color/color_333"
+                            android:textSize="13dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="82dp"
+                            android:text="开奖号码"
+                            android:textColor="@color/color_333"
+                            android:textSize="13dp" />
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <include layout="@layout/line_e1" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_14"
-                >
-                <ImageView
-                    android:id="@+id/shake_choose_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:background="@mipmap/shake_choose"
-                    android:layout_marginLeft="@dimen/length_13"/>
+                android:layout_height="30dp">
+
                 <TextView
+                    android:id="@+id/tv_award"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="至少选择5个红球，2个蓝球"
+                    android:layout_marginLeft="10dp"
+                    android:text="第2018033期"
+                    android:textColor="@color/color_333"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:id="@+id/limite_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/tv_award"
+                    android:text="第2018033期"
+                    android:textColor="@color/red_ball"
+                    android:textSize="13dp" />
+
+                <LinearLayout
+                    android:id="@+id/layout_expand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/length_13"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/color_666"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_expand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:drawablePadding="5dp"
+                        android:text="下拉"
+                        android:textSize="13dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_expand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:src="@mipmap/arrow_down" />
+                </LinearLayout>
             </RelativeLayout>
-            <GridView
-                android:id="@+id/red_gv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:numColumns="7"
-                android:verticalSpacing="5dp"
-                android:layout_marginTop="@dimen/length_14"
-                android:layout_marginBottom="@dimen/length_15"
-                >
-            </GridView>
 
-            <include layout="@layout/line_e1"/>
+            <include layout="@layout/line_e1" />
+        </android.support.design.widget.AppBarLayout>
 
-            <GridView
-                android:id="@+id/blue_gv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:horizontalSpacing="5dp"
-                android:numColumns="7"
-                android:verticalSpacing="5dp"
-                android:layout_marginTop="@dimen/length_15"
-                android:layout_marginBottom="@dimen/length_15">
-            </GridView>
+        <include layout="@layout/super_lotto_common" />
+    </android.support.design.widget.CoordinatorLayout>
 
-        </LinearLayout>
-    </ScrollView>
-
-    <include layout="@layout/bottom_result"/>
-
+    <include layout="@layout/bottom_result" />
 </LinearLayout>

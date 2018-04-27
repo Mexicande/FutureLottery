@@ -38,6 +38,7 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.AwardPeriod;
 import cn.com.futurelottery.model.DoubleBall;
@@ -47,6 +48,8 @@ import cn.com.futurelottery.ui.adapter.DoubleBallBlueAdapter;
 import cn.com.futurelottery.ui.adapter.DoubleBallRedAdapter;
 import cn.com.futurelottery.utils.AppBarStateChangeListener;
 import cn.com.futurelottery.utils.Calculator;
+import cn.com.futurelottery.utils.DeviceUtil;
+import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.RandomMadeBall;
 import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ShakeListener;
@@ -110,6 +113,11 @@ public class DoubleBallCommonFragment extends BaseFragment {
     private AwardPeriodAdapter mAwardPeriodAdapter;
     private boolean IsXpand=false;
     private ArrayList<AwardPeriod> jsonArray;
+
+    private String phase = "2018032";
+    private int intentType;
+
+
     @Override
     public int getLayoutResource() {
         return R.layout.fragment_double_ball_common;
@@ -118,12 +126,22 @@ public class DoubleBallCommonFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getData();
         initView();
         initDate();
         setListener();
     }
 
+    private void getData() {
+        Intent intent = getActivity().getIntent();
+        intentType=intent.getIntExtra("data",0);
+    }
+
     private void initDate() {
+        if (!DeviceUtil.IsNetWork(getContext())){
+            ToastUtils.showToast("网络异常，请检查网络");
+            return;
+        }
         //往期中奖
         ApiService.GET_SERVICE(Api.Double_Ball.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
             @Override
@@ -141,18 +159,26 @@ public class DoubleBallCommonFragment extends BaseFragment {
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
-        //遗漏
-        ApiService.GET_SERVICE(Api.Double_Ball.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
+        //期
+        ApiService.GET_SERVICE(Api.Double_Ball.GET_BYTIME, getActivity(), new JSONObject(), new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONObject jo = data.getJSONArray("data").getJSONObject(0);
+                    phase=jo.getString(Contacts.PHASE);
+                    tvAward.setText("第"+phase+"期");
+                    limiteDate.setText(jo.getString(Contacts.END_TIME)+" 截止");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
 
@@ -165,6 +191,12 @@ public class DoubleBallCommonFragment extends BaseFragment {
         doubleBallRedGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //限制球数
+                if (limit(20, position, chooseRedBall)) {
+                    ToastUtils.showToast("最多选择20个红球");
+                    return;
+                }
+
                 // 在每次获取点击的item时将对应的checkbox状态改变，同时修改map的值。
                 DoubleBallRedAdapter.redGridViewHolder vHolder = (DoubleBallRedAdapter.redGridViewHolder) view.getTag();
                 vHolder.chkRed.toggle();
@@ -235,7 +267,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
                 randomChoose();
             }
         });
-        //机选
+        //机选多注
 
         bottomResultChooseTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,12 +281,14 @@ public class DoubleBallCommonFragment extends BaseFragment {
         tvOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getRandomCount(1);
                 mCirclePop.dismiss();
             }
         });
         tvFive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getRandomCount(5);
                 mCirclePop.dismiss();
 
             }
@@ -262,6 +296,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
         tvTen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getRandomCount(10);
                 mCirclePop.dismiss();
             }
         });
@@ -284,6 +319,61 @@ public class DoubleBallCommonFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    //获取多个随机注
+    private void getRandomCount(int count) {
+        ArrayList<DoubleBall> balls = new ArrayList<>();
+        for (int j=0;j<count;j++){
+            ArrayList<String> chooseRedBalls = RandomMadeBall.getManyBall(33, 6);
+            ArrayList<String> chooseblueBalls = RandomMadeBall.getOneBall(16);
+            DoubleBall db = new DoubleBall();
+            String red = "";
+            String blue = "";
+            for (int i = 0; i < chooseRedBalls.size(); i++) {
+                int number = Integer.parseInt(chooseRedBalls.get(i)) + 1;
+                if (i == 0) {
+                    red = red + ((number < 10) ? ("0" + number) : number);
+                } else {
+                    red = red + "," + ((number < 10) ? ("0" + number) : number);
+                }
+            }
+            for (int i = 0; i < chooseblueBalls.size(); i++) {
+                int number = Integer.parseInt(chooseblueBalls.get(i)) + 1;
+                if (i == 0) {
+                    blue = blue + ((number < 10) ? ("0" + number) : number);
+                } else {
+                    blue = blue + "," + ((number < 10) ? ("0" + number) : number);
+                }
+            }
+
+            db.setType(0);
+
+            db.setRed(red);
+            db.setBlu(blue);
+            db.setZhushu(1);
+            db.setMoney(2);
+
+            balls.add(db);
+        }
+
+        intent(balls);
+    }
+
+    //跳转
+    private void intent(ArrayList<DoubleBall> balls) {
+        if (intentType==0){
+            Intent intent = new Intent(getContext(), ChooseBallPaymentActivity.class);
+            intent.putExtra("balls", (Serializable) balls);
+            intent.putExtra("phase", phase);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent();
+            intent.putExtra("balls", (Serializable) balls);
+            intent.putExtra("phase", phase);
+            getActivity().setResult(-1,intent);
+        }
+        getActivity().finish();
     }
 
     //机选
@@ -367,7 +457,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.shake_choose_iv, R.id.bottom_result_clear_tv, R.id.bottom_result_choose_tv,
+    @OnClick({R.id.shake_choose_iv, R.id.bottom_result_clear_tv,
             R.id.bottom_result_next_btn,R.id.layout_expand})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -386,8 +476,6 @@ public class DoubleBallCommonFragment extends BaseFragment {
                 //清除选中的球
                 redBallAdapter.clearData();
                 blueBallAdapter.clearData();
-                break;
-            case R.id.bottom_result_choose_tv:
                 break;
             case R.id.bottom_result_next_btn:
                 if (chooseRedBall.size() == 0 && chooseblueBall.size() == 0) {
@@ -409,8 +497,14 @@ public class DoubleBallCommonFragment extends BaseFragment {
                         red = red + "," + ((number < 10) ? ("0" + number) : number);
                     }
                 }
-                int number = Integer.parseInt(chooseblueBall.get(0)) + 1;
-                blue = "" + ((number < 10) ? ("0" + number) : number);
+                for (int i = 0; i < chooseblueBall.size(); i++) {
+                    int number = Integer.parseInt(chooseblueBall.get(i)) + 1;
+                    if (i == 0) {
+                        blue = blue + ((number < 10) ? ("0" + number) : number);
+                    } else {
+                        blue = blue + "," + ((number < 10) ? ("0" + number) : number);
+                    }
+                }
                 //判断单复式
                 if (chooseRedBall.size() > 6 || chooseblueBall.size() > 1) {
                     db.setType(1);
@@ -425,10 +519,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
 
                 ArrayList<DoubleBall> balls = new ArrayList<>();
                 balls.add(db);
-                Intent intent = new Intent(getContext(), ChooseBallPaymentActivity.class);
-                intent.putExtra("kinds", "1");
-                intent.putExtra("balls", (Serializable) balls);
-                startActivity(intent);
+
+                intent(balls);
                 break;
             case R.id.layout_expand:
                 if(!IsXpand){
@@ -518,6 +610,19 @@ public class DoubleBallCommonFragment extends BaseFragment {
         }
     }
 
-
+    //限制球的个数，小于等于count返回true
+    private boolean limit(int count, int position, ArrayList<String> balls) {
+        boolean isLimit = true;
+        if (balls.size() >= count) {
+            for (int i = 0; i < balls.size(); i++) {
+                if (balls.get(i).equals(position + "")) {
+                    isLimit = false;
+                }
+            }
+        } else {
+            isLimit = false;
+        }
+        return isLimit;
+    }
 
 }

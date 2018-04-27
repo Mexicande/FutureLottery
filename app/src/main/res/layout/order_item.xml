@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:gravity="center_vertical"
+    android:background="@color/white"
+    android:layout_marginBottom="@dimen/length_1">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/length_10"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/month_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3月"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_666"/>
+        <TextView
+            android:id="@+id/day_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3月"
+            android:textSize="@dimen/size_15"
+            android:textColor="@color/color_0a"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/length_20"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="双色球"
+            android:textSize="@dimen/size_15"
+            android:textColor="@color/color_0a"/>
+        <TextView
+            android:id="@+id/money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2元 普通订单"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_666"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/length_10"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/lottery_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中奖"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_33"
+            android:layout_marginRight="@dimen/length_5"/>
+        
+        <ImageView
+            android:layout_width="@dimen/length_6"
+            android:layout_height="@dimen/length_11"
+            android:src="@mipmap/lottery_enter"/>
+    </LinearLayout>
+
+</LinearLayout>

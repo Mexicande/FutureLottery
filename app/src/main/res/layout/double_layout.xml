@@ -1,117 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:layout_height="match_parent">
-    <include layout="@layout/line_e1"/>
-    <RelativeLayout
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp">
-        <TextView
-            android:textColor="@color/color_333"
-            android:id="@+id/tv_award"
-            android:textSize="13dp"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="第2018033期"/>
-        <TextView
-            android:id="@+id/limite_date"
-            android:textSize="13dp"
-            android:textColor="@color/red_ball"
-            android:layout_toRightOf="@id/tv_award"
-            android:layout_marginLeft="20dp"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="第2018033期"/>
-        <LinearLayout
-            android:id="@+id/layout_expand"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_expand"
-                android:textSize="13dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="20dp"
-                android:drawablePadding="5dp"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="下拉"/>
-            <ImageView
-                android:id="@+id/iv_expand"
-                android:layout_marginLeft="5dp"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/arrow_down"/>
-        </LinearLayout>
-    </RelativeLayout>
-    <include layout="@layout/line_e1"/>
-        <ScrollView
-            android:id="@+id/myScrollView"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_14">
+
+            <ImageView
+                android:id="@+id/shake_choose_iv"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_14"
-                    >
-                    <ImageView
-                        android:id="@+id/shake_choose_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:background="@mipmap/shake_choose"
-                        android:layout_marginLeft="@dimen/length_13"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="至少选择6个红球，1个篮球"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/length_13"
-                        android:textSize="@dimen/size_12"
-                        android:textColor="@color/color_666"/>
-                </RelativeLayout>
-                <GridView
-                    android:id="@+id/doubleBall_red_gv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:numColumns="7"
-                    android:verticalSpacing="5dp"
-                    android:layout_marginTop="@dimen/length_14"
-                    android:layout_marginBottom="@dimen/length_15"
-                    >
-                </GridView>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/length_13"
+                android:background="@mipmap/shake_choose" />
 
-                <include layout="@layout/line_e1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/length_13"
+                android:text="至少选择6个红球，1个篮球"
+                android:textColor="@color/color_666"
+                android:textSize="@dimen/size_12" />
+        </RelativeLayout>
 
-                <GridView
-                    android:id="@+id/doubleBall_blue_gv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:horizontalSpacing="5dp"
-                    android:numColumns="7"
-                    android:verticalSpacing="5dp"
-                    android:layout_marginTop="@dimen/length_15"
-                    android:layout_marginBottom="@dimen/length_15">
-                </GridView>
-            </LinearLayout>
-        </ScrollView>
-</LinearLayout>
+        <GridView
+            android:id="@+id/doubleBall_red_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_14"
+            android:gravity="center"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"></GridView>
+
+        <include layout="@layout/line_e1" />
+
+        <GridView
+            android:id="@+id/doubleBall_blue_gv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_15"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="7"
+            android:verticalSpacing="5dp"></GridView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

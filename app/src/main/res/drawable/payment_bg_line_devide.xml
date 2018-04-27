@@ -6,4 +6,6 @@
         android:width="@dimen/length_1"
         android:dashWidth="@dimen/length_2"
         android:dashGap="@dimen/length_2"/>
+    <!-- 虚线高度 -->
+    <size android:height="1dip" />
 </shape>

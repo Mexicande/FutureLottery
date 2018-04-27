@@ -2,6 +2,7 @@ package cn.com.futurelottery.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -35,6 +36,8 @@ import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
+import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.AwardPeriod;
 import cn.com.futurelottery.model.DoubleBall;
@@ -52,7 +55,7 @@ import cn.com.futurelottery.utils.ViewSetHinghUtil;
 /**
  * 双色球胆拖
  */
-public class DoubleBallDuplexFragment extends Fragment {
+public class DoubleBallDuplexFragment extends BaseFragment {
 
     @BindView(R.id.danhao_red_gv)
     GridView danhaoRedGv;
@@ -68,7 +71,6 @@ public class DoubleBallDuplexFragment extends Fragment {
     TextView bottomResultMoneyTv;
     @BindView(R.id.bottom_result_next_btn)
     Button bottomResultNextBtn;
-    Unbinder unbinder;
     @BindView(R.id.bottom_result_choose_tv)
     TextView bottomResultChooseTv;
     @BindView(R.id.recyclerView)
@@ -87,7 +89,6 @@ public class DoubleBallDuplexFragment extends Fragment {
     ImageView ivExpand;
     @BindView(R.id.lion)
     LinearLayout lion;
-    private View view;
     private ArrayList<String> chooseDanBalls = new ArrayList<>();
     private ArrayList<String> chooseTuoBalls = new ArrayList<>();
     private ArrayList<String> chooseBlueBalls = new ArrayList<>();
@@ -104,6 +105,9 @@ public class DoubleBallDuplexFragment extends Fragment {
     private boolean IsXpand=false;
     private ArrayList<AwardPeriod> jsonArray;
     private AwardPeriodAdapter mAwardPeriodAdapter;
+    //第多少期
+    private String phase;
+    private int intentType;
 
     public DoubleBallDuplexFragment() {
         // Required empty public constructor
@@ -111,15 +115,26 @@ public class DoubleBallDuplexFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_double_ball_duplex, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    public int getLayoutResource() {
+        return R.layout.fragment_double_ball_duplex;
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getData();
         initView();
         initDate();
         setListener();
-        return view;
     }
+
+    private void getData() {
+        Intent intent = getActivity().getIntent();
+        intentType=intent.getIntExtra("data",0);
+    }
+
+
     private void initDate() {
         //往期中奖
         ApiService.GET_SERVICE(Api.Double_Ball.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
@@ -131,6 +146,12 @@ public class DoubleBallDuplexFragment extends Fragment {
                     Type bannerType = new TypeToken<ArrayList<AwardPeriod>>() {
                     }.getType();
                     jsonArray = gson.fromJson(bannerArray.toString(), bannerType);
+                    for (int i=0;i<jsonArray.size();i++){
+                        AwardPeriod ja = jsonArray.get(i);
+                        jsonArray.remove(i);
+                        ja.setType(1);
+                        jsonArray.add(i,ja);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -138,18 +159,26 @@ public class DoubleBallDuplexFragment extends Fragment {
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
-        //遗漏
-        ApiService.GET_SERVICE(Api.Double_Ball.GET_DROP, getActivity(), new JSONObject(), new OnRequestDataListener() {
+        //期
+        ApiService.GET_SERVICE(Api.Double_Ball.GET_BYTIME, getActivity(), new JSONObject(), new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONObject jo = data.getJSONArray("data").getJSONObject(0);
+                    phase=jo.getString(Contacts.PHASE);
+                    tvAward.setText("第"+phase+"期");
+                    limiteDate.setText(jo.getString(Contacts.END_TIME)+" 截止");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
 
@@ -228,7 +257,7 @@ public class DoubleBallDuplexFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //限制球数
-                if (limit(20, position, chooseDanBalls)) {
+                if (limit(20, position, chooseTuoBalls)) {
                     ToastUtils.showToast("最多选择20个拖码");
                     return;
                 }
@@ -334,11 +363,6 @@ public class DoubleBallDuplexFragment extends Fragment {
         return isLimit;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @OnClick({R.id.bottom_result_clear_tv, R.id.bottom_result_next_btn,R.id.layout_expand})
     public void onViewClicked(View view) {
@@ -383,8 +407,14 @@ public class DoubleBallDuplexFragment extends Fragment {
                         tuo = tuo + "," + ((number < 10) ? ("0" + number) : number);
                     }
                 }
-                int number = Integer.parseInt(chooseBlueBalls.get(0)) + 1;
-                blue = "" + ((number < 10) ? ("0" + number) : number);
+                for (int i = 0; i < chooseBlueBalls.size(); i++) {
+                    int number = Integer.parseInt(chooseBlueBalls.get(i)) + 1;
+                    if (i == 0) {
+                        blue = blue + ((number < 10) ? ("0" + number) : number);
+                    } else {
+                        blue = blue + "," + ((number < 10) ? ("0" + number) : number);
+                    }
+                }
                 //判断单复式胆拖
                 db.setType(2);
                 db.setDan(dan);
@@ -395,10 +425,9 @@ public class DoubleBallDuplexFragment extends Fragment {
 
                 ArrayList<DoubleBall> balls = new ArrayList<>();
                 balls.add(db);
-                Intent intent = new Intent(getContext(), ChooseBallPaymentActivity.class);
-                intent.putExtra("kinds", "1");
-                intent.putExtra("balls", (Serializable) balls);
-                startActivity(intent);
+
+
+                intent(balls);
                 break;
             case R.id.layout_expand:
                 if(!IsXpand){
@@ -410,6 +439,23 @@ public class DoubleBallDuplexFragment extends Fragment {
             default:
                 break;
         }
+    }
+
+
+    //跳转
+    private void intent(ArrayList<DoubleBall> balls) {
+        if (intentType==0){
+            Intent intent = new Intent(getContext(), ChooseBallPaymentActivity.class);
+            intent.putExtra("balls", (Serializable) balls);
+            intent.putExtra("phase", phase);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent();
+            intent.putExtra("balls", (Serializable) balls);
+            intent.putExtra("phase", phase);
+            getActivity().setResult(-1,intent);
+        }
+        getActivity().finish();
     }
 
     //计算注数并显示

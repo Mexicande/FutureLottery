@@ -2,13 +2,15 @@ package cn.com.futurelottery.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,14 +33,20 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.inter.SaveDialogListener;
 import cn.com.futurelottery.model.DoubleBall;
 import cn.com.futurelottery.ui.adapter.ChooseBallPaymentAdapter;
+import cn.com.futurelottery.ui.dialog.QuitDialogFragment;
+import cn.com.futurelottery.utils.ActivityUtils;
+import cn.com.futurelottery.utils.DeviceUtil;
 import cn.com.futurelottery.utils.RandomMadeBall;
+import cn.com.futurelottery.utils.SPUtil;
 import cn.com.futurelottery.utils.StatusBarUtil;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.AmountView;
+import cn.com.futurelottery.view.DashlineItemDivider;
 
-public class ChooseBallPaymentActivity extends BaseActivity {
+public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialogListener{
 
     @BindView(R.id.choose_self_ll)
     LinearLayout chooseSelfLl;
@@ -65,14 +74,15 @@ public class ChooseBallPaymentActivity extends BaseActivity {
     CheckBox checkbox;
     @BindView(R.id.bt_check_box)
     LinearLayout btCheckBox;
-    @BindView(R.id.et_stop_money)
-    EditText etStopMoney;
     @BindView(R.id.accumulative_ll)
     LinearLayout accumulativeLl;
+    @BindView(R.id.layout_top_back)
+    ImageView layoutTopBack;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     private ArrayList<DoubleBall> balls = new ArrayList<>();
     private ChooseBallPaymentAdapter adapter;
     private long zhushu = 0;
-    private long money = 0;
     //期数
     private long periods = 1;
     //倍数
@@ -82,8 +92,6 @@ public class ChooseBallPaymentActivity extends BaseActivity {
     //停止追期金额
     String stop_money = "0";
     private String phase = "2018032";
-    //种类  1双色球2大乐透
-    private String kind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +105,7 @@ public class ChooseBallPaymentActivity extends BaseActivity {
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                zhushu=zhushu-balls.get(position).getZhushu();
-                money=zhushu*2;
+                zhushu = zhushu - balls.get(position).getZhushu();
                 balls.remove(position);
                 show();
                 adapter.notifyDataSetChanged();
@@ -114,10 +121,10 @@ public class ChooseBallPaymentActivity extends BaseActivity {
             @Override
             public void onAmountChange(View view, int amount) {
                 periods = amount;
-                if (amount<=1){
+                if (amount <= 1) {
                     accumulativeLl.setVisibility(View.GONE);
                     checkbox.setChecked(false);
-                }else {
+                } else {
                     accumulativeLl.setVisibility(View.VISIBLE);
                 }
                 show();
@@ -126,7 +133,7 @@ public class ChooseBallPaymentActivity extends BaseActivity {
         multiplyCount.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
-                multiple=amount;
+                multiple = amount;
                 show();
             }
         });
@@ -134,14 +141,25 @@ public class ChooseBallPaymentActivity extends BaseActivity {
 
     //获取数据
     private void getData() {
+        //本地数据
+        if (SPUtil.contains(this,Contacts.doubleBallSave)){
+            ArrayList<DoubleBall> getBalls = (ArrayList<DoubleBall>) ((Serializable)SPUtil.getList(this,Contacts.doubleBallSave));
+            balls.addAll(0, getBalls);
+            for (int i = 0; i < getBalls.size(); i++) {
+                DoubleBall db = getBalls.get(i);
+                zhushu = zhushu + db.getZhushu();
+            }
+        }
+
+
+
         Intent intent = getIntent();
-        kind = intent.getStringExtra("kinds");
+        phase = intent.getStringExtra("phase");
         ArrayList<DoubleBall> getBalls = (ArrayList<DoubleBall>) intent.getSerializableExtra("balls");
         balls.addAll(0, getBalls);
         for (int i = 0; i < getBalls.size(); i++) {
             DoubleBall db = getBalls.get(i);
             zhushu = zhushu + db.getZhushu();
-            money = zhushu*2;
         }
         show();
     }
@@ -151,15 +169,19 @@ public class ChooseBallPaymentActivity extends BaseActivity {
         return R.layout.activity_choose_ball_payment;
     }
 
+
     @Override
-    protected void setStatusBar() {
-        StatusBarUtil.setTranslucentForImageViewInFragment(ChooseBallPaymentActivity.this, 0, null);
+    protected void setTitle() {
+        tvTitle.setText(R.string.double_title);
     }
 
-    @OnClick({R.id.choose_self_ll, R.id.choose_random_ll, R.id.choose_clear_ll, R.id.bottom_result_btn})
+    @OnClick({R.id.choose_self_ll, R.id.choose_random_ll, R.id.choose_clear_ll, R.id.bottom_result_btn, R.id.layout_top_back, R.id.tip_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.choose_self_ll:
+                Intent intent=new Intent(this,DoubleBallActivity.class);
+                intent.putExtra("data",1);
+                startActivityForResult(intent,Contacts.REQUEST_CODE_PAYMENT_TO_CHOOSE);
                 break;
             case R.id.choose_random_ll:
                 randomChoose();
@@ -170,14 +192,51 @@ public class ChooseBallPaymentActivity extends BaseActivity {
             case R.id.bottom_result_btn:
                 pay();
                 break;
+            case R.id.layout_top_back:
+                if (balls.size()>0){
+                    showMyDialog();
+                }else {
+                    finish();
+                }
+                break;
+            case R.id.tip_iv:
+                showTipDialog();
+                break;
         }
+    }
+
+    private void showTipDialog() {
+        final AlertDialog alertDialog1 = new AlertDialog.Builder(this,R.style.CustomDialog).create();
+        alertDialog1.setCancelable(false);
+        alertDialog1.setCanceledOnTouchOutside(false);
+        alertDialog1.show();
+        Window window1 = alertDialog1.getWindow();
+        window1.setContentView(R.layout.tip_dialog);
+        TextView tvTip = (TextView) window1.findViewById(R.id.tips_tv);
+        TextView tvContent = (TextView) window1.findViewById(R.id.tips_tv_content);
+        TextView tvClick = (TextView) window1.findViewById(R.id.click_tv);
+        tvTip.setText("什么是中奖后停止追号");
+        tvContent.setText("勾选后，当您的追号方案某一期中奖，则后续的追号订单将被撤销，资金返还到您的账户中。如不勾选，系统一直帮您购买所有的追号投注订单。");
+        tvClick.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                alertDialog1.dismiss();
+            }
+        });
+    }
+
+    private void showMyDialog() {
+        QuitDialogFragment qt=new QuitDialogFragment();
+        qt.show(getSupportFragmentManager(),"是否保存");
+
+
     }
 
     //清空列表
     private void clearList() {
         balls.clear();
-        zhushu=0;
-        money=0;
+        zhushu = 0;
         show();
         adapter.notifyDataSetChanged();
     }
@@ -188,9 +247,12 @@ public class ChooseBallPaymentActivity extends BaseActivity {
             ToastUtils.showToast("至少选一注");
             return;
         }
+        if (!DeviceUtil.IsNetWork(this)){
+            ToastUtils.showToast("网络异常，检查网络后重试");
+            return;
+        }
 
-        is_stop=checkbox.isChecked()?"1":"2";
-        stop_money=etStopMoney.getText().toString().trim();
+        is_stop = checkbox.isChecked() ? "1" : "2";
 
         JSONArray ja = new JSONArray();
         JSONObject jo = new JSONObject();
@@ -207,8 +269,11 @@ public class ChooseBallPaymentActivity extends BaseActivity {
             }
 
             map.put(Contacts.BLU, ball.getBlu());
-            map.put(Contacts.MONEY, ball.getMoney() + "");
+            map.put(Contacts.MONEY, ball.getZhushu()*2*periods*multiple + "");
             map.put(Contacts.NOTES, ball.getZhushu() + "");
+
+            map.put(Contacts.PERIODS, periods + "");
+            map.put(Contacts.MULTIPLE, multiple + "");
 
             JSONObject jsonObject = new JSONObject(map);
             ja.put(jsonObject);
@@ -216,7 +281,7 @@ public class ChooseBallPaymentActivity extends BaseActivity {
         try {
             jo.put(Contacts.TOTAL, ja);
             jo.put(Contacts.NOTES, zhushu + "");
-            jo.put(Contacts.MONEY, money + "");
+            jo.put(Contacts.MONEY, zhushu * periods * multiple * 2 + "");
             jo.put(Contacts.PERIODS, periods + "");
             jo.put(Contacts.MULTIPLE, multiple + "");
             jo.put(Contacts.PHASE, phase);
@@ -229,12 +294,25 @@ public class ChooseBallPaymentActivity extends BaseActivity {
         ApiService.GET_SERVICE(Api.Double_Ball.POST_DOUBLE_BALL, this, jo, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-                ToastUtils.showToast(data.toString());
+                try {
+                    if (code==Api.Special_Code.notEnoughMoney){
+                        Intent intent=new Intent(ChooseBallPaymentActivity.this,PayActivity.class);
+                        intent.putExtra("information","双色球 第"+phase+"期");
+                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
+                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
+                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+                    }else if (code==0){
+                        ToastUtils.showToast("下单成功");
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
     }
@@ -262,7 +340,6 @@ public class ChooseBallPaymentActivity extends BaseActivity {
         db.setZhushu(1);
         db.setMoney(2);
         zhushu += 1;
-        money =zhushu*2;
         balls.add(0, db);
         adapter.notifyDataSetChanged();
         //列表是否显示
@@ -280,7 +357,7 @@ public class ChooseBallPaymentActivity extends BaseActivity {
             chooseZhuRv.setVisibility(View.VISIBLE);
         }
         bottomResultCountTv.setText(zhushu + "注" + periods + "期" + multiple + "倍");
-        bottomResultMoneyTv.setText(zhushu*periods*multiple*2 + "");
+        bottomResultMoneyTv.setText(zhushu * periods * multiple * 2 + "");
     }
 
     //选球列表是否显示
@@ -294,10 +371,19 @@ public class ChooseBallPaymentActivity extends BaseActivity {
         }
     }
 
+
     private void initView() {
+        //每期机选
+        periodsCount.setGoodsStorage(99);
+        //每期投
+        multiplyCount.setGoodsStorage(50);
+
+
         adapter = new ChooseBallPaymentAdapter(balls);
         chooseZhuRv.setLayoutManager(new LinearLayoutManager(this));
         chooseZhuRv.setAdapter(adapter);
+        //设置分割线
+        chooseZhuRv.addItemDecoration(new DashlineItemDivider(this));
         View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
         adapter.addFooterView(view);
 
@@ -316,4 +402,49 @@ public class ChooseBallPaymentActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void saveDate() {
+        SPUtil.putList(this,Contacts.doubleBallSave,balls);
+        finish();
+    }
+
+    @Override
+    public void clearDate() {
+        SPUtil.remove(this,Contacts.doubleBallSave);
+        finish();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (balls.size()>0){
+            showMyDialog();
+        }else {
+            finish();
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_PAYMENT_TO_CHOOSE:
+                    ArrayList<DoubleBall> getBalls = (ArrayList<DoubleBall>) data.getSerializableExtra("balls");
+                    phase=data.getStringExtra("phase");
+                    balls.addAll(0, getBalls);
+                    for (int i = 0; i < getBalls.size(); i++) {
+                        DoubleBall db = getBalls.get(i);
+                        zhushu = zhushu + db.getZhushu();
+                    }
+                    adapter.notifyDataSetChanged();
+                    show();
+                    break;
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

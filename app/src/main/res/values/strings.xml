@@ -7,6 +7,8 @@
     <string name="double_title">双色球</string>
     <string name="doubleBile_title">双色球胆拖</string>
     <string name="payment">下单</string>
+    <string name="title_activity_super_lotto">大乐透</string>
+    <string name="title_activity_super_lotto_dan">大乐透胆拖</string>
 
 
     <!-- error-->
@@ -25,12 +27,27 @@
     <string name="validate_btn_hint">获取验证码</string>
     <string name="expand">收起</string>
     <string name="un_expand">下拉</string>
+
+
     <string name="football_title">竞猜足彩</string>
     <string name="screen_title">选择联赛</string>
     <string name="foot_explain">页面赔率仅供参考,请以出票赔率为准</string>
     <string name="str_sure">确定</string>
     <string name="score_90">竞猜全场90分钟（含伤停补时）的比分</string>
-    <string name="select_foot">足彩选择</string>
-    <string name="title_activity_size_bet">SizeBetActivity</string>
-    <string name="empty_str">当前暂无比赛</string>
+
+
+    <string name="pay_title">支付</string>
+    <string name="title_activity_recharge">充值</string>
+
+
+    <string name="errcode_success">分享成功</string>
+    <string name="errcode_cancel">分享取消</string>
+    <string name="errcode_deny">分享被拒绝</string>
+    <string name="errcode_unknown">分享返回</string>
+    <string name="title_activity_order">订单</string>
+
+
+    <!--提现说明-->
+    <string name="withdrawal_instructions">1.每个账户每天至多提现3次，提现金额至少10元\n2.红包不可提取，中奖奖金可全部提现\n3.非活动充值，充值金额30天后可申请提现\n4.追号撤销等退款的70%可提现、30%不可提现\n5.每日凌晨0:50-1:20提现申请会有短暂延时，请耐心等候
+    </string>
 </resources>

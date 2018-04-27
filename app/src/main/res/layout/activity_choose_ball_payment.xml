@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity">
 
-    <include layout="@layout/toolbar_normal"/>
+    <include layout="@layout/toolbar_back"/>
 
 
     <LinearLayout
@@ -252,30 +252,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="中奖累计"/>
+                android:text="中奖后停止追号"/>
         </LinearLayout>
-        <EditText
-            android:id="@+id/et_stop_money"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:textSize="13sp"
-            android:gravity="center"
-            android:digits="0123456789"
-            android:maxLength="8"
-            android:text="5000"
-            android:background="@drawable/bg_amount_layout"/>
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:textSize="13sp"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="元后停止"/>
         <ImageView
+            android:id="@+id/tip_iv"
             android:layout_marginLeft="5dp"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"

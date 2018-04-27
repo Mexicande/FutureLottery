@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -16,17 +17,26 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.mancj.slideup.SlideUp;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.Api;
+import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.base.Contacts;
+import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.ui.fragment.DoubleBallCommonFragment;
 import cn.com.futurelottery.ui.fragment.DoubleBallDuplexFragment;
 import cn.com.futurelottery.ui.fragment.FragmentController;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
+import cn.com.futurelottery.utils.DeviceUtil;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -90,7 +100,40 @@ public class DoubleBallActivity extends BaseActivity {
         setTopTitlePop();
         initView();
         setListener();
+        getMissData();
+    }
 
+    //获取遗漏数据
+    private void getMissData() {
+        if (!DeviceUtil.IsNetWork(this)){
+            ToastUtils.showToast("网络异常，请检查网络");
+            return;
+        }
+        //遗漏
+        ApiService.GET_SERVICE(Api.Double_Ball.GET_MISS, this, new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONObject jo = data.getJSONObject("data");
+                    JSONArray ja1 = jo.getJSONArray(Contacts.RED);
+                    for(int i=0;i<ja1.length();i++){
+                        omitsRed.add(ja1.getString(i));
+                    }
+                    JSONArray ja2 = jo.getJSONArray(Contacts.BLU);
+                    for(int i=0;i<ja2.length();i++){
+                        omitsBlue.add(ja2.getString(i));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
     }
 
 
@@ -199,7 +242,9 @@ public class DoubleBallActivity extends BaseActivity {
             public void onTopRightMenuItemClick(int position) {
                 switch (position) {
                     case 0:
-                        ActivityUtils.startActivity(AutoSelectActivity.class);
+                        Intent intent=new Intent(DoubleBallActivity.this,AutoSelectActivity.class);
+                        intent.putExtra("intentType",0);
+                        startActivity(intent);
                         break;
                     case 1:
                         if (isShow==0){

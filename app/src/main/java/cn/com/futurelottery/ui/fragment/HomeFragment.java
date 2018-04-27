@@ -41,6 +41,7 @@ import cn.com.futurelottery.model.Notification;
 import cn.com.futurelottery.model.Lottery;
 import cn.com.futurelottery.ui.activity.DoubleBallActivity;
 import cn.com.futurelottery.ui.activity.Football.FootBallActivity;
+import cn.com.futurelottery.ui.activity.SuperLottoActivity;
 import cn.com.futurelottery.ui.adapter.LotteryAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
@@ -192,7 +193,7 @@ public class HomeFragment extends BaseFragment {
                         //双色球
                     }else if(Contacts.Lottery.DIL.equals(lotid)){
                         //大乐透
-
+                        ActivityUtils.startActivity(SuperLottoActivity.class);
                     }else if(Contacts.Lottery.FTB.equals(lotid)){
                         //足彩
                         ActivityUtils.startActivity(FootBallActivity.class);
