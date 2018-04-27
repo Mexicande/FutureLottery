@@ -81,7 +81,9 @@ public class WinAndLoseFragment extends BaseFragment {
     public WinAndLoseFragment() {
         // Required empty public constructor
     }
+    public void setSelect(int i){
 
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

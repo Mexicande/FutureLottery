@@ -48,6 +48,8 @@ public class AdialogFragment extends DialogFragment {
 
     }
 
+
+
     public AdialogFragment() {
 
     }
