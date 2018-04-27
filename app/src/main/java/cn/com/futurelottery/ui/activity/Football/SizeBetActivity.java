@@ -24,7 +24,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -34,12 +38,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.Api;
+import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.inter.SizeDialogListener;
 import cn.com.futurelottery.model.FootBallList;
+import cn.com.futurelottery.model.FootPay;
 import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.adapter.football.FootChooseScoreAdapter;
 import cn.com.futurelottery.ui.adapter.football.FootChooseSizeAdapter;
 import cn.com.futurelottery.ui.adapter.football.FootChooseWinAdapter;
+import cn.com.futurelottery.ui.dialog.PayMentFragment;
+import cn.com.futurelottery.ui.dialog.SizeBetDialogFragment;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
@@ -48,7 +59,7 @@ import cn.com.futurelottery.view.topRightMenu.MenuItem;
 import cn.com.futurelottery.view.topRightMenu.TRMenuAdapter;
 
 
-public class SizeBetActivity extends BaseActivity {
+public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -88,7 +99,7 @@ public class SizeBetActivity extends BaseActivity {
     private List<FootBallList.DataBean.MatchBean> mSizeBeanList;
     private List<MenuItem> mSrceenList;
     private int type = 0;
-
+    private  View view;
 
     @Override
     public int getLayoutResource() {
@@ -100,7 +111,7 @@ public class SizeBetActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         type = getIntent().getIntExtra("type", 0);
         initView();
-        if(type==7){
+        if(type%2!=0){
             //过关
             initAllPass();
         }else {
@@ -110,6 +121,35 @@ public class SizeBetActivity extends BaseActivity {
         setListener();
     }
 
+    private void initOnePass() {
+        int bet = Integer.parseInt(edMultiple.getText().toString());
+        //注数
+
+        //单关预计奖金
+        double oneMinMoney;
+        double oneMaxMoney;
+
+        OnePass();
+        //单关最大预计奖金
+        oneMaxMoney = getOneMax()*2*bet;
+        //单关最小预计奖金
+        oneMinMoney = getOneMoney()*2*bet;
+
+        double max=oneMaxMoney;
+
+
+        DecimalFormat decimalFormat =new DecimalFormat("#.00");
+        String strMin = decimalFormat.format(oneMinMoney);
+        String strMax = decimalFormat.format(max);
+        if(oneMaxMoney==oneMinMoney){
+            predictMoney.setText(strMin+"");
+        }else {
+            predictMoney.setText(strMin+"~"+strMax);
+        }
+
+
+    }
+
     private void initView() {
         mSizeBeanList = (List<FootBallList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
         mSizeAdapter = new FootChooseSizeAdapter(mSizeBeanList);
@@ -117,7 +157,7 @@ public class SizeBetActivity extends BaseActivity {
         chooseRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         ((SimpleItemAnimator) chooseRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
         chooseRecycler.setAdapter(mSizeAdapter);
-        View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
+         view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
         mSizeAdapter.addFooterView(view);
 
         slideUp = new SlideUp.Builder(slideView)
@@ -134,7 +174,7 @@ public class SizeBetActivity extends BaseActivity {
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(10), 4));
         mBottomTRMenuAdapter = new TRMenuAdapter(R.layout.football_menu_item, mSrceenList);
         trmRecyclerview.setAdapter(mBottomTRMenuAdapter);
-
+        mBottomTRMenuAdapter.getData().get(0).setIcon(1);
         slideMultiple.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -170,7 +210,15 @@ public class SizeBetActivity extends BaseActivity {
                 }
 
                 edMultiple.setText(s);
-                upDate();
+
+                if(type%2!=0){
+                    //过关
+                    upDate();
+                }else {
+                    //单关
+                    initOnePass();
+                }
+
             }
         });
 
@@ -185,7 +233,13 @@ public class SizeBetActivity extends BaseActivity {
                     item.setIcon(0);
                 }
                 mBottomTRMenuAdapter.notifyItemChanged(position);
-                upDate();
+                if(type%2!=0){
+                    //过关
+                    upDate();
+                }else {
+                    //单关
+                    initOnePass();
+                }
 
             }
         });
@@ -217,78 +271,130 @@ public class SizeBetActivity extends BaseActivity {
             ivArrow.setVisibility(View.VISIBLE);
         }
 
-
     }
 
+
+    private void setListener() {
+        mSizeAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()){
+                    case R.id.iv_delete:
+                        mSizeAdapter.remove(position);
+                        delectDate();
+                        break;
+                    case R.id.tv_score:
+                        FootBallList.DataBean.MatchBean item = mSizeAdapter.getItem(position);
+                        SizeBetDialogFragment adialogFragment = SizeBetDialogFragment.newInstance(item,position);
+                        adialogFragment.show(getSupportFragmentManager(), "timePicker");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        edMultiple.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String len = s.toString();
+                if(len.startsWith("0")){
+                    String substring = len.substring(1, len.length()-1);
+                    edMultiple.setText(substring);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s)) {
+                    edMultiple.setText("1");
+                    return;
+                } else if (Integer.valueOf(s.toString()) > 50) {
+                    edMultiple.setText(String.valueOf(50));
+                    return;
+                }
+                if (Integer.valueOf(s.toString())<1){
+                    edMultiple.setText("1");
+                    return;
+                }
+                if(type%2!=0){
+                    //过关
+                    upDate();
+                }else {
+                    //单关
+                    initOnePass();
+                }
+            }
+        });
+        slideUp.addSlideListener(new SlideUp.Listener.Visibility() {
+            @Override
+            public void onVisibilityChanged(int visibility) {
+                if(visibility==View.VISIBLE){
+                    slideMultiple.setText(edMultiple.getText().toString());
+                }else {
+                    edMultiple.setText(slideMultiple.getText().toString());
+                }
+            }
+        });
+    }
+
+    /**
+     * 删除数据
+     */
+    private void delectDate() {
+
+        mBottomTRMenuAdapter.notifyDataSetChanged();
+        if(mSizeAdapter.getData().size()<mSrceenList.size()){
+            mBottomTRMenuAdapter.remove(mSrceenList.size()-1);
+        }
+        if(mSizeAdapter.getData().size()>1){
+            mSrceenList.get(mSrceenList.size()-1).setIcon(1);
+            tvSelectBet.setText( mSrceenList.get(mSrceenList.size()-1).getContent());
+        }else if(mSizeAdapter.getData().size()==1){
+            mSrceenList.get(mSrceenList.size()-1).setIcon(1);
+            tvSelectBet.setText(mSrceenList.get(0).getContent());
+            ivArrow.setVisibility(View.GONE);
+
+            //单关
+        }else {
+            tvSelectBet.setText("投注方式(必选)");
+            chooseRecycler.setVisibility(View.GONE);
+            emptyLayout.setVisibility(View.VISIBLE);
+            mSizeAdapter.removeFooterView(view);
+        }
+        if(type%2!=0){
+            //过关
+            upDate();
+        }else {
+            //单关
+            initOnePass();
+        }
+    }
     /**
      * 刷新数据
      */
     private void upDate() {
         int bet = Integer.parseInt(edMultiple.getText().toString());
 
-        //单关预计奖金
-        double oneMinMoney=0;
-        double oneMaxMoney=0;
-
-        //过关预计奖金
-        double allMinMoney=0;
-        double allMaxMoneyy=0;
-
-        //注数
-        int oneCount=0;
         int allCount=0;
         for(int i=0;i<mSrceenList.size();i++){
-            if(i==0){
-                if(mSrceenList.get(0).getIcon()==1){
-                    oneCount = OnePass();
-                    //单关最大预计奖金
-                    oneMaxMoney = getOneMax()*2*bet;
-                    //单关最小预计奖金
-                    oneMinMoney = getOneMoney()*2*bet;
-
-                }
-            }else {
                 if (mSrceenList.get(i).getIcon() == 1) {
                     String content = mSrceenList.get(i).getContent();
                     String substring = content.substring(0, 1);
                     Integer integer = Integer.valueOf(substring);
+
                     allCount += nuBet(integer);
                 }
-                //过关最小预计奖金
-                allMinMoney = updateMinOddsAll()*2*bet;
-                //过关最大预计奖金
-                oneMaxMoney = updateMaxOddsAll()*2*bet;
-            }
+        }
+        updateMinOddsAll();
 
-        }
-        if(mSrceenList.size()==0){
-            //单关最大预计奖金
-            oneMaxMoney = getOneMax()*2*bet;
-            //单关最小预计奖金
-            oneMinMoney = getOneMoney()*2*bet;
-        }
-        double min=0;
-        if(allMinMoney==0||oneMinMoney==0){
-            if(oneMinMoney<=allMinMoney){
-                min=allMinMoney;
-            }
-        }else {
-            if(oneMinMoney<=allMinMoney){
-                min=oneMinMoney;
-            }
-        }
-        double max=oneMaxMoney+allMaxMoneyy;
-        DecimalFormat decimalFormat =new DecimalFormat("#.00");
-        String strMin = decimalFormat.format(min);
-        String strMax = decimalFormat.format(max);
-        if(min!=0&&max!=0&&min!=max){
-            predictMoney.setText(strMin+"~"+strMax);
-        }else if(min!=0&&max!=0&&min==max){
-            predictMoney.setText(strMin+"");
-        }
-
-        bottomResultCountTv.setText(String.valueOf((allCount+oneCount)));
-        bottomResultMoneyTv.setText((allCount+oneCount) * Integer.valueOf(bet) * 2 + "");
+        bottomResultCountTv.setText(String.valueOf(allCount));
+        bottomResultMoneyTv.setText(allCount * Integer.valueOf(bet) * 2 + "");
 
 
 
@@ -298,31 +404,23 @@ public class SizeBetActivity extends BaseActivity {
     /**
      * 单关注数---钱数
      */
-    private int  OnePass() {
+    private void  OnePass() {
         String bet = edMultiple.getText().toString();
         int count = 0;
-        for (FootBallList.DataBean.MatchBean s : ScoreBeanList) {
-            List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-            for(int i=0;i<odds.size();i++){
-                List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(i);
-                for(int k=0;k<oddsBeans.size();k++){
-                    if(oddsBeans.get(k).getType()==1){
+
+        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
+                for(int i=0;i<odds.size();i++){
+                    if(odds.get(i).getType()==1){
                         count++;
                     }
                 }
-
-            }
         }
-        for(FootBallList.DataBean.MatchBean s:mSizeBeanList){
-
-        }
-
 
         bottomResultCountTv.setText(String.valueOf(count));
         bottomResultMoneyTv.setText(count * Integer.valueOf(bet) * 2 + "");
         //单关奖金
         getOneMoney();
-        return count;
     }
 
     /**
@@ -332,26 +430,22 @@ public class SizeBetActivity extends BaseActivity {
      */
     private double getOneMoney() {
         double min=0;
-        ArrayList<String>mlist=new ArrayList<>();
-        for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
-            List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-
+        ArrayList<Double>mlist=new ArrayList<>();
+        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
             for(int i=0;i<odds.size();i++){
-                List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(i);
-
-                for(int k=0;k<oddsBeans.size();k++){
-                    if(oddsBeans.get(k).getType()==1){
-                        mlist.add(oddsBeans.get(k).getOdds());
-                    }
+                if(odds.get(i).getType()==1){
+                    mlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
 
             }
+
         }
+
         if(mlist.size()!=0){
             int i = Integer.parseInt(edMultiple.getText().toString());
             bottomResultTvBet.setText(i+"倍");
-            String minStr = Collections.min(mlist);
-            min = Double.parseDouble(minStr);
+            min= Collections.min(mlist);
 
         }
         return min;
@@ -363,24 +457,23 @@ public class SizeBetActivity extends BaseActivity {
      */
     private double getOneMax() {
         double money=0;
-        for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
-            List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-            ArrayList<String>maxlist=new ArrayList<>();
+
+        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
+            ArrayList<Double>mlist=new ArrayList<>();
             for(int i=0;i<odds.size();i++){
-                List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(i);
-                for(int k=0;k<oddsBeans.size();k++){
-                    if(oddsBeans.get(k).getType()==1){
-                        maxlist.add(oddsBeans.get(k).getOdds());
-                    }
+                if(odds.get(i).getType()==1){
+                    mlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
 
             }
-            if(maxlist.size()!=0){
-                String maxStr = Collections.max(maxlist);
-                double max = Double.parseDouble(maxStr);
+            if(mlist.size()!=0){
+                double max  = Collections.max(mlist);
                 money+=max;
             }
         }
+
+
         return money;
     }
 
@@ -397,20 +490,17 @@ public class SizeBetActivity extends BaseActivity {
         Integer integer = 0;
         int number=0;
         ArrayList<Integer> mArrays = new ArrayList<>();
-        for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
+        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
             number=0;
-            List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
             for(int i=0;i<odds.size();i++){
-                List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(i);
-                for(int k=0;k<oddsBeans.size();k++){
-                    if(oddsBeans.get(k).getType()==1){
-                        number++;
-                    }
+                if(odds.get(i).getType()==1){
+                    number++;
                 }
+
             }
             mArrays.add(number);
         }
-        ToastUtils.showToast("mArrays=="+mArrays.toString()+",nu=="+nu);
         if (mArrays.size() != 0) {
             integer = countExpect(nu, mArrays);
         }
@@ -428,7 +518,6 @@ public class SizeBetActivity extends BaseActivity {
      * @return
      */
     private Integer countExpect(int m, ArrayList<Integer> mList) {
-        LogUtils.i("m="+m+"  mlist=="+mList.toString());
         int count = 0;
         if (m == 2) {
             return countDouble(mList);
@@ -464,85 +553,79 @@ public class SizeBetActivity extends BaseActivity {
     /**
      * 多注最小奖金
      */
-    private double updateMinOddsAll() {
+    private void updateMinOddsAll() {
         double min;
-        ArrayList<String> list = new ArrayList<>();
-        for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
-            List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(0);
-            ArrayList<String>maxlist=new ArrayList<>();
-            for(ScoreList.DataBean.MatchBean.OddsBean max:oddsOne){
-                if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+        int bet = Integer.parseInt(edMultiple.getText().toString());
+        ArrayList<Double> list = new ArrayList<>();
+        list.clear();
+        for (FootBallList.DataBean.MatchBean s : mSizeBeanList) {
+            ArrayList<Double>maxlist=new ArrayList<>();
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = s.getOdds();
+            for(int i=0;i<odds.size();i++){
+                if(odds.get(i).getType()==1){
+                    maxlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
             }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsTwo = odds.get(1);
-            for(ScoreList.DataBean.MatchBean.OddsBean max:oddsTwo){
-                if(max.getType()==1){
-                    maxlist.add(max.getOdds());
-                }
-            }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsThree = odds.get(2);
-            for(ScoreList.DataBean.MatchBean.OddsBean max:oddsThree){
-                if(max.getType()==1){
-                    maxlist.add(max.getOdds());
-                }
-            }
-
-
             if(maxlist.size()!=0){
-                String minStr = Collections.min(maxlist);
+                Double minStr = Collections.min(maxlist);
                 list.add(minStr);
             }
 
         }
         Collections.sort(list);
-        min = Double.parseDouble(list.get(0)) * Double.parseDouble(list.get(1));
-        return min;
+
+        ArrayList<Integer>mList=new ArrayList<>();
+        for (int j = 0; j < mSrceenList.size(); j++) {
+            if (mSrceenList.get(j).getIcon() == 1) {
+                    String content = mSrceenList.get(j).getContent();
+                    String substring = content.substring(0, 1);
+                    Integer integer = Integer.valueOf(substring);
+                    mList.add(integer);
+            }
+        }
+
+        double money=1;
+            Integer integer = mList.get(0);
+            ToastUtils.showToast(""+integer);
+            for(int k=0;k<integer;k++){
+                money=money*list.get(k);
+            }
+            min = money*2*bet;
+            double v = updateMaxOddsAll() * 2 * bet;
+
+            DecimalFormat decimalFormat =new DecimalFormat("#.00");
+            String strMin = decimalFormat.format(min);
+            String strMax = decimalFormat.format(v);
+
+            if(v!=min){
+                predictMoney.setText(strMin+"~"+strMax);
+            } else {
+                predictMoney.setText(strMax+"");
+            }
     }
     /**
      * 多注最大奖金
      */
     private Double updateMaxOddsAll() {
+
         ArrayList<Double> mlist = new ArrayList<>();
-        for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
-            List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(0);
-            ArrayList<String>maxlist=new ArrayList<>();
-            for(ScoreList.DataBean.MatchBean.OddsBean max:oddsOne){
-                if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+        for (FootBallList.DataBean.MatchBean s : mSizeBeanList) {
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = s.getOdds();
+            ArrayList<Double>maxlist=new ArrayList<>();
+            for(int i=0;i<odds.size();i++){
+                if(odds.get(i).getType()==1){
+                    maxlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
             }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsTwo = odds.get(1);
-            for(ScoreList.DataBean.MatchBean.OddsBean max:oddsTwo){
-                if(max.getType()==1){
-                    maxlist.add(max.getOdds());
-                }
-            }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsThree = odds.get(2);
-            for(ScoreList.DataBean.MatchBean.OddsBean max:oddsThree){
-                if(max.getType()==1){
-                    maxlist.add(max.getOdds());
-                }
-            }
-
             if(maxlist.size()!=0){
-                String maxStr = Collections.max(maxlist);
-                double max = Double.parseDouble(maxStr);
+                Double max = Collections.max(maxlist);
                 mlist.add(max);
             }
-
         }
-
 
         double money=0;
 
-        if(mScoreAdapter.getData().size()==1||mSrceenList.get(0).getIcon() == 1){
-            money= setMaX(mlist,1);
-        }
-        for (int i = 1; i < mSrceenList.size(); i++) {
+        for (int i = 0; i < mSrceenList.size(); i++) {
             if (mSrceenList.get(i).getIcon() == 1) {
                 String content = mSrceenList.get(i).getContent();
                 String substring = content.substring(0, 1);
@@ -592,9 +675,18 @@ public class SizeBetActivity extends BaseActivity {
             case R.id.choose_clear:
                 mSizeAdapter.getData().clear();
                 mSizeAdapter.notifyDataSetChanged();
-                ScoreBeanList.clear();
-                upDate();
+                mSizeBeanList.clear();
+                if(type%2==0){
+                    //过关
+                    upDate();
+                }else {
+                    //单关
+                    initOnePass();
+                }
+
                 emptyLayout.setVisibility(View.VISIBLE);
+                mSizeAdapter.removeFooterView(view);
+
                 break;
             case R.id.layout_bet:
                 if(mSizeAdapter.getData().size()==1){
@@ -611,16 +703,160 @@ public class SizeBetActivity extends BaseActivity {
                 getSelectBet();
                 break;
             case R.id.bottom_result_btn:
+                String text = bottomResultCountTv.getText().toString();
+
                 if(slideUp.isVisible()){
                     slideUp.hide();
-                }
+                }else {
+                    if (type%2!=0) {
+                        payMent(text);
+                    } else {
 
-                paySubmit();
+                    }
+                }
                 break;
             default:
                 break;
         }
     }
 
+    private void getSelectBet() {
+        StringBuilder sb = new StringBuilder();
 
+        for (MenuItem s : mSrceenList) {
+            if (s.getIcon() == 1) {
+                sb.append(s.getContent()).append(",");
+
+            }
+        }
+        if (sb.length() == 0) {
+            tvSelectBet.setText("投注方式(必选)");
+        } else {
+            String s = sb.toString();
+            String substring = s.substring(0, s.length() - 1);
+            tvSelectBet.setText(substring);
+        }
+
+    }
+
+    /**
+     * 支付
+     * @param
+     */
+    private void payMent(String str) {
+        ArrayList<FootPay.TitleBean>list=new ArrayList<>();
+        /*for(int i=0;i<bean.size();i++){
+            FootBallList.DataBean.MatchBean matchBean = bean.get(i);
+            LogUtils.i("matchBean="+matchBean.toString());
+            if(bean.get(i).getAwayType()==1||bean.get(i).getVsType()==1||bean.get(i).getHomeType()==1){
+                FootPay.TitleBean titleBean=new FootPay.TitleBean();
+                titleBean.setMatch(bean.get(i).getMatch_id());
+                titleBean.setTeam(matchBean.getHomeTeam()+":"+matchBean.getAwayTeam());
+                String str = (matchBean.getHomeType() == 1 ? "3," : "") + (matchBean.getVsType() == 1 ? "1," : "")
+                        + (matchBean.getAwayType() == 1 ? "0," : "");
+                if(str.endsWith(",")){
+                    String substring = str.substring(0, str.length() - 1);
+                    titleBean.setType(substring);
+                }else {
+                    titleBean.setType(str);
+                }
+                list.add(titleBean);
+            }
+        }*/
+        StringBuilder sb=new StringBuilder();
+        for(MenuItem s:mSrceenList){
+            if(s.getIcon()==1){
+                sb.append(s.getContent()).append(",");
+            }
+        }
+        FootPay.MessageBean messageBean=new FootPay.MessageBean();
+
+        String string = sb.toString();
+        String substring = string.substring(0, string.length() - 1);
+        //钱数
+        String money = bottomResultMoneyTv.getText().toString();
+        //倍数
+        String bet = edMultiple.getText().toString();
+        messageBean.setMoney(Integer.parseInt(money));
+        messageBean.setMultiple(Integer.parseInt(bet));
+        messageBean.setNumber(Integer.parseInt(str));
+        switch (type){
+            case 1:
+                //队伍
+                messageBean.setStrand(substring);
+                messageBean.setPlay_rules(Api.FOOTBALL.FT001);
+                break;
+            case 2:
+                messageBean.setStrand("0");
+                messageBean.setPlay_rules(Api.FOOTBALL.FT001);
+                break;
+            case 3:
+                messageBean.setStrand(substring);
+                messageBean.setPlay_rules(Api.FOOTBALL.FT006);
+                break;
+            case 4:
+                messageBean.setStrand("0");
+                messageBean.setPlay_rules(Api.FOOTBALL.FT006);
+                break;
+            case 5:
+            case 6:
+                break;
+            default:
+                break;
+
+        }
+
+
+        FootPay footPay=new FootPay();
+        footPay.setMessage(messageBean);
+        footPay.setTitle(list);
+        Gson gson=new Gson();
+
+        String json = gson.toJson(footPay);
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject=new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiService.GET_SERVICE(Api.FootBall_Api.Payment, this, jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onDefeateComplete(int index, FootBallList.DataBean.MatchBean matchBean) {
+            int number=0;
+        List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
+            for(int i=0;i<odds.size();i++){
+                for(int k=0;k<odds.size();k++){
+                    if(odds.get(k).getType()==1){
+                        number++;
+                    }
+                }
+            }
+            if(number==0){
+                mSizeAdapter.remove(index);
+                delectDate();
+            }else {
+                mSizeAdapter.setData(index,matchBean);
+                mSizeAdapter.notifyItemChanged(index);
+                if(type%2==0){
+                    //过关
+                    upDate();
+                }else {
+                    //单关
+                    initOnePass();
+                }
+            }
+        }
 }

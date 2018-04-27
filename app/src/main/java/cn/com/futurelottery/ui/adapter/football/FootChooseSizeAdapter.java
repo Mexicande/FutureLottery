@@ -24,29 +24,10 @@ public class FootChooseSizeAdapter extends BaseQuickAdapter<FootBallList.DataBea
 
         List<FootBallList.DataBean.MatchBean.OddsBean> odds = item.getOdds();
         StringBuilder sb=new StringBuilder();
-        if(item.getFistfrom()==1){
-            sb.append(odds.get(0).getName()).append(" ");
-        }
-        if(item.getSecondfrom()==1){
-            sb.append(odds.get(1).getName()).append(" ");
-        }
-        if(item.getThirdfrom()==1){
-            sb.append(odds.get(2).getName()).append(" ");
-        }
-        if(item.getFourthfrom()==1){
-            sb.append(odds.get(3).getName()).append(" ");
-        }
-        if(item.getFistfrom()==1){
-            sb.append(odds.get(4).getName()).append(" ");
-        }
-        if(item.getSixthfrom()==1){
-            sb.append(odds.get(5).getName()).append(" ");
-        }
-        if(item.getSeventhfrom()==1){
-            sb.append(odds.get(6).getName()).append(" ");
-        }
-        if(item.getEighthfrom()==1){
-            sb.append(odds.get(7).getName()).append(" ");
+        for(int i=0;i<odds.size();i++){
+            if(odds.get(i).getType()==1){
+                sb.append(odds.get(i).getName()).append(" ");
+            }
         }
 
         helper.setText(R.id.tv_home,item.getHomeTeam())

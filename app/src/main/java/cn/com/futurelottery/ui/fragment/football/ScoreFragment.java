@@ -132,9 +132,7 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
 
     @Override
     public void onDefeateComplete(int index, ScoreList.DataBean.MatchBean matchBean) {
-        ToastUtils.showToast("index=="+index);
         mScoreListAdapter.setData(index, matchBean);
-        //mMatchBeans.set(index, matchBean);
         mScoreListAdapter.notifyItemChanged(index);
 
     }
@@ -159,7 +157,6 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
      */
     private void nextSubmit() {
         list.clear();
-        boolean flag=false;
         int m=0;
         for(ScoreList.DataBean s:beans){
             List<ScoreList.DataBean.MatchBean> match = s.getMatch();
@@ -184,7 +181,6 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
                 }
 
         }
-
         Intent intent=new Intent(getActivity(),ScoreBetActivity.class);
         if(list.size()>=1){
             intent.putExtra("bean",(Serializable)list);
@@ -192,7 +188,6 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
         }else {
             ToastUtils.showToast("请至少选择1场比赛");
         }
-
     }
 
     /**
@@ -212,7 +207,7 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
                                     }
                                 }
                         }
-
+                    s.setSelect("");
                 }
         }
         mScoreListAdapter.notifyDataSetChanged();

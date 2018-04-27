@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,8 +24,6 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,27 +31,28 @@ import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.inter.SizeDialogListener;
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.adapter.football.SizeDialogAdapter;
+import cn.com.futurelottery.view.supertextview.SuperButton;
 
 
 /**
  * A simple {@link Fragment} subclass.
  *
  * @author apple
- *         半全场
+ *         总比分
  */
-public class HalfDialogFragment extends DialogFragment {
+public class SizeBetDialogFragment extends DialogFragment {
 
 
     @BindView(R.id.tv_home)
     TextView tvHome;
     @BindView(R.id.tv_away)
     TextView tvAway;
-    @BindView(R.id.one_recyclerView)
-    RecyclerView oneRecyclerView;
+    @BindView(R.id.lion)
+    LinearLayout lion;
+    @BindView(R.id.two_recyclerView)
+    RecyclerView twoRecyclerView;
     Unbinder unbinder;
-
     private SizeDialogAdapter mSizeDialogAdapter;
     private FootBallList.DataBean.MatchBean beans;
     private int mIndex;
@@ -62,15 +62,15 @@ public class HalfDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback = (SizeDialogListener) getParentFragment();
+        callback = (SizeDialogListener) context;
     }
 
-    public HalfDialogFragment() {
+    public SizeBetDialogFragment() {
         // Required empty public constructor
     }
 
-    public static HalfDialogFragment newInstance(FootBallList.DataBean.MatchBean mPopupBean, int index) {
-        HalfDialogFragment instance = new HalfDialogFragment();
+    public static SizeBetDialogFragment newInstance(FootBallList.DataBean.MatchBean mPopupBean, int index) {
+        SizeBetDialogFragment instance = new SizeBetDialogFragment();
         Bundle args = new Bundle();
         args.putSerializable("bean", mPopupBean);
         args.putInt("index", index);
@@ -87,8 +87,7 @@ public class HalfDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_half2, container, false);
+        View view = inflater.inflate(R.layout.fragment_size_bet_dialog, container, false);
         final Window window = getDialog().getWindow();
         if (window != null) {
             window.getDecorView().setPadding(0, 0, 0, 0);
@@ -98,6 +97,7 @@ public class HalfDialogFragment extends DialogFragment {
             wlp.height = WindowManager.LayoutParams.WRAP_CONTENT;
             window.setAttributes(wlp);
         }
+
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -128,7 +128,6 @@ public class HalfDialogFragment extends DialogFragment {
 
     }
 
-
     private void initView() {
 
         beans = (FootBallList.DataBean.MatchBean) getArguments().getSerializable("bean");
@@ -147,16 +146,12 @@ public class HalfDialogFragment extends DialogFragment {
         threeManager.setAlignItems(AlignItems.STRETCH);
         threeManager.setJustifyContent(JustifyContent.FLEX_START);
         mSizeDialogAdapter = new SizeDialogAdapter(beans.getOdds());
-        ((SimpleItemAnimator) oneRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        oneRecyclerView.setLayoutManager(threeManager);
-        oneRecyclerView.setAdapter(mSizeDialogAdapter);
+        ((SimpleItemAnimator) twoRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        twoRecyclerView.setLayoutManager(threeManager);
+        twoRecyclerView.setAdapter(mSizeDialogAdapter);
 
     }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
+
 
     @OnClick({R.id.bt_cancel, R.id.bt_sure})
     public void onViewClicked(View view) {
@@ -165,21 +160,17 @@ public class HalfDialogFragment extends DialogFragment {
                 dismiss();
                 break;
             case R.id.bt_sure:
-                List<FootBallList.DataBean.MatchBean.OddsBean> data = mSizeDialogAdapter.getData();
-                StringBuilder sb=new StringBuilder();
-                for(int i=0;i<data.size();i++){
-                    if(data.get(i).getType()==1){
-                        sb.append(data.get(i).getName()).append(" ");
-
-                    }
-                }
-                beans.setSelect(sb.toString());
-                beans.setOdds(data);
                 callback.onDefeateComplete(mIndex, beans);
                 dismiss();
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

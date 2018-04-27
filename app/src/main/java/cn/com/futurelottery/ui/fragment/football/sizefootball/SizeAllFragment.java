@@ -32,6 +32,7 @@ import cn.com.futurelottery.presenter.FootCleanType;
 import cn.com.futurelottery.presenter.FootSizeType;
 import cn.com.futurelottery.presenter.FootSureType;
 import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
+import cn.com.futurelottery.ui.activity.Football.SizeBetActivity;
 import cn.com.futurelottery.ui.adapter.football.SizeAdapter;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -116,22 +117,6 @@ public class SizeAllFragment extends BaseFragment {
         });
     }
 
-    private void update() {
-        nu=0;
-        for (int i = 0; i < beans.size(); i++) {
-            FootBallList.DataBean dataBean = beans.get(i);
-            for(int j=0;j<dataBean.getMatch().size();j++){
-                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
-                if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
-                        ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
-                        ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
-                    nu++;
-                }
-
-            }
-        }
-       // EventBus.getDefault().post(new FootSizeType(nu,0));
-    }
 
     @Override
     public void onStart() {
@@ -184,7 +169,7 @@ public class SizeAllFragment extends BaseFragment {
     public void nextSubmit(FootSureType type){
         if(type.getmType()==7){
                 nextDate();
-                Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
+                Intent intent=new Intent(getActivity(),SizeBetActivity.class);
                 intent.putExtra("type",7);
                 List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
                 for(FootBallList.DataBean s:beans){

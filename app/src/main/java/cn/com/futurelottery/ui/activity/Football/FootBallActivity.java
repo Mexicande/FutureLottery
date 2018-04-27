@@ -25,8 +25,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.Api;
+import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.inter.DialogListener;
+import cn.com.futurelottery.ui.fragment.FragmentController;
 import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
 import cn.com.futurelottery.ui.fragment.football.ScoreFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
@@ -68,8 +71,8 @@ public class FootBallActivity extends BaseActivity{
     private TRMenuAdapter mTRMenuAdapter,mBottomTRMenuAdapter;
     private TopRightMenu mtopRightMenu;
     BottomSheetDialog mBottomSheetDialog;
-    private WinAndLoseFragment mWinAndLoseFragment;
     ArrayList<Fragment> mFragmentList = new ArrayList<>();
+    FragmentController instance;
     @Override
     public int getLayoutResource() {
         return R.layout.activity_foot_ball;
@@ -83,6 +86,24 @@ public class FootBallActivity extends BaseActivity{
         initView();
         setListener();
     }
+
+    private void getDate() {
+        /**
+         * 赛事列表
+         */
+        for(int i = 0; i < mFragmentList.size(); i++) {
+            Fragment fragment = mFragmentList.get(i);
+            if(fragment!=null && fragment.isAdded()&&fragment.isVisible()) {
+
+            }
+        }
+
+        //ApiService.GET_SERVICE(Api.FootBall_Api.PayList,this,);
+        instance.hideFragments();
+
+
+    }
+
     private void setListener() {
         mTRMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -106,7 +127,8 @@ public class FootBallActivity extends BaseActivity{
                 tvTitle.setText(item.getContent());
                 RoteteUtils.rotateArrow(ivArrow, flag);
                 flag = !flag;
-                switchPages(position);
+                instance.showFragment(position);
+
             }
         });
     }
@@ -207,29 +229,10 @@ public class FootBallActivity extends BaseActivity{
         mFragmentList.add(new ScoreFragment());
         mFragmentList.add(new SizeFragment());
         mFragmentList.add(new HalfFragment());
-        switchPages(0);
-    }
+         instance = FragmentController.getInstance(this, R.id.foot_fragment, true, mFragmentList);
+        instance.showFragment(0);
 
-    private void switchPages(int index) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment;
-        for (int i = 0, j = mFragmentList.size(); i < j; i++) {
-            if (i == index) {
-                continue;
-            }
-            fragment = mFragmentList.get(i);
-            if (fragment.isAdded()) {
-                fragmentTransaction.hide(fragment);
-            }
-        }
-        fragment = mFragmentList.get(index);
-        if (fragment.isAdded()) {
-            fragmentTransaction.show(fragment);
-        } else {
-            fragmentTransaction.add(R.id.foot_fragment, fragment);
-        }
-        fragmentTransaction.commitAllowingStateLoss();
+
     }
 
     /**
@@ -282,6 +285,7 @@ public class FootBallActivity extends BaseActivity{
                 finish();
                 break;
             case R.id.iv_screen:
+                getDate();
                 if(!mBottomSheetDialog.isShowing()) {
                     mBottomSheetDialog.show();
                 }else {

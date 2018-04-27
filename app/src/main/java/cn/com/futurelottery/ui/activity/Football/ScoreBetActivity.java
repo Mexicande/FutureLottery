@@ -99,7 +99,9 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
     private List<ScoreList.DataBean.MatchBean> ScoreBeanList;
     private List<MenuItem> mSrceenList;
     private int type = 0;
-
+    private double oneMinMoney=0;
+    private double oneMaxMoney=0;
+    private View view;
     @Override
     public int getLayoutResource() {
         return R.layout.activity_score_bet;
@@ -108,6 +110,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        type = getIntent().getIntExtra("type", 0);
         initView();
 
         initAllPass();
@@ -138,6 +141,8 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
             tvSelectBet.setText("投注方式(必选)");
             chooseRecycler.setVisibility(View.GONE);
             emptyLayout.setVisibility(View.VISIBLE);
+            mScoreAdapter.removeFooterView(view);
+
         }
         upDate();
     }
@@ -149,72 +154,53 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         int bet = Integer.parseInt(edMultiple.getText().toString());
 
         //单关预计奖金
-        double oneMinMoney=0;
-        double oneMaxMoney=0;
+         oneMinMoney=0;
+         oneMaxMoney=0;
 
-        //过关预计奖金
-        double allMinMoney=0;
-        double allMaxMoneyy=0;
 
         //注数
         int oneCount=0;
         int allCount=0;
         for(int i=0;i<mSrceenList.size();i++){
             if(i==0){
-                if(mSrceenList.get(0).getIcon()==1){
+                if(mBottomTRMenuAdapter.getData().get(i).getIcon()==1){
                     oneCount = OnePass();
                     //单关最大预计奖金
                     oneMaxMoney = getOneMax()*2*bet;
                     //单关最小预计奖金
                     oneMinMoney = getOneMoney()*2*bet;
-
                 }
             }else {
-                if (mSrceenList.get(i).getIcon() == 1) {
+                if (mBottomTRMenuAdapter.getData().get(i).getIcon() == 1) {
                     String content = mSrceenList.get(i).getContent();
                     String substring = content.substring(0, 1);
                     Integer integer = Integer.valueOf(substring);
                     allCount += nuBet(integer);
                 }
-                //过关最小预计奖金
-                allMinMoney = updateMinOddsAll()*2*bet;
-                //过关最大预计奖金
-                oneMaxMoney = updateMaxOddsAll()*2*bet;
             }
 
         }
-        if(mSrceenList.size()==0){
+
+        updateMinOddsAll();
+
+        if(mBottomTRMenuAdapter.getData().size()==0){
             //单关最大预计奖金
             oneMaxMoney = getOneMax()*2*bet;
             //单关最小预计奖金
             oneMinMoney = getOneMoney()*2*bet;
-        }
-        double min=0;
-        if(allMinMoney==0||oneMinMoney==0){
-            if(oneMinMoney<=allMinMoney){
-                min=allMinMoney;
-            }
-        }else {
-            if(oneMinMoney<=allMinMoney){
-                min=oneMinMoney;
+            if(oneMaxMoney==oneMinMoney){
+                predictMoney.setText(oneMinMoney+"");
+            }else {
+                predictMoney.setText(oneMinMoney+"~"+oneMaxMoney);
             }
         }
-        double max=oneMaxMoney+allMaxMoneyy;
-        DecimalFormat decimalFormat =new DecimalFormat("#.00");
-        String strMin = decimalFormat.format(min);
-        String strMax = decimalFormat.format(max);
-        if(min!=0&&max!=0&&min!=max){
-            predictMoney.setText(strMin+"~"+strMax);
-        }else if(min!=0&&max!=0&&min==max){
-            predictMoney.setText(strMin+"");
-        }
+
 
         bottomResultCountTv.setText(String.valueOf((allCount+oneCount)));
         bottomResultMoneyTv.setText((allCount+oneCount) * Integer.valueOf(bet) * 2 + "");
 
-
-
     }
+
 
 
     /**
@@ -249,16 +235,14 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
      */
     private double getOneMoney() {
         double min=0;
-        ArrayList<String>mlist=new ArrayList<>();
+        ArrayList<Double>mlist=new ArrayList<>();
         for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
             List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-
             for(int i=0;i<odds.size();i++){
                 List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(i);
-
                 for(int k=0;k<oddsBeans.size();k++){
                     if(oddsBeans.get(k).getType()==1){
-                        mlist.add(oddsBeans.get(k).getOdds());
+                        mlist.add(Double.parseDouble(oddsBeans.get(k).getOdds()));
                     }
                 }
 
@@ -267,9 +251,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         if(mlist.size()!=0){
             int i = Integer.parseInt(edMultiple.getText().toString());
             bottomResultTvBet.setText(i+"倍");
-            String minStr = Collections.min(mlist);
-             min = Double.parseDouble(minStr);
-
+             min = Collections.min(mlist);
         }
         return min;
     }
@@ -282,20 +264,20 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         double money=0;
         for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
             List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-            ArrayList<String>maxlist=new ArrayList<>();
+            ArrayList<Double>maxlist=new ArrayList<>();
             for(int i=0;i<odds.size();i++){
                 List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(i);
+                maxlist.clear();
                 for(int k=0;k<oddsBeans.size();k++){
                     if(oddsBeans.get(k).getType()==1){
-                        maxlist.add(oddsBeans.get(k).getOdds());
+                        maxlist.add(Double.parseDouble(oddsBeans.get(k).getOdds()));
                     }
                 }
 
             }
             if(maxlist.size()!=0){
-                String maxStr = Collections.max(maxlist);
-                double max = Double.parseDouble(maxStr);
-                money+=max;
+                double  maxStr = Collections.max(maxlist);
+                money+=maxStr;
             }
         }
         return money;
@@ -327,7 +309,6 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
             }
             mArrays.add(number);
         }
-        ToastUtils.showToast("mArrays=="+mArrays.toString()+",nu=="+nu);
         if (mArrays.size() != 0) {
             integer = countExpect(nu, mArrays);
         }
@@ -345,7 +326,6 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
      * @return
      */
     private Integer countExpect(int m, ArrayList<Integer> mList) {
-        LogUtils.i("m="+m+"  mlist=="+mList.toString());
         int count = 0;
         if (m == 2) {
             return countDouble(mList);
@@ -386,7 +366,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         chooseRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         ((SimpleItemAnimator) chooseRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
         chooseRecycler.setAdapter(mScoreAdapter);
-        View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
+         view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
         mScoreAdapter.addFooterView(view);
 
         slideUp = new SlideUp.Builder(slideView)
@@ -475,7 +455,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(10), 4));
         mBottomTRMenuAdapter = new TRMenuAdapter(R.layout.football_menu_item, mSrceenList);
         trmRecyclerview.setAdapter(mBottomTRMenuAdapter);
-
+        mBottomTRMenuAdapter.getData().get(0).setIcon(1);
         upDate();
         slideMultiple.addTextChangedListener(new TextWatcher() {
             @Override
@@ -562,41 +542,83 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
     /**
      * 多注最小奖金
      */
-    private double updateMinOddsAll() {
+    private void updateMinOddsAll() {
         double min;
-        ArrayList<String> list = new ArrayList<>();
+        int bet = Integer.parseInt(edMultiple.getText().toString());
+
+        ArrayList<Double> list = new ArrayList<>();
         for (ScoreList.DataBean.MatchBean s : ScoreBeanList) {
             List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
             List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(0);
-            ArrayList<String>maxlist=new ArrayList<>();
+            ArrayList<Double>maxlist=new ArrayList<>();
             for(ScoreList.DataBean.MatchBean.OddsBean max:oddsOne){
                 if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+                    maxlist.add(Double.parseDouble(max.getOdds()));
                 }
             }
             List<ScoreList.DataBean.MatchBean.OddsBean> oddsTwo = odds.get(1);
             for(ScoreList.DataBean.MatchBean.OddsBean max:oddsTwo){
                 if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+                    maxlist.add(Double.parseDouble(max.getOdds()));
                 }
             }
             List<ScoreList.DataBean.MatchBean.OddsBean> oddsThree = odds.get(2);
             for(ScoreList.DataBean.MatchBean.OddsBean max:oddsThree){
                 if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+                    maxlist.add(Double.parseDouble(max.getOdds()));
                 }
             }
 
 
             if(maxlist.size()!=0){
-                String minStr = Collections.min(maxlist);
+                double minStr = Collections.min(maxlist);
                 list.add(minStr);
             }
 
         }
                 Collections.sort(list);
-                min = Double.parseDouble(list.get(0)) * Double.parseDouble(list.get(1));
-                return min;
+
+        ArrayList<Integer>mList=new ArrayList<>();
+        for (int j = 0; j < mSrceenList.size(); j++) {
+            if (mSrceenList.get(j).getIcon() == 1) {
+                if(j==0){
+                    mList.add(1);
+                }else {
+                    String content = mSrceenList.get(j).getContent();
+                    String substring = content.substring(0, 1);
+                    Integer integer = Integer.valueOf(substring);
+                    mList.add(integer);
+                }
+            }
+        }
+        double money=1;
+        Integer integer = mList.get(0);
+        ToastUtils.showToast(""+integer);
+        for(int k=0;k<integer;k++){
+            money=money*list.get(k);
+        }
+        min = money*2*bet;
+
+
+        double v = updateMaxOddsAll() * 2 * bet;
+        double minOne=0;
+
+        DecimalFormat decimalFormat =new DecimalFormat("#.00");
+
+        if(oneMinMoney!=0){
+            minOne=oneMinMoney;
+        }else {
+            minOne=min;
+        }
+        String strMin = decimalFormat.format(minOne);
+        String strMax = decimalFormat.format(v);
+        if(minOne!=0&&v!=minOne){
+            predictMoney.setText(strMin+"~"+strMax);
+        }else {
+            predictMoney.setText(strMax+"");
+        }
+
+
     }
     /**
      * 多注最大奖金
@@ -607,29 +629,28 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
             List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
 
             List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(0);
-            ArrayList<String>maxlist=new ArrayList<>();
+            ArrayList<Double>maxlist=new ArrayList<>();
             for(ScoreList.DataBean.MatchBean.OddsBean max:oddsOne){
                 if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+                    maxlist.add(Double.parseDouble(max.getOdds()));
                 }
             }
             List<ScoreList.DataBean.MatchBean.OddsBean> oddsTwo = odds.get(1);
             for(ScoreList.DataBean.MatchBean.OddsBean max:oddsTwo){
                 if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+                    maxlist.add(Double.parseDouble(max.getOdds()));
                 }
             }
             List<ScoreList.DataBean.MatchBean.OddsBean> oddsThree = odds.get(2);
             for(ScoreList.DataBean.MatchBean.OddsBean max:oddsThree){
                 if(max.getType()==1){
-                    maxlist.add(max.getOdds());
+                    maxlist.add(Double.parseDouble(max.getOdds()));
                 }
             }
 
             if(maxlist.size()!=0){
-                String maxStr = Collections.max(maxlist);
-                double max = Double.parseDouble(maxStr);
-                mlist.add(max);
+                double maxStr = Collections.max(maxlist);
+                mlist.add(maxStr);
             }
 
         }
@@ -698,6 +719,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
                 ScoreBeanList.clear();
                 upDate();
                 emptyLayout.setVisibility(View.VISIBLE);
+                mScoreAdapter.removeFooterView(view);
                 break;
             case R.id.layout_bet:
                 if(mScoreAdapter.getData().size()==1){
@@ -787,31 +809,9 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         messageBean.setMoney(Integer.parseInt(money));
         messageBean.setMultiple(Integer.parseInt(bet));
         messageBean.setNumber(Integer.parseInt(number));
-        switch (type){
-            case 1:
-                //队伍
-                messageBean.setStrand(substring);
-                messageBean.setPlay_rules(Api.FOOTBALL.FT001);
-                break;
-            case 2:
-                messageBean.setStrand("0");
-                messageBean.setPlay_rules(Api.FOOTBALL.FT001);
-                break;
-            case 3:
-                messageBean.setStrand(substring);
-                messageBean.setPlay_rules(Api.FOOTBALL.FT006);
-                break;
-            case 4:
-                messageBean.setStrand("0");
-                messageBean.setPlay_rules(Api.FOOTBALL.FT006);
-                break;
-            case 5:
-            case 6:
-                break;
-            default:
-                break;
+        messageBean.setPlay_rules(Api.FOOTBALL.FT002);
+        messageBean.setStrand(substring);
 
-        }
 
 
         FootPay footPay=new FootPay();
@@ -887,7 +887,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
             }
         }
         if(number==0){
-            mScoreAdapter.remove(0);
+            mScoreAdapter.remove(index);
             delectDate();
         }else {
             mScoreAdapter.setData(index,matchBean);

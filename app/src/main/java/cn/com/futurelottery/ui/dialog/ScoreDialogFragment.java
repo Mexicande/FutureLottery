@@ -108,7 +108,6 @@ public class ScoreDialogFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
         initView();
         setListener();
-
     }
 
 
@@ -233,7 +232,6 @@ public class ScoreDialogFragment extends DialogFragment {
                 List<ScoreList.DataBean.MatchBean.OddsBean> win = mScoreListAdapter.getData();
                 List<ScoreList.DataBean.MatchBean.OddsBean> flat = mFlatAdapter.getData();
                 List<ScoreList.DataBean.MatchBean.OddsBean> losr = mLosrAdapter.getData();
-
                 List<List<ScoreList.DataBean.MatchBean.OddsBean>> odd=new ArrayList<>();
                 odd.add(win);
                 odd.add(flat);

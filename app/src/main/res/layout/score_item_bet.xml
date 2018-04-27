@@ -23,8 +23,8 @@
             android:text="皇马"/>
         <TextView
             android:gravity="center"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:id="@+id/tv_VS"
             android:textSize="13sp"
             android:textColor="@color/black"
@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/tv_away"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="拜仁"

@@ -122,7 +122,7 @@ public class FootAllBetActivity extends BaseActivity {
         chooseRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         ((SimpleItemAnimator) chooseRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
         chooseRecycler.setAdapter(mAdapter);
-        View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
+        view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
         mAdapter.addFooterView(view);
 
         slideUp = new SlideUp.Builder(slideView)
@@ -465,21 +465,21 @@ public class FootAllBetActivity extends BaseActivity {
      * 多注最小奖金
      */
     private void updateMinOddsAll() {
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<Double> list = new ArrayList<>();
         for (FootBallList.DataBean.MatchBean s : bean) {
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = s.getOdds();
-            ArrayList<String>mlist=new ArrayList<>();
+            ArrayList<Double>mlist=new ArrayList<>();
             if(s.getHomeType()==1){
-                mlist.add(odds.get(0).getOdds());
+                mlist.add(Double.parseDouble(odds.get(0).getOdds()));
             }
             if(s.getVsType()==1){
-                mlist.add(odds.get(1).getOdds());
+                mlist.add(Double.parseDouble(odds.get(1).getOdds()));
             }
             if(s.getAwayType()==1){
-                mlist.add(odds.get(2).getOdds());
+                mlist.add(Double.parseDouble(odds.get(2).getOdds()));
             }
             if(mlist.size()!=0){
-                String min = Collections.min(mlist);
+                Double min = Collections.min(mlist);
                 list.add(min);
             }
         }
@@ -489,12 +489,30 @@ public class FootAllBetActivity extends BaseActivity {
                 selected=true;
             }
         }
+
         if(selected){
             double v;
             int i = Integer.parseInt(edMultiple.getText().toString());
                 if(list.size()>=2){
                     Collections.sort(list);
-                    v = Double.parseDouble(list.get(0)) * Double.parseDouble(list.get(1))*2*i;
+
+                    ArrayList<Integer>mList=new ArrayList<>();
+                    for (int j = 0; j < mSrceenList.size(); j++) {
+                        if (mSrceenList.get(j).getIcon() == 1) {
+                            String content = mSrceenList.get(j).getContent();
+                            String substring = content.substring(0, 1);
+                            Integer integer = Integer.valueOf(substring);
+                            mList.add(integer);
+                        }
+                    }
+                    double money=1;
+                    Integer integer = mList.get(0);
+                    ToastUtils.showToast(""+integer);
+                    for(int k=0;k<integer;k++){
+                        money=money*list.get(k);
+                    }
+                    v = money*2*i;
+
                     DecimalFormat decimalFormat =new DecimalFormat("#.00");
                     String min = decimalFormat.format(v);
                     String max = decimalFormat.format(updateMaxOddsAll()*i);
@@ -650,11 +668,14 @@ public class FootAllBetActivity extends BaseActivity {
                 mAdapter.notifyDataSetChanged();
                 bean.clear();
                 upDate();
+                emptyLayout.setVisibility(View.VISIBLE);
                 if (type%2!=0) {
                     footAll.setText("请至少选择2场比赛");
                 } else  {
                     footAll.setText("请至少选择1场比赛");
                 }
+
+                mAdapter.removeFooterView(view);
                 break;
             case R.id.layout_bet:
                 if (type%2!=0) {

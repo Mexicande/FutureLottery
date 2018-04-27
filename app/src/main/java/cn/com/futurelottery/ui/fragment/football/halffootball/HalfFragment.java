@@ -29,16 +29,23 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.model.FootBallList;
+import cn.com.futurelottery.presenter.FootCleanType;
+import cn.com.futurelottery.presenter.FootSureType;
+import cn.com.futurelottery.presenter.FooterOneEvent;
 import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
 import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
 import cn.com.futurelottery.ui.adapter.football.HalfAdapter;
@@ -70,7 +77,8 @@ public class HalfFragment extends BaseFragment {
     private List<String> mDataList = new ArrayList<>();
     ArrayList<Fragment> mFragmentList = new ArrayList<>();
 
-
+    private int AllNumber=0;
+    private int OneNumber=0;
     public HalfFragment() {
 
     }
@@ -89,6 +97,7 @@ public class HalfFragment extends BaseFragment {
     private void initFragment() {
         mDataList.add("过关 (至少选两场)");
         mDataList.add("单关 (猜一场,奖金固定)");
+        tvSelect.setText("请至少选择2场比赛");
         mFragmentList.add(new AllHalfFragment());
         mFragmentList.add(new OneHalfFragment());
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getChildFragmentManager(), mFragmentList);
@@ -116,10 +125,20 @@ public class HalfFragment extends BaseFragment {
                         mFragmentContainerHelper.handlePageSelected(i);
                         viewPager.setCurrentItem(i);
                         if (i == 0) {
-                            tvSelect.setText("请至少选择2场比赛");
+                            if (AllNumber == 0) {
+                                tvSelect.setText("请至少选择2场比赛");
+                            } else {
+                                tvSelect.setText("已选择" + AllNumber + "场");
+                            }
                         } else if (i == 1) {
-                            tvSelect.setText("请至少选择1场比赛");
+                            if (OneNumber == 0) {
+                                tvSelect.setText("请至少选择1场比赛");
+                            } else {
+                                tvSelect.setText("已选择" + OneNumber + "场");
+                            }
+
                         }
+
 
                     }
                 });
@@ -155,5 +174,68 @@ public class HalfFragment extends BaseFragment {
             }
         });
 
+    }
+    /**
+     * 已选场次Nu更新
+     * @param event
+     */
+    @Subscribe
+    public void onOne(FooterOneEvent event) {
+        if(event.getType()==1){
+            AllNumber = event.getmMeeage();
+            if (event.getmMeeage() != 0) {
+                tvSelect.setText("已选择" + AllNumber + "场");
+            } else {
+                tvSelect.setText("请至少选择2场比赛");
+            }
+        }else if(event.getType()==2){
+            OneNumber = event.getmMeeage();
+            if (event.getmMeeage() != 0) {
+                tvSelect.setText("已选择" + String.valueOf(OneNumber) + "场");
+            } else {
+                tvSelect.setText("请至少选择1场比赛");
+            }
+        }
+    }
+
+    @OnClick({R.id.bottom_result_clear_tv, R.id.bottom_result_next_btn})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.bottom_result_clear_tv:
+                //清除
+                int currentItem = viewPager.getCurrentItem();
+                if(currentItem==0){
+                    EventBus.getDefault().post(new FootCleanType(9));
+                    tvSelect.setText("请至少选择2场比赛");
+                    AllNumber=0;
+                }else {
+                    EventBus.getDefault().post(new FootCleanType(10));
+                    tvSelect.setText("请至少选择1场比赛");
+                    OneNumber=0;
+                }
+                break;
+            case R.id.bottom_result_next_btn:
+                int index = viewPager.getCurrentItem();
+                if(index==0){
+                    EventBus.getDefault().post(new FootSureType(9));
+                }else {
+                    EventBus.getDefault().post(new FootSureType(10));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
