@@ -153,6 +153,14 @@ public interface Api {
     interface Withdraw{
         //绑定银行卡状态
         String binding   =      HOST+"extract/binding";
+        //检验验证码
+        String checkCode   =      HOST+"sms/checkCode";
+        //提交信息
+        String idcard   =      HOST+"extract/idcard";
+        //提现信息
+        String amount   =      HOST+"extract/amount";
+        //提现
+        String take   =      HOST+"extract/take";
     }
 
 }

@@ -31,6 +31,7 @@ public class Order implements Serializable{
     private String openmatch;
     private String name;
     private String winning_money;
+    private String status;
 
     public String getId() {
         return id;
@@ -104,6 +105,15 @@ public class Order implements Serializable{
         this.winning_money = winning_money;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
     @Override
     public String toString() {
         return "Order{" +
@@ -116,6 +126,7 @@ public class Order implements Serializable{
                 ", openmatch='" + openmatch + '\'' +
                 ", name='" + name + '\'' +
                 ", winning_money='" + winning_money + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

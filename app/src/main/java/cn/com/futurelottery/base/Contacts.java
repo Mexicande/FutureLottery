@@ -154,5 +154,7 @@ public   interface    Contacts {
     String INTENT_EXTRA_PAY_SUCESS = "com.xinhe.intent.action.PAY_SUCESS";
     //充值成功
     String INTENT_EXTRA_RECHARGE_SUCESS = "com.xinhe.intent.action.RECHARGE_SUCESS";
+    //登陆成功
+    String INTENT_EXTRA_LOGIN_SUCESS = "com.xinhe.intent.action.LOGIN_SUCESS";
 
 }

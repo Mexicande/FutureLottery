@@ -1,6 +1,9 @@
 package cn.com.futurelottery.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -29,6 +32,7 @@ import cn.com.futurelottery.ui.activity.RechargeActivity;
 import cn.com.futurelottery.ui.activity.SetActivity;
 import cn.com.futurelottery.ui.activity.WithdrawActivity;
 import cn.com.futurelottery.utils.ActivityUtils;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 
 /**
@@ -39,8 +43,8 @@ import cn.com.futurelottery.utils.ToastUtils;
 public class CenterFragment extends BaseFragment {
     @BindView(R.id.center_fragment_iv)
     ImageView centerFragmentIv;
-    private final int LOGIN_REQUEST_CODE = 1000;
     private final int WITHDRAW_REQUEST_CODE = 1001;
+    private final int SET_REQUEST_CODE = 1002;
     private final int RESULT_CODE = -1;
     @BindView(R.id.center_fragment_number_tv)
     TextView centerFragmentNumberTv;
@@ -64,6 +68,7 @@ public class CenterFragment extends BaseFragment {
     RelativeLayout centerFragmentRl1;
     @BindView(R.id.center_fragment_rl2)
     RelativeLayout centerFragmentRl2;
+    private InnerReceiver receiver;
 
 
     @Override
@@ -79,6 +84,12 @@ public class CenterFragment extends BaseFragment {
 
     private void initView() {
 
+        // 注册广播接收者
+        receiver = new InnerReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
+        getContext().registerReceiver(receiver, filter);
+
         if (!TextUtils.isEmpty(BaseApplication.getInstance().token)){
             setLoginView();
         }
@@ -90,29 +101,39 @@ public class CenterFragment extends BaseFragment {
         centerFragmentMoneyTv1.setText(BaseApplication.getInstance().amount);
     }
 
-    @Override
-    protected void setTitle() {
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_CODE) {
             switch (requestCode) {
-                case LOGIN_REQUEST_CODE:
-                    String amount = data.getStringExtra(Contacts.AMOUNT);
-                    String nick = data.getStringExtra(Contacts.NICK);
-                    centerFragmentNumberTv.setText(nick);
-                    centerFragmentMoneyTv1.setText(amount);
-                    break;
                 case WITHDRAW_REQUEST_CODE:
                     getBalance();
+                    break;
+                case SET_REQUEST_CODE:
+                    exit();
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    //用户退出时处理
+    private void exit() {
+        centerFragmentIv.setImageResource(R.mipmap.me_fragment_head1);
+        centerFragmentNumberTv.setText("登陆/注册");
+        centerFragmentMoneyTv1.setText("0.00");
+        BaseApplication.getInstance().token="";
+        BaseApplication.getInstance().mobile="";
+        BaseApplication.getInstance().amount="";
+        BaseApplication.getInstance().userName="";
+        BaseApplication.getInstance().integral="";
+        SPUtils.remove(getContext(),Contacts.MOBILE);
+        SPUtils.remove(getContext(),Contacts.TOKEN);
+        SPUtils.remove(getContext(),Contacts.AMOUNT);
+        SPUtils.remove(getContext(),Contacts.NICK);
+        SPUtils.remove(getContext(),Contacts.INTEGRAL);
     }
 
 
@@ -121,37 +142,63 @@ public class CenterFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.center_fragment_iv:
-                Intent intent1 = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent1, LOGIN_REQUEST_CODE);
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }
                 break;
             case R.id.center_fragment_number_tv:
-                Intent intent2 = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent2, LOGIN_REQUEST_CODE);
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }
                 break;
             case R.id.center_fragment_money_ll1:
-                ActivityUtils.startActivity(RechargeActivity.class);
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }else {
+                    ActivityUtils.startActivity(RechargeActivity.class);
+                }
                 break;
             case R.id.center_fragment_money_ll2:
                 break;
             case R.id.center_fragment_money_ll3:
-                getWithdrawStatus();
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }else {
+                    getWithdrawStatus();
+                }
                 break;
             case R.id.center_fragment_order_ll1:
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                    return;
+                }
                 Intent intent3 = new Intent(getActivity(), OrderActivity.class);
                 intent3.putExtra("intentType","1");
                 startActivity(intent3);
                 break;
             case R.id.center_fragment_order_ll2:
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                    return;
+                }
                 Intent intent4 = new Intent(getActivity(), OrderActivity.class);
                 intent4.putExtra("intentType","2");
                 startActivity(intent4);
                 break;
             case R.id.center_fragment_order_ll3:
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                    return;
+                }
                 Intent intent5 = new Intent(getActivity(), OrderActivity.class);
                 intent5.putExtra("intentType","3");
                 startActivity(intent5);
                 break;
             case R.id.center_fragment_order_ll4:
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                    return;
+                }
                 Intent intent6 = new Intent(getActivity(), OrderActivity.class);
                 intent6.putExtra("intentType","4");
                 startActivity(intent6);
@@ -165,7 +212,7 @@ public class CenterFragment extends BaseFragment {
                 break;
             case R.id.me_fragment_rl3:
                 Intent intent8 = new Intent(getActivity(), SetActivity.class);
-                startActivity(intent8);
+                startActivityForResult(intent8,SET_REQUEST_CODE);
                 break;
         }
     }
@@ -226,5 +273,26 @@ public class CenterFragment extends BaseFragment {
         });
     }
 
+    // 广播接收者
+    private class InnerReceiver extends BroadcastReceiver {
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 获取Intent中的Action
+            String action = intent.getAction();
+            // 判断Action
+            if (Contacts.INTENT_EXTRA_LOGIN_SUCESS.equals(action)) {
+                getBalance();
+                setLoginView();
+            }
+        }
+
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().unregisterReceiver(receiver);
+    }
 }

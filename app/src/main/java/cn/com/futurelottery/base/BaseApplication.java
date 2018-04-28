@@ -60,7 +60,7 @@ public class BaseApplication extends Application {
             token= (String) SPUtils.get(this,Contacts.TOKEN,"");
             amount= (String) SPUtils.get(this,Contacts.AMOUNT,"");
             userName= (String) SPUtils.get(this,Contacts.NICK,"");
-            userName= (String) SPUtils.get(this,Contacts.INTEGRAL,"");
+            integral= (String) SPUtils.get(this,Contacts.INTEGRAL,"");
         }
         //initokgo
         HttpHeaders headers = new HttpHeaders();
