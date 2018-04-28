@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -42,6 +43,7 @@ import cn.com.futurelottery.model.Lottery;
 import cn.com.futurelottery.ui.activity.DoubleBallActivity;
 import cn.com.futurelottery.ui.activity.Football.FootBallActivity;
 import cn.com.futurelottery.ui.activity.SuperLottoActivity;
+import cn.com.futurelottery.ui.activity.WebViewActivity;
 import cn.com.futurelottery.ui.adapter.LotteryAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
@@ -99,7 +101,10 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onBannerItemClick(BGABanner banner, ImageView itemView, Banner model, int position) {
 
-
+                Intent intent=new Intent(getContext(), WebViewActivity.class);
+                intent.putExtra("url",model.getLink_url());
+                intent.putExtra("title",model.getTitle());
+                startActivity(intent);
             }
         });
         mProductAdapter = new LotteryAdapter(null);

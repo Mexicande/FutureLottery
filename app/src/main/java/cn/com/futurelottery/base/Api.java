@@ -80,7 +80,7 @@ public interface Api {
          */
         String GET_CODE               =         HOST+"sms/getcode";
         /**
-         * 登陆
+         * 登录
          */
         String LOGIN               =            HOST+"login/login";
         /**

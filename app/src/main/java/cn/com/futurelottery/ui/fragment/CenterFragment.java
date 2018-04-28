@@ -122,7 +122,7 @@ public class CenterFragment extends BaseFragment {
     //用户退出时处理
     private void exit() {
         centerFragmentIv.setImageResource(R.mipmap.me_fragment_head1);
-        centerFragmentNumberTv.setText("登陆/注册");
+        centerFragmentNumberTv.setText("登录/注册");
         centerFragmentMoneyTv1.setText("0.00");
         BaseApplication.getInstance().token="";
         BaseApplication.getInstance().mobile="";

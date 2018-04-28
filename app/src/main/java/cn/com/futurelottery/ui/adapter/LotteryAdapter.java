@@ -30,7 +30,7 @@ public class LotteryAdapter extends BaseQuickAdapter<Lottery,BaseViewHolder> {
         helper.setText(R.id.tv_name,item.getTitle())
                 .setText(R.id.tv_desc,"1".equals(item.getStatus())?item.getDesc():"暂停销售");
 
-        Glide.with(mContext).load("http://orqk6filp.bkt.clouddn.com/double_ball.png")
+        Glide.with(mContext).load(item.getLogo())
                 .apply(new RequestOptions())
                 .into((ImageView) helper.getView(R.id.iv_product_logo));
     }

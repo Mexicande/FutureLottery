@@ -328,7 +328,7 @@
                    android:id="@+id/footBall_tv1"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="巴西"
+                   android:text=""
                    android:textSize="@dimen/size_12"
                    android:textColor="@color/white"
                    />
@@ -336,17 +336,17 @@
                    android:id="@+id/footBall_tv2"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="0:2"
+                   android:text="0:0"
                    android:textSize="@dimen/size_12"
                    android:textColor="@color/white"
-                   android:layout_marginRight="@dimen/length_25"
-                   android:layout_marginLeft="@dimen/length_25"
+                   android:layout_marginRight="@dimen/length_15"
+                   android:layout_marginLeft="@dimen/length_15"
                    />
                <TextView
                    android:id="@+id/footBall_tv3"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="巴基斯坦"
+                   android:text=""
                    android:textSize="@dimen/size_12"
                    android:textColor="@color/white"
                    />

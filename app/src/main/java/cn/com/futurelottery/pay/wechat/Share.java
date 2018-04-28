@@ -84,7 +84,7 @@ public class Share {
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = "webpage"+System.currentTimeMillis();
         req.message = msg;
-        req.scene = SendMessageToWX.Req.WXSceneTimeline ;
+        req.scene = SendMessageToWX.Req.WXSceneSession ;
         api.sendReq(req);
     }
 
@@ -100,7 +100,7 @@ public class Share {
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = "webpage"+System.currentTimeMillis();
         req.message = msg;
-        req.scene = SendMessageToWX.Req.WXSceneSession ;
+        req.scene = SendMessageToWX.Req.WXSceneTimeline ;
         api.sendReq(req);
     }
 

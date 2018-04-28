@@ -197,6 +197,7 @@ public class LotteryFragment extends BaseFragment {
     private List<LotteryInformation.DataProduct> lotteryInformations = new ArrayList<>();
     private LotteryInformation.DataProduct superLotto;
     private LotteryInformation.DataProduct doubleBall;
+    private LotteryInformation.DataProduct footBall;
 
     public LotteryFragment() {
         // Required empty public constructor
@@ -258,6 +259,9 @@ public class LotteryFragment extends BaseFragment {
                 case "dlt":
                     superLotto=lotteryInformations.get(i);
                     break;
+                case "ftb":
+                    footBall=lotteryInformations.get(i);
+                    break;
             }
         }
         //大乐透
@@ -284,6 +288,12 @@ public class LotteryFragment extends BaseFragment {
             doubleBallRedTv5.setText(ball2[4]);
             doubleBallRedTv6.setText(ball2[5]);
             doubleBallBlueTv1.setText(ball2[6]);
+        }
+        //足彩
+        if (null!=footBall){
+            footBallTv1.setText(footBall.getFront());
+            footBallTv2.setText(footBall.getResult());
+            footBallTv3.setText(footBall.getAfter());
         }
 
     }

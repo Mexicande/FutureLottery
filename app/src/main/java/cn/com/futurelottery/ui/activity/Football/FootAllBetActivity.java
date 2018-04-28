@@ -751,16 +751,19 @@ public class FootAllBetActivity extends BaseActivity {
                 list.add(titleBean);
             }
         }
-        StringBuilder sb=new StringBuilder();
-        for(MenuItem s:mSrceenList){
-            if(s.getIcon()==1){
-                sb.append(s.getContent()).append(",");
-            }
-        }
-        FootPay.MessageBean messageBean=new FootPay.MessageBean();
 
-        String string = sb.toString();
+        FootPay.MessageBean messageBean=new FootPay.MessageBean();
+        if (mSrceenList.size()!=0) {
+            StringBuilder sb=new StringBuilder();
+            for(MenuItem s:mSrceenList){
+                if(s.getIcon()==1){
+                    sb.append(s.getContent()).append(",");
+                }
+            }
+            String string = sb.toString();
             String substring = string.substring(0, string.length() - 1);
+            messageBean.setStrand(substring);
+        }
             //钱数
             String money = bottomResultMoneyTv.getText().toString();
             //倍数
@@ -771,7 +774,6 @@ public class FootAllBetActivity extends BaseActivity {
                 switch (type){
                     case 1:
                         //队伍
-                        messageBean.setStrand(substring);
                         messageBean.setPlay_rules(Api.FOOTBALL.FT001);
                         break;
                     case 2:
@@ -779,7 +781,6 @@ public class FootAllBetActivity extends BaseActivity {
                         messageBean.setPlay_rules(Api.FOOTBALL.FT001);
                         break;
                     case 3:
-                        messageBean.setStrand(substring);
                         messageBean.setPlay_rules(Api.FOOTBALL.FT006);
                         break;
                     case 4:

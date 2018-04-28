@@ -27,7 +27,7 @@
             android:layout_marginLeft="@dimen/length_17"
             android:layout_toRightOf="@+id/me_fragment_iv"
             android:lines="1"
-            android:text="登陆/注册"
+            android:text="登录/注册"
             android:textColor="@color/text_color_fe"
             android:textSize="@dimen/size_13" />
     </RelativeLayout>

@@ -773,16 +773,21 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
             titleBean.setTeam(matchBean.getHomeTeam()+":"+matchBean.getAwayTeam());
             list.add(titleBean);
         }
-        StringBuilder sb=new StringBuilder();
-        for(MenuItem s:mSrceenList){
-            if(s.getIcon()==1){
-                sb.append(s.getContent()).append(",");
-            }
-        }
         FootPay.MessageBean messageBean=new FootPay.MessageBean();
+        if(mSrceenList.size()!=0){
+            StringBuilder sb=new StringBuilder();
+            for(MenuItem s:mSrceenList){
+                if(s.getIcon()==1){
+                    sb.append(s.getContent()).append(",");
+                }
+            }
+            String string = sb.toString();
+            String substring = string.substring(0, string.length() - 1);
+            messageBean.setStrand(substring);
 
-        String string = sb.toString();
-        String substring = string.substring(0, string.length() - 1);
+        }
+
+
         //钱数
         String money = bottomResultMoneyTv.getText().toString();
         //倍数
@@ -793,7 +798,6 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
         switch (type){
             case 7:
                 //队伍
-                messageBean.setStrand(substring);
                 messageBean.setPlay_rules(Api.FOOTBALL.FT003);
                 break;
             case 8:
@@ -801,7 +805,6 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
                 messageBean.setPlay_rules(Api.FOOTBALL.FT003);
                 break;
             case 9:
-                messageBean.setStrand(substring);
                 messageBean.setPlay_rules(Api.FOOTBALL.FT004);
                 break;
             case 10:
