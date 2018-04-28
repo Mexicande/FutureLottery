@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.activity.Football;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -41,19 +42,25 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.inter.SizeDialogListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.FootPay;
 import cn.com.futurelottery.model.ScoreList;
+import cn.com.futurelottery.ui.activity.LoginActivity;
+import cn.com.futurelottery.ui.activity.PayActivity;
 import cn.com.futurelottery.ui.adapter.football.FootChooseScoreAdapter;
 import cn.com.futurelottery.ui.adapter.football.FootChooseSizeAdapter;
 import cn.com.futurelottery.ui.adapter.football.FootChooseWinAdapter;
 import cn.com.futurelottery.ui.dialog.PayMentFragment;
 import cn.com.futurelottery.ui.dialog.SizeBetDialogFragment;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
+import cn.com.futurelottery.utils.SPUtil;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.MenuItem;
 import cn.com.futurelottery.view.topRightMenu.TRMenuAdapter;
@@ -586,7 +593,6 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
 
         double money=1;
             Integer integer = mList.get(0);
-            ToastUtils.showToast(""+integer);
             for(int k=0;k<integer;k++){
                 money=money*list.get(k);
             }
@@ -708,10 +714,13 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
                 if(slideUp.isVisible()){
                     slideUp.hide();
                 }else {
-                    if (type%2!=0) {
-                        payMent(text);
-                    } else {
+                    String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
 
+                    if(TextUtils.isEmpty(string)){
+                        ToastUtils.showToast(getString(R.string.login_please));
+                        ActivityUtils.startActivity(LoginActivity.class);
+                    }else {
+                        payMent(text);
                     }
                 }
                 break;
@@ -745,24 +754,25 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
      */
     private void payMent(String str) {
         ArrayList<FootPay.TitleBean>list=new ArrayList<>();
-        /*for(int i=0;i<bean.size();i++){
-            FootBallList.DataBean.MatchBean matchBean = bean.get(i);
-            LogUtils.i("matchBean="+matchBean.toString());
-            if(bean.get(i).getAwayType()==1||bean.get(i).getVsType()==1||bean.get(i).getHomeType()==1){
-                FootPay.TitleBean titleBean=new FootPay.TitleBean();
-                titleBean.setMatch(bean.get(i).getMatch_id());
-                titleBean.setTeam(matchBean.getHomeTeam()+":"+matchBean.getAwayTeam());
-                String str = (matchBean.getHomeType() == 1 ? "3," : "") + (matchBean.getVsType() == 1 ? "1," : "")
-                        + (matchBean.getAwayType() == 1 ? "0," : "");
-                if(str.endsWith(",")){
-                    String substring = str.substring(0, str.length() - 1);
-                    titleBean.setType(substring);
-                }else {
-                    titleBean.setType(str);
+        for(int i=0;i<mSizeBeanList.size();i++){
+            FootBallList.DataBean.MatchBean matchBean = mSizeBeanList.get(i);
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
+
+            FootPay.TitleBean titleBean=new FootPay.TitleBean();
+            StringBuilder type=new StringBuilder();
+            for(int j=0;j<odds.size();j++){
+                if(odds.get(j).getType()==1){
+                    type.append(odds.get(j).getName()).append(",");
                 }
-                list.add(titleBean);
+
             }
-        }*/
+            String s = type.toString();
+            String substring = s.substring(0, s.length() - 1);
+            titleBean.setType(substring);
+            titleBean.setMatch(mSizeBeanList.get(i).getMatch_id());
+            titleBean.setTeam(matchBean.getHomeTeam()+":"+matchBean.getAwayTeam());
+            list.add(titleBean);
+        }
         StringBuilder sb=new StringBuilder();
         for(MenuItem s:mSrceenList){
             if(s.getIcon()==1){
@@ -781,25 +791,22 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
         messageBean.setMultiple(Integer.parseInt(bet));
         messageBean.setNumber(Integer.parseInt(str));
         switch (type){
-            case 1:
+            case 7:
                 //队伍
                 messageBean.setStrand(substring);
-                messageBean.setPlay_rules(Api.FOOTBALL.FT001);
+                messageBean.setPlay_rules(Api.FOOTBALL.FT003);
                 break;
-            case 2:
+            case 8:
                 messageBean.setStrand("0");
-                messageBean.setPlay_rules(Api.FOOTBALL.FT001);
+                messageBean.setPlay_rules(Api.FOOTBALL.FT003);
                 break;
-            case 3:
+            case 9:
                 messageBean.setStrand(substring);
-                messageBean.setPlay_rules(Api.FOOTBALL.FT006);
+                messageBean.setPlay_rules(Api.FOOTBALL.FT004);
                 break;
-            case 4:
+            case 10:
                 messageBean.setStrand("0");
-                messageBean.setPlay_rules(Api.FOOTBALL.FT006);
-                break;
-            case 5:
-            case 6:
+                messageBean.setPlay_rules(Api.FOOTBALL.FT004);
                 break;
             default:
                 break;
@@ -823,12 +830,34 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
         ApiService.GET_SERVICE(Api.FootBall_Api.Payment, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                if(code==0){
+                    ToastUtils.showToast("下单成功");
+                    Intent intent = new Intent();
+                    intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
+                    sendBroadcast(intent);
+                    finish();
+                }else {
+                    Intent intent=new Intent(SizeBetActivity.this,PayActivity.class);
+                    if(type<9){
+                        intent.putExtra("information","精彩足球总进球");
+                    }else {
+                        intent.putExtra("information","精彩足球半全场");
+                    }
+                    try {
+                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
+                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
+                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+                        ToastUtils.showToast(data.getString("error_message"));
+                    } catch (JSONException e) {
 
+                    }
+
+                }
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
     }
@@ -859,4 +888,17 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
                 }
             }
         }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

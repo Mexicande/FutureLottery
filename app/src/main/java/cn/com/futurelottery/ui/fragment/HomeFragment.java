@@ -50,6 +50,8 @@ import cn.com.futurelottery.view.marqueeview.MarqueeView;
 
 /**
  * A simple {@link Fragment} subclass.
+ * @author apple
+ *
  */
 public class HomeFragment extends BaseFragment {
 
@@ -96,6 +98,7 @@ public class HomeFragment extends BaseFragment {
         mConvenientBanner.setDelegate(new BGABanner.Delegate<ImageView, Banner>() {
             @Override
             public void onBannerItemClick(BGABanner banner, ImageView itemView, Banner model, int position) {
+
 
             }
         });

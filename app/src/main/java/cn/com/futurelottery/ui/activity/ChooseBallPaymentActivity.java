@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -41,6 +42,7 @@ import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.DeviceUtil;
 import cn.com.futurelottery.utils.RandomMadeBall;
 import cn.com.futurelottery.utils.SPUtil;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.StatusBarUtil;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.AmountView;
@@ -190,7 +192,13 @@ public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialo
                 clearList();
                 break;
             case R.id.bottom_result_btn:
-                pay();
+                String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
+                if(TextUtils.isEmpty(string)){
+                    ToastUtils.showToast(getString(R.string.login_please));
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }else {
+                    pay();
+                }
                 break;
             case R.id.layout_top_back:
                 if (balls.size()>0){

@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.activity.Football;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,18 +40,24 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.DialogListener;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.FootPay;
 import cn.com.futurelottery.model.ScoreList;
+import cn.com.futurelottery.ui.activity.LoginActivity;
+import cn.com.futurelottery.ui.activity.PayActivity;
 import cn.com.futurelottery.ui.adapter.football.FootChooseScoreAdapter;
 import cn.com.futurelottery.ui.adapter.football.FootChooseWinAdapter;
 import cn.com.futurelottery.ui.dialog.PayMentFragment;
 import cn.com.futurelottery.ui.dialog.ScoreDialogFragment;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
+import cn.com.futurelottery.utils.SPUtil;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.MenuItem;
 import cn.com.futurelottery.view.topRightMenu.TRMenuAdapter;
@@ -447,7 +454,6 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         if(ScoreBeanList.size()==0){
             tvSelectBet.setText("单关");
         }else {
-            //mSrceenList.get(0).setIcon(1);
             tvSelectBet.setText("投注方式(必选)");
             ivArrow.setVisibility(View.VISIBLE);
         }
@@ -593,7 +599,6 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         }
         double money=1;
         Integer integer = mList.get(0);
-        ToastUtils.showToast(""+integer);
         for(int k=0;k<integer;k++){
             money=money*list.get(k);
         }
@@ -739,7 +744,6 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
                 if(slideUp.isVisible()){
                     slideUp.hide();
                 }
-
                 paySubmit();
                 break;
             default:
@@ -752,50 +756,61 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
      */
     private void paySubmit() {
         String text = bottomResultCountTv.getText().toString();
+        String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
+
         if(!"0".equals(text)){
-            if (type%2!=0) {
-                payMent(text );
+            if(TextUtils.isEmpty(string)){
+                ToastUtils.showToast(getString(R.string.login_please));
+                ActivityUtils.startActivity(LoginActivity.class);
+            }else {
 
-            } else {
-
+                payMent(text);
             }
+
         }else {
-            if (type%2!=0) {
-                slideUp.show();
-                ToastUtils.showToast("请选择投注方式");
-
-            } else {
-
-
-            }
-
+            slideUp.show();
+            ToastUtils.showToast("请选择投注方式");
         }
-    }
+     }
 
     private void payMent(String number) {
         ArrayList<FootPay.TitleBean>list=new ArrayList<>();
-        /*for(int i=0;i<bean.size();i++){
-            FootBallList.DataBean.MatchBean matchBean = bean.get(i);
-            LogUtils.i("matchBean="+matchBean.toString());
-            if(bean.get(i).getAwayType()==1||bean.get(i).getVsType()==1||bean.get(i).getHomeType()==1){
-                FootPay.TitleBean titleBean=new FootPay.TitleBean();
-                titleBean.setMatch(bean.get(i).getMatch_id());
-                titleBean.setTeam(matchBean.getHomeTeam()+":"+matchBean.getAwayTeam());
-                String str = (matchBean.getHomeType() == 1 ? "3," : "") + (matchBean.getVsType() == 1 ? "1," : "")
-                        + (matchBean.getAwayType() == 1 ? "0," : "");
-                if(str.endsWith(",")){
-                    String substring = str.substring(0, str.length() - 1);
-                    titleBean.setType(substring);
-                }else {
-                    titleBean.setType(str);
-                }
-                list.add(titleBean);
+        List<ScoreList.DataBean.MatchBean> data = mScoreAdapter.getData();
+
+
+        for(int i=0;i<data.size();i++){
+            ScoreList.DataBean.MatchBean matchBean = data.get(i);
+            List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = matchBean.getOdds();
+            FootPay.TitleBean titleBean=new FootPay.TitleBean();
+            StringBuilder type=new StringBuilder();
+            for(int j=0;j<odds.size();j++){
+                List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(j);
+                    for(int k=0;k<oddsBeans.size();k++){
+                        if(oddsBeans.get(k).getType()==1){
+                            type.append(oddsBeans.get(k).getName()).append(",");
+                        }
+                    }
             }
-        }*/
+            String s = type.toString();
+            String replace = s.replace(":", "");
+            String substring = replace.substring(0, replace.length() - 1);
+            titleBean.setType(substring);
+            titleBean.setMatch(data.get(i).getMatch_id());
+            titleBean.setTeam(matchBean.getHomeTeam()+":"+matchBean.getAwayTeam());
+            list.add(titleBean);
+
+        }
+
+
+
         StringBuilder sb=new StringBuilder();
         for(MenuItem s:mSrceenList){
             if(s.getIcon()==1){
-                sb.append(s.getContent()).append(",");
+                if("单关".equals(s.getContent())){
+                    sb.append("1串1").append(",");
+                }else {
+                    sb.append(s.getContent()).append(",");
+                }
             }
         }
         FootPay.MessageBean messageBean=new FootPay.MessageBean();
@@ -830,12 +845,31 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
         ApiService.GET_SERVICE(Api.FootBall_Api.Payment, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                if(code==0){
+                    ToastUtils.showToast("下单成功");
+                    Intent intent = new Intent();
+                    intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
+                    sendBroadcast(intent);
+                    finish();
 
+                }else {
+                    Intent intent=new Intent(ScoreBetActivity.this,PayActivity.class);
+                        intent.putExtra("information","精彩足球比分");
+                    try {
+                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
+                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
+                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+                        ToastUtils.showToast(data.getString("error_message"));
+                    } catch (JSONException e) {
+
+                    }
+
+                }
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
     }
@@ -894,5 +928,17 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener{
             mScoreAdapter.notifyItemChanged(index);
             upDate();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

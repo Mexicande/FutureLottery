@@ -31,6 +31,7 @@ import cn.com.futurelottery.ui.fragment.LotteryFragment;
 import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.StatusBarUtil;
 import cn.com.futurelottery.utils.TimeUtils;
+import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.pagerBottomTab.NavigationController;
 import cn.com.futurelottery.view.pagerBottomTab.PageNavigationView;
 import cn.com.futurelottery.view.pagerBottomTab.item.BaseTabItem;
@@ -113,4 +114,19 @@ public class MainActivity extends BaseActivity {
         onlyIconItemView.setTextCheckedColor(getResources().getColor(R.color.colorPrimary));
         return onlyIconItemView;
     }
+
+
+
+    private long mLastBackTime = 0;
+    @Override
+    public void onBackPressed() {
+        if ((System.currentTimeMillis() - mLastBackTime) < 1000) {
+            finish();
+        } else {
+            mLastBackTime = System.currentTimeMillis();
+            ToastUtils.showToast("再按一次退出");
+        }
+    }
+
+
 }

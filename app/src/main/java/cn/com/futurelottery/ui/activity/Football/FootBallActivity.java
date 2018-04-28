@@ -96,7 +96,6 @@ public class FootBallActivity extends BaseActivity{
     }
 
     private void getDate() {
-        LogUtils.i("show");
         fivePlay.add("意甲");
         fivePlay.add("德甲");
         fivePlay.add("法甲");
@@ -108,7 +107,6 @@ public class FootBallActivity extends BaseActivity{
         for(int i = 0; i < mFragmentList.size(); i++) {
             Fragment fragment = mFragmentList.get(i);
             if(fragment!=null && fragment.isAdded()&&fragment.isVisible()) {
-                LogUtils.i("index=="+i);
                 switch (i){
                     case 0:
                         getSelectPlay(Api.FOOTBALL.FT001);
