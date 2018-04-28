@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.activity.Football;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -39,13 +40,20 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.model.DoubleBall;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.FootPay;
+import cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity;
+import cn.com.futurelottery.ui.activity.LoginActivity;
+import cn.com.futurelottery.ui.activity.PayActivity;
 import cn.com.futurelottery.ui.adapter.football.FootChooseWinAdapter;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
+import cn.com.futurelottery.utils.SPUtil;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.MenuItem;
 import cn.com.futurelottery.view.topRightMenu.TRMenuAdapter;
@@ -507,7 +515,6 @@ public class FootAllBetActivity extends BaseActivity {
                     }
                     double money=1;
                     Integer integer = mList.get(0);
-                    ToastUtils.showToast(""+integer);
                     for(int k=0;k<integer;k++){
                         money=money*list.get(k);
                     }
@@ -708,21 +715,17 @@ public class FootAllBetActivity extends BaseActivity {
     private void paySubmit() {
         String text = bottomResultCountTv.getText().toString();
             if(!"0".equals(text)){
-                if (type%2!=0) {
-                    payMent(text );
+                if(TextUtils.isEmpty(SPUtil.getString(this,Contacts.TOKEN))){
+                    ToastUtils.showToast("请先登陆");
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }else {
 
-                } else {
-
+                    payMent(text);
                 }
+
             }else {
-                if (type%2!=0) {
                     slideUp.show();
                     ToastUtils.showToast("请选择投注方式");
-
-                } else {
-
-
-                }
 
             }
     }
@@ -731,7 +734,6 @@ public class FootAllBetActivity extends BaseActivity {
         ArrayList<FootPay.TitleBean>list=new ArrayList<>();
         for(int i=0;i<bean.size();i++){
             FootBallList.DataBean.MatchBean matchBean = bean.get(i);
-            LogUtils.i("matchBean="+matchBean.toString());
             if(bean.get(i).getAwayType()==1||bean.get(i).getVsType()==1||bean.get(i).getHomeType()==1){
                 FootPay.TitleBean titleBean=new FootPay.TitleBean();
                 titleBean.setMatch(bean.get(i).getMatch_id());
@@ -807,12 +809,31 @@ public class FootAllBetActivity extends BaseActivity {
         ApiService.GET_SERVICE(Api.FootBall_Api.Payment, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                if(code==0){
+                    ToastUtils.showToast("下单成功");
+                    finish();
+                }else {
+                    Intent intent=new Intent(FootAllBetActivity.this,PayActivity.class);
+                    if(type>2){
+                        intent.putExtra("information","精彩足球胜平负");
+                    }else {
+                        intent.putExtra("information","精彩足球让胜平负");
+                    }
+                    try {
+                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
+                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
+                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+                        ToastUtils.showToast(data.getString("error_message"));
+                    } catch (JSONException e) {
 
+                    }
+
+                }
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
     }
@@ -850,4 +871,17 @@ public class FootAllBetActivity extends BaseActivity {
             return super.onKeyDown(keyCode, event);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }

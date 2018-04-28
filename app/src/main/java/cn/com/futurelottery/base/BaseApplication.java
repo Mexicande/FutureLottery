@@ -66,8 +66,8 @@ public class BaseApplication extends Application {
         HttpHeaders headers = new HttpHeaders();
         headers.put("channel", channel);
         headers.put("os", versionName);
-//        headers.put(Contacts.TOKEN, token);
-        headers.put(Contacts.TOKEN, "WpdMOe5fnfEpyUHy1WAfyNxCgYGVypV9");
+        headers.put(Contacts.TOKEN, token);
+        //headers.put(Contacts.TOKEN, "WpdMOe5fnfEpyUHy1WAfyNxCgYGVypV9");
         OkGo.getInstance()
                 .init(this)
                 .setCacheMode(CacheMode.NO_CACHE)
