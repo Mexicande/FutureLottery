@@ -39,6 +39,7 @@ public class OrderActivity extends BaseActivity {
     private ArrayList<Order> orders=new ArrayList<>();
     private OrderAdapter adapter;
     private String url=Api.Order.whole;
+    private final int ORDER_DETAIL=1001;
 
     @Override
     public int getLayoutResource() {
@@ -58,11 +59,18 @@ public class OrderActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Order order = orders.get(position);
-                if ("ssq".equals(order.getLotid())||"dlt".equals(order.getLotid())){
+                if ("ssq".equals(order.getLotid())){
                     Intent intent=new Intent(OrderActivity.this,BallOrderDetailActivity.class);
                     intent.putExtra("id",order.getId());
                     intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
-                    startActivity(intent);
+                    intent.putExtra("ballName","双色球");
+                    startActivityForResult(intent,ORDER_DETAIL);
+                }else if ("dlt".equals(order.getLotid())){
+                    Intent intent=new Intent(OrderActivity.this,BallOrderDetailActivity.class);
+                    intent.putExtra("id",order.getId());
+                    intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
+                    intent.putExtra("ballName","大乐透");
+                    startActivityForResult(intent,ORDER_DETAIL);
                 }
             }
         });
@@ -91,6 +99,7 @@ public class OrderActivity extends BaseActivity {
     }
 
     private void getData() {
+        orders.clear();
         JSONObject jsonObject = new JSONObject();
         ApiService.GET_SERVICE(url, this, jsonObject, new OnRequestDataListener() {
             @Override
@@ -129,5 +138,17 @@ public class OrderActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (-1==resultCode){
+            switch (requestCode){
+                case ORDER_DETAIL:
+                    getData();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

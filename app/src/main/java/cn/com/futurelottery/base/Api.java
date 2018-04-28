@@ -154,6 +154,8 @@ public interface Api {
         String wait   =      HOST+"order/wait";
         //订单详情
         String deteails   =      HOST+"order/deteails";
+        //删除订单
+        String del   =      HOST+"order/del";
     }
     //提现
     interface Withdraw{
