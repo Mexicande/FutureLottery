@@ -54,6 +54,7 @@ import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.SPUtil;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.MenuItem;
 import cn.com.futurelottery.view.topRightMenu.TRMenuAdapter;
@@ -713,10 +714,11 @@ public class FootAllBetActivity extends BaseActivity {
      * 提交订单
      */
     private void paySubmit() {
+        String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
         String text = bottomResultCountTv.getText().toString();
             if(!"0".equals(text)){
-                if(TextUtils.isEmpty(SPUtil.getString(this,Contacts.TOKEN))){
-                    ToastUtils.showToast("请先登陆");
+                if(TextUtils.isEmpty(string)){
+                    ToastUtils.showToast(getString(R.string.login_please));
                     ActivityUtils.startActivity(LoginActivity.class);
                 }else {
 
@@ -810,11 +812,16 @@ public class FootAllBetActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 if(code==0){
+                    // 发广播
+                    Intent intent = new Intent();
+                    intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
+                    sendBroadcast(intent);
+
                     ToastUtils.showToast("下单成功");
                     finish();
                 }else {
                     Intent intent=new Intent(FootAllBetActivity.this,PayActivity.class);
-                    if(type>2){
+                    if(type<=2){
                         intent.putExtra("information","精彩足球胜平负");
                     }else {
                         intent.putExtra("information","精彩足球让胜平负");

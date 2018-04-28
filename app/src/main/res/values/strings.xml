@@ -50,6 +50,7 @@
     <!--提现说明-->
     <string name="withdrawal_instructions">1.每个账户每天至多提现3次，提现金额至少10元\n2.红包不可提取，中奖奖金可全部提现\n3.非活动充值，充值金额30天后可申请提现\n4.追号撤销等退款的70%可提现、30%不可提现\n5.每日凌晨0:50-1:20提现申请会有短暂延时，请耐心等候
     </string>
+    <string name="login_please">请先登陆</string>
 
     <!--进度对话框-->
     <color name="kprogresshud_default_color">#b1000000</color>

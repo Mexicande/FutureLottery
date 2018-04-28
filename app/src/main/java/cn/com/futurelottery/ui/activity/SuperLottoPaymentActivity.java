@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -38,9 +39,11 @@ import cn.com.futurelottery.inter.SaveDialogListener;
 import cn.com.futurelottery.model.SuperLotto;
 import cn.com.futurelottery.ui.adapter.SuperLottoPaymentAdapter;
 import cn.com.futurelottery.ui.dialog.QuitDialogFragment;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.DeviceUtil;
 import cn.com.futurelottery.utils.RandomMadeBall;
 import cn.com.futurelottery.utils.SPUtil;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.AmountView;
 import cn.com.futurelottery.view.DashlineItemDivider;
@@ -211,7 +214,13 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
                 clearList();
                 break;
             case R.id.bottom_result_btn:
-                pay();
+                String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
+                if(TextUtils.isEmpty(string)){
+                    ToastUtils.showToast(getString(R.string.login_please));
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }else {
+                    pay();
+                }
                 break;
             case R.id.layout_top_back:
                 if (balls.size() > 0) {
@@ -223,6 +232,8 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
             case R.id.tip_iv:
                 showTipDialog();
                 break;
+            default:
+                break;
         }
     }
 
@@ -233,27 +244,27 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
         alertDialog1.setCanceledOnTouchOutside(false);
         alertDialog1.show();
         Window window1 = alertDialog1.getWindow();
-        window1.setContentView(R.layout.tip_dialog);
-        TextView tvTip = (TextView) window1.findViewById(R.id.tips_tv);
-        TextView tvContent = (TextView) window1.findViewById(R.id.tips_tv_content);
-        TextView tvClick = (TextView) window1.findViewById(R.id.click_tv);
-        tvTip.setText("什么是中奖后停止追号");
-        tvContent.setText("勾选后，当您的追号方案某一期中奖，则后续的追号订单将被撤销，资金返还到您的账户中。如不勾选，系统一直帮您购买所有的追号投注订单。");
-        tvClick.setOnClickListener(new View.OnClickListener() {
+        if (window1 != null) {
+            window1.setContentView(R.layout.tip_dialog);
+            TextView tvTip = window1.findViewById(R.id.tips_tv);
+            TextView tvContent = window1.findViewById(R.id.tips_tv_content);
+            TextView tvClick = window1.findViewById(R.id.click_tv);
+            tvTip.setText("什么是中奖后停止追号");
+            tvContent.setText("勾选后，当您的追号方案某一期中奖，则后续的追号订单将被撤销，资金返还到您的账户中。如不勾选，系统一直帮您购买所有的追号投注订单。");
+            tvClick.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                alertDialog1.dismiss();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    alertDialog1.dismiss();
+                }
+            });
+        }
     }
 
 
     private void showMyDialog() {
         QuitDialogFragment qt = new QuitDialogFragment();
         qt.show(getSupportFragmentManager(), "是否保存");
-
-
     }
 
     //清空列表
@@ -424,18 +435,8 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
         View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
         adapter.addFooterView(view);
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-                switch (view.getId()) {
-                    case R.id.payment_item_delet_iv:
-                        adapter.remove(position);
 
-                        break;
-                }
-            }
-        });
     }
 
 

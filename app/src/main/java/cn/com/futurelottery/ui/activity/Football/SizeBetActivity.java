@@ -60,6 +60,7 @@ import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.SPUtil;
+import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.MenuItem;
 import cn.com.futurelottery.view.topRightMenu.TRMenuAdapter;
@@ -713,9 +714,10 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
                 if(slideUp.isVisible()){
                     slideUp.hide();
                 }else {
+                    String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
 
-                    if(TextUtils.isEmpty(SPUtil.getString(this,Contacts.TOKEN))){
-                        ToastUtils.showToast("请先登陆");
+                    if(TextUtils.isEmpty(string)){
+                        ToastUtils.showToast(getString(R.string.login_please));
                         ActivityUtils.startActivity(LoginActivity.class);
                     }else {
                         payMent(text);
@@ -830,6 +832,9 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener{
             public void requestSuccess(int code, JSONObject data) {
                 if(code==0){
                     ToastUtils.showToast("下单成功");
+                    Intent intent = new Intent();
+                    intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
+                    sendBroadcast(intent);
                     finish();
                 }else {
                     Intent intent=new Intent(SizeBetActivity.this,PayActivity.class);
