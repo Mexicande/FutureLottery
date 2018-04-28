@@ -8,6 +8,8 @@
     android:background="@color/bg_color_f4"
     tools:context="cn.com.futurelottery.ui.activity.BallOrderDetailActivity">
 
+    <include layout="@layout/toolbar_back"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="119dp"
@@ -25,7 +27,6 @@
                 android:id="@+id/icon_iv"
                 android:layout_width="49dp"
                 android:layout_height="49dp"
-                android:src="@mipmap/doubleball"
                 />
             <TextView
                 android:id="@+id/name_tv"
@@ -53,7 +54,7 @@
             android:orientation="vertical"
             android:gravity="center_horizontal"
             android:layout_below="@+id/name_ll"
-            android:layout_marginTop="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_13"
             android:layout_marginLeft="@dimen/length_10"
             >
             <TextView
@@ -79,7 +80,7 @@
             android:orientation="vertical"
             android:gravity="center_horizontal"
             android:layout_below="@+id/name_ll"
-            android:layout_marginTop="@dimen/length_15"
+            android:layout_marginTop="@dimen/length_13"
             android:layout_marginLeft="@dimen/length_25"
             android:layout_toRightOf="@+id/order_money_ll"
             >
@@ -103,7 +104,6 @@
             android:id="@+id/winning_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/order_winning"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/length_10"
@@ -111,9 +111,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:src="@mipmap/payment_bg_bottom"
+            android:background="@mipmap/payment_bg_bottom"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="@dimen/length_10"
             />
     </RelativeLayout>
 
@@ -127,7 +126,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="双色球"
+            android:text="订单状态"
             android:layout_marginLeft="@dimen/length_10"
             android:textColor="@color/black"
             android:textSize="@dimen/size_12"
@@ -153,7 +152,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="投注信息"
+            android:text="开奖号码"
             android:layout_marginLeft="@dimen/length_10"
             android:textColor="@color/black"
             android:textSize="@dimen/size_12"
@@ -173,6 +172,7 @@
             android:layout_height="wrap_content"
             android:text="1"
             android:textColor="@color/blue_ball"
+            android:layout_marginLeft="@dimen/length_3"
             android:textSize="@dimen/size_12"
             />
     </LinearLayout>
@@ -185,6 +185,7 @@
         android:orientation="vertical"
         >
         <LinearLayout
+            android:id="@+id/choose_detail_ll1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/length_10"
@@ -213,7 +214,7 @@
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/choose_detail_ll"
+            android:id="@+id/choose_detail_ll2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/length_10"
@@ -256,6 +257,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/lottery_enter"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             />
     </RelativeLayout>
     <include layout="@layout/line_cc"/>
@@ -326,7 +328,7 @@
             android:id="@+id/order_tip_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="提示"
+            android:text="奖金直接打入您的账户"
             android:textColor="@color/color_666"
             android:textSize="@dimen/size_11"
             android:layout_marginLeft="@dimen/length_30"
@@ -343,7 +345,7 @@
         android:textSize="@dimen/size_13"
         />
     <View
-        android:layout_width="50dp"
+        android:layout_width="55dp"
         android:layout_height="@dimen/length_1"
         android:background="@color/red_ball"
         android:layout_gravity="center_horizontal"/>
@@ -358,10 +360,12 @@
         android:layout_height="50dp"
         android:background="@color/white"
         >
+        <!--这里先隐藏-->
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="gone"
             >
             <Button
                 android:id="@+id/continue_btn"

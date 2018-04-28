@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="课题金额"
+                android:text="可提金额"
                 android:textColor="@color/text_color_32"
                 android:textSize="@dimen/size_12"
                 android:layout_marginLeft="@dimen/length_13"
@@ -61,19 +61,28 @@
                 />
             <EditText
                 android:id="@+id/money_et"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:paddingLeft="@dimen/length_28"
                 android:paddingRight="@dimen/length_13"
                 android:maxLength="18"
                 android:inputType="phone"
-                android:digits="0123456789"
+                android:digits="0123456789."
                 android:lines="1"
                 android:background="@null"
                 android:textSize="9sp"
                 android:hint="账户余额不足10元，无法提现"
                 android:textColor="@color/color_a9"
                 />
+            <TextView
+                android:id="@+id/all_money_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部提现"
+                android:textColor="@color/red"
+                android:textSize="@dimen/size_12"
+                android:padding="@dimen/length_3"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

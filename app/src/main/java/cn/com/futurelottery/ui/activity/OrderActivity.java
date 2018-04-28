@@ -61,6 +61,7 @@ public class OrderActivity extends BaseActivity {
                 if ("ssq".equals(order.getLotid())||"dlt".equals(order.getLotid())){
                     Intent intent=new Intent(OrderActivity.this,BallOrderDetailActivity.class);
                     intent.putExtra("id",order.getId());
+                    intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
                     startActivity(intent);
                 }
             }
