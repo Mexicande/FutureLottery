@@ -113,6 +113,12 @@ public interface Api {
     class FootBall_Api{
 
        public static final String  FOOTBALL_LSIT  =   HOST+"football/list";
+       public static final String  Payment  =   HOST+"football/confirmThePayment";
+        //赛事列表
+        public static final String  PayList  =   HOST+"football/league";
+
+
+
 
     }
 

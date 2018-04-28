@@ -16,21 +16,33 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.futurelottery.R;
+import cn.com.futurelottery.base.Api;
+import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
-import cn.com.futurelottery.presenter.FooterTypeEvent;
+import cn.com.futurelottery.inter.DialogListener;
+import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.model.PlayList;
+import cn.com.futurelottery.ui.fragment.FragmentController;
+import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
 import cn.com.futurelottery.ui.fragment.football.ScoreFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
+import cn.com.futurelottery.ui.fragment.football.sizefootball.SizeFragment;
 import cn.com.futurelottery.ui.fragment.football.winandlose.WinAndLoseFragment;
 import cn.com.futurelottery.utils.CommonUtil;
+import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -44,7 +56,7 @@ import cn.com.futurelottery.view.topRightMenu.TopRightMenu;
  * @author apple
  *         足彩
  */
-public class FootBallActivity extends BaseActivity {
+public class FootBallActivity extends BaseActivity{
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.iv_arrow)
@@ -66,8 +78,9 @@ public class FootBallActivity extends BaseActivity {
     private TRMenuAdapter mTRMenuAdapter,mBottomTRMenuAdapter;
     private TopRightMenu mtopRightMenu;
     BottomSheetDialog mBottomSheetDialog;
-    private WinAndLoseFragment mWinAndLoseFragment;
     ArrayList<Fragment> mFragmentList = new ArrayList<>();
+    ArrayList<String>fivePlay=new ArrayList<>();
+    FragmentController instance;
     @Override
     public int getLayoutResource() {
         return R.layout.activity_foot_ball;
@@ -81,6 +94,90 @@ public class FootBallActivity extends BaseActivity {
         initView();
         setListener();
     }
+
+    private void getDate() {
+        LogUtils.i("show");
+        fivePlay.add("意甲");
+        fivePlay.add("德甲");
+        fivePlay.add("法甲");
+        fivePlay.add("英超");
+        fivePlay.add("西甲");
+        /**
+         * 赛事列表
+         */
+        for(int i = 0; i < mFragmentList.size(); i++) {
+            Fragment fragment = mFragmentList.get(i);
+            if(fragment!=null && fragment.isAdded()&&fragment.isVisible()) {
+                LogUtils.i("index=="+i);
+                switch (i){
+                    case 0:
+                        getSelectPlay(Api.FOOTBALL.FT001);
+                        break;
+                    case 1:
+                        getSelectPlay(Api.FOOTBALL.FT006);
+                        break;
+                    case 2:
+                        getSelectPlay(Api.FOOTBALL.FT002);
+                        break;
+                    case 3:
+                        getSelectPlay(Api.FOOTBALL.FT003);
+
+                        break;
+                    case 4:
+                        getSelectPlay(Api.FOOTBALL.FT004);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+
+    }
+
+    private void getSelectPlay(String i) {
+
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("pass_rules",1);
+            jsonObject.put("play_rules",i);
+        } catch (JSONException e) {
+
+
+        }
+        ApiService.GET_SERVICE(Api.FootBall_Api.PayList, this, jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                Gson gson=new Gson();
+                PlayList playList = gson.fromJson(data.toString(), PlayList.class);
+                List<PlayList.DataBean> palyList= playList.getData();
+                mSrceenList.clear();
+                int number = 0;
+                for(PlayList.DataBean s:palyList){
+                    MenuItem menuItem=new MenuItem();
+                    menuItem.setContent(s.getLeague());
+                    menuItem.setCount(s.getCount());
+                    mSrceenList.add(menuItem);
+                    number+=s.getCount();
+                }
+                tv_Session.setText(String.valueOf(number));
+                mBottomTRMenuAdapter.setNewData(mSrceenList);
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
+
+
+    }
+
+    private void getPlayList() {
+
+    }
+
+
     private void setListener() {
         mTRMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -105,13 +202,13 @@ public class FootBallActivity extends BaseActivity {
                 RoteteUtils.rotateArrow(ivArrow, flag);
                 flag = !flag;
                 switchPages(position);
-                EventBus.getDefault().post(new FooterTypeEvent(position));
+
             }
         });
     }
 
     private RecyclerView mBootRecycler;
-    private TextView tv_all,tv_unAll,tv_FiveAll;
+    private TextView tv_all,tv_unAll,tv_FiveAll,tv_Session;
     final ArrayList<MenuItem> mSrceenList = new ArrayList<>();
     private SuperButton mSuperCancel,mSuperSure;
     /**
@@ -123,21 +220,14 @@ public class FootBallActivity extends BaseActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.screen_bootom_sheet_layout, null, false);
         mBottomSheetDialog.setContentView(view);
         mBottomSheetDialog.setCanceledOnTouchOutside(true);
+
         mBootRecycler=view.findViewById(R.id.bottom_recyclerView);
         tv_all=view.findViewById(R.id.tv_all);
+        tv_Session=view.findViewById(R.id.session);
         tv_unAll=view.findViewById(R.id.tv_un_all);
         tv_FiveAll=view.findViewById(R.id.five_all);
         mSuperCancel=view.findViewById(R.id.super_cancel);
         mSuperSure=view.findViewById(R.id.super_sure);
-
-
-        mSrceenList.add(new MenuItem(0, "英冠"));
-        mSrceenList.add(new MenuItem(0, "英甲"));
-        mSrceenList.add(new MenuItem(0, "比分"));
-        mSrceenList.add(new MenuItem(0, "K联赛"));
-        mSrceenList.add(new MenuItem(0, "欧冠杯"));
-        mSrceenList.add(new MenuItem(0, "瑞超"));
-        mSrceenList.add(new MenuItem(0, "巴西杯"));
 
         mBootRecycler.setLayoutManager(new GridLayoutManager(this, 3));
         mBootRecycler.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(10),3));
@@ -152,28 +242,69 @@ public class FootBallActivity extends BaseActivity {
                 }else {
                     menuItem.setIcon(3);
                 }
-                mSrceenList.set(position,menuItem);
-                mBottomTRMenuAdapter.setData(position,menuItem);
                 mBottomTRMenuAdapter.notifyItemChanged(position);
+                List<MenuItem> data = mBottomTRMenuAdapter.getData();
+                int number=0;
+                for(MenuItem s:data){
+                    if(s.getIcon()==3){
+                        number+=s.getCount();
+                    }
+                }
+                tv_Session.setText(String.valueOf(number));
             }
         });
+        tv_FiveAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                for(MenuItem s:mSrceenList){
+                    s.setIcon(0);
+                }
+                int number=0;
+                for(int i=0;i<fivePlay.size();i++){
+                    for(MenuItem s:mSrceenList){
+                        if(s.getContent().equals(fivePlay.get(i))){
+                            s.setIcon(3);
+                            number+=s.getCount();
+                        }
+                    }
+                }
+                mBottomTRMenuAdapter.notifyDataSetChanged();
+                tv_Session.setText(""+number);
+
+            }
+        });
         tv_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for(MenuItem s:mSrceenList){
                     s.setIcon(3);
                 }
-                mBottomTRMenuAdapter.setNewData(mSrceenList);
+                mBottomTRMenuAdapter.notifyDataSetChanged();
+
+                List<MenuItem> data = mBottomTRMenuAdapter.getData();
+                int number=0;
+                for(MenuItem s:data){
+                    number+=s.getCount();
+                }
+                tv_Session.setText(String.valueOf(number));
             }
         });
         tv_unAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int number=0;
                 for(MenuItem s:mSrceenList){
-                    s.setIcon(0);
+                    if(s.getIcon()==3){
+                        s.setIcon(0);
+                    }else {
+                        s.setIcon(3);
+                        number+=s.getCount();
+                    }
                 }
-                mBottomTRMenuAdapter.setNewData(mSrceenList);
+
+                tv_Session.setText(number+"");
+                mBottomTRMenuAdapter.notifyDataSetChanged();
             }
         });
         mSuperCancel.setOnClickListener(new View.OnClickListener() {
@@ -200,29 +331,10 @@ public class FootBallActivity extends BaseActivity {
         mFragmentList.add(new WinAndLoseFragment());
         mFragmentList.add(new ConWinAndFragment());
         mFragmentList.add(new ScoreFragment());
+        mFragmentList.add(new SizeFragment());
+        mFragmentList.add(new HalfFragment());
         switchPages(0);
-    }
 
-    private void switchPages(int index) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment;
-        for (int i = 0, j = mFragmentList.size(); i < j; i++) {
-            if (i == index) {
-                continue;
-            }
-            fragment = mFragmentList.get(i);
-            if (fragment.isAdded()) {
-                fragmentTransaction.hide(fragment);
-            }
-        }
-        fragment = mFragmentList.get(index);
-        if (fragment.isAdded()) {
-            fragmentTransaction.show(fragment);
-        } else {
-            fragmentTransaction.add(R.id.foot_fragment, fragment);
-        }
-        fragmentTransaction.commitAllowingStateLoss();
     }
 
     /**
@@ -276,6 +388,7 @@ public class FootBallActivity extends BaseActivity {
                 break;
             case R.id.iv_screen:
                 if(!mBottomSheetDialog.isShowing()) {
+                    getDate();
                     mBottomSheetDialog.show();
                 }else {
                     mBottomSheetDialog.dismiss();
@@ -303,6 +416,26 @@ public class FootBallActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    }
+    private void switchPages(int index) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment;
+        for (int i = 0, j = mFragmentList.size(); i < j; i++) {
+            if (i == index) {
+                continue;
+            }
+            fragment = mFragmentList.get(i);
+            if (fragment.isAdded()) {
+                fragmentTransaction.hide(fragment);
+            }
+        }
+        fragment = mFragmentList.get(index);
+        if (fragment.isAdded()) {
+            fragmentTransaction.show(fragment);
+        } else {
+            fragmentTransaction.add(R.id.foot_fragment, fragment);
+        }
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }

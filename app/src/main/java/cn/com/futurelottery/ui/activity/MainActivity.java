@@ -51,8 +51,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         initBottom();
         aPopupDialog();
-        ScoreDialogFragment scoreDialogFragment=new ScoreDialogFragment();
-        scoreDialogFragment.show(getSupportFragmentManager(),"1111");
     }
 
     private void aPopupDialog() {

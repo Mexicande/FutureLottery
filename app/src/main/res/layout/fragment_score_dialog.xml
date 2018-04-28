@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="cn.com.futurelottery.ui.dialog.ScoreDialogFragment">
     <android.support.v7.widget.CardView
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         app:cardCornerRadius="5dp"
         app:cardBackgroundColor="#EAEAEA"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
@@ -91,7 +91,6 @@
                     android:layout_height="match_parent" />
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/two_recyclerView"
-                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </android.support.v7.widget.RecyclerView>
@@ -113,11 +112,42 @@
                     android:layout_height="match_parent" />
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/three_recyclerView"
-                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <cn.com.futurelottery.view.supertextview.SuperButton
+                    android:id="@+id/bt_cancel"
+                    android:layout_width="wrap_content"
+                    android:text="取消"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:textSize="15sp"
+                    app:sCornersRadius="3dp"
+                    app:sSolidColor="@color/white"
+                    android:textColor="@color/black"
+                    android:layout_height="30dp" />
+                <cn.com.futurelottery.view.supertextview.SuperButton
+                    android:id="@+id/bt_sure"
+                    android:layout_toRightOf="@id/bt_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:text="确定"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    app:sCornersRadius="3dp"
+                    app:sSolidColor="@color/red_ball"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

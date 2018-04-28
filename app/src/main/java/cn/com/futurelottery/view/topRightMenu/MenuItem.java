@@ -8,6 +8,16 @@ public class MenuItem {
 
     private int icon;
     private String content;
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public MenuItem() {
     }
 

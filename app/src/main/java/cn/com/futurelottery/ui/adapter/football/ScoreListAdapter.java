@@ -13,10 +13,13 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.utils.ToastUtils;
+import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 /**
- * Created by apple on 2018/4/18.
- * football 胜平负
+ *
+ * @author apple
+ * @date 2018/4/18
+ * football 比分
  */
 
 public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
@@ -26,6 +29,8 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
      *
      * @param data A new list is created out of this one to avoid mutable list
      */
+    private OnTopRightMenuItemClickListener mItemClickListener;
+
 
     public static final int TYPE_LEVEL_0 = 0;
     public static final int TYPE_LEVEL_1 = 1;
@@ -60,23 +65,14 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
                 break;
             case TYPE_LEVEL_1:
                 final ScoreList.DataBean.MatchBean matchBean= (ScoreList.DataBean.MatchBean) item;
-                //List<ScoreList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
                 helper.setText(R.id.tv_name,matchBean.getLeague())
                         .setText(R.id.tv_week,matchBean.getWeek()+matchBean.getTeamid())
                         .setText(R.id.tv_endTime,matchBean.getEndtime()+"截止")
                         .setText(R.id.home_odds,matchBean.getHomeTeam())
                         .setText(R.id.away_odd,matchBean.getAwayTeam())
-                        /*.addOnClickListener(R.id.layout_home)
-                        .addOnClickListener(R.id.layout_vs)
-                        .addOnClickListener(R.id.layout_away)*/
+                        .addOnClickListener(R.id.layout_select)
                         ;
                 View select = helper.getView(R.id.layout_select);
-                select.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        
-                    }
-                });
                 String tvSelect = matchBean.getSelect();
                 if(!TextUtils.isEmpty(tvSelect)){
                     select.setBackgroundColor(mContext.getResources().getColor(R.color.red_ball));
@@ -90,11 +86,12 @@ public class ScoreListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity,
 
                 }
 
-
                 break;
             default:
                 break;
         }
 
     }
+
+
 }

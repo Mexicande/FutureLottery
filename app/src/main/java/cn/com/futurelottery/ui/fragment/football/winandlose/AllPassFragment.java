@@ -1,10 +1,10 @@
 package cn.com.futurelottery.ui.fragment.football.winandlose;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -19,8 +19,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,10 +30,16 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.presenter.FooterTypeEvent;
+import cn.com.futurelottery.presenter.FootCleanType;
+import cn.com.futurelottery.presenter.FootSureType;
+import cn.com.futurelottery.presenter.FooterAllEvent;
+import cn.com.futurelottery.presenter.FooterOneEvent;
+import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.ToastUtils;
+import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
 
 /**
@@ -50,6 +56,9 @@ public class AllPassFragment extends BaseFragment {
     private WinAndLoseAdapter mWinAndLoseAdapter;
     private ArrayList<MultiItemEntity> res;
     private List<FootBallList.DataBean> beans;
+    private int nu=0;
+    private boolean mTrue =false;
+
     public AllPassFragment() {
         // Required empty public constructor
     }
@@ -64,15 +73,115 @@ public class AllPassFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         getDate();
         initView();
-        setListener();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 清除
+     */
+    @Subscribe
+    public void cleanSelected(FootCleanType type){
+        if(type.getmMeeage()==1){
+            for (int i = 0; i < beans.size(); i++) {
+                FootBallList.DataBean dataBean = beans.get(i);
+                for(int j=0;j<dataBean.getMatch().size();j++){
+                    FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                    if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                        matchBean.setHomeType(0);
+                        matchBean.setVsType(0);
+                        matchBean.setAwayType(0);
+
+                    }
+                }
+            }
+            mWinAndLoseAdapter.notifyDataSetChanged();
+        }
+        mTrue=false;
+
+    }
+
+    /**
+     * 提交
+     */
+    @Subscribe
+    public void nextSubmit(FootSureType type){
+        LogUtils.i("提交");
+        if(type.getmType()==1){
+            nextDate();
+            if(mTrue){
+                Intent intent=new Intent(getActivity(),FootAllBetActivity.class);
+                intent.putExtra("type",1);
+                List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
+                for(FootBallList.DataBean s:beans){
+                    for(int i=0;i<s.getMatch().size();i++){
+                        FootBallList.DataBean.MatchBean matchBean = s.getMatch().get(i);
+                        if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                            list.add(matchBean);
+                        }
+                    }
+                }
+                if(list.size()>=2){
+                    intent.putExtra("bean",(Serializable)list);
+                    startActivity(intent);
+                }else {
+                    ToastUtils.showToast("请至少选择2场比赛");
+                }
+            }
+        }
+    }
+
+    private void nextDate(){
+
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                    mTrue=true;
+                    return;
+
+                }
+            }
+        }
+    }
+
 
     private void setListener() {
 
+        mWinAndLoseAdapter.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
+            @Override
+            public void onTopRightMenuItemClick(int position) {
+                update();
+            }
+        });
+    }
+
+    private void update() {
+        nu=0;
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getAwayType()==1||matchBean.getHomeType()==1||matchBean.getVsType()==1){
+                    nu++;
+                }
+            }
+        }
+        EventBus.getDefault().post(new FooterOneEvent(nu,1));
     }
 
     private void initView() {
-
 
     }
 
@@ -90,7 +199,7 @@ public class AllPassFragment extends BaseFragment {
             public void requestSuccess(int code, JSONObject data) {
                 Gson gson=new Gson();
                 FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
-                 beans = footBallList.getData();
+                beans = footBallList.getData();
                 res = new ArrayList<>();
                 for (int i = 0; i < beans.size(); i++) {
                     FootBallList.DataBean dataBean = beans.get(i);
@@ -99,17 +208,9 @@ public class AllPassFragment extends BaseFragment {
                 }
                 mWinAndLoseAdapter = new WinAndLoseAdapter(res);
                 mAllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                mAllRecycler.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
                 mAllRecycler.setAdapter(mWinAndLoseAdapter);
                 ((SimpleItemAnimator)mAllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-                mWinAndLoseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        for( FootBallList.DataBean s :beans){
-                            LogUtils.i(s.toString());
-                        }
-                    }
-                });
+                setListener();
 
             }
 
@@ -121,6 +222,7 @@ public class AllPassFragment extends BaseFragment {
 
 
     }
+
 
 
 }
