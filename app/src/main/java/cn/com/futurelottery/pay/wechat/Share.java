@@ -90,8 +90,8 @@ public class Share {
 
     public void ShareToFriends(){
         WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = "http://www.baidu.com";
         WXMediaMessage msg = new WXMediaMessage(webpage);
+        webpage.webpageUrl = "http://www.baidu.com";
         msg.title = "标题";
         msg.description = "描述信息";
         Bitmap thumb = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher);
