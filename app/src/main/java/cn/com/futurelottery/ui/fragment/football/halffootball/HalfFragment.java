@@ -82,6 +82,9 @@ public class HalfFragment extends BaseFragment {
     public HalfFragment() {
 
     }
+    public int getCurrentItem(){
+        return viewPager.getCurrentItem();
+    }
 
     @Override
     public int getLayoutResource() {

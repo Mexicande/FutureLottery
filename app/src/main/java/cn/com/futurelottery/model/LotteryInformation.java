@@ -9,13 +9,14 @@ import java.util.List;
 
 public class LotteryInformation implements Serializable{
 
+
     /**
      * code : 200
      * message : OK
-     * data : [{"end_time":"2018-04-19","lotid":"ssq","phase":"2018032","bonuscode":"05,06,07,08,20,17,04","week":"周四"},{"end_time":"2018-04-23","lotid":"dlt","phase":"18046","bonuscode":"01,02,03,04,05,06,07","week":"周一"},{"end_time":"2018-04-23","lotid":"dlt","phase":"18046","bonuscode":"01,02,03,04,05,06,07","week":"周一"},{"end_time":"2018-04-23","lotid":"dlt","phase":"18046","bonuscode":"01,02,03,04,05,06,07","week":"周一"},{"end_time":"2018-04-23","lotid":"p3","phase":"18106","bonuscode":"1,2,3","week":"周一"},{"end_time":"2018-04-23","lotid":"p3","phase":"18106","bonuscode":"1,2,3","week":"周一"},{"end_time":"2018-04-23","lotid":"p3","phase":"18106","bonuscode":"1,2,3","week":"周一"},{"end_time":"2018-04-23","lotid":"p5","phase":"18106","bonuscode":"1,2,3,4,5","week":"周一"},{"end_time":"2018-04-23","lotid":"p5","phase":"18106","bonuscode":"1,2,3,4,5","week":"周一"},{"end_time":"2018-04-23","lotid":"p5","phase":"18106","bonuscode":"1,2,3,4,5","week":"周一"},{"end_time":"2018-04-23","lotid":"dlc","phase":"18042384","bonuscode":"01,02,03,04,05","week":"周一"},{"end_time":"2018-04-24","lotid":"JXK3","phase":"180424036","bonuscode":"1,2,3","week":"周二"},{"end_time":"2018-04-24","lotid":"D11","phase":"18042439","bonuscode":"01,02,03,04,05","week":"周二"},{"front":"1登博思","result":"1:2","daytime":"2018-04-23","after":"埃门"}]
+     * data : [{"end_time":"2018-04-25","lotid":"dlt","phase":"18047","bonuscode":"06,20,34,35,25,01,03","week":"周三","name":"大乐透"},{"end_time":"2018-04-22","lotid":"ssq","phase":"2018045","bonuscode":"01,02,03,04,05,06,07","week":"周日","name":"双色球"},{"front":"-1戈多伊克鲁斯","result":"2:0","daytime":"2018-04-27","after":"圣胡安圣马丁","lotid":"ftb","name":"竞彩足球"}]
      * error_code : 0
      * error_message :
-     * time : 2018-04-24 15:04:22
+     * time : 2018-04-28 16:56:26
      */
 
     private int code;
@@ -75,15 +76,16 @@ public class LotteryInformation implements Serializable{
 
     public static class DataProduct {
         /**
-         * end_time : 2018-04-19
-         * lotid : ssq
-         * phase : 2018032
-         * bonuscode : 05,06,07,08,20,17,04
-         * week : 周四
-         * front : 1登博思
-         * result : 1:2
-         * daytime : 2018-04-23
-         * after : 埃门
+         * end_time : 2018-04-25
+         * lotid : dlt
+         * phase : 18047
+         * bonuscode : 06,20,34,35,25,01,03
+         * week : 周三
+         * name : 大乐透
+         * front : -1戈多伊克鲁斯
+         * result : 2:0
+         * daytime : 2018-04-27
+         * after : 圣胡安圣马丁
          */
 
         private String end_time;
@@ -91,6 +93,7 @@ public class LotteryInformation implements Serializable{
         private String phase;
         private String bonuscode;
         private String week;
+        private String name;
         private String front;
         private String result;
         private String daytime;
@@ -134,6 +137,14 @@ public class LotteryInformation implements Serializable{
 
         public void setWeek(String week) {
             this.week = week;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
 
         public String getFront() {

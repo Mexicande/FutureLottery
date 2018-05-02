@@ -50,9 +50,21 @@
     <!--提现说明-->
     <string name="withdrawal_instructions">1.每个账户每天至多提现3次，提现金额至少10元\n2.红包不可提取，中奖奖金可全部提现\n3.非活动充值，充值金额30天后可申请提现\n4.追号撤销等退款的70%可提现、30%不可提现\n5.每日凌晨0:50-1:20提现申请会有短暂延时，请耐心等候
     </string>
-    <string name="login_please">请先登陆</string>
+    <string name="login_please">请先登录</string>
 
     <!--进度对话框-->
     <color name="kprogresshud_default_color">#b1000000</color>
     <color name="kprogresshud_grey_color">#449E9E9E</color>
+
+
+    <!-- h5下载 -->
+    <string name="update_app_model_prepare">准备下载</string>
+    <string name="update_app_model_progress">正在下载 %1$d%2$s</string>
+    <string name="update_app_model_success">下载成功(点击安装)</string>
+    <string name="update_app_model_error">下载失败(点击用浏览器下载)</string>
+    <string name="lose">负</string>
+    <string name="flat">平</string>
+    <string name="win">胜</string>
+    <string name="half">半 全 场</string>
+    <string name="size_goals">总进球</string>
 </resources>

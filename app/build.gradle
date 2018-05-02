@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
-apply plugin: 'walle'
 
 android {
     compileSdkVersion 26
@@ -15,12 +14,6 @@ android {
 
     signingConfigs {
         debug {
-            v1SigningEnabled true
-            v2SigningEnabled true
-            storeFile file('../keystore/keystore')
-            keyAlias 'lottery'
-            keyPassword '000000'
-            storePassword '000000'
         }
         release {
             v1SigningEnabled true
@@ -32,20 +25,11 @@ android {
         }
     }
     buildTypes {
-        debug {
-            // 显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            //混淆
-            minifyEnabled false
-            //Zipalign优化
-            zipAlignEnabled false
-            // 移除无用的resource文件
-            shrinkResources false
-            //加载默认混淆配置文件
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //签名
-            signingConfig signingConfigs.release
-        }
+//        debug {
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            //签名
+//            signingConfig signingConfigs.release
+//        }
         release {
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
@@ -60,14 +44,6 @@ android {
             //签名
             signingConfig signingConfigs.release
         }
-    }
-    walle {
-        // 指定渠道包的输出路径
-        apkOutputFolder = new File("${project.buildDir}/outputs/channels");
-        // 定制渠道包的APK的文件名称
-        apkFileNameFormat = '${channel}-v${versionName}-${buildTime}.apk';
-        // 渠道配置文件
-        channelFile = new File("${project.getProjectDir()}/channel")
     }
 }
 

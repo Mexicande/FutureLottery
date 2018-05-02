@@ -79,7 +79,9 @@ public class ConWinAndFragment extends BaseFragment{
     public ConWinAndFragment() {
         // Required empty public constructor
     }
-
+    public int getCurrentItem(){
+        return viewPager.getCurrentItem();
+    }
     @Override
     public int getLayoutResource() {
         return R.layout.fragment_con_win_and;

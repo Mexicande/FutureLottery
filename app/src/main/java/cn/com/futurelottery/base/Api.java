@@ -80,7 +80,7 @@ public interface Api {
          */
         String GET_CODE               =         HOST+"sms/getcode";
         /**
-         * 登陆
+         * 登录
          */
         String LOGIN               =            HOST+"login/login";
         /**
@@ -114,9 +114,14 @@ public interface Api {
 
        public static final String  FOOTBALL_LSIT  =   HOST+"football/list";
        public static final String  Payment  =   HOST+"football/confirmThePayment";
-        //赛事列表
-        public static final String  PayList  =   HOST+"football/league";
-
+        /**
+         * 赛事列表
+         */
+        public static final String PAY_LIST =   HOST+"football/league";
+        /**
+         * 赛事筛选
+         */
+        public static final String PAY_SCREEN =   HOST+"football/screen";
 
 
 
@@ -154,6 +159,8 @@ public interface Api {
         String wait   =      HOST+"order/wait";
         //订单详情
         String deteails   =      HOST+"order/deteails";
+        //删除订单
+        String del   =      HOST+"order/del";
     }
     //提现
     interface Withdraw{

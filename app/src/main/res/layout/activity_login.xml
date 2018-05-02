@@ -105,7 +105,7 @@
             android:layout_marginLeft="@dimen/length_15"
             android:background="@drawable/login_button_bg"
             android:layout_marginTop="@dimen/length_20"
-            android:text="登陆"
+            android:text="登录"
             android:enabled="false"
             app:sSelectorPressedColor="@color/color_press"
             app:sSelectorNormalColor="@color/colorPrimary"

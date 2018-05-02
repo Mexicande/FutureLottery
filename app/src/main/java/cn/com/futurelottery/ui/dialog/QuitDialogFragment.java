@@ -12,22 +12,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.inter.DialogListener;
 import cn.com.futurelottery.inter.SaveDialogListener;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * 退出dialog
+ *
  * @author apple
  */
 public class QuitDialogFragment extends DialogFragment {
 
+    @BindView(R.id.bt_save)
+    TextView btSave;
+    @BindView(R.id.bt_clear)
+    TextView btClear;
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.message)
+    TextView message;
     private SaveDialogListener listener;
     Unbinder unbinder;
 
@@ -35,11 +45,20 @@ public class QuitDialogFragment extends DialogFragment {
         // Required empty public constructor
     }
 
+    public static QuitDialogFragment newInstance(int type) {
+        QuitDialogFragment instance = new QuitDialogFragment();
+        Bundle args = new Bundle();
+        args.putInt("type", type);
+        instance.setArguments(args);
+        return instance;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         listener = (SaveDialogListener) context;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +72,7 @@ public class QuitDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_quit_dialog, container, false);
         final Window window = getDialog().getWindow();
-        if(window!=null){
+        if (window != null) {
             window.getDecorView().setPadding(0, 0, 0, 0);
             WindowManager.LayoutParams wlp = window.getAttributes();
             wlp.gravity = Gravity.CENTER;
@@ -62,6 +81,8 @@ public class QuitDialogFragment extends DialogFragment {
             window.setAttributes(wlp);
         }
         unbinder = ButterKnife.bind(this, view);
+        int type = getArguments().getInt("type");
+
 
         return view;
     }

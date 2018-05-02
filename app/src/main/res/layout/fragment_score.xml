@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:background="@color/white_bg"
     android:layout_height="match_parent"
-    tools:context="cn.com.futurelottery.ui.fragment.football.ScoreFragment">
+    tools:context="cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreSizeFragment">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/AllRecycler"
         android:layout_weight="1"

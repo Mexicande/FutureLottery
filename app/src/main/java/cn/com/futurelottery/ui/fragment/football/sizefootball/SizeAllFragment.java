@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
@@ -25,9 +27,12 @@ import butterknife.BindView;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
+import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
+import cn.com.futurelottery.model.ScoreList;
+import cn.com.futurelottery.presenter.CompetitionSelectType;
 import cn.com.futurelottery.presenter.FootCleanType;
 import cn.com.futurelottery.presenter.FootSizeType;
 import cn.com.futurelottery.presenter.FootSureType;
@@ -55,6 +60,7 @@ public class SizeAllFragment extends BaseFragment {
     private List<FootBallList.DataBean> beans;
     private int nu=0;
     private boolean mTrue =false;
+    private View notDataView;
 
     public SizeAllFragment() {
         // Required empty public constructor
@@ -68,8 +74,21 @@ public class SizeAllFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initView();
         getDate();
+        setListener();
+
     }
+
+    private void initView() {
+        mSizeAdapter = new SizeAdapter(null);
+        sizeAllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        sizeAllRecycler.setAdapter(mSizeAdapter);
+        ((SimpleItemAnimator)sizeAllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
+        notDataView = getLayoutInflater().inflate(R.layout.empty_layout, (ViewGroup) sizeAllRecycler.getParent(), false);
+
+    }
+
     private void getDate() {
         JSONObject jsonObject=new JSONObject();
         try {
@@ -91,16 +110,17 @@ public class SizeAllFragment extends BaseFragment {
                     dataBean.setSubItems(beans.get(i).getMatch());
                     res.add(dataBean);
                 }
-                mSizeAdapter = new SizeAdapter(res);
-                sizeAllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                sizeAllRecycler.setAdapter(mSizeAdapter);
-                ((SimpleItemAnimator)sizeAllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-                setListener();
+                if(beans.size()==0){
+                    mSizeAdapter.setEmptyView(notDataView);
+                }
+                mSizeAdapter.addData(res);
+                mSizeAdapter.expandAll();
+
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
 
@@ -131,6 +151,55 @@ public class SizeAllFragment extends BaseFragment {
     }
 
     /**
+     * 筛选
+     * @param league
+     */
+    private void setSelect(String league){
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("pass_rules",1);
+            jsonObject.put("play_rules",Api.FOOTBALL.FT003);
+            jsonObject.put("league",league);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiService.GET_SERVICE(Api.FootBall_Api.PAY_SCREEN, BaseApplication.getInstance(), jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                Gson gson=new Gson();
+                FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
+                beans = footBallList.getData();
+                res = new ArrayList<>();
+                for (int i = 0; i < beans.size(); i++) {
+                    FootBallList.DataBean dataBean = beans.get(i);
+                    dataBean.setSubItems(beans.get(i).getMatch());
+                    res.add(dataBean);
+                }
+                if(res.size()!=0){
+                    mSizeAdapter.getData().clear();
+                    mSizeAdapter.addData(res);
+                    mSizeAdapter.expandAll();
+                }
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+            }
+        });
+
+    }
+    @Subscribe
+    public void setSelect(CompetitionSelectType type){
+        if(type.getmSelect()==7){
+            setSelect(type.getmLeague());
+        }
+
+    }
+
+    /**
      * 清除
      */
     @Subscribe
@@ -158,7 +227,6 @@ public class SizeAllFragment extends BaseFragment {
             }
             mSizeAdapter.notifyDataSetChanged();
         }
-        mTrue=false;
 
     }
 

@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.fragment.football;
+package cn.com.futurelottery.ui.fragment.football.scorefootball;
 
 
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,11 +33,13 @@ import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
+import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.DialogListener;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.ScoreList;
+import cn.com.futurelottery.presenter.CompetitionSelectType;
 import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.activity.Football.ScoreBetActivity;
 import cn.com.futurelottery.ui.adapter.football.ScoreListAdapter;
@@ -48,7 +51,7 @@ import cn.com.futurelottery.utils.ToastUtils;
  * @author apple
  *         比分
  */
-public class ScoreFragment extends BaseFragment implements DialogListener {
+public class ScoreSizeFragment extends BaseFragment implements DialogListener {
 
     @BindView(R.id.AllRecycler)
     RecyclerView AllRecycler;
@@ -63,8 +66,8 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
     private List<ScoreList.DataBean> beans;
     private ArrayList<ScoreList.DataBean.MatchBean> mMatchBeans;
     private List<ScoreList.DataBean.MatchBean> list;
-
-    public ScoreFragment() {
+    private View notDataView;
+    public ScoreSizeFragment() {
         // Required empty public constructor
     }
 
@@ -76,7 +79,19 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initView();
         getDate();
+        setListener();
+    }
+
+
+
+    private void initView() {
+        mScoreListAdapter = new ScoreListAdapter(null);
+        AllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        AllRecycler.setAdapter(mScoreListAdapter);
+        ((SimpleItemAnimator) AllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
+        notDataView = getLayoutInflater().inflate(R.layout.empty_layout, (ViewGroup) AllRecycler.getParent(), false);
     }
 
     private void getDate() {
@@ -100,25 +115,16 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
                     dataBean.setSubItems(beans.get(i).getMatch());
                     res.add(dataBean);
                 }
-                mScoreListAdapter = new ScoreListAdapter(res);
-                AllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                AllRecycler.setAdapter(mScoreListAdapter);
-                ((SimpleItemAnimator) AllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-
+                mScoreListAdapter.addData(res);
+                mScoreListAdapter.expandAll();
+                if(beans.size()==0){
+                    mScoreListAdapter.setEmptyView(notDataView);
+                }
                 mMatchBeans = new ArrayList<>();
                 for (int i = 0; i < beans.size(); i++) {
                     mMatchBeans.addAll(beans.get(i).getMatch());
                 }
 
-                mScoreListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-                    @Override
-                    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                        ScoreList.DataBean.MatchBean matchBean = mMatchBeans.get(position-1);
-                        ScoreDialogFragment adialogFragment = ScoreDialogFragment.newInstance(matchBean, position,Api.FOOTBALL.FT002);
-                        adialogFragment.show(getChildFragmentManager(), "timePicker");
-
-                    }
-                });
 
             }
 
@@ -128,7 +134,18 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
             }
         });
     }
+    private void setListener() {
+        mScoreListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                ScoreList.DataBean.MatchBean matchBean = mMatchBeans.get(position-1);
+                ScoreDialogFragment adialogFragment = ScoreDialogFragment.newInstance(matchBean, position,Api.FOOTBALL.FT002);
+                adialogFragment.show(getChildFragmentManager(), "timePicker");
 
+            }
+        });
+
+    }
 
     @Override
     public void onDefeateComplete(int index, ScoreList.DataBean.MatchBean matchBean) {
@@ -188,6 +205,56 @@ public class ScoreFragment extends BaseFragment implements DialogListener {
         }else {
             ToastUtils.showToast("请至少选择1场比赛");
         }
+    }
+
+
+    /**
+     * 筛选
+     * @param league
+     */
+    private void setSelect(String league){
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("pass_rules",1);
+            jsonObject.put("play_rules",Api.FOOTBALL.FT002);
+            jsonObject.put("league",league);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiService.GET_SERVICE(Api.FootBall_Api.PAY_SCREEN, BaseApplication.getInstance(), jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                Gson gson = new Gson();
+                ScoreList footBallList = gson.fromJson(data.toString(), ScoreList.class);
+                beans = footBallList.getData();
+                res = new ArrayList<>();
+                for (int i = 0; i < beans.size(); i++) {
+                    ScoreList.DataBean dataBean = beans.get(i);
+                    dataBean.setSubItems(beans.get(i).getMatch());
+                    res.add(dataBean);
+                }
+                if(res.size()!=0){
+                    mScoreListAdapter.getData().clear();
+                    mScoreListAdapter.addData(res);
+                    mScoreListAdapter.expandAll();
+                }
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+            }
+        });
+
+    }
+    @Subscribe
+    public void setSelect(CompetitionSelectType type){
+        if(type.getmSelect()==5){
+            setSelect(type.getmLeague());
+        }
+
     }
 
     /**

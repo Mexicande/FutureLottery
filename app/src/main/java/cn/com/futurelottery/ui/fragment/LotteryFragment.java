@@ -197,6 +197,7 @@ public class LotteryFragment extends BaseFragment {
     private List<LotteryInformation.DataProduct> lotteryInformations = new ArrayList<>();
     private LotteryInformation.DataProduct superLotto;
     private LotteryInformation.DataProduct doubleBall;
+    private LotteryInformation.DataProduct footBall;
 
     public LotteryFragment() {
         // Required empty public constructor
@@ -250,28 +251,51 @@ public class LotteryFragment extends BaseFragment {
     }
 
     private void updateView() {
+        for (int i=0;i<lotteryInformations.size();i++){
+            switch (lotteryInformations.get(i).getLotid()){
+                case "ssq":
+                    doubleBall=lotteryInformations.get(i);
+                    break;
+                case "dlt":
+                    superLotto=lotteryInformations.get(i);
+                    break;
+                case "ftb":
+                    footBall=lotteryInformations.get(i);
+                    break;
+            }
+        }
         //大乐透
-        superLotto=lotteryInformations.get(1);
-        superLottoTimeTv.setText("第"+superLotto.getPhase()+"期 "+superLotto.getEnd_time()+" ("+superLotto.getWeek()+")");
-        String[] ball1 = superLotto.getBonuscode().split(",");
-        superLottoRedTv1.setText(ball1[0]);
-        superLottoRedTv2.setText(ball1[1]);
-        superLottoRedTv3.setText(ball1[2]);
-        superLottoRedTv4.setText(ball1[3]);
-        superLottoRedTv5.setText(ball1[4]);
-        superLottoBlueTv1.setText(ball1[5]);
-        superLottoBlueTv2.setText(ball1[6]);
+        if (null!=superLotto){
+            superLottoTimeTv.setText("第"+superLotto.getPhase()+"期 "+superLotto.getEnd_time()+" ("+superLotto.getWeek()+")");
+            String[] ball1 = superLotto.getBonuscode().split(",");
+            superLottoRedTv1.setText(ball1[0]);
+            superLottoRedTv2.setText(ball1[1]);
+            superLottoRedTv3.setText(ball1[2]);
+            superLottoRedTv4.setText(ball1[3]);
+            superLottoRedTv5.setText(ball1[4]);
+            superLottoBlueTv1.setText(ball1[5]);
+            superLottoBlueTv2.setText(ball1[6]);
+        }
+
         //双色球
-        doubleBall=lotteryInformations.get(0);
-        doubleBallTimeTv.setText("第"+doubleBall.getPhase()+"期 "+doubleBall.getEnd_time()+" ("+doubleBall.getWeek()+")");
-        String[] ball2 = doubleBall.getBonuscode().split(",");
-        doubleBallRedTv1.setText(ball2[0]);
-        doubleBallRedTv2.setText(ball2[1]);
-        doubleBallRedTv3.setText(ball2[2]);
-        doubleBallRedTv4.setText(ball2[3]);
-        doubleBallRedTv5.setText(ball2[4]);
-        doubleBallRedTv6.setText(ball2[5]);
-        doubleBallBlueTv1.setText(ball2[6]);
+        if (null!=doubleBall){
+            doubleBallTimeTv.setText("第"+doubleBall.getPhase()+"期 "+doubleBall.getEnd_time()+" ("+doubleBall.getWeek()+")");
+            String[] ball2 = doubleBall.getBonuscode().split(",");
+            doubleBallRedTv1.setText(ball2[0]);
+            doubleBallRedTv2.setText(ball2[1]);
+            doubleBallRedTv3.setText(ball2[2]);
+            doubleBallRedTv4.setText(ball2[3]);
+            doubleBallRedTv5.setText(ball2[4]);
+            doubleBallRedTv6.setText(ball2[5]);
+            doubleBallBlueTv1.setText(ball2[6]);
+        }
+        //足彩
+        if (null!=footBall){
+            footBallTv1.setText(footBall.getFront());
+            footBallTv2.setText(footBall.getResult());
+            footBallTv3.setText(footBall.getAfter());
+        }
+
     }
 
     @OnClick({R.id.superLotto_rl, R.id.doubleBall_rl, R.id.footBall_rl})

@@ -32,17 +32,16 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
-import cn.com.futurelottery.inter.DialogListener;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.PlayList;
-import cn.com.futurelottery.ui.fragment.FragmentController;
+import cn.com.futurelottery.presenter.CompetitionSelectType;
 import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
-import cn.com.futurelottery.ui.fragment.football.ScoreFragment;
+import cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreFragment;
+import cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreSizeFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
 import cn.com.futurelottery.ui.fragment.football.sizefootball.SizeFragment;
 import cn.com.futurelottery.ui.fragment.football.winandlose.WinAndLoseFragment;
 import cn.com.futurelottery.utils.CommonUtil;
-import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -80,7 +79,12 @@ public class FootBallActivity extends BaseActivity{
     BottomSheetDialog mBottomSheetDialog;
     ArrayList<Fragment> mFragmentList = new ArrayList<>();
     ArrayList<String>fivePlay=new ArrayList<>();
-    FragmentController instance;
+    private WinAndLoseFragment mWinAndLoseFragment;
+    private ConWinAndFragment mConWinAndFragment;
+    private SizeFragment mSizeFragment;
+    private HalfFragment mHalfFragment;
+    private ScoreFragment mScoreFragment;
+
     @Override
     public int getLayoutResource() {
         return R.layout.activity_foot_ball;
@@ -109,20 +113,40 @@ public class FootBallActivity extends BaseActivity{
             if(fragment!=null && fragment.isAdded()&&fragment.isVisible()) {
                 switch (i){
                     case 0:
-                        getSelectPlay(Api.FOOTBALL.FT001);
+                        int currentItem = mWinAndLoseFragment.getCurrentItem();
+                        if(currentItem==0){
+                            getSelectPlay(Api.FOOTBALL.FT001,1);
+                        }else {
+                            getSelectPlay(Api.FOOTBALL.FT001,0);
+                        }
                         break;
                     case 1:
-                        getSelectPlay(Api.FOOTBALL.FT006);
+                        int currentConWinAnd = mConWinAndFragment.getCurrentItem();
+                        if(currentConWinAnd==0){
+                            getSelectPlay(Api.FOOTBALL.FT001,1);
+                        }else {
+                            getSelectPlay(Api.FOOTBALL.FT001,0);
+                        }
                         break;
                     case 2:
-                        getSelectPlay(Api.FOOTBALL.FT002);
+                        getSelectPlay(Api.FOOTBALL.FT002,1);
                         break;
                     case 3:
-                        getSelectPlay(Api.FOOTBALL.FT003);
-
+                        int currentSize = mSizeFragment.getCurrentItem();
+                        if(currentSize==0){
+                            getSelectPlay(Api.FOOTBALL.FT001,1);
+                        }else {
+                            getSelectPlay(Api.FOOTBALL.FT001,0);
+                        }
                         break;
                     case 4:
-                        getSelectPlay(Api.FOOTBALL.FT004);
+                        int currentHalf = mHalfFragment.getCurrentItem();
+                        if(currentHalf==0){
+                            getSelectPlay(Api.FOOTBALL.FT001,1);
+                        }else {
+                            getSelectPlay(Api.FOOTBALL.FT001,0);
+
+                        }
                         break;
                     default:
                         break;
@@ -133,17 +157,17 @@ public class FootBallActivity extends BaseActivity{
 
     }
 
-    private void getSelectPlay(String i) {
+    private void getSelectPlay(String i,int index) {
 
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put("pass_rules",1);
+            jsonObject.put("pass_rules",index);
             jsonObject.put("play_rules",i);
         } catch (JSONException e) {
 
 
         }
-        ApiService.GET_SERVICE(Api.FootBall_Api.PayList, this, jsonObject, new OnRequestDataListener() {
+        ApiService.GET_SERVICE(Api.FootBall_Api.PAY_LIST, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 Gson gson=new Gson();
@@ -171,8 +195,68 @@ public class FootBallActivity extends BaseActivity{
 
     }
 
+    /**
+     * 筛选
+     */
     private void getPlayList() {
+        List<MenuItem> data = mBottomTRMenuAdapter.getData();
+        StringBuilder sb=new StringBuilder();
+        for(MenuItem s:data){
+            if(s.getIcon()==3){
+                sb.append(s.getContent()).append(",");
+            }
+        }
+        String str = sb.toString();
+        if(str.length()==0){
+            ToastUtils.showToast("筛选结果为空,请重新筛选比赛");
+        }else {
+            String substring = str.substring(0, str.length() - 1);
+            for(int i = 0; i < mFragmentList.size(); i++) {
+                Fragment fragment = mFragmentList.get(i);
+                if (fragment != null && fragment.isAdded() && fragment.isVisible()) {
+                    switch (i){
+                        case 0:
+                            int currentItem = mWinAndLoseFragment.getCurrentItem();
+                            if(currentItem==0){
+                                EventBus.getDefault().post(new CompetitionSelectType(1,substring));
+                            }else {
+                                EventBus.getDefault().post(new CompetitionSelectType(2,substring));
+                            }
+                            break;
+                        case 1:
+                            int currentConWinAnd = mConWinAndFragment.getCurrentItem();
+                            if(currentConWinAnd==0){
+                                EventBus.getDefault().post(new CompetitionSelectType(3,substring));
+                            }else {
+                                EventBus.getDefault().post(new CompetitionSelectType(4,substring));
+                            }
+                            break;
+                        case 2:
+                            EventBus.getDefault().post(new CompetitionSelectType(5,substring));
+                            break;
+                        case 3:
+                            int currentSize = mSizeFragment.getCurrentItem();
+                            if(currentSize==0){
+                                EventBus.getDefault().post(new CompetitionSelectType(7,substring));
+                            }else {
+                                EventBus.getDefault().post(new CompetitionSelectType(8,substring));
+                            }
+                            break;
+                        case 4:
+                            int currentHalf = mHalfFragment.getCurrentItem();
+                            if(currentHalf==0){
+                                EventBus.getDefault().post(new CompetitionSelectType(9,substring));
+                            }else {
+                                EventBus.getDefault().post(new CompetitionSelectType(10,substring));
+                            }
+                            break;
+                        default:
+                            break;
+                    }
 
+                }
+            }
+        }
     }
 
 
@@ -231,6 +315,7 @@ public class FootBallActivity extends BaseActivity{
         mBootRecycler.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(10),3));
         mBottomTRMenuAdapter = new TRMenuAdapter(R.layout.football_menu_item,mSrceenList);
         mBootRecycler.setAdapter(mBottomTRMenuAdapter);
+
         mBottomTRMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -315,7 +400,7 @@ public class FootBallActivity extends BaseActivity{
             @Override
             public void onClick(View v) {
                 //筛选
-                ToastUtils.showToast("筛选");
+                getPlayList();
                 mBottomSheetDialog.dismiss();
             }
         });
@@ -326,11 +411,17 @@ public class FootBallActivity extends BaseActivity{
         trmRecyclerview.addItemDecoration(new MenuDecoration(CommonUtil.dip2px(10),3));
         mTRMenuAdapter = new TRMenuAdapter(R.layout.football_menu_item,mlist);
         trmRecyclerview.setAdapter(mTRMenuAdapter);
-        mFragmentList.add(new WinAndLoseFragment());
-        mFragmentList.add(new ConWinAndFragment());
-        mFragmentList.add(new ScoreFragment());
-        mFragmentList.add(new SizeFragment());
-        mFragmentList.add(new HalfFragment());
+
+         mWinAndLoseFragment=new WinAndLoseFragment();
+         mConWinAndFragment=new ConWinAndFragment();
+         mSizeFragment=new SizeFragment();
+         mHalfFragment=new HalfFragment();
+        mScoreFragment=new ScoreFragment();
+        mFragmentList.add(mWinAndLoseFragment);
+        mFragmentList.add(mConWinAndFragment);
+        mFragmentList.add(mScoreFragment);
+        mFragmentList.add(mSizeFragment);
+        mFragmentList.add(mHalfFragment);
         switchPages(0);
 
     }

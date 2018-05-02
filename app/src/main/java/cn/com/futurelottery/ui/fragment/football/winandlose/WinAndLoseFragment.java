@@ -78,11 +78,13 @@ public class WinAndLoseFragment extends BaseFragment {
     private OnePassFragment onePassFragment;
     private int AllNumber = 0;
     private int OneNumber = 0;
+
+
     public WinAndLoseFragment() {
         // Required empty public constructor
     }
-    public void setSelect(int i){
-
+    public int getCurrentItem(){
+        return viewPager.getCurrentItem();
     }
     @Override
     public void onAttach(Context context) {

@@ -41,9 +41,15 @@ public class AwardPeriodAdapter extends BaseQuickAdapter<AwardPeriod,BaseViewHol
         SpannableStringBuilder builder = new SpannableStringBuilder(replace);
         ForegroundColorSpan yellowSpan = new ForegroundColorSpan(mContext.getResources().getColor(R.color.blue_ball));
         if(item.getType()==1){
-            builder.setSpan(yellowSpan, replace.length()-5,replace.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (replace.length()>5){
+
+                builder.setSpan(yellowSpan, replace.length()-5,replace.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         }else {
-            builder.setSpan(yellowSpan, replace.length()-2,replace.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (replace.length()>2){
+
+                builder.setSpan(yellowSpan, replace.length()-2,replace.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         }
         helper.setText(R.id.tv_number,builder);
 

@@ -206,7 +206,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     /**
-     * 登陆
+     * 登录
      */
     private void setLogin(String code) {
         String phone = etPhone.getText().toString();

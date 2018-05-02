@@ -345,6 +345,12 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
                         startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
                     }else if (code==0){
                         ToastUtils.showToast("下单成功");
+
+                        // 发广播
+                        Intent intent = new Intent();
+                        intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
+                        sendBroadcast(intent);
+
                         finish();
                     }
                 } catch (JSONException e) {
