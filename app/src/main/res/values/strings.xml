@@ -44,6 +44,11 @@
     <string name="errcode_cancel">分享取消</string>
     <string name="errcode_deny">分享被拒绝</string>
     <string name="errcode_unknown">分享返回</string>
+    <string name="errcode_login_cancel">登录取消</string>
+    <string name="errcode_login_deny">登录被拒绝</string>
+    <string name="errcode_login_unknown">登录返回</string>
+
+
     <string name="title_activity_order">订单</string>
 
 

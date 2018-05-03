@@ -59,17 +59,23 @@ public class OrderActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Order order = orders.get(position);
-                if ("ssq".equals(order.getLotid())){
+                if ("双色球".equals(order.getName())){
                     Intent intent=new Intent(OrderActivity.this,BallOrderDetailActivity.class);
                     intent.putExtra("id",order.getId());
                     intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
                     intent.putExtra("ballName","双色球");
                     startActivityForResult(intent,ORDER_DETAIL);
-                }else if ("dlt".equals(order.getLotid())){
+                }else if ("大乐透".equals(order.getName())){
                     Intent intent=new Intent(OrderActivity.this,BallOrderDetailActivity.class);
                     intent.putExtra("id",order.getId());
                     intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
                     intent.putExtra("ballName","大乐透");
+                    startActivityForResult(intent,ORDER_DETAIL);
+                }else if (order.getName().startsWith("竞彩足球")){
+                    Intent intent=new Intent(OrderActivity.this,FootBallOrderDetailActivity.class);
+                    intent.putExtra("id",order.getId());
+                    intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
+                    intent.putExtra("ballName","竞彩足球");
                     startActivityForResult(intent,ORDER_DETAIL);
                 }
             }

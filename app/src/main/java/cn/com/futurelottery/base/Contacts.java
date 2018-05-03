@@ -137,6 +137,8 @@ public   interface    Contacts {
         String WX_APP_ID       = "wxe90a89b17657d1ae";
         //商户号
         String WX_PARTNER_ID   = "";
+        //secret
+        String SECRET   = "391890c4186f9d9ce2ae91aa8f17b0c6";
 }
     /**
      * 支付宝

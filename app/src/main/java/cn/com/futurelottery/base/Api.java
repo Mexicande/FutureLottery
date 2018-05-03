@@ -87,6 +87,14 @@ public interface Api {
          * 获取余额
          */
         String balance               =            HOST+"user/balance";
+        /**
+         * 微信登录
+         */
+        String wlogin               =            HOST+"login/wlogin";
+        /**
+         * 微信登录绑定手机号
+         */
+        String wbind               =            HOST+"login/wbind";
     }
     interface  FOOTBALL{
 

@@ -91,6 +91,7 @@ public class CenterFragment extends BaseFragment {
         getContext().registerReceiver(receiver, filter);
 
         if (!TextUtils.isEmpty(BaseApplication.getInstance().token)){
+            getBalance();
             setLoginView();
         }
     }
@@ -260,6 +261,7 @@ public class CenterFragment extends BaseFragment {
                     if (0==code){
                         BaseApplication.getInstance().amount=data.getJSONObject("data").getString("amount");
                         centerFragmentMoneyTv1.setText(BaseApplication.getInstance().amount);
+                        SPUtils.put(getContext(),Contacts.AMOUNT,BaseApplication.getInstance().amount);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

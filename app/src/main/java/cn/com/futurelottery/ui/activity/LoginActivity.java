@@ -1,7 +1,9 @@
 package cn.com.futurelottery.ui.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +22,9 @@ import android.widget.TextView;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.HttpHeaders;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +38,7 @@ import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.ui.fragment.CenterFragment;
 import cn.com.futurelottery.utils.CaptchaTimeCount;
 import cn.com.futurelottery.utils.CodeUtils;
 import cn.com.futurelottery.utils.CommonUtil;
@@ -69,6 +75,8 @@ public class LoginActivity extends BaseActivity {
     private String yanZhengCode;
     private String yanZhengResult;
     private String etYanZhengCode;
+    private IWXAPI mWxApi;
+    private InnerReceiver receiver;
 
     @Override
     public int getLayoutResource() {
@@ -80,8 +88,21 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         captchaTimeCount = new CaptchaTimeCount(Contacts.Times.MILLIS_IN_TOTAL, Contacts.Times.COUNT_DOWN_INTERVAL, codeTv, this);
 
+        mWxApi = WXAPIFactory.createWXAPI(this, Contacts.WeChat.WX_APP_ID, false);
+        // 将该app注册到微信
+        mWxApi.registerApp(Contacts.WeChat.WX_APP_ID);
+
+        initView();
         setListener();
 
+    }
+
+    private void initView() {
+        // 注册广播接收者
+        receiver = new InnerReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
+        registerReceiver(receiver, filter);
     }
 
     @Override
@@ -107,12 +128,26 @@ public class LoginActivity extends BaseActivity {
                 }
                 break;
             case R.id.login_weixin_iv:
+                wxLogin();
                 break;
             default:
                 break;
 
         }
     }
+
+
+    public void wxLogin() {
+        if (!mWxApi.isWXAppInstalled()) {
+            ToastUtils.showToast("您还未安装微信客户端");
+            return;
+        }
+        final SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "wx_login_xinyuncai";
+        mWxApi.sendReq(req);
+    }
+
 
     /*
      *
@@ -246,16 +281,6 @@ public class LoginActivity extends BaseActivity {
                             intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
                             sendBroadcast(intent);
 
-                            //initokgo
-                            HttpHeaders headers = new HttpHeaders();
-                            headers.put("channel", BaseApplication.getInstance().channel);
-                            headers.put("os", BaseApplication.getInstance().versionName);
-                            headers.put(Contacts.TOKEN, BaseApplication.getInstance().token);
-                            OkGo.getInstance()
-                                    .init(getApplication())
-                                    .setCacheMode(CacheMode.NO_CACHE)
-                                    .addCommonHeaders(headers);
-
 
                             ToastUtils.showToast("登录成功");
                             setResult(RESULT_CODE);
@@ -322,5 +347,26 @@ public class LoginActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+    }
+
+    // 广播接收者
+    private class InnerReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 获取Intent中的Action
+            String action = intent.getAction();
+            // 判断Action
+            if (Contacts.INTENT_EXTRA_LOGIN_SUCESS.equals(action)) {
+                finish();
+            }
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 }

@@ -32,6 +32,7 @@ public class ApiService {
         final String netError = context.getString(R.string.net_error);
         OkGo.<String>post(url)
                 .tag(context)
+                .headers("token",BaseApplication.getInstance().token)
                 .upJson(params)
                 .execute(new StringCallback() {
                     @Override
