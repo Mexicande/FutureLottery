@@ -106,10 +106,12 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.PersonalInformationActivity" />
         <activity android:name=".ui.activity.WithdrawActivity" />
-        <activity android:name=".ui.activity.SetActivity"></activity>
-        <activity android:name=".ui.activity.Football.ScoreBetActivity"/>
-        <activity android:name=".ui.activity.Football.SizeBetActivity"/>
-        <activity android:name=".ui.activity.Football.FootAllBetActivity"/>
+        <activity android:name=".ui.activity.SetActivity" />
+        <activity android:name=".ui.activity.Football.ScoreBetActivity" />
+        <activity android:name=".ui.activity.Football.SizeBetActivity" />
+        <activity android:name=".ui.activity.Football.FootAllBetActivity" />
+        <activity android:name=".ui.activity.runlottery.FootRunActivity" />
+        <activity android:name=".TestActivity"></activity>
     </application>
 
 </manifest>

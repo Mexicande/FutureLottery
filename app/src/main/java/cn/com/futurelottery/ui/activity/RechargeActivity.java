@@ -32,7 +32,7 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.pay.alipay.Alipay;
 import cn.com.futurelottery.pay.alipay.PayResult;
 import cn.com.futurelottery.pay.wechat.Wechat;

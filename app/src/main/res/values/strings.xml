@@ -67,4 +67,6 @@
     <string name="win">胜</string>
     <string name="half">半 全 场</string>
     <string name="size_goals">总进球</string>
+    <string name="checkout_success">下单成功</string>
+    <string name="progress_str">提交中...</string>
 </resources>

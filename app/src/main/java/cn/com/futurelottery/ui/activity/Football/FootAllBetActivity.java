@@ -30,7 +30,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,24 +40,17 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.ClearDialogListener;
-import cn.com.futurelottery.inter.OnRequestDataListener;
-import cn.com.futurelottery.inter.SaveDialogListener;
-import cn.com.futurelottery.model.DoubleBall;
+import cn.com.futurelottery.listener.ClearDialogListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.FootPay;
-import cn.com.futurelottery.model.ScoreList;
-import cn.com.futurelottery.ui.activity.ChooseBallPaymentActivity;
 import cn.com.futurelottery.ui.activity.LoginActivity;
 import cn.com.futurelottery.ui.activity.PayActivity;
 import cn.com.futurelottery.ui.adapter.football.FootChooseWinAdapter;
 import cn.com.futurelottery.ui.dialog.ClearDialogFragment;
-import cn.com.futurelottery.ui.dialog.QuitDialogFragment;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
-import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
-import cn.com.futurelottery.utils.SPUtil;
 import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.MenuItem;
@@ -203,22 +195,22 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
 
             @Override
             public void afterTextChanged(Editable s) {
-                String len = s.toString();
-                if (len.equals("0")) {
-                    s.clear();
-                }
+
                 if (TextUtils.isEmpty(s)) {
-                    slideMultiple.setText("1");
-                    return;
-                } else if (Integer.valueOf(s.toString()) > 50) {
-                    slideMultiple.setText(String.valueOf(50));
                     return;
                 }
 
-                if (Integer.valueOf(s.toString())<1){
+                int amount = Integer.valueOf(s.toString());
+
+                if (amount > 50) {
+                    slideMultiple.setText("50");
+                    return;
+                }
+                if (amount<1){
                     slideMultiple.setText("1");
                     return;
                 }
+
                 edMultiple.setText(s);
                 if(type%2!=0){
                     //过关
@@ -344,7 +336,9 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
         edMultiple.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if("1".equals(s.toString())){
 
+                }
             }
 
             @Override
@@ -358,13 +352,18 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 if (TextUtils.isEmpty(s)) {
                     return;
-                } else if (Integer.valueOf(s.toString()) > 50) {
-                    edMultiple.setText(String.valueOf(50));
+                }
+
+                int amount = Integer.valueOf(s.toString());
+
+                if (amount > 50) {
+                    edMultiple.setText("50");
                     return;
                 }
-                if (Integer.valueOf(s.toString())<1){
+                if (amount<1){
                     edMultiple.setText("1");
                     return;
                 }
@@ -879,8 +878,7 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
                     Intent intent = new Intent();
                     intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
                     sendBroadcast(intent);
-
-                    ToastUtils.showToast("下单成功");
+                    ToastUtils.showToast(getString(R.string.checkout_success));
                     finish();
                 }else {
                     Intent intent=new Intent(FootAllBetActivity.this,PayActivity.class);

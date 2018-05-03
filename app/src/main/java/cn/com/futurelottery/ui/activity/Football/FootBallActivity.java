@@ -32,12 +32,11 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.PlayList;
 import cn.com.futurelottery.presenter.CompetitionSelectType;
 import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
 import cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreFragment;
-import cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreSizeFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
 import cn.com.futurelottery.ui.fragment.football.sizefootball.SizeFragment;
 import cn.com.futurelottery.ui.fragment.football.winandlose.WinAndLoseFragment;
@@ -232,7 +231,12 @@ public class FootBallActivity extends BaseActivity{
                             }
                             break;
                         case 2:
-                            EventBus.getDefault().post(new CompetitionSelectType(5,substring));
+                            int currentScore = mScoreFragment.getCurrentItem();
+                            if(currentScore==0){
+                                EventBus.getDefault().post(new CompetitionSelectType(5,substring));
+                            }else {
+                                EventBus.getDefault().post(new CompetitionSelectType(6,substring));
+                            }
                             break;
                         case 3:
                             int currentSize = mSizeFragment.getCurrentItem();

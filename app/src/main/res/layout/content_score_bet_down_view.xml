@@ -60,6 +60,7 @@
                         android:id="@+id/slide_multiple"
                         android:inputType="number"
                         android:maxLength="2"
+                        android:hint="1"
                         android:background="@drawable/editext_bg"
                         android:layout_marginLeft="5dp"
                         android:layout_width="60dp"

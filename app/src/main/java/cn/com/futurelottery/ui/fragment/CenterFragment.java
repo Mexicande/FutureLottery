@@ -23,7 +23,7 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.pay.wechat.Share;
 import cn.com.futurelottery.ui.activity.LoginActivity;
 import cn.com.futurelottery.ui.activity.OrderActivity;
@@ -69,7 +69,6 @@ public class CenterFragment extends BaseFragment {
     @BindView(R.id.center_fragment_rl2)
     RelativeLayout centerFragmentRl2;
     private InnerReceiver receiver;
-
 
     @Override
     public int getLayoutResource() {
@@ -253,7 +252,7 @@ public class CenterFragment extends BaseFragment {
      */
     private void getBalance() {
         JSONObject jsonObject = new JSONObject();
-        ApiService.GET_SERVICE(Api.Login.balance, getContext(), jsonObject, new OnRequestDataListener() {
+        ApiService.GET_SERVICE(Api.Login.BALANCE, getContext(), jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {

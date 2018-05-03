@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.inter.DialogListener;
+import cn.com.futurelottery.listener.DialogListener;
 import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.adapter.ScoreDialogAdapter;
 

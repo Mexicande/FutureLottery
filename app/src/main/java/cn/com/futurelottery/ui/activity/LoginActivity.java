@@ -32,12 +32,11 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.utils.CaptchaTimeCount;
 import cn.com.futurelottery.utils.CodeUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.DeviceUtil;
-import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.editext.PowerfulEditText;
@@ -246,7 +245,7 @@ public class LoginActivity extends BaseActivity {
                             intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
                             sendBroadcast(intent);
 
-                            //initokgo
+                          /*  //initokgo
                             HttpHeaders headers = new HttpHeaders();
                             headers.put("channel", BaseApplication.getInstance().channel);
                             headers.put("os", BaseApplication.getInstance().versionName);
@@ -254,7 +253,7 @@ public class LoginActivity extends BaseActivity {
                             OkGo.getInstance()
                                     .init(getApplication())
                                     .setCacheMode(CacheMode.NO_CACHE)
-                                    .addCommonHeaders(headers);
+                                    .addCommonHeaders(headers);*/
 
 
                             ToastUtils.showToast("登录成功");

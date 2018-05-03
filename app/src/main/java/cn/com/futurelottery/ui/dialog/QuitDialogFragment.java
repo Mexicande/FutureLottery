@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.inter.SaveDialogListener;
+import cn.com.futurelottery.listener.SaveDialogListener;
 
 
 /**

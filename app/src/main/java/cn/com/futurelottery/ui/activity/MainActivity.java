@@ -19,12 +19,11 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.Popup;
 import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
 import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
 import cn.com.futurelottery.ui.dialog.AdialogFragment;
-import cn.com.futurelottery.ui.dialog.ScoreDialogFragment;
 import cn.com.futurelottery.ui.fragment.CenterFragment;
 import cn.com.futurelottery.ui.fragment.HomeFragment;
 import cn.com.futurelottery.ui.fragment.LotteryFragment;
@@ -91,9 +90,8 @@ public class MainActivity extends BaseActivity {
     }
     @Override
     protected void setStatusBar() {
-        StatusBarUtil.setTranslucentForImageViewInFragment(MainActivity.this, 0,null);
+        StatusBarUtil.setTranslucentForImageViewInFragment(MainActivity.this, 114,null);
     }
-
     private void initBottom() {
         NavigationController navigationController = tab.custom()
                 .addItem(newItem(R.mipmap.iv_normal_home, R.mipmap.iv_select_home, getResources().getString(R.string.buy_lottery)))

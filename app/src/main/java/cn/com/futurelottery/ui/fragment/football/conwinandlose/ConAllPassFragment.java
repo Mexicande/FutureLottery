@@ -5,15 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.Gson;
 
@@ -32,16 +29,14 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.presenter.CompetitionSelectType;
 import cn.com.futurelottery.presenter.FootCleanType;
 import cn.com.futurelottery.presenter.FootSureType;
-import cn.com.futurelottery.presenter.FooterAllEvent;
 import cn.com.futurelottery.presenter.FooterOneEvent;
 import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.adapter.football.WinAndLoseAdapter;
-import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
@@ -195,7 +190,7 @@ public class ConAllPassFragment extends BaseFragment {
     private void getDate() {
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put(Api.FOOTBALL.PASS_RULE, Api.FOOTBALL.pass_rules_1);
+            jsonObject.put(Api.FOOTBALL.PASS_RULE, Api.FOOTBALL.PASS_RULES_1);
             jsonObject.put(Api.FOOTBALL.PLAY_RULE,Api.FOOTBALL.FT006);
         } catch (JSONException e) {
             e.printStackTrace();

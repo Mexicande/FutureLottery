@@ -2,7 +2,6 @@ package cn.com.futurelottery.ui.activity.Football;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,24 +40,19 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.ClearDialogListener;
-import cn.com.futurelottery.inter.DialogListener;
-import cn.com.futurelottery.inter.OnRequestDataListener;
-import cn.com.futurelottery.model.FootBallList;
+import cn.com.futurelottery.listener.ClearDialogListener;
+import cn.com.futurelottery.listener.DialogListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.FootPay;
 import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.activity.LoginActivity;
 import cn.com.futurelottery.ui.activity.PayActivity;
 import cn.com.futurelottery.ui.adapter.football.FootChooseScoreAdapter;
-import cn.com.futurelottery.ui.adapter.football.FootChooseWinAdapter;
 import cn.com.futurelottery.ui.dialog.ClearDialogFragment;
 import cn.com.futurelottery.ui.dialog.PayMentFragment;
-import cn.com.futurelottery.ui.dialog.ScoreDialogFragment;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
-import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.MenuDecoration;
-import cn.com.futurelottery.utils.SPUtil;
 import cn.com.futurelottery.utils.SPUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.MenuItem;
@@ -427,21 +421,22 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener,Cle
 
             @Override
             public void afterTextChanged(Editable s) {
-                String len = s.toString();
-                if (len.equals("0")) {
-                    s.clear();
-                }
                 if (TextUtils.isEmpty(s)) {
-                    edMultiple.setText("1");
-                    return;
-                } else if (Integer.valueOf(s.toString()) > 50) {
-                    edMultiple.setText(String.valueOf(50));
                     return;
                 }
-                if (Integer.valueOf(s.toString())<1){
+
+                int amount = Integer.valueOf(s.toString());
+
+                if (amount > 50) {
+                    edMultiple.setText("50");
+                    return;
+                }
+                if (amount<1){
                     edMultiple.setText("1");
                     return;
                 }
+
+
                 if(type%2!=0){
                     //过关
                     upDate();
@@ -491,22 +486,21 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener,Cle
 
             @Override
             public void afterTextChanged(Editable s) {
-                String len = s.toString();
-                if (len.equals("0")) {
-                    s.clear();
-                }
                 if (TextUtils.isEmpty(s)) {
-                    slideMultiple.setText("1");
-                    return;
-                } else if (Integer.valueOf(s.toString()) > 50) {
-                    slideMultiple.setText(String.valueOf(50));
                     return;
                 }
 
-                if (Integer.valueOf(s.toString())<1){
+                int amount = Integer.valueOf(s.toString());
+
+                if (amount > 50) {
+                    slideMultiple.setText("50");
+                    return;
+                }
+                if (amount<1){
                     slideMultiple.setText("1");
                     return;
                 }
+
                 edMultiple.setText(s);
                 if(type%2!=0){
                     //过关
@@ -882,7 +876,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener,Cle
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 if(code==0){
-                    ToastUtils.showToast("下单成功");
+                    ToastUtils.showToast(getString(R.string.checkout_success));
                     Intent intent = new Intent();
                     intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
                     sendBroadcast(intent);

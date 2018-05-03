@@ -29,17 +29,13 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.presenter.CompetitionSelectType;
 import cn.com.futurelottery.presenter.FootCleanType;
-import cn.com.futurelottery.presenter.FootSizeType;
 import cn.com.futurelottery.presenter.FootSureType;
-import cn.com.futurelottery.ui.activity.Football.FootAllBetActivity;
 import cn.com.futurelottery.ui.activity.Football.SizeBetActivity;
 import cn.com.futurelottery.ui.adapter.football.SizeAdapter;
-import cn.com.futurelottery.utils.LogUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.topRightMenu.OnTopRightMenuItemClickListener;
 
@@ -92,7 +88,7 @@ public class SizeAllFragment extends BaseFragment {
     private void getDate() {
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put(Api.FOOTBALL.PASS_RULE,Api.FOOTBALL.pass_rules_1);
+            jsonObject.put(Api.FOOTBALL.PASS_RULE,Api.FOOTBALL.PASS_RULES_1);
             jsonObject.put(Api.FOOTBALL.PLAY_RULE,Api.FOOTBALL.FT003);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -158,7 +154,7 @@ public class SizeAllFragment extends BaseFragment {
         JSONObject jsonObject=new JSONObject();
         try {
             jsonObject.put("pass_rules",1);
-            jsonObject.put("play_rules",Api.FOOTBALL.FT003);
+            jsonObject.put("play_rules",Api.FOOTBALL.FT002);
             jsonObject.put("league",league);
 
         } catch (JSONException e) {
