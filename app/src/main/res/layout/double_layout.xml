@@ -15,12 +15,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_14">
+            android:layout_marginTop="@dimen/size_10">
 
             <ImageView
                 android:id="@+id/shake_choose_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="67dp"
+                android:layout_height="25dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/length_13"
                 android:background="@mipmap/shake_choose" />
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/length_15"
-            android:layout_marginTop="@dimen/length_14"
+            android:layout_marginTop="@dimen/length_10"
             android:gravity="center"
             android:numColumns="7"
             android:verticalSpacing="5dp"></GridView>

@@ -245,7 +245,7 @@ public class LoginActivity extends BaseActivity {
                             intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
                             sendBroadcast(intent);
 
-                          /*  //initokgo
+                            //initokgo
                             HttpHeaders headers = new HttpHeaders();
                             headers.put("channel", BaseApplication.getInstance().channel);
                             headers.put("os", BaseApplication.getInstance().versionName);
@@ -253,7 +253,7 @@ public class LoginActivity extends BaseActivity {
                             OkGo.getInstance()
                                     .init(getApplication())
                                     .setCacheMode(CacheMode.NO_CACHE)
-                                    .addCommonHeaders(headers);*/
+                                    .addCommonHeaders(headers);
 
 
                             ToastUtils.showToast("登录成功");
