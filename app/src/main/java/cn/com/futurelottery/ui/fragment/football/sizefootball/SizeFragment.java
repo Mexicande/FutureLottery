@@ -66,6 +66,9 @@ public class SizeFragment extends BaseFragment {
     ArrayList<Fragment> mFragmentList = new ArrayList<>();
     private int AllNumber=0;
     private int OneNumber=0;
+    public int getCurrentItem(){
+        return viewPager.getCurrentItem();
+    }
     public SizeFragment() {
         // Required empty public constructor
     }

@@ -54,6 +54,7 @@ public class OrderActivity extends BaseActivity {
         setListener();
     }
 
+
     private void setListener() {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

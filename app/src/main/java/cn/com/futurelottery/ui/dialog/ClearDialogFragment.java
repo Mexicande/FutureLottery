@@ -12,41 +12,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.inter.SaveDialogListener;
-
+import cn.com.futurelottery.inter.ClearDialogListener;
 
 /**
  * A simple {@link Fragment} subclass.
- * 退出dialog
  *
  * @author apple
+ *         清除数据
  */
-public class QuitDialogFragment extends DialogFragment {
+public class ClearDialogFragment extends DialogFragment {
 
-    @BindView(R.id.bt_save)
-    TextView btSave;
-    @BindView(R.id.bt_clear)
-    TextView btClear;
-    @BindView(R.id.title)
-    TextView title;
-    @BindView(R.id.message)
-    TextView message;
-    private SaveDialogListener listener;
+
     Unbinder unbinder;
+    private ClearDialogListener listener;
 
-    public QuitDialogFragment() {
-        // Required empty public constructor
-    }
-
-    public static QuitDialogFragment newInstance(int type) {
-        QuitDialogFragment instance = new QuitDialogFragment();
+    public static ClearDialogFragment newInstance(int type) {
+        ClearDialogFragment instance = new ClearDialogFragment();
         Bundle args = new Bundle();
         args.putInt("type", type);
         instance.setArguments(args);
@@ -56,7 +42,11 @@ public class QuitDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (SaveDialogListener) context;
+        listener = (ClearDialogListener) context;
+    }
+
+    public ClearDialogFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -70,7 +60,7 @@ public class QuitDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_quit_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_half_bet_dialog, container, false);
         final Window window = getDialog().getWindow();
         if (window != null) {
             window.getDecorView().setPadding(0, 0, 0, 0);
@@ -81,11 +71,9 @@ public class QuitDialogFragment extends DialogFragment {
             window.setAttributes(wlp);
         }
         unbinder = ButterKnife.bind(this, view);
-        int type = getArguments().getInt("type");
-
-
         return view;
     }
+
 
     @Override
     public void onDestroyView() {
@@ -93,16 +81,21 @@ public class QuitDialogFragment extends DialogFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.bt_save, R.id.bt_clear})
+
+    @OnClick({R.id.bt_cancel, R.id.bt_sure})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.bt_save:
-                listener.saveDate();
+            case R.id.bt_cancel:
                 dismiss();
                 break;
-            case R.id.bt_clear:
-                listener.clearDate();
+            case R.id.bt_sure:
                 dismiss();
+                int type = getArguments().getInt("type");
+                if (type == 1) {
+                    listener.sure(1);
+                } else {
+                    listener.sure(2);
+                }
                 break;
             default:
                 break;

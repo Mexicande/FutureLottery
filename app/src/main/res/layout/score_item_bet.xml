@@ -55,9 +55,9 @@
         <TextView
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
+            android:gravity="center"
             android:paddingBottom="5dp"
             android:textColor="@color/red_ball"
-            android:layout_gravity="center_vertical"
             android:id="@+id/tv_score"
             android:background="@color/white_bg"
             android:layout_width="match_parent"

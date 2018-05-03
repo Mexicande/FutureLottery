@@ -122,9 +122,14 @@ public interface Api {
 
        public static final String  FOOTBALL_LSIT  =   HOST+"football/list";
        public static final String  Payment  =   HOST+"football/confirmThePayment";
-        //赛事列表
-        public static final String  PayList  =   HOST+"football/league";
-
+        /**
+         * 赛事列表
+         */
+        public static final String PAY_LIST =   HOST+"football/league";
+        /**
+         * 赛事筛选
+         */
+        public static final String PAY_SCREEN =   HOST+"football/screen";
 
 
 

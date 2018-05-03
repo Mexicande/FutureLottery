@@ -32,9 +32,11 @@ import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
+import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
 import cn.com.futurelottery.inter.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
+import cn.com.futurelottery.presenter.CompetitionSelectType;
 import cn.com.futurelottery.presenter.FootCleanType;
 import cn.com.futurelottery.presenter.FootSureType;
 import cn.com.futurelottery.presenter.FooterOneEvent;
@@ -61,6 +63,8 @@ public class ConOnePassFragment extends BaseFragment {
     private List<FootBallList.DataBean> beans;
     private int nu=0;
     private boolean mTrue =false;
+    private View notDataView;
+
     public ConOnePassFragment() {
         // Required empty public constructor
     }
@@ -73,7 +77,18 @@ public class ConOnePassFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initView();
         getDate();
+        setListener();
+    }
+
+    private void initView() {
+        mWinAndLoseAdapter = new WinAndLoseAdapter(res);
+        conOneRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        conOneRecycler.setAdapter(mWinAndLoseAdapter);
+        ((SimpleItemAnimator)conOneRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
+        notDataView = getLayoutInflater().inflate(R.layout.empty_layout, (ViewGroup) conOneRecycler.getParent(), false);
+
     }
 
     private void setListener() {
@@ -113,6 +128,57 @@ public class ConOnePassFragment extends BaseFragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
+
+
+    /**
+     * 筛选
+     * @param league
+     */
+    private void setSelect(String league){
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("pass_rules",0);
+            jsonObject.put("play_rules",Api.FOOTBALL.FT006);
+            jsonObject.put("league",league);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiService.GET_SERVICE(Api.FootBall_Api.PAY_SCREEN, BaseApplication.getInstance(), jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                Gson gson=new Gson();
+                FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
+                beans = footBallList.getData();
+                res = new ArrayList<>();
+                for (int i = 0; i < beans.size(); i++) {
+                    FootBallList.DataBean dataBean = beans.get(i);
+                    dataBean.setSubItems(beans.get(i).getMatch());
+                    res.add(dataBean);
+                }
+                if(res.size()!=0){
+                    mWinAndLoseAdapter.getData().clear();
+                    mWinAndLoseAdapter.addData(res);
+                    mWinAndLoseAdapter.expandAll();
+                }
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+            }
+        });
+
+    }
+    @Subscribe
+    public void setSelect(CompetitionSelectType type){
+        if(type.getmSelect()==4){
+            setSelect(type.getmLeague());
+        }
+
+    }
+
     /**
      * 清除
      */
@@ -195,26 +261,21 @@ public class ConOnePassFragment extends BaseFragment {
                 Gson gson=new Gson();
                 FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
                 beans = footBallList.getData();
-                if(beans.size()==0){
-                    ToastUtils.showToast("暂无比赛");
-                }
                 res = new ArrayList<>();
                 for (int i = 0; i < beans.size(); i++) {
                     FootBallList.DataBean dataBean = beans.get(i);
                     dataBean.setSubItems(beans.get(i).getMatch());
                     res.add(dataBean);
                 }
-                mWinAndLoseAdapter = new WinAndLoseAdapter(res);
-                conOneRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                conOneRecycler.setAdapter(mWinAndLoseAdapter);
-                ((SimpleItemAnimator)conOneRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-                setListener();
-
+                mWinAndLoseAdapter.addData(res);
+                if(beans.size()==0){
+                    mWinAndLoseAdapter.setEmptyView(notDataView);
+                }
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-
+                ToastUtils.showToast(msg);
             }
         });
 
