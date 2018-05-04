@@ -1,4 +1,4 @@
-package cn.com.futurelottery.inter;
+package cn.com.futurelottery.listener;
 
 import org.json.JSONObject;
 

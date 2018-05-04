@@ -1,4 +1,4 @@
-package cn.com.futurelottery.inter;
+package cn.com.futurelottery.listener;
 
 /**
  * Created by tantan on 2018/4/17.

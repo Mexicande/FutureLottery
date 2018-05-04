@@ -29,7 +29,7 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.utils.CaptchaTimeCount;
 import cn.com.futurelottery.utils.CodeUtils;
 import cn.com.futurelottery.utils.CommonUtil;

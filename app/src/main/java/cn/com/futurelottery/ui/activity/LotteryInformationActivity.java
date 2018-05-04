@@ -24,7 +24,7 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.BallInformation;
 import cn.com.futurelottery.ui.adapter.BallInformationAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
@@ -102,7 +102,7 @@ public class LotteryInformationActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.bet_tv})
+    @OnClick({R.id.bet_tv,R.id.layout_top_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bet_tv:
@@ -114,6 +114,8 @@ public class LotteryInformationActivity extends BaseActivity {
                 break;
             case R.id.layout_top_back:
                 finish();
+                break;
+            default:
                 break;
         }
     }

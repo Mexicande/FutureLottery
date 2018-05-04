@@ -1,7 +1,6 @@
-package cn.com.futurelottery.inter;
+package cn.com.futurelottery.listener;
 
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.model.ScoreList;
 
 /**
  * Created by apple on 2018/4/13.

@@ -30,9 +30,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.inter.SizeDialogListener;
+import cn.com.futurelottery.listener.SizeDialogListener;
 import cn.com.futurelottery.model.FootBallList;
-import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.adapter.football.SizeDialogAdapter;
 
 

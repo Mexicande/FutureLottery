@@ -13,7 +13,10 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.model.Order;
 
 /**
- * Created by tantan on 2018/4/25.
+ *
+ * @author tantan
+ * @date 2018/4/25
+ * 订单
  */
 
 public class OrderAdapter extends BaseQuickAdapter<Order,BaseViewHolder>{

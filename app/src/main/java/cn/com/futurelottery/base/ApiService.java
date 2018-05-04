@@ -2,16 +2,17 @@ package cn.com.futurelottery.base;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.com.futurelottery.R;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
+import cn.com.futurelottery.utils.SPUtils;
 
 /**
  * Created by apple on 2018/4/13.
@@ -30,9 +31,11 @@ public class ApiService {
 
     private static void newExcuteJsonPost(String url, final Context context, JSONObject params, final OnRequestDataListener listener){
         final String netError = context.getString(R.string.net_error);
+        String token= (String) SPUtils.get(context,Contacts.TOKEN,"");
+
         OkGo.<String>post(url)
                 .tag(context)
-                .headers("token",BaseApplication.getInstance().token)
+                .headers(Contacts.TOKEN,token)
                 .upJson(params)
                 .execute(new StringCallback() {
                     @Override

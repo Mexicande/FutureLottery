@@ -55,19 +55,16 @@ public class BaseApplication extends Application {
 
     private void getLogin() {
 
-        if (SPUtils.contains(this,Contacts.TOKEN)){
             mobile= (String) SPUtils.get(this,Contacts.MOBILE,"");
             token= (String) SPUtils.get(this,Contacts.TOKEN,"");
             amount= (String) SPUtils.get(this,Contacts.AMOUNT,"");
             userName= (String) SPUtils.get(this,Contacts.NICK,"");
             integral= (String) SPUtils.get(this,Contacts.INTEGRAL,"");
-        }
         //initokgo
         HttpHeaders headers = new HttpHeaders();
         headers.put("channel", channel);
         headers.put("os", versionName);
         headers.put(Contacts.TOKEN, token);
-        //headers.put(Contacts.TOKEN, "WpdMOe5fnfEpyUHy1WAfyNxCgYGVypV9");
         OkGo.getInstance()
                 .init(this)
                 .setCacheMode(CacheMode.NO_CACHE)

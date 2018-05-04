@@ -20,7 +20,10 @@ import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.utils.AppUtils;
 
 /**
- * Created by apple on 2018/4/19.
+ *
+ * @author apple
+ * @date 2018/4/19
+ * 比分下单
  */
 
 public class ScoreDialogAdapter extends BaseQuickAdapter<ScoreList.DataBean.MatchBean.OddsBean,BaseViewHolder> {
@@ -33,7 +36,6 @@ public class ScoreDialogAdapter extends BaseQuickAdapter<ScoreList.DataBean.Matc
     @Override
     protected void convert(BaseViewHolder helper, ScoreList.DataBean.MatchBean.OddsBean item) {
         RelativeLayout view = helper.getView(R.id.layout);
-        String odds = item.getOdds();
         helper.setText(R.id.tv_odds,item.getOdds())
         .setText(R.id.tv_name,item.getName());
         if(item.getType()==1){
@@ -48,8 +50,8 @@ public class ScoreDialogAdapter extends BaseQuickAdapter<ScoreList.DataBean.Matc
 
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp instanceof FlexboxLayoutManager.LayoutParams) {
-            FlexboxLayoutManager.LayoutParams flexboxLp = (FlexboxLayoutManager.LayoutParams) lp;
-                flexboxLp.setFlexGrow(1f);
+            FlexboxLayoutManager.LayoutParams fireboxLp = (FlexboxLayoutManager.LayoutParams) lp;
+                fireboxLp.setFlexGrow(1f);
         }
 
     }

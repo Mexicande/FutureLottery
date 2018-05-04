@@ -28,7 +28,7 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallOrder;
 import cn.com.futurelottery.ui.adapter.FootBallOrderAdapter;
 import cn.com.futurelottery.utils.ToastUtils;

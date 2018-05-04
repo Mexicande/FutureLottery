@@ -26,7 +26,7 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.ui.activity.BindPhoneActivity;
 import cn.com.futurelottery.ui.activity.MainActivity;
 import cn.com.futurelottery.utils.ActivityUtils;

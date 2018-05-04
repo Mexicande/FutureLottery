@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_height="40dp">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:paddingRight="10dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_league"
+                android:layout_weight="1"
+                android:text="中北美冠"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:textColor="@color/color_333"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:id="@+id/date"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:textColor="@color/color_333"
+                android:text="周二 024"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/team_home"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            android:text="墨美洲"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:paddingTop="5dp"
+                android:id="@+id/tv_result"
+                android:layout_weight="1"
+                android:text="1:1"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:textColor="@color/red_ball"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:paddingBottom="5dp"
+                android:id="@+id/tv_firsthalf_result"
+                android:textSize="10sp"
+                android:gravity="center"
+                android:textColor="@color/color_666"
+                android:text="半0:0"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <TextView
+            android:paddingLeft="10dp"
+            android:id="@+id/team_away"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="墨美洲"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <include layout="@layout/run_foot_form"/>
+</LinearLayout>

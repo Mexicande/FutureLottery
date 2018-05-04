@@ -78,11 +78,11 @@ public interface Api {
         /**
          * 验证码获取
          */
-        String GET_CODE               =         HOST+"sms/getcode";
+        String GET_CODE                  =         HOST+"sms/getcode";
         /**
          * 登录
          */
-        String LOGIN               =            HOST+"login/login";
+        String LOGIN                    =            HOST+"login/login";
         /**
          * 获取余额
          */
@@ -99,7 +99,7 @@ public interface Api {
     interface  FOOTBALL{
 
         String  PASS_RULE                   =           "pass_rules";
-        String  PLAY_RULE                =               "play_rules";
+        String  PLAY_RULE                    =               "play_rules";
 
         //胜平负
         String  FT001           =           "FT001";
@@ -112,9 +112,9 @@ public interface Api {
         //半全场
         String  FT004           =           "FT004";
         //单关
-        String pass_rules_o        =            "0";
+        String PASS_RULES_O =            "0";
         //过关
-        String pass_rules_1        =            "1";
+        String PASS_RULES_1 =            "1";
 
     }
 
@@ -151,9 +151,15 @@ public interface Api {
     //开奖
     interface Open{
         //总的开奖信息
+
         String open   =      HOST+"open/open";
+
         //二级页面
+
         String openssq   =      HOST+"open/openssq";
+
+        String FOOT_RUN   =     HOST+"football/result";
+
     }
     //订单
     interface Order{

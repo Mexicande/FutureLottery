@@ -29,7 +29,7 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.Contacts;
-import cn.com.futurelottery.inter.OnRequestDataListener;
+import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.utils.BankUtils;
 import cn.com.futurelottery.utils.CodeUtils;
 import cn.com.futurelottery.utils.CommonUtil;
@@ -187,7 +187,7 @@ public class PersonalInformationActivity extends BaseActivity {
         }
         hud = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("提交中...")
+                .setLabel(getString(R.string.progress_str))
                 .setDimAmount(0.5f)
                 .show();
 

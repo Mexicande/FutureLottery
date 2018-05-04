@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,21 +32,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
-import cn.com.futurelottery.inter.FooterListener;
 import cn.com.futurelottery.presenter.FootCleanType;
 import cn.com.futurelottery.presenter.FootSureType;
-import cn.com.futurelottery.presenter.FooterAllEvent;
 import cn.com.futurelottery.presenter.FooterOneEvent;
 import cn.com.futurelottery.ui.adapter.MyViewPagerAdapter;
 import cn.com.futurelottery.ui.adapter.NoTouchViewPager;
-import cn.com.futurelottery.ui.fragment.football.winandlose.AllPassFragment;
-import cn.com.futurelottery.ui.fragment.football.winandlose.OnePassFragment;
 
 
 /**
