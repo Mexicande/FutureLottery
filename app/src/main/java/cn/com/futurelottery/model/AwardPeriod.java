@@ -18,6 +18,9 @@ public class AwardPeriod implements Serializable {
 
     private String winning;
     private String period;
+    private String memo;
+    private String commissioning;
+    //type0双色球，1大乐透，2排5,3排3,4表示3D
     private int type;
 
     public int getType() {
@@ -42,5 +45,21 @@ public class AwardPeriod implements Serializable {
 
     public void setPeriod(String period) {
         this.period = period;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public String getCommissioning() {
+        return commissioning;
+    }
+
+    public void setCommissioning(String commissioning) {
+        this.commissioning = commissioning;
     }
 }

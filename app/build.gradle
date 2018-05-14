@@ -14,6 +14,12 @@ android {
 
     signingConfigs {
         debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            storeFile file('../keystore/keystore')
+            keyAlias 'lottery'
+            keyPassword '000000'
+            storePassword '000000'
         }
         release {
             v1SigningEnabled true
@@ -25,11 +31,11 @@ android {
         }
     }
     buildTypes {
-//        debug {
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            //签名
-//            signingConfig signingConfigs.release
-//        }
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //签名
+            signingConfig signingConfigs.release
+        }
         release {
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"

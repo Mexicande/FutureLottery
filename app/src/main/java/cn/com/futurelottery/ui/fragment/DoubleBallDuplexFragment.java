@@ -194,9 +194,9 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         recyclerView.setAdapter(mAwardPeriodAdapter);
 
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(buleGv);
+        ViewSetHinghUtil.resetGridViewHight(danhaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(buleGv,7);
 
         //底部显示清空
         bottomResultChooseTv.setVisibility(View.GONE);
@@ -469,9 +469,9 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         tuoBallAdapter.updateData(isShow, chooseTuoBalls, omitsRed);
         blueBallAdapter.updateData(isShow, chooseBlueBalls, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(buleGv);
+        ViewSetHinghUtil.resetGridViewHight(danhaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(buleGv,7);
     }
 
     //显示遗漏
@@ -483,9 +483,9 @@ public class DoubleBallDuplexFragment extends BaseFragment {
         tuoBallAdapter.updateData(isShow, chooseTuoBalls, omitsRed);
         blueBallAdapter.updateData(isShow, chooseBlueBalls, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(buleGv);
+        ViewSetHinghUtil.resetGridViewHight(danhaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(buleGv,7);
     }
 
     @Override

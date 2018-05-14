@@ -24,28 +24,21 @@ public class FootChooseScoreAdapter extends BaseQuickAdapter<ScoreList.DataBean.
 
         List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = item.getOdds();
 
-        List<ScoreList.DataBean.MatchBean.OddsBean> oddsHome = odds.get(0);
-        List<ScoreList.DataBean.MatchBean.OddsBean> oddsVs = odds.get(1);
-        List<ScoreList.DataBean.MatchBean.OddsBean> oddsAway = odds.get(2);
-
         StringBuilder sb=new StringBuilder();
-        for(ScoreList.DataBean.MatchBean.OddsBean s:oddsHome){
-            if(s.getType()==1){
-                sb.append(s.getName()).append(" ");
+
+        if (null!=odds&&odds.size()>0){
+            for (List<ScoreList.DataBean.MatchBean.OddsBean>ods:odds){
+                if (null!=ods&&ods.size()>0){
+                    for (ScoreList.DataBean.MatchBean.OddsBean od:ods){
+                        if(od.getType()==1){
+                            sb.append(od.getName()).append(" ");
+                        }
+                    }
+                }
             }
         }
 
-        for(ScoreList.DataBean.MatchBean.OddsBean s:oddsVs){
-            if(s.getType()==1){
-                sb.append(" ").append(s.getName());
-            }
-        }
 
-        for(ScoreList.DataBean.MatchBean.OddsBean s:oddsAway){
-            if(s.getType()==1){
-                sb.append(" ").append(s.getName());
-            }
-        }
         helper.setText(R.id.tv_home,item.getHomeTeam())
                 .setText(R.id.tv_away,item.getAwayTeam())
                 .setText(R.id.tv_score,sb.toString())

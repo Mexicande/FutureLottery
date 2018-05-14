@@ -67,6 +67,8 @@
     <string name="update_app_model_progress">正在下载 %1$d%2$s</string>
     <string name="update_app_model_success">下载成功(点击安装)</string>
     <string name="update_app_model_error">下载失败(点击用浏览器下载)</string>
+
+
     <string name="lose">负</string>
     <string name="flat">平</string>
     <string name="win">胜</string>
@@ -74,4 +76,9 @@
     <string name="size_goals">总进球</string>
     <string name="checkout_success">下单成功</string>
     <string name="progress_str">提交中...</string>
+
+    <!--排三组三复式提示-->
+    <string name="line3_three_compound">玩法提示：\n所选号码包括开奖号码中的2位（顺序不限），且开奖号码有任意两位相同，即中奖346元。</string>
+    <!--排三组六提示-->
+    <string name="line3_six">玩法提示：\n所选号码包括开奖号码相同（顺序不限），且开奖号码中3个号码各不相同，即中奖173元。</string>
 </resources>

@@ -26,6 +26,9 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.BallInformation;
+import cn.com.futurelottery.ui.activity.arrange.Line3Activity;
+import cn.com.futurelottery.ui.activity.arrange.Line5Activity;
+import cn.com.futurelottery.ui.activity.arrange.Lottery3DActivity;
 import cn.com.futurelottery.ui.adapter.BallInformationAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -42,9 +45,10 @@ public class LotteryInformationActivity extends BaseActivity {
     @BindView(R.id.bet_tv)
     TextView betTv;
     //0双色球1大乐透
-    private int type;
+    private String type;
     private ArrayList<BallInformation> ballformations=new ArrayList<>();
     private BallInformationAdapter adapter;
+    private String name;
 
     @Override
     public int getLayoutResource() {
@@ -66,20 +70,32 @@ public class LotteryInformationActivity extends BaseActivity {
 
     private void getData() {
         Intent intent = getIntent();
-        type=intent.getIntExtra("type",0);
-        if (type==0){
-            tvTitle.setText("双色球");
-            betTv.setText("投注双色球");
-        }else if (type==1){
-            betTv.setText("投注大乐透");
-            tvTitle.setText("大乐透");
+        type=intent.getStringExtra("type");
+        switch (type) {
+            case "ssq":
+                name="双色球";
+                break;
+            case "dlt":
+                name="大乐透";
+                break;
+            case "p3":
+                name="排列3";
+                break;
+            case "p5":
+                name="排列5";
+                break;
+            case "3d":
+                name="3D";
+                break;
         }
+        tvTitle.setText(name);
+        betTv.setText("投注"+name);
         getInformation();
     }
 
     private void getInformation() {
         Map<String, String> map = new HashMap<>();
-        map.put("type",type==0?"ssq":"dlt");
+        map.put("type",type);
 
         JSONObject jsonObject = new JSONObject(map);
         ApiService.GET_SERVICE(Api.Open.openssq, this, jsonObject, new OnRequestDataListener() {
@@ -106,10 +122,22 @@ public class LotteryInformationActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bet_tv:
-                if (type==0){
-                    ActivityUtils.startActivity(DoubleBallActivity.class);
-                }else if (type==1){
-                    ActivityUtils.startActivity(SuperLottoActivity.class);
+                switch (type) {
+                    case "ssq":
+                        ActivityUtils.startActivity(DoubleBallActivity.class);
+                        break;
+                    case "dlt":
+                        ActivityUtils.startActivity(SuperLottoActivity.class);
+                        break;
+                    case "p3":
+                        ActivityUtils.startActivity(Line3Activity.class);
+                        break;
+                    case "p5":
+                        ActivityUtils.startActivity(Line5Activity.class);
+                        break;
+                    case "3d":
+                        ActivityUtils.startActivity(Lottery3DActivity.class);
+                        break;
                 }
                 break;
             case R.id.layout_top_back:

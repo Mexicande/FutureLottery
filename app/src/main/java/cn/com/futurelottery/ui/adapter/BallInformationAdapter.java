@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.adapter;
 
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -29,6 +30,8 @@ public class BallInformationAdapter extends BaseQuickAdapter<BallInformation,Bas
     protected void convert(final BaseViewHolder helper, final BallInformation item) {
         helper.setText(R.id.time_tv,"第"+item.getPhase()+"期 "+item.getEnd_time()+" ("+item.getWeek()+")");
 
+        String[] balls = item.getBonuscode().split(",");
+
         TextView ball1 = (TextView) helper.getView(R.id.ball_tv1);
         TextView ball2 = (TextView) helper.getView(R.id.ball_tv2);
         TextView ball3 = (TextView) helper.getView(R.id.ball_tv3);
@@ -48,14 +51,32 @@ public class BallInformationAdapter extends BaseQuickAdapter<BallInformation,Bas
             ball4.setTextColor(mContext.getResources().getColor(R.color.white));
             ball5.setBackgroundResource(R.drawable.lottery_fragment_redball);
             ball5.setTextColor(mContext.getResources().getColor(R.color.white));
-            if ("ssq".equals(item.getLotid())){
-                ball6.setBackgroundResource(R.drawable.lottery_fragment_redball);
-            }else {
-                ball6.setBackgroundResource(R.drawable.lottery_fragment_blueball);
-            }
             ball6.setTextColor(mContext.getResources().getColor(R.color.white));
             ball7.setBackgroundResource(R.drawable.lottery_fragment_blueball);
             ball7.setTextColor(mContext.getResources().getColor(R.color.white));
+            if ("ssq".equals(item.getLotid())){
+                ball6.setBackgroundResource(R.drawable.lottery_fragment_redball);
+                ball4.setText(balls[3]);
+                ball5.setText(balls[4]);
+                ball6.setText(balls[5]);
+                ball7.setText(balls[6]);
+            }else if ("dlt".equals(item.getLotid())){
+                ball6.setBackgroundResource(R.drawable.lottery_fragment_blueball);
+                ball4.setText(balls[3]);
+                ball5.setText(balls[4]);
+                ball6.setText(balls[5]);
+                ball7.setText(balls[6]);
+            }else if ("p3".equals(item.getLotid())||"3d".equals(item.getLotid())){
+                ball4.setVisibility(View.GONE);
+                ball5.setVisibility(View.GONE);
+                ball6.setVisibility(View.GONE);
+                ball7.setVisibility(View.GONE);
+            }else if ("p5".equals(item.getLotid())){
+                ball4.setText(balls[3]);
+                ball5.setText(balls[4]);
+                ball6.setVisibility(View.GONE);
+                ball7.setVisibility(View.GONE);
+            }
         }else {
             ball1.setBackground(null);
             ball1.setTextColor(mContext.getResources().getColor(R.color.red_ball));
@@ -68,21 +89,34 @@ public class BallInformationAdapter extends BaseQuickAdapter<BallInformation,Bas
             ball5.setBackground(null);
             ball5.setTextColor(mContext.getResources().getColor(R.color.red_ball));
             ball6.setBackground(null);
-            if ("ssq".equals(item.getLotid())){
-                ball6.setTextColor(mContext.getResources().getColor(R.color.red_ball));
-            }else {
-                ball6.setTextColor(mContext.getResources().getColor(R.color.blue_ball));
-            }
             ball7.setBackground(null);;
             ball7.setTextColor(mContext.getResources().getColor(R.color.blue_ball));
+            if ("ssq".equals(item.getLotid())){
+                ball6.setTextColor(mContext.getResources().getColor(R.color.red_ball));
+                ball4.setText(balls[3]);
+                ball5.setText(balls[4]);
+                ball6.setText(balls[5]);
+                ball7.setText(balls[6]);
+            }else if ("dlt".equals(item.getLotid())){
+                ball6.setTextColor(mContext.getResources().getColor(R.color.blue_ball));
+                ball4.setText(balls[3]);
+                ball5.setText(balls[4]);
+                ball6.setText(balls[5]);
+                ball7.setText(balls[6]);
+            }else if ("p3".equals(item.getLotid())||"3d".equals(item.getLotid())){
+                ball4.setVisibility(View.GONE);
+                ball5.setVisibility(View.GONE);
+                ball6.setVisibility(View.GONE);
+                ball7.setVisibility(View.GONE);
+            }else if ("p5".equals(item.getLotid())){
+                ball4.setText(balls[3]);
+                ball5.setText(balls[4]);
+                ball6.setVisibility(View.GONE);
+                ball7.setVisibility(View.GONE);
+            }
         }
-        String[] balls = item.getBonuscode().split(",");
         ball1.setText(balls[0]);
         ball2.setText(balls[1]);
         ball3.setText(balls[2]);
-        ball4.setText(balls[3]);
-        ball5.setText(balls[4]);
-        ball6.setText(balls[5]);
-        ball7.setText(balls[6]);
     }
 }

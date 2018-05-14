@@ -432,8 +432,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mAwardPeriodAdapter);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
+        ViewSetHinghUtil.resetGridViewHight(doubleBallRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(doubleBallBlueGv,7);
 
         //底部显示机选
         bottomResultChooseTv.setVisibility(View.VISIBLE);
@@ -558,8 +558,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
         redBallAdapter.updateData(isShow, chooseRedBall, omitsRed);
         blueBallAdapter.updateData(isShow, chooseblueBall, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
+        ViewSetHinghUtil.resetGridViewHight(doubleBallRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(doubleBallBlueGv,7);
     }
 
     //显示遗漏
@@ -570,8 +570,8 @@ public class DoubleBallCommonFragment extends BaseFragment {
         redBallAdapter.updateData(isShow, chooseRedBall, omitsRed);
         blueBallAdapter.updateData(isShow, chooseblueBall, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(doubleBallRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(doubleBallBlueGv);
+        ViewSetHinghUtil.resetGridViewHight(doubleBallRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(doubleBallBlueGv,7);
     }
 
 

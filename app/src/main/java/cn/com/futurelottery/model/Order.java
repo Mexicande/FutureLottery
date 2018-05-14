@@ -9,37 +9,27 @@ import java.io.Serializable;
 
 public class Order implements Serializable{
 
-
     /**
-     * id : 1
-     * lotid : ssq
-     * created_at : 04-25
-     * internal_id : 2
-     * pay_money : 2
-     * is_chasing : 0
-     * openmatch : 0
-     * name : 双色球
-     * winning_money :
+     * lotid : FT005
+     * created_at : 05-11
+     * order_id : 152602509075355673
+     * chasing_id :
+     * openmatch : 5
+     * pay_money_total : 9900
+     * name : 竞彩足球混合串关玩法
+     * status : 2
+     * winning_money : 0
      */
 
-    private String id;
     private String lotid;
     private String created_at;
-    private String internal_id;
-    private String pay_money;
-    private String is_chasing;
+    private String order_id;
+    private String chasing_id;
     private String openmatch;
+    private String pay_money_total;
     private String name;
-    private String winning_money;
     private String status;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private int winning_money;
 
     public String getLotid() {
         return lotid;
@@ -57,28 +47,20 @@ public class Order implements Serializable{
         this.created_at = created_at;
     }
 
-    public String getInternal_id() {
-        return internal_id;
+    public String getOrder_id() {
+        return order_id;
     }
 
-    public void setInternal_id(String internal_id) {
-        this.internal_id = internal_id;
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
     }
 
-    public String getPay_money() {
-        return pay_money;
+    public String getChasing_id() {
+        return chasing_id;
     }
 
-    public void setPay_money(String pay_money) {
-        this.pay_money = pay_money;
-    }
-
-    public String getIs_chasing() {
-        return is_chasing;
-    }
-
-    public void setIs_chasing(String is_chasing) {
-        this.is_chasing = is_chasing;
+    public void setChasing_id(String chasing_id) {
+        this.chasing_id = chasing_id;
     }
 
     public String getOpenmatch() {
@@ -89,20 +71,20 @@ public class Order implements Serializable{
         this.openmatch = openmatch;
     }
 
+    public String getPay_money_total() {
+        return pay_money_total;
+    }
+
+    public void setPay_money_total(String pay_money_total) {
+        this.pay_money_total = pay_money_total;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getWinning_money() {
-        return winning_money;
-    }
-
-    public void setWinning_money(String winning_money) {
-        this.winning_money = winning_money;
     }
 
     public String getStatus() {
@@ -113,20 +95,26 @@ public class Order implements Serializable{
         this.status = status;
     }
 
+    public int getWinning_money() {
+        return winning_money;
+    }
+
+    public void setWinning_money(int winning_money) {
+        this.winning_money = winning_money;
+    }
 
     @Override
     public String toString() {
         return "Order{" +
-                "id='" + id + '\'' +
-                ", lotid='" + lotid + '\'' +
+                "lotid='" + lotid + '\'' +
                 ", created_at='" + created_at + '\'' +
-                ", internal_id='" + internal_id + '\'' +
-                ", pay_money='" + pay_money + '\'' +
-                ", is_chasing='" + is_chasing + '\'' +
+                ", order_id='" + order_id + '\'' +
+                ", chasing_id='" + chasing_id + '\'' +
                 ", openmatch='" + openmatch + '\'' +
+                ", pay_money_total='" + pay_money_total + '\'' +
                 ", name='" + name + '\'' +
-                ", winning_money='" + winning_money + '\'' +
-                ", status='" + status + '\'' +
+                ", status=" + status +
+                ", winning_money=" + winning_money +
                 '}';
     }
 }

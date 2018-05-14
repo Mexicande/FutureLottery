@@ -129,4 +129,35 @@ public class Calculator {
         return number;
     }
 
+    /**
+     * 排三组三复式算法
+     *
+     */
+
+    public static long arrange3ThreeCompound(int count) {
+        long number;
+        if (count<1){
+            number=0;
+        }else {
+            number=count*(count-1);
+
+        }
+        return number;
+    }
+    /**
+     * 排三组六算法
+     *
+     */
+
+    public static long arrange3Six(int count) {
+        long number;
+        if (count<2){
+            number=0;
+        }else {
+            number=count*(count-1)*(count-2)/6;
+
+        }
+        return number;
+    }
+
 }

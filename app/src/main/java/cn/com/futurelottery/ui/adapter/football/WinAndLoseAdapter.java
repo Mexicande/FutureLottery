@@ -66,7 +66,7 @@ public class WinAndLoseAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         .setText(R.id.tv_week,matchBean.getWeek()+matchBean.getTeamid())
                         .setText(R.id.tv_endTime,matchBean.getEndtime()+"截止")
                         .setText(R.id.home_odds,matchBean.getHomeTeam())
-                        .setText(R.id.tv_homedescribe,"客胜 "+odds.get(0).getOdds())
+                        .setText(R.id.tv_homedescribe,"主胜 "+odds.get(0).getOdds())
                         .setText(R.id.vs_describe,"平 "+odds.get(1).getOdds())
                         .setText(R.id.away_odd,matchBean.getAwayTeam())
                         .setText(R.id.away_describe,"客胜 "+odds.get(2).getOdds())

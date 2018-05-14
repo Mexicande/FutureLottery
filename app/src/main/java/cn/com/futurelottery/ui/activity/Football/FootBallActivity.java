@@ -35,6 +35,7 @@ import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.PlayList;
 import cn.com.futurelottery.presenter.CompetitionSelectType;
+import cn.com.futurelottery.ui.fragment.football.MixtureFragment;
 import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
 import cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
@@ -83,6 +84,7 @@ public class FootBallActivity extends BaseActivity{
     private SizeFragment mSizeFragment;
     private HalfFragment mHalfFragment;
     private ScoreFragment mScoreFragment;
+    private MixtureFragment mMixtureFragment;
 
     @Override
     public int getLayoutResource() {
@@ -122,9 +124,9 @@ public class FootBallActivity extends BaseActivity{
                     case 1:
                         int currentConWinAnd = mConWinAndFragment.getCurrentItem();
                         if(currentConWinAnd==0){
-                            getSelectPlay(Api.FOOTBALL.FT001,1);
+                            getSelectPlay(Api.FOOTBALL.FT006,1);
                         }else {
-                            getSelectPlay(Api.FOOTBALL.FT001,0);
+                            getSelectPlay(Api.FOOTBALL.FT006,0);
                         }
                         break;
                     case 2:
@@ -133,19 +135,22 @@ public class FootBallActivity extends BaseActivity{
                     case 3:
                         int currentSize = mSizeFragment.getCurrentItem();
                         if(currentSize==0){
-                            getSelectPlay(Api.FOOTBALL.FT001,1);
+                            getSelectPlay(Api.FOOTBALL.FT003,1);
                         }else {
-                            getSelectPlay(Api.FOOTBALL.FT001,0);
+                            getSelectPlay(Api.FOOTBALL.FT003,0);
                         }
                         break;
                     case 4:
                         int currentHalf = mHalfFragment.getCurrentItem();
                         if(currentHalf==0){
-                            getSelectPlay(Api.FOOTBALL.FT001,1);
+                            getSelectPlay(Api.FOOTBALL.FT004,1);
                         }else {
-                            getSelectPlay(Api.FOOTBALL.FT001,0);
+                            getSelectPlay(Api.FOOTBALL.FT004,0);
 
                         }
+                        break;
+                    case 5:
+                        getSelectPlay(Api.FOOTBALL.FT005,1);
                         break;
                     default:
                         break;
@@ -254,6 +259,9 @@ public class FootBallActivity extends BaseActivity{
                                 EventBus.getDefault().post(new CompetitionSelectType(10,substring));
                             }
                             break;
+                        case 5:
+                            EventBus.getDefault().post(new CompetitionSelectType(11,substring));
+                            break;
                         default:
                             break;
                     }
@@ -265,6 +273,7 @@ public class FootBallActivity extends BaseActivity{
 
 
     private void setListener() {
+        //标题
         mTRMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -289,6 +298,18 @@ public class FootBallActivity extends BaseActivity{
                 flag = !flag;
                 switchPages(position);
 
+            }
+        });
+        //右上角菜单
+        mtopRightMenu.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
+            @Override
+            public void onTopRightMenuItemClick(int position) {
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                }
             }
         });
     }
@@ -421,11 +442,13 @@ public class FootBallActivity extends BaseActivity{
          mSizeFragment=new SizeFragment();
          mHalfFragment=new HalfFragment();
         mScoreFragment=new ScoreFragment();
+        mMixtureFragment=new MixtureFragment();
         mFragmentList.add(mWinAndLoseFragment);
         mFragmentList.add(mConWinAndFragment);
         mFragmentList.add(mScoreFragment);
         mFragmentList.add(mSizeFragment);
         mFragmentList.add(mHalfFragment);
+        mFragmentList.add(mMixtureFragment);
         switchPages(0);
 
     }
@@ -446,10 +469,10 @@ public class FootBallActivity extends BaseActivity{
         mlist.add(new MenuItem(0, "比分"));
         mlist.add(new MenuItem(0, "总进球"));
         mlist.add(new MenuItem(0, "半全场"));
+        mlist.add(new MenuItem(0, "混合投注"));
 
 
-        list.add(new MenuItem(0, "多期机选"));
-        list.add(new MenuItem(0, "显示遗漏"));
+        list.add(new MenuItem(0, "开奖信息"));
         list.add(new MenuItem(0, "玩法说明"));
         //右上菜单
         mtopRightMenu = new TopRightMenu(this);
@@ -461,15 +484,6 @@ public class FootBallActivity extends BaseActivity{
                 .setAnimationStyle(R.style.TopRightMenu_Anim)
                 .setShowBackground(true)
                 .setArrowPosition(CommonUtil.dip2px(55f));
-
-        mtopRightMenu.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
-            @Override
-            public void onTopRightMenuItemClick(int position) {
-
-            }
-        });
-
-
     }
 
     @OnClick({R.id.layout_top_back, R.id.iv_screen, R.id.iv_menu, R.id.layout_title,

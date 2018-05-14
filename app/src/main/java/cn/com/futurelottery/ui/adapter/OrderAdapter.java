@@ -1,6 +1,7 @@
 package cn.com.futurelottery.ui.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -36,26 +37,24 @@ public class OrderAdapter extends BaseQuickAdapter<Order,BaseViewHolder>{
         helper.setText(R.id.month_tv,time[0]+"月");
         helper.setText(R.id.day_tv,time[1]);
         helper.setText(R.id.name_tv,item.getName());
-        helper.setText(R.id.money_tv,item.getPay_money()+"元  "+("0".equals(item.getIs_chasing())?"普通订单":"追号订单"));
+        helper.setText(R.id.money_tv,item.getPay_money_total()+"元  "+(TextUtils.isEmpty(item.getChasing_id())?"普通订单":"追号订单"));
         TextView tv=helper.getView(R.id.lottery_tv);
         if ("2".equals(item.getStatus())){
             tv.setTextColor(mContext.getResources().getColor(R.color.color_33));
             tv.setText("正在委托中");
+        }else if ("3".equals(item.getStatus())){
+            tv.setTextColor(mContext.getResources().getColor(R.color.color_33));
+            tv.setText("委托失败");
         }else {
-            if ("1".equals(item.getIs_chasing())){
+            if ("0".equals(item.getOpenmatch())){
                 tv.setTextColor(mContext.getResources().getColor(R.color.color_33));
-                tv.setText("追号进行时");
-            }else {
-                if ("0".equals(item.getOpenmatch())){
-                    tv.setTextColor(mContext.getResources().getColor(R.color.color_33));
-                    tv.setText("等待开奖");
-                }else if ("2".equals(item.getOpenmatch())){
-                    tv.setTextColor(mContext.getResources().getColor(R.color.color_33));
-                    tv.setText("未中奖");
-                }else if ("3".equals(item.getOpenmatch())){
-                    tv.setTextColor(mContext.getResources().getColor(R.color.red_ball));
-                    tv.setText("中奖"+item.getWinning_money());
-                }
+                tv.setText("等待开奖");
+            }else if ("2".equals(item.getOpenmatch())){
+                tv.setTextColor(mContext.getResources().getColor(R.color.color_33));
+                tv.setText("未中奖");
+            }else if ("3".equals(item.getOpenmatch())){
+                tv.setTextColor(mContext.getResources().getColor(R.color.red_ball));
+                tv.setText("中奖"+item.getWinning_money());
             }
         }
     }

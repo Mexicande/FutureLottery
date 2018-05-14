@@ -57,6 +57,9 @@ import cn.com.futurelottery.view.popup.VerticalGravity;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
+/**
+ * 大乐透普通选
+ */
 public class SuperLottoCommonFragment extends BaseFragment {
 
 
@@ -446,8 +449,8 @@ public class SuperLottoCommonFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mAwardPeriodAdapter);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(redGv);
-        ViewSetHinghUtil.resetGridViewHight7(blueGv);
+        ViewSetHinghUtil.resetGridViewHight(redGv,7);
+        ViewSetHinghUtil.resetGridViewHight(blueGv,7);
 
         //底部显示机选
         bottomResultChooseTv.setVisibility(View.VISIBLE);
@@ -569,8 +572,8 @@ public class SuperLottoCommonFragment extends BaseFragment {
         redBallAdapter.updateData(isShow, chooseRedBall, omitsRed);
         blueBallAdapter.updateData(isShow, chooseblueBall, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(redGv);
-        ViewSetHinghUtil.resetGridViewHight7(blueGv);
+        ViewSetHinghUtil.resetGridViewHight(redGv,7);
+        ViewSetHinghUtil.resetGridViewHight(blueGv,7);
     }
 
     //显示遗漏
@@ -581,8 +584,8 @@ public class SuperLottoCommonFragment extends BaseFragment {
         redBallAdapter.updateData(isShow, chooseRedBall, omitsRed);
         blueBallAdapter.updateData(isShow, chooseblueBall, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(redGv);
-        ViewSetHinghUtil.resetGridViewHight7(blueGv);
+        ViewSetHinghUtil.resetGridViewHight(redGv,7);
+        ViewSetHinghUtil.resetGridViewHight(blueGv,7);
     }
 
 

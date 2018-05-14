@@ -102,6 +102,7 @@ public class MainActivity extends BaseActivity {
         list.add(new HomeFragment());
         list.add(new LotteryFragment());
         list.add(new CenterFragment());
+        appItem.setOffscreenPageLimit(list.size());
         appItem.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(), list));
         navigationController.setupWithViewPager(appItem);
     }

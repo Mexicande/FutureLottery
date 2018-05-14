@@ -47,6 +47,9 @@ import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.utils.ViewSetHinghUtil;
 
+/**
+ * 大乐透胆拖
+ */
 public class SuperLottoDuplexFragment extends BaseFragment {
 
 
@@ -194,10 +197,10 @@ public class SuperLottoDuplexFragment extends BaseFragment {
         recyclerView.setAdapter(mAwardPeriodAdapter);
 
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(danhaoBuleGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoBuleGv);
+        ViewSetHinghUtil.resetGridViewHight(danhaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(danhaoBuleGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoBuleGv,7);
 
         //底部显示清空
         bottomResultChooseTv.setVisibility(View.GONE);
@@ -539,10 +542,10 @@ public class SuperLottoDuplexFragment extends BaseFragment {
         blueDanBallAdapter.updateData(isShow, chooseBlueDanBalls, omitsBlue);
         blueTuoBallAdapter.updateData(isShow, chooseBlueTuoBalls, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(danhaoBuleGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoBuleGv);
+        ViewSetHinghUtil.resetGridViewHight(danhaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(danhaoBuleGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoBuleGv,7);
     }
 
     //显示遗漏
@@ -555,10 +558,10 @@ public class SuperLottoDuplexFragment extends BaseFragment {
         blueDanBallAdapter.updateData(isShow, chooseBlueDanBalls, omitsBlue);
         blueTuoBallAdapter.updateData(isShow, chooseBlueTuoBalls, omitsBlue);
         //重新设置高度
-        ViewSetHinghUtil.resetGridViewHight7(danhaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoRedGv);
-        ViewSetHinghUtil.resetGridViewHight7(danhaoBuleGv);
-        ViewSetHinghUtil.resetGridViewHight7(tuohaoBuleGv);
+        ViewSetHinghUtil.resetGridViewHight(danhaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoRedGv,7);
+        ViewSetHinghUtil.resetGridViewHight(danhaoBuleGv,7);
+        ViewSetHinghUtil.resetGridViewHight(tuohaoBuleGv,7);
     }
 
     @Override

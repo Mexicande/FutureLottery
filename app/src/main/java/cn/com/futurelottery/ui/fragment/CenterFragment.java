@@ -26,7 +26,7 @@ import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.pay.wechat.Share;
 import cn.com.futurelottery.ui.activity.LoginActivity;
-import cn.com.futurelottery.ui.activity.OrderActivity;
+import cn.com.futurelottery.ui.activity.order.OrderActivity;
 import cn.com.futurelottery.ui.activity.PersonalInformationActivity;
 import cn.com.futurelottery.ui.activity.RechargeActivity;
 import cn.com.futurelottery.ui.activity.SetActivity;
@@ -96,6 +96,9 @@ public class CenterFragment extends BaseFragment {
     }
 
     private void setLoginView() {
+        if (centerFragmentIv==null){
+            return;
+        }
         centerFragmentIv.setImageResource(R.mipmap.me_fragment_head2);
         centerFragmentNumberTv.setText(BaseApplication.getInstance().userName);
         centerFragmentMoneyTv1.setText(BaseApplication.getInstance().amount);
@@ -295,5 +298,15 @@ public class CenterFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         getContext().unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+            if (!TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                getBalance();
+            }
+        }
     }
 }

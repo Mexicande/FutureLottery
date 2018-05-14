@@ -68,6 +68,32 @@ public   interface    Contacts {
         String  DIL                  =                 "dlt";
         //竞彩足球
         String  FTB                  =                 "ftb";
+        //排列3
+        String  P3name                  =                 "排列3";
+        String  P3                  =                 "p3";
+        //排列5
+        String  P5name                  =                 "排列5";
+        String  P5                  =                 "p5";
+        //福彩3d
+        String  D3name                  =                 "3D";
+        String  D3                  =                 "3d";
+    }
+
+    /**
+     * 排3、5
+     * 3d
+     */
+    interface Arrange{
+        //个
+        String  individual                  =                 "individual";
+        //十
+        String  ten                  =                 "ten";
+        //百
+        String  hundred                  =                 "hundred";
+        //千
+        String  thousand                  =                 "thousand";
+        //万
+        String  absolutely                  =                 "absolutely";
     }
 
 
@@ -75,6 +101,12 @@ public   interface    Contacts {
     String  doubleBallSave                 =              "doubleBalls";
     //大乐透列表缓存
     String  superLottoSave                 =              "superLottos";
+    //排列5列表缓存
+    String  line5                 =              "line5";
+    //排列3列表缓存
+    String  line3                 =              "line3";
+    //3D列表缓存
+    String  D3                 =              "3D";
 
 
     // 双色球下单到选球的请求码

@@ -154,7 +154,11 @@ public class DoubleBallActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.layoutGo:
-                slideUp.hide();
+                if (slideUp.isVisible()) {
+                    RoteteUtils.rotateArrow(ivArrow, flag);
+                    flag = !flag;
+                    slideUp.hide();
+                }
                 break;
             default:
                 break;

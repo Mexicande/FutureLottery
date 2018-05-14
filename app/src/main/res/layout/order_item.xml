@@ -47,7 +47,8 @@
             android:layout_height="wrap_content"
             android:text="2元 普通订单"
             android:textSize="@dimen/size_12"
-            android:textColor="@color/color_666"/>
+            android:textColor="@color/color_666"
+            android:layout_marginTop="@dimen/length_3"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -60,7 +61,7 @@
             android:id="@+id/lottery_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="中奖"
+            android:text=""
             android:textSize="@dimen/size_12"
             android:textColor="@color/color_33"
             android:layout_marginRight="@dimen/length_5"/>

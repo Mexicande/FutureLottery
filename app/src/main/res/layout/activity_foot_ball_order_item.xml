@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color_f4"
+    android:orientation="vertical"
+    tools:context="cn.com.futurelottery.ui.activity.FootBallOrderItemActivity">
+
+    <include layout="@layout/toolbar_back"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/detail_fl"
+        android:layout_marginTop="@dimen/length_10"
+        android:layout_marginLeft="@dimen/length_10"
+        android:layout_marginRight="@dimen/length_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flexWrap="wrap"
+        app:alignItems="center"
+        app:alignContent="flex_start"
+        app:flexDirection="row"
+        app:justifyContent="flex_start"
+        >
+    </com.google.android.flexbox.FlexboxLayout>
+    <TextView
+        android:id="@+id/type_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/size_12"
+        android:textColor="@color/color_33"
+        android:layout_marginLeft="@dimen/length_10"
+        android:layout_marginRight="@dimen/length_10"
+        android:layout_marginTop="@dimen/length_5"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/length_10"
+        android:layout_marginRight="@dimen/length_10"
+        android:layout_marginTop="@dimen/length_5"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/color_33"
+            android:text="出票成功"
+            />
+        <TextView
+            android:id="@+id/lottery_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/black"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

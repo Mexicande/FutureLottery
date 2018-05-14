@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="cn.com.futurelottery.ui.activity.arrange.Line5Activity">
+
+    <include layout="@layout/toolbar_ball"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        >
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:elevation="0dp"
+                app:expanded="false"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/toolbar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:fitsSystemWindows="true"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:orientation="horizontal"
+                            android:background="@color/white_bg"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="2"
+                                android:layout_height="wrap_content"
+                                android:text="期号"
+                                android:textColor="@color/color_333"
+                                android:textSize="13dp"
+                                android:gravity="center"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_weight="4"
+                                android:layout_height="wrap_content"
+                                android:text="开奖号码"
+                                android:textColor="@color/color_333"
+                                android:textSize="13dp"
+                                android:gravity="center"/>
+                        </LinearLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    </LinearLayout>
+
+
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+                <include layout="@layout/line_e1" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:id="@+id/tv_award"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text=""
+                        android:textColor="@color/color_333"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/limite_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_toRightOf="@id/tv_award"
+                        android:text=""
+                        android:textColor="@color/red_ball"
+                        android:textSize="13dp" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_expand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:id="@+id/tv_expand"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="20dp"
+                            android:drawablePadding="5dp"
+                            android:text="下拉"
+                            android:textSize="13dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_expand"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:src="@mipmap/arrow_down" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <include layout="@layout/line_e1" />
+            </android.support.design.widget.AppBarLayout>
+
+            <include layout="@layout/line5_layout" />
+        </android.support.design.widget.CoordinatorLayout>
+
+        <TextView
+            android:id="@+id/tip_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/length_30"
+            android:background="@color/bg_color_f4"
+            android:textSize="@dimen/size_11"
+            android:textColor="@color/color_33"
+            android:paddingLeft="@dimen/length_10"
+            android:gravity="center_vertical"
+            android:visibility="gone"/>
+        <include layout="@layout/bottom_result" />
+    </LinearLayout>
+
+</RelativeLayout>

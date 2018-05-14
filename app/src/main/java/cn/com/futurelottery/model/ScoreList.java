@@ -148,6 +148,14 @@ public class ScoreList implements Serializable, MultiItemEntity {
              * week : 星期四
              * odds : [[{"odds":"9.00","name":"1:0","describe":"1:0奖金(赔率)"},{"odds":"8.25","name":"2:0","describe":"2:0奖金(赔率)"},{"odds":"7.00","name":"2:1","describe":"2:1奖金(赔率)"},{"odds":"11.00","name":"3:0","describe":"3:0奖金(赔率)"},{"odds":"10.00","name":"3:1","describe":"3:1奖金(赔率)"},{"odds":"16.00","name":"3:2","describe":"3:2奖金(赔率)"},{"odds":"19.00","name":"4:0","describe":"4:0奖金(赔率)"},{"odds":"18.00","name":"4:1","describe":"4:1奖金(赔率)"},{"odds":"30.00","name":"4:2","describe":"4:2奖金(赔率)"},{"odds":"40.00","name":"5:0","describe":"5:0奖金(赔率)"},{"odds":"35.00","name":"5:1","describe":"5:1奖金(赔率)"},{"odds":"60.00","name":"5:2","describe":"5:2奖金(赔率)"},{"odds":"19.00","name":"胜其它","describe":"胜其它奖金(赔率)"}],[{"odds":"18.00","name":"0:0","describe":"0:0奖金(赔率)"},{"odds":"8.25","name":"1:1","describe":"1:1奖金(赔率)"},{"odds":"12.50","name":"2:2","describe":"2:2奖金(赔率)"},{"odds":"40.00","name":"3:3","describe":"3:3奖金(赔率)"},{"odds":"200.00","name":"平其它","describe":"平其它奖金(赔率)"}],[{"odds":"18.00","name":"0:1","describe":"0:1奖金(赔率)"},{"odds":"30.00","name":"0:2","describe":"0:2奖金(赔率)"},{"odds":"14.00","name":"1:2","describe":"1:2奖金(赔率)"},{"odds":"70.00","name":"0:3","describe":"0:3奖金(赔率)"},{"odds":"40.00","name":"1:3","describe":"1:3奖金(赔率)"},{"odds":"30.00","name":"2:3","describe":"2:3奖金(赔率)"},{"odds":"250.00","name":"0:4","describe":"0:4奖金(赔率)"},{"odds":"100.00","name":"1:4","describe":"1:4奖金(赔率)"},{"odds":"100.00","name":"2:4","describe":"2:4奖金(赔率)"},{"odds":"600.00","name":"0:5","describe":"0:5奖金(赔率)"},{"odds":"400.00","name":"1:5","describe":"1:5奖金(赔率)"},{"odds":"300.00","name":"2:5","describe":"2:5奖金(赔率)"},{"odds":"80.00","name":"负其它","describe":"负其它奖金(赔率)"}]]
              */
+
+            private int homeType1;
+            private int vsType1;
+            private int awayType1;
+            private int homeType2;
+            private int vsType2;
+            private int awayType2;
+
             private String select;
             private String id;
             private String match_id;
@@ -167,6 +175,55 @@ public class ScoreList implements Serializable, MultiItemEntity {
             private String awayTeam;
             private String week;
             private List<List<OddsBean>> odds;
+
+
+            public int getHomeType1() {
+                return homeType1;
+            }
+
+            public void setHomeType1(int homeType1) {
+                this.homeType1 = homeType1;
+            }
+
+            public int getVsType1() {
+                return vsType1;
+            }
+
+            public void setVsType1(int vsType1) {
+                this.vsType1 = vsType1;
+            }
+
+            public int getAwayType1() {
+                return awayType1;
+            }
+
+            public void setAwayType1(int awayType1) {
+                this.awayType1 = awayType1;
+            }
+
+            public int getHomeType2() {
+                return homeType2;
+            }
+
+            public void setHomeType2(int homeType2) {
+                this.homeType2 = homeType2;
+            }
+
+            public int getVsType2() {
+                return vsType2;
+            }
+
+            public void setVsType2(int vsType2) {
+                this.vsType2 = vsType2;
+            }
+
+            public int getAwayType2() {
+                return awayType2;
+            }
+
+            public void setAwayType2(int awayType2) {
+                this.awayType2 = awayType2;
+            }
 
             public String getSelect() {
                 return select;
@@ -367,7 +424,72 @@ public class ScoreList implements Serializable, MultiItemEntity {
                 public void setDescribe(String describe) {
                     this.describe = describe;
                 }
+
+                @Override
+                public String toString() {
+                    return "OddsBean{" +
+                            "type=" + type +
+                            ", odds='" + odds + '\'' +
+                            ", name='" + name + '\'' +
+                            ", describe='" + describe + '\'' +
+                            '}';
+                }
+
             }
+
+            @Override
+            public String toString() {
+                return "MatchBean{" +
+                        "homeType1=" + homeType1 +
+                        ", vsType1=" + vsType1 +
+                        ", awayType1=" + awayType1 +
+                        ", homeType2=" + homeType2 +
+                        ", vsType2=" + vsType2 +
+                        ", awayType2=" + awayType2 +
+                        ", select='" + select + '\'' +
+                        ", id='" + id + '\'' +
+                        ", match_id='" + match_id + '\'' +
+                        ", daytime='" + daytime + '\'' +
+                        ", weekid='" + weekid + '\'' +
+                        ", teamid='" + teamid + '\'' +
+                        ", league='" + league + '\'' +
+                        ", team='" + team + '\'' +
+                        ", endtime='" + endtime + '\'' +
+                        ", matchtime='" + matchtime + '\'' +
+                        ", flage='" + flage + '\'' +
+                        ", wtype='" + wtype + '\'' +
+                        ", champion='" + champion + '\'' +
+                        ", unsupport_type='" + unsupport_type + '\'' +
+                        ", created_at='" + created_at + '\'' +
+                        ", homeTeam='" + homeTeam + '\'' +
+                        ", awayTeam='" + awayTeam + '\'' +
+                        ", week='" + week + '\'' +
+                        ", odds=" + odds +
+                        '}';
+            }
+
         }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "date='" + date + '\'' +
+                    ", week='" + week + '\'' +
+                    ", count=" + count +
+                    ", match=" + match +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ScoreList{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", error_code=" + error_code +
+                ", error_message='" + error_message + '\'' +
+                ", time='" + time + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

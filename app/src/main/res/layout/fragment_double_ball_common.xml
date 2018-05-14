@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:text="第2018033期"
+                    android:text=""
                     android:textColor="@color/color_333"
                     android:textSize="13dp" />
 
@@ -91,7 +91,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@id/tv_award"
-                    android:text="第2018033期"
+                    android:text=""
                     android:textColor="@color/red_ball"
                     android:textSize="13dp" />
 

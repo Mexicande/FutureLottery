@@ -99,10 +99,10 @@
             android:name=".ui.activity.LotteryInformationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.OrderActivity"
+            android:name=".ui.activity.order.OrderActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.BallOrderDetailActivity"
+            android:name=".ui.activity.order.BallOrderDetailActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.PersonalInformationActivity" />
         <activity android:name=".ui.activity.WithdrawActivity" />
@@ -110,8 +110,20 @@
         <activity android:name=".ui.activity.Football.ScoreBetActivity" />
         <activity android:name=".ui.activity.Football.SizeBetActivity" />
         <activity android:name=".ui.activity.Football.FootAllBetActivity" />
-        <activity android:name=".ui.activity.FootBallOrderDetailActivity" />
-        <activity android:name=".ui.activity.BindPhoneActivity"></activity>
+        <activity android:name=".ui.activity.order.FootBallOrderDetailActivity" />
+        <activity android:name=".ui.activity.BindPhoneActivity" />
+        <activity android:name=".ui.activity.FootBallOrderItemActivity" />
+        <activity android:name=".ui.activity.runlottery.FootRunActivity" />
+        <activity android:name=".ui.activity.arrange.Line5Activity" />
+        <activity android:name=".ui.activity.arrange.ArrangePayActivity" />
+        <activity
+            android:name=".ui.activity.arrange.Line3Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.arrange.Lottery3DActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.Football.MixtureBetActivity" />
+        <activity android:name=".ui.activity.order.BallOrderDetailOneActivity"></activity>
     </application>
 
 </manifest>

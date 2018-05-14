@@ -1,4 +1,4 @@
-package cn.com.futurelottery.ui.activity;
+package cn.com.futurelottery.ui.activity.order;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +29,12 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.listener.OnRequestDataListener;
+import cn.com.futurelottery.model.OrderDetail;
+import cn.com.futurelottery.ui.activity.DoubleBallActivity;
+import cn.com.futurelottery.ui.activity.SuperLottoActivity;
+import cn.com.futurelottery.ui.activity.arrange.Line3Activity;
+import cn.com.futurelottery.ui.activity.arrange.Line5Activity;
+import cn.com.futurelottery.ui.activity.arrange.Lottery3DActivity;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -95,21 +102,11 @@ public class BallOrderDetailActivity extends BaseActivity {
     @BindView(R.id.drop_down_iv)
     ImageView dropDownIv;
     private String id;
-    private String iconURL;
-    private String name;
-    private String phase;
-    private String pay_money;
-    private String openmatch;
-    private String winning_money;
-    private String bonuscode;
-    private String multiple;
-    private String chooseBalls;
-    private String play_type;
-    private String created_at;
-    private String tc_order_num;
     private String ballName;
     private boolean flag = false;
     private AlertDialog alertDialog;
+    private OrderDetail orderDetsil;
+    private int position;
 
     @Override
     public int getLayoutResource() {
@@ -146,32 +143,8 @@ public class BallOrderDetailActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
-                    JSONArray ja = data.getJSONArray("data");
-                    JSONObject jo = ja.getJSONObject(0);
-                    iconURL = jo.getString("logo");
-                    name = jo.getString("name");
-                    phase = jo.getString("phase");
-                    pay_money = jo.getString("pay_money");
-                    //中奖状态
-                    openmatch = jo.getString("openmatch");
-                    //中奖额度
-                    winning_money = jo.getString("winning_money");
-                    //开奖号码
-                    bonuscode = jo.getString("bonuscode");
-                    //倍数
-                    multiple = jo.getString("multiple");
-                    //选号
-                    chooseBalls = jo.getString("data");
-                    //玩法类型
-                    play_type = jo.getString("play_type");
-                    //下单时间
-                    created_at = jo.getString("created_at");
-                    //订单编号
-                    tc_order_num = jo.getString("tc_order_num");
-                    //订单编号
-                    tc_order_num = jo.getString("tc_order_num");
-
-
+                    Gson gson=new Gson();
+                    orderDetsil=gson.fromJson(data.toString(), OrderDetail.class);
                     setView();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -187,78 +160,107 @@ public class BallOrderDetailActivity extends BaseActivity {
 
     private void setView() {
         try {
-            Glide.with(this).load(iconURL)
-                    .apply(new RequestOptions())
-                    .into(iconIv);
-            if ("0".equals(openmatch)) {
-                winningIv.setImageResource(R.mipmap.order_wait);
-                orderStatusTv.setText("等待开奖");
-            } else if ("2".equals(openmatch)) {
-                winningIv.setImageResource(R.mipmap.order_unwinning);
-                orderStatusTv.setText("未中奖");
-            }
-            if ("3".equals(openmatch)) {
-                winningIv.setImageResource(R.mipmap.order_winning);
-                winningMoneyTv.setTextColor(getResources().getColor(R.color.red_ball));
-                orderStatusTv.setTextColor(getResources().getColor(R.color.red_ball));
-                orderStatusTv.setText("中奖");
-            }
-            nameTv.setText(name);
-            phaseTv.setText("第" + phase + "期");
-            orderMoneyTv.setText(pay_money);
-            if (TextUtils.isEmpty(winning_money)) {
-                winningMoneyTv.setText("0.00");
-            } else {
-                winningMoneyTv.setText(winning_money);
-            }
+            OrderDetail.DataProduct data = orderDetsil.getData();
+            if (null!=data){
+                Glide.with(this).load(data.getLogo())
+                        .apply(new RequestOptions())
+                        .into(iconIv);
 
-            String[] arr = bonuscode.split("#");
-            orderDetailTv1.setText(arr[0].replace(",", " "));
-            orderDetailTv2.setText(arr[1].replace(",", " "));
-
-            String type = "";
-            switch (play_type) {
-                case "101":
-                    type = "单式";
-                    break;
-                case "102":
-                    type = "复式";
-                    break;
-                case "103":
-                    type = "胆拖";
-                    break;
-                case "104":
-                    type = "追加复式";
-                    break;
-                case "106":
-                    type = "胆拖";
-                    break;
-                case "107":
-                    type = "追加胆拖";
-                    break;
-            }
-            chooseDetailNumberTv.setText(type + "\n" + multiple + "倍");
-
-            chooseBalls.replace(",", " ");
-            String[] arrBalls = chooseBalls.split("#");
-            if (!chooseBalls.contains("$")) {
-                chooseDetailTypeTv.setText(arrBalls[0] + ":" + arrBalls[1]);
-            } else {
-                String[] arrRedBalls = arrBalls[0].split("$");
-                String[] arrBlueBalls;
-                if (!arrRedBalls[1].contains("$")) {
-                    chooseDetailTypeTv.setText("(" + arrRedBalls[0] + ")" + arrRedBalls[1] + ":" + arrBalls[1]);
-                } else {
-                    arrBlueBalls = arrBalls[1].split("$");
-                    chooseDetailTypeTv.setText("(" + arrRedBalls[0] + ":" + arrBlueBalls[0] + ")" + arrRedBalls[1] + ":" + arrBlueBalls[1]);
+                if ("2".equals(data.getStatus())){
+                    winningIv.setImageResource(R.mipmap.order_wait);
+                    orderStatusTv.setText("正在委托中");
+                }else if ("3".equals(data.getStatus())){
+                    winningIv.setImageResource(R.mipmap.order_wait);
+                    orderStatusTv.setText("委托失败");
+                }else {
+                    if ("0".equals(data.getOpenmatch())) {
+                        winningIv.setImageResource(R.mipmap.order_wait);
+                        orderStatusTv.setText("等待开奖");
+                    } else if ("2".equals(data.getOpenmatch())) {
+                        winningIv.setImageResource(R.mipmap.order_unwinning);
+                        orderStatusTv.setText("未中奖");
+                    }
+                    if ("3".equals(data.getOpenmatch())) {
+                        winningIv.setImageResource(R.mipmap.order_winning);
+                        winningMoneyTv.setTextColor(getResources().getColor(R.color.red_ball));
+                        orderStatusTv.setTextColor(getResources().getColor(R.color.red_ball));
+                        orderStatusTv.setText("中奖");
+                    }
                 }
 
+                nameTv.setText(data.getName());
+                phaseTv.setText("第" + data.getPhase() + "期");
+                orderMoneyTv.setText(data.getPay_money_total());
+                if (TextUtils.isEmpty(data.getWinning_money())) {
+                    winningMoneyTv.setText("0.00");
+                } else {
+                    winningMoneyTv.setText(data.getWinning_money());
+                }
+
+                String[] arr = data.getBonuscode().split("#");
+                if (arr.length>1){
+                    orderDetailTv1.setText(arr[0].replace(",", " "));
+                    orderDetailTv2.setText(arr[1].replace(",", " "));
+                }else {
+                    orderDetailTv1.setText("暂未开奖");
+                }
+
+                if (null!=data.getInfo()&&data.getInfo().size()>0){
+                    OrderDetail.DataProduct.InfoProduct infoProduct = data.getInfo().get(position);
+
+                    String playType = "";
+                    //101=单式 102=复式 103=胆拖 大乐透 101=单式 102=复式 106=胆拖 103=追加单式 104=追加复式 107=追加胆拖
+                    switch (infoProduct.getPlay_type()){
+                        case "101":
+                            playType="单式";
+                            break;
+                        case "102":
+                            playType="复式";
+                            break;
+                        case "103":
+                            playType="胆拖";
+                            break;
+                        case "104":
+                            playType="追加复式";
+                            break;
+                        case "106":
+                            playType="胆拖";
+                            break;
+                        case "107":
+                            playType="追加胆拖";
+                            break;
+                    }
+                    chooseDetailNumberTv.setText( playType+ "\n" + infoProduct.getMultiple() + "倍");
+
+
+                    String chooseBalls = infoProduct.getBouns();
+                    chooseBalls.replaceAll(",", " ");
+                    String[] arrBalls = chooseBalls.split("#");
+                    if (!chooseBalls.contains("$")) {
+                        if (arrBalls.length>1){
+                            chooseDetailTypeTv.setText(arrBalls[0] + ":" + arrBalls[1]);
+                        }else {
+                            chooseDetailTypeTv.setText(arrBalls[0]);
+                        }
+
+                    } else {
+                        String[] arrRedBalls = arrBalls[0].split("$");
+                        String[] arrBlueBalls;
+                        if (!arrRedBalls[1].contains("$")) {
+                            chooseDetailTypeTv.setText("(" + arrRedBalls[0] + ")" + arrRedBalls[1] + ":" + arrBalls[1]);
+                        } else {
+                            arrBlueBalls = arrBalls[1].split("$");
+                            chooseDetailTypeTv.setText("(" + arrRedBalls[0] + ":" + arrBlueBalls[0] + ")" + arrRedBalls[1] + ":" + arrBlueBalls[1]);
+                        }
+
+                    }
+                }
+
+
+                orderTimeTv.setText(data.getCreated_at());
+                orderNumberTv.setText(data.getOrder_id());
             }
-            orderTimeTv.setText(created_at);
-            orderNumberTv.setText(tc_order_num);
-
-
-        } catch (Resources.NotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -292,6 +294,12 @@ public class BallOrderDetailActivity extends BaseActivity {
                     ActivityUtils.startActivity(DoubleBallActivity.class);
                 }else if ("大乐透".equals(ballName)){
                     ActivityUtils.startActivity(SuperLottoActivity.class);
+                }else if ("排列3".equals(ballName)){
+                    ActivityUtils.startActivity(Line3Activity.class);
+                }else if ("排列5".equals(ballName)){
+                    ActivityUtils.startActivity(Line5Activity.class);
+                }else if ("3D".equals(ballName)){
+                    ActivityUtils.startActivity(Lottery3DActivity.class);
                 }
                 break;
         }

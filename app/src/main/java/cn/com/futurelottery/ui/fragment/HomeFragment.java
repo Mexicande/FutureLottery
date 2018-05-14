@@ -42,8 +42,11 @@ import cn.com.futurelottery.model.Notification;
 import cn.com.futurelottery.model.Lottery;
 import cn.com.futurelottery.ui.activity.DoubleBallActivity;
 import cn.com.futurelottery.ui.activity.Football.FootBallActivity;
+import cn.com.futurelottery.ui.activity.arrange.Line3Activity;
+import cn.com.futurelottery.ui.activity.arrange.Line5Activity;
 import cn.com.futurelottery.ui.activity.SuperLottoActivity;
 import cn.com.futurelottery.ui.activity.WebViewActivity;
+import cn.com.futurelottery.ui.activity.arrange.Lottery3DActivity;
 import cn.com.futurelottery.ui.adapter.LotteryAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
@@ -205,6 +208,15 @@ public class HomeFragment extends BaseFragment {
                     }else if(Contacts.Lottery.FTB.equals(lotid)){
                         //足彩
                         ActivityUtils.startActivity(FootBallActivity.class);
+                    }else if(Contacts.Lottery.P5.equals(lotid)){
+                        //排5
+                        ActivityUtils.startActivity(Line5Activity.class);
+                    }else if(Contacts.Lottery.P3.equals(lotid)){
+                        //排3
+                        ActivityUtils.startActivity(Line3Activity.class);
+                    }else if(Contacts.Lottery.D3.equals(lotid)){
+                        //排3
+                        ActivityUtils.startActivity(Lottery3DActivity.class);
                     }
                 }
             }

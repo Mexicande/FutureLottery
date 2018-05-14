@@ -82,7 +82,6 @@ public class ConAllPassFragment extends BaseFragment {
         mAllRecycler.setAdapter(mWinAndLoseAdapter);
         ((SimpleItemAnimator)mAllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
         notDataView = getLayoutInflater().inflate(R.layout.empty_layout, (ViewGroup) mAllRecycler.getParent(), false);
-
     }
 
     private void setListener() {

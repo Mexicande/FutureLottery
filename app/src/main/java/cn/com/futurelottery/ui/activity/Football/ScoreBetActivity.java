@@ -679,10 +679,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener,Cle
 
         double money=0;
 
-        if(mScoreAdapter.getData().size()==1||mSrceenList.get(0).getIcon() == 1){
-            money= setMaX(mlist,1);
-        }
-        for (int i = 1; i < mSrceenList.size(); i++) {
+        for (int i = 0; i < mSrceenList.size(); i++) {
             if (mSrceenList.get(i).getIcon() == 1) {
                 String content = mSrceenList.get(i).getContent();
                 String substring = content.substring(0, 1);
@@ -877,9 +874,6 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener,Cle
             public void requestSuccess(int code, JSONObject data) {
                 if(code==0){
                     ToastUtils.showToast(getString(R.string.checkout_success));
-                    Intent intent = new Intent();
-                    intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
-                    sendBroadcast(intent);
                     finish();
 
                 }else {
@@ -998,7 +992,7 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener,Cle
                 mBottomTRMenuAdapter.getData().clear();
                 mBottomTRMenuAdapter.notifyDataSetChanged();
             }
-            if(type%2==0){
+            if(type%2!=0){
                 //过关
                 upDate();
             }else {

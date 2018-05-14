@@ -155,7 +155,11 @@ public class SuperLottoActivity extends BaseActivity {
                 }
                 break;
             case R.id.layoutGo:
-                slideUp.hide();
+                if (slideUp.isVisible()) {
+                    RoteteUtils.rotateArrow(ivArrow, flag);
+                    flag = !flag;
+                    slideUp.hide();
+                }
                 break;
         }
     }

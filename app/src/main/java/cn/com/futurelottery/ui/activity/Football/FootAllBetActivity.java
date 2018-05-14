@@ -874,10 +874,6 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 if(code==0){
-                    // 发广播
-                    Intent intent = new Intent();
-                    intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
-                    sendBroadcast(intent);
                     ToastUtils.showToast(getString(R.string.checkout_success));
                     finish();
                 }else {

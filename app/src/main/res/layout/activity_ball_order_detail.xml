@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/bg_color_f4"
-    tools:context="cn.com.futurelottery.ui.activity.BallOrderDetailActivity">
+    tools:context="cn.com.futurelottery.ui.activity.order.BallOrderDetailActivity">
 
     <include layout="@layout/toolbar_back"/>
 
@@ -161,7 +161,7 @@
             android:id="@+id/order_detail_tv1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text=""
             android:layout_marginLeft="@dimen/length_25"
             android:textColor="@color/red_ball"
             android:textSize="@dimen/size_12"
@@ -170,7 +170,7 @@
             android:id="@+id/order_detail_tv2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text=""
             android:textColor="@color/blue_ball"
             android:layout_marginLeft="@dimen/length_3"
             android:textSize="@dimen/size_12"

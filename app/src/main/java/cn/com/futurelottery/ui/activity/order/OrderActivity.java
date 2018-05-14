@@ -1,9 +1,10 @@
-package cn.com.futurelottery.ui.activity;
+package cn.com.futurelottery.ui.activity.order;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -60,25 +61,38 @@ public class OrderActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Order order = orders.get(position);
-                if ("双色球".equals(order.getName())){
-                    Intent intent=new Intent(OrderActivity.this,BallOrderDetailActivity.class);
-                    intent.putExtra("id",order.getId());
-                    intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
-                    intent.putExtra("ballName","双色球");
-                    startActivityForResult(intent,ORDER_DETAIL);
-                }else if ("大乐透".equals(order.getName())){
-                    Intent intent=new Intent(OrderActivity.this,BallOrderDetailActivity.class);
-                    intent.putExtra("id",order.getId());
-                    intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
-                    intent.putExtra("ballName","大乐透");
-                    startActivityForResult(intent,ORDER_DETAIL);
-                }else if (order.getName().startsWith("竞彩足球")){
-                    Intent intent=new Intent(OrderActivity.this,FootBallOrderDetailActivity.class);
-                    intent.putExtra("id",order.getId());
-                    intent.putExtra("type","0".equals(order.getIs_chasing())?"普通投注":"追号投注");
+                Intent intent=new Intent();
+
+                if (order.getName().startsWith("竞彩足球")){
+                    intent.setClass(OrderActivity.this,FootBallOrderDetailActivity.class);
+                    intent.putExtra("id",order.getOrder_id());
+                    intent.putExtra("lotid",order.getLotid());
+                    intent.putExtra("type",TextUtils.isEmpty(order.getChasing_id())?"普通投注":"追号投注");
                     intent.putExtra("ballName","竞彩足球");
-                    startActivityForResult(intent,ORDER_DETAIL);
+                }else {
+                    if (TextUtils.isEmpty(order.getChasing_id())){
+                        intent.putExtra("id",order.getOrder_id());
+                        intent.putExtra("type","普通投注");
+                        intent.setClass(OrderActivity.this,BallOrderDetailActivity.class);
+                    }else {
+                        intent.putExtra("id",order.getChasing_id());
+                        intent.putExtra("type","追号投注");
+                        intent.setClass(OrderActivity.this,BallOrderDetailOneActivity.class);
+                    }
+                    if ("双色球".equals(order.getName())){
+                        intent.putExtra("ballName","双色球");
+                    }else if ("大乐透".equals(order.getName())){
+                        intent.putExtra("ballName","大乐透");
+                    }else if ("排列3".equals(order.getName())){
+                        intent.putExtra("ballName","排列3");
+                    }else if ("排列5".equals(order.getName())){
+                        intent.putExtra("ballName","排列5");
+                    }else if ("3D".equals(order.getName())){
+                        intent.putExtra("ballName","3D");
+                    }
                 }
+
+                startActivityForResult(intent,ORDER_DETAIL);
             }
         });
     }

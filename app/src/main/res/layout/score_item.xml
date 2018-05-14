@@ -4,8 +4,10 @@
     android:layout_width="wrap_content"
     android:background="@color/white"
     android:id="@+id/layout"
-    android:layout_margin="0.5dp"
-    android:layout_height="wrap_content">
+    android:layout_margin="0.3dp"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/length_3"
+    android:paddingTop="@dimen/length_3">
     <LinearLayout
         android:id="@+id/layout_bg"
         android:orientation="vertical"

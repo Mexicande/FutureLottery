@@ -30,8 +30,8 @@ public class ViewSetHinghUtil {
 
 	}
 
-	// 给GridView重新设置高度，两列
-	public static void resetGridViewHight(GridView listView) {
+	// 给GridView重新设置高度,count列数
+	public static void resetGridViewHight(GridView listView,int count) {
 		if (listView == null)
 			return;
 		ListAdapter listAdapter = listView.getAdapter();
@@ -40,70 +40,7 @@ public class ViewSetHinghUtil {
 			return;
 		}
 		int totalHeight = 0;
-		for (int i = 0; i < listAdapter.getCount(); i += 2) {
-			View listItem = listAdapter.getView(i, null, listView);
-			listItem.measure(0, 0);
-			totalHeight += (listItem.getMeasuredHeight()+ listView.getVerticalSpacing());
-		}
-		ViewGroup.LayoutParams params = listView.getLayoutParams();
-		params.height = totalHeight - listView.getVerticalSpacing();
-		listView.setLayoutParams(params);
-
-	}
-
-	// 给GridView重新设置高度,四列
-	public static void resetGridViewHight1(GridView listView) {
-		if (listView == null)
-			return;
-		ListAdapter listAdapter = listView.getAdapter();
-		if (listAdapter == null) {
-			// pre-condition
-			return;
-		}
-		int totalHeight = 0;
-		for (int i = 0; i < listAdapter.getCount(); i += 4) {
-			View listItem = listAdapter.getView(i, null, listView);
-			listItem.measure(0, 0);
-			totalHeight += (listItem.getMeasuredHeight() + listView.getVerticalSpacing());
-		}
-		ViewGroup.LayoutParams params = listView.getLayoutParams();
-		params.height = totalHeight - listView.getVerticalSpacing();
-		listView.setLayoutParams(params);
-
-	}
-
-	// 给GridView重新设置高度,三列
-	public static void resetGridViewHight2(GridView listView) {
-		if (listView == null)
-			return;
-		ListAdapter listAdapter = listView.getAdapter();
-		if (listAdapter == null) {
-			// pre-condition
-			return;
-		}
-		int totalHeight = 0;
-		for (int i = 0; i < listAdapter.getCount(); i += 3) {
-			View listItem = listAdapter.getView(i, null, listView);
-			listItem.measure(0, 0);
-			totalHeight += (listItem.getMeasuredHeight() + listView.getVerticalSpacing());
-		}
-		ViewGroup.LayoutParams params = listView.getLayoutParams();
-		params.height = totalHeight - listView.getVerticalSpacing();
-		listView.setLayoutParams(params);
-	}
-
-
-	// 给GridView重新设置高度,七列
-	public static void resetGridViewHight7(GridView listView) {
-		if (listView == null)
-			return;
-		ListAdapter listAdapter = listView.getAdapter();
-		if (listAdapter == null) {
-			// pre-condition
-			return;
-		}
-		int totalHeight = 0;
-		for (int i = 0; i < listAdapter.getCount(); i += 7) {
+		for (int i = 0; i < listAdapter.getCount(); i += count) {
 			View listItem = listAdapter.getView(i, null, listView);
 			listItem.measure(0, 0);
 			totalHeight += (listItem.getMeasuredHeight() + listView.getVerticalSpacing());

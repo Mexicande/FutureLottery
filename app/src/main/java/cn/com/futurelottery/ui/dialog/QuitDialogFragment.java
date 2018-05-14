@@ -81,7 +81,7 @@ public class QuitDialogFragment extends DialogFragment {
             window.setAttributes(wlp);
         }
         unbinder = ButterKnife.bind(this, view);
-        int type = getArguments().getInt("type");
+//        int type = getArguments().getInt("type");
 
 
         return view;

@@ -864,9 +864,6 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
             public void requestSuccess(int code, JSONObject data) {
                 if(code==0){
                     ToastUtils.showToast(getString(R.string.checkout_success));
-                    Intent intent = new Intent();
-                    intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
-                    sendBroadcast(intent);
                     finish();
                 }else {
                     Intent intent=new Intent(SizeBetActivity.this,PayActivity.class);
@@ -911,7 +908,7 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
             }else {
                 mSizeAdapter.setData(index,matchBean);
                 mSizeAdapter.notifyItemChanged(index);
-                if(type%2==0){
+                if(type%2!=0){
                     //过关
                     upDate();
                 }else {

@@ -309,12 +309,6 @@ public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialo
                         startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
                     }else if (code==0){
                         ToastUtils.showToast("下单成功");
-
-                        // 发广播
-                        Intent intent = new Intent();
-                        intent.setAction(Contacts.INTENT_EXTRA_LOGIN_SUCESS);
-                        sendBroadcast(intent);
-
                         finish();
                     }
                 } catch (JSONException e) {
@@ -354,26 +348,11 @@ public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialo
         zhushu += 1;
         balls.add(0, db);
         adapter.notifyDataSetChanged();
-        //列表是否显示
-        listIsShow();
         //显示
         show();
     }
 
     private void show() {
-        if (balls.size() == 0) {
-            chooseNullTv.setVisibility(View.VISIBLE);
-            chooseZhuRv.setVisibility(View.GONE);
-        } else {
-            chooseNullTv.setVisibility(View.GONE);
-            chooseZhuRv.setVisibility(View.VISIBLE);
-        }
-        bottomResultCountTv.setText(zhushu + "注" + periods + "期" + multiple + "倍");
-        bottomResultMoneyTv.setText(zhushu * periods * multiple * 2 + "");
-    }
-
-    //选球列表是否显示
-    private void listIsShow() {
         if (balls.size() > 0) {
             chooseZhuRv.setVisibility(View.VISIBLE);
             chooseNullTv.setVisibility(View.GONE);
@@ -381,6 +360,8 @@ public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialo
             chooseZhuRv.setVisibility(View.GONE);
             chooseNullTv.setVisibility(View.VISIBLE);
         }
+        bottomResultCountTv.setText(zhushu + "注" + periods + "期" + multiple + "倍");
+        bottomResultMoneyTv.setText(zhushu * periods * multiple * 2 + "");
     }
 
 
@@ -398,19 +379,6 @@ public class ChooseBallPaymentActivity extends BaseActivity implements SaveDialo
         chooseZhuRv.addItemDecoration(new DashlineItemDivider(this));
         View view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
         adapter.addFooterView(view);
-
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-                switch (view.getId()) {
-                    case R.id.payment_item_delet_iv:
-                        adapter.remove(position);
-
-                        break;
-                }
-            }
-        });
     }
 
 

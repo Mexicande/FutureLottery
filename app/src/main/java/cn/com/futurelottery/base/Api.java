@@ -115,6 +115,8 @@ public interface Api {
         String PASS_RULES_O =            "0";
         //过关
         String PASS_RULES_1 =            "1";
+        //混合
+        String  FT005           =           "FT005";
 
     }
 
@@ -122,6 +124,8 @@ public interface Api {
 
        public static final String  FOOTBALL_LSIT  =   HOST+"football/list";
        public static final String  Payment  =   HOST+"football/confirmThePayment";
+       //混合下单
+       public static final String  blend  =   HOST+"football/blend";
         /**
          * 赛事列表
          */
@@ -171,8 +175,12 @@ public interface Api {
         String winning   =      HOST+"order/winning";
         //待开奖订单
         String wait   =      HOST+"order/wait";
+        //追号二级页
+        String chasing   =      HOST+"order/chasing";
         //订单详情
         String deteails   =      HOST+"order/deteails";
+        //足球混合订单详情
+        String footDeteails   =      HOST+"order/footDeteails";
         //删除订单
         String del   =      HOST+"order/del";
     }
@@ -188,6 +196,31 @@ public interface Api {
         String amount   =      HOST+"extract/amount";
         //提现
         String take   =      HOST+"extract/take";
+    }
+
+    //排列3,5
+    interface Line{
+        //排列3 5购买的奖期以及截止时间
+        String purchase   =      HOST+"arrange/purchase";
+        //往期中奖
+        String drop   =      HOST+"arrange/drop";
+        //遗漏
+        String miss   =      HOST+"arrange/miss";
+        //排5下单
+        String five   =      HOST+"arrange/five";
+        //排3下单
+        String order   =      HOST+"arrange/order";
+    }
+    //3D
+    interface Lottery3D{
+        //排列3 5购买的奖期以及截止时间
+        String purchase   =      HOST+"3d/purchase";
+        //往期中奖
+        String drop   =      HOST+"3d/drop";
+        //遗漏
+        String miss   =      HOST+"3d/miss";
+        //下单
+        String order   =      HOST+"3d/order";
     }
 
 }
