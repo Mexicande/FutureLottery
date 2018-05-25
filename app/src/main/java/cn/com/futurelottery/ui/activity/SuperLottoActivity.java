@@ -123,7 +123,7 @@ public class SuperLottoActivity extends BaseActivity {
                         omitsBlue.add(ja2.getString(i));
                     }
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -192,6 +192,8 @@ public class SuperLottoActivity extends BaseActivity {
 
         list.add(new MenuItem(0, "多期机选"));
         list.add(new MenuItem(0, "显示遗漏"));
+        list.add(new MenuItem(0, "近期开奖"));
+        list.add(new MenuItem(0, "走势图"));
         list.add(new MenuItem(0, "玩法说明"));
         //右上菜单
         mtopRightMenu = new TopRightMenu(this);
@@ -246,7 +248,7 @@ public class SuperLottoActivity extends BaseActivity {
             @Override
             public void onTopRightMenuItemClick(int position) {
                 switch (position) {
-                    case 0:
+                    case 0://多期机选
                         Intent intent=new Intent(SuperLottoActivity.this,AutoSelectActivity.class);
                         intent.putExtra("intentType",1);
                         startActivity(intent);
@@ -266,7 +268,22 @@ public class SuperLottoActivity extends BaseActivity {
                             duplexFragment.unShowOmit();
                         }
                         break;
-                    default:
+                    case 2://开奖信息
+                        Intent intent2 = new Intent(SuperLottoActivity.this, LotteryInformationActivity.class);
+                        intent2.putExtra("type", "dlt");
+                        startActivity(intent2);
+                        break;
+                    case 3://走势图
+                        Intent intent1=new Intent(SuperLottoActivity.this, WebViewActivity.class);
+                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/dlt");
+                        intent1.putExtra("title","大乐透走势图");
+                        startActivity(intent1);
+                        break;
+                    case 4://玩法说明
+                        Intent intent4=new Intent(SuperLottoActivity.this, WebViewActivity.class);
+                        intent4.putExtra("url","http://p96a3nm36.bkt.clouddn.com/dlt.jpg");
+                        intent4.putExtra("title","大乐透玩法说明");
+                        startActivity(intent4);
                         break;
                 }
 

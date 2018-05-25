@@ -192,6 +192,8 @@ public class DoubleBallActivity extends BaseActivity {
 
         list.add(new MenuItem(0, "多期机选"));
         list.add(new MenuItem(0, "显示遗漏"));
+        list.add(new MenuItem(0, "近期开奖"));
+        list.add(new MenuItem(0, "走势图"));
         list.add(new MenuItem(0, "玩法说明"));
         //右上菜单
         mtopRightMenu = new TopRightMenu(this);
@@ -243,7 +245,7 @@ public class DoubleBallActivity extends BaseActivity {
             @Override
             public void onTopRightMenuItemClick(int position) {
                 switch (position) {
-                    case 0:
+                    case 0://多期机选
                         Intent intent=new Intent(DoubleBallActivity.this,AutoSelectActivity.class);
                         intent.putExtra("intentType",0);
                         startActivity(intent);
@@ -263,7 +265,22 @@ public class DoubleBallActivity extends BaseActivity {
                             duplexFragment.unShowOmit();
                         }
                         break;
-                    default:
+                    case 2://开奖信息
+                        Intent intent2 = new Intent(DoubleBallActivity.this, LotteryInformationActivity.class);
+                        intent2.putExtra("type", "ssq");
+                        startActivity(intent2);
+                        break;
+                    case 3://走势图
+                        Intent intent1=new Intent(DoubleBallActivity.this, WebViewActivity.class);
+                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/ssq");
+                        intent1.putExtra("title","双色球走势图");
+                        startActivity(intent1);
+                        break;
+                    case 4://玩法说明
+                        Intent intent4=new Intent(DoubleBallActivity.this, WebViewActivity.class);
+                        intent4.putExtra("url","http://p96a3nm36.bkt.clouddn.com/ssq.jpg");
+                        intent4.putExtra("title","双色球玩法说明");
+                        startActivity(intent4);
                         break;
                 }
 

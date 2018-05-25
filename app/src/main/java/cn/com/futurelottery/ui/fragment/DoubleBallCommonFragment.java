@@ -166,7 +166,7 @@ public class DoubleBallCommonFragment extends BaseFragment {
                     phase=jo.getString(Contacts.PHASE);
                     tvAward.setText("第"+phase+"期");
                     limiteDate.setText(jo.getString(Contacts.END_TIME)+" 截止");
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

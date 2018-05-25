@@ -63,19 +63,22 @@ public class OrderActivity extends BaseActivity {
                 Order order = orders.get(position);
                 Intent intent=new Intent();
 
-                if (order.getName().startsWith("竞彩足球")){
+                if (3==order.getType()){
+                    intent.putExtra("id",order.getOrder_id());
+                    intent.putExtra("type","合买");
+                    intent.setClass(OrderActivity.this,ChippedOrderDetailActivity.class);
+                }else if (order.getName().startsWith("竞彩足球")){
                     intent.setClass(OrderActivity.this,FootBallOrderDetailActivity.class);
                     intent.putExtra("id",order.getOrder_id());
-                    intent.putExtra("lotid",order.getLotid());
-                    intent.putExtra("type",TextUtils.isEmpty(order.getChasing_id())?"普通投注":"追号投注");
+                    intent.putExtra("type","普通投注");
                     intent.putExtra("ballName","竞彩足球");
                 }else {
-                    if (TextUtils.isEmpty(order.getChasing_id())){
+                    if (1==order.getType()){
                         intent.putExtra("id",order.getOrder_id());
                         intent.putExtra("type","普通投注");
                         intent.setClass(OrderActivity.this,BallOrderDetailActivity.class);
-                    }else {
-                        intent.putExtra("id",order.getChasing_id());
+                    }else if (2==order.getType()){
+                        intent.putExtra("id",order.getOrder_id());
                         intent.putExtra("type","追号投注");
                         intent.setClass(OrderActivity.this,BallOrderDetailOneActivity.class);
                     }
@@ -91,7 +94,7 @@ public class OrderActivity extends BaseActivity {
                         intent.putExtra("ballName","3D");
                     }
                 }
-
+                intent.putExtra("lotid",order.getLotid());
                 startActivityForResult(intent,ORDER_DETAIL);
             }
         });

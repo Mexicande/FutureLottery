@@ -50,7 +50,10 @@ import cn.com.futurelottery.ui.activity.arrange.Lottery3DActivity;
 import cn.com.futurelottery.ui.adapter.LotteryAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
+import cn.com.futurelottery.utils.DeviceUtil;
 import cn.com.futurelottery.utils.ProductItemDecoration;
+import cn.com.futurelottery.utils.SPUtils;
+import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.marqueeview.MarqueeView;
 
 /**
@@ -118,6 +121,10 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initDate() {
+        if (!DeviceUtil.IsNetWork(getContext())){
+            ToastUtils.showToast("网络异常，请检查网络");
+            return;
+        }
         //Banner
         ApiService.GET_SERVICE(Api.GET_BANNER, getActivity(), new JSONObject(), new OnRequestDataListener() {
             @Override
@@ -200,8 +207,8 @@ public class HomeFragment extends BaseFragment {
                 if (item != null) {
                     String  lotid = item.getLotid();
                     if(Contacts.Lottery.SSQ.equals(lotid)){
-                        ActivityUtils.startActivity(DoubleBallActivity.class);
                         //双色球
+                        ActivityUtils.startActivity(DoubleBallActivity.class);
                     }else if(Contacts.Lottery.DIL.equals(lotid)){
                         //大乐透
                         ActivityUtils.startActivity(SuperLottoActivity.class);
@@ -218,7 +225,34 @@ public class HomeFragment extends BaseFragment {
                         //排3
                         ActivityUtils.startActivity(Lottery3DActivity.class);
                     }
+                    //浏览记录
+                    record(lotid);
                 }
+            }
+        });
+    }
+
+    //浏览统计
+    private void record(String lotid) {
+        if (!DeviceUtil.IsNetWork(getContext())){
+            return;
+        }
+        JSONObject json = new JSONObject();
+        try {
+            json.put("lotid",lotid);
+            json.put("token",(String) SPUtils.get(getContext(),Contacts.TOKEN,""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiService.GET_SERVICE(Api.record.envelopes, getActivity(),json , new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
             }
         });
     }

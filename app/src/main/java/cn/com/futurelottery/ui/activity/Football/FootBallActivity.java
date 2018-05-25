@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.activity.Football;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
@@ -32,15 +33,19 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.PlayList;
 import cn.com.futurelottery.presenter.CompetitionSelectType;
+import cn.com.futurelottery.ui.activity.WebViewActivity;
+import cn.com.futurelottery.ui.activity.runlottery.FootRunActivity;
 import cn.com.futurelottery.ui.fragment.football.MixtureFragment;
 import cn.com.futurelottery.ui.fragment.football.halffootball.HalfFragment;
 import cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreFragment;
 import cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment;
 import cn.com.futurelottery.ui.fragment.football.sizefootball.SizeFragment;
 import cn.com.futurelottery.ui.fragment.football.winandlose.WinAndLoseFragment;
+import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.MenuDecoration;
 import cn.com.futurelottery.utils.RoteteUtils;
@@ -305,9 +310,14 @@ public class FootBallActivity extends BaseActivity{
             @Override
             public void onTopRightMenuItemClick(int position) {
                 switch (position) {
-                    case 0:
+                    case 0://开奖信息
+                        ActivityUtils.startActivity(FootRunActivity.class);
                         break;
-                    case 1:
+                    case 1://玩法说明
+                        Intent intent4=new Intent(FootBallActivity.this, WebViewActivity.class);
+                        intent4.putExtra("url","http://p96a3nm36.bkt.clouddn.com/jczq.jpg");
+                        intent4.putExtra("title","竞彩足球玩法说明");
+                        startActivity(intent4);
                         break;
                 }
             }
@@ -545,4 +555,5 @@ public class FootBallActivity extends BaseActivity{
         }
         fragmentTransaction.commitAllowingStateLoss();
     }
+
 }

@@ -85,6 +85,8 @@ public class ChaseOrder implements Serializable{
          * is_stop : 1
          * stop_money : 0.00
          * winning_money : 0
+         * "status":2
+         * "openmatch":"5"
          * info : [{"lotid":"dlt","created_at":"2018-05-09 14:28:43","pay_money_total":"2","order_id":"152584732369977819","chasing_id":"152584915664019048","start_periods":"18053","openmatch":5,"winning_money":0,"status":2}]
          */
 
@@ -97,6 +99,8 @@ public class ChaseOrder implements Serializable{
         private String is_stop;
         private String stop_money;
         private String winning_money;
+        private String status;
+        private String openmatch;
         private ArrayList<InfoProduct> info;
 
         public String getLogo() {
@@ -171,6 +175,22 @@ public class ChaseOrder implements Serializable{
             this.winning_money = winning_money;
         }
 
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getOpenmatch() {
+            return openmatch;
+        }
+
+        public void setOpenmatch(String openmatch) {
+            this.openmatch = openmatch;
+        }
+
         public ArrayList<InfoProduct> getInfo() {
             return info;
         }
@@ -198,9 +218,9 @@ public class ChaseOrder implements Serializable{
             private String order_id;
             private String chasing_id;
             private String start_periods;
-            private int openmatch;
-            private int winning_money;
-            private int status;
+            private String openmatch;
+            private String winning_money;
+            private String status;
 
             public String getLotid() {
                 return lotid;
@@ -250,27 +270,27 @@ public class ChaseOrder implements Serializable{
                 this.start_periods = start_periods;
             }
 
-            public int getOpenmatch() {
+            public String getOpenmatch() {
                 return openmatch;
             }
 
-            public void setOpenmatch(int openmatch) {
+            public void setOpenmatch(String openmatch) {
                 this.openmatch = openmatch;
             }
 
-            public int getWinning_money() {
+            public String getWinning_money() {
                 return winning_money;
             }
 
-            public void setWinning_money(int winning_money) {
+            public void setWinning_money(String winning_money) {
                 this.winning_money = winning_money;
             }
 
-            public int getStatus() {
+            public String getStatus() {
                 return status;
             }
 
-            public void setStatus(int status) {
+            public void setStatus(String status) {
                 this.status = status;
             }
         }

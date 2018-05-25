@@ -2,9 +2,11 @@ package cn.com.futurelottery.ui.activity.order;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,9 +20,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,9 +36,11 @@ import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.OrderDetail;
 import cn.com.futurelottery.ui.activity.DoubleBallActivity;
 import cn.com.futurelottery.ui.activity.SuperLottoActivity;
+import cn.com.futurelottery.ui.activity.WebViewActivity;
 import cn.com.futurelottery.ui.activity.arrange.Line3Activity;
 import cn.com.futurelottery.ui.activity.arrange.Line5Activity;
 import cn.com.futurelottery.ui.activity.arrange.Lottery3DActivity;
+import cn.com.futurelottery.ui.adapter.OrderInfoAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.RoteteUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -77,12 +83,6 @@ public class BallOrderDetailActivity extends BaseActivity {
     TextView chooseDetailTv;
     @BindView(R.id.choose_detail_ll1)
     LinearLayout chooseDetailLl1;
-    @BindView(R.id.choose_detail_number_tv)
-    TextView chooseDetailNumberTv;
-    @BindView(R.id.choose_detail_type_tv)
-    TextView chooseDetailTypeTv;
-    @BindView(R.id.choose_detail_ll2)
-    LinearLayout chooseDetailLl2;
     @BindView(R.id.calculate_rl)
     RelativeLayout calculateRl;
     @BindView(R.id.order_time_tv)
@@ -101,12 +101,19 @@ public class BallOrderDetailActivity extends BaseActivity {
     LinearLayout lion;
     @BindView(R.id.drop_down_iv)
     ImageView dropDownIv;
+    @BindView(R.id.information_rv)
+    RecyclerView informationRv;
+    @BindView(R.id.nest_sv)
+    NestedScrollView nestSv;
     private String id;
     private String ballName;
     private boolean flag = false;
     private AlertDialog alertDialog;
     private OrderDetail orderDetsil;
     private int position;
+    private List<OrderDetail.DataProduct.InfoProduct> infos = new ArrayList<>();
+    private String lotid;
+    private OrderInfoAdapter infoAdapter;
 
     @Override
     public int getLayoutResource() {
@@ -121,14 +128,20 @@ public class BallOrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        nestSv.setNestedScrollingEnabled(false);
         RoteteUtils.rotateArrow(dropDownIv, flag);
         flag = !flag;
+
+        infoAdapter = new OrderInfoAdapter(infos, lotid);
+        informationRv.setLayoutManager(new LinearLayoutManager(this));
+        informationRv.setAdapter(infoAdapter);
     }
 
     private void getData() {
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         String type = intent.getStringExtra("type");
+        lotid = intent.getStringExtra("lotid");
         ballName = intent.getStringExtra("ballName");
         tvTitle.setText(type);
         buyBtn.setText(ballName + "投注");
@@ -143,8 +156,10 @@ public class BallOrderDetailActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
-                    Gson gson=new Gson();
-                    orderDetsil=gson.fromJson(data.toString(), OrderDetail.class);
+                    Gson gson = new Gson();
+                    orderDetsil = gson.fromJson(data.toString(), OrderDetail.class);
+                    infos.clear();
+                    infos.addAll(orderDetsil.getData().getInfo());
                     setView();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -161,18 +176,18 @@ public class BallOrderDetailActivity extends BaseActivity {
     private void setView() {
         try {
             OrderDetail.DataProduct data = orderDetsil.getData();
-            if (null!=data){
+            if (null != data) {
                 Glide.with(this).load(data.getLogo())
                         .apply(new RequestOptions())
                         .into(iconIv);
 
-                if ("2".equals(data.getStatus())){
+                if ("2".equals(data.getStatus())) {
                     winningIv.setImageResource(R.mipmap.order_wait);
                     orderStatusTv.setText("正在委托中");
-                }else if ("3".equals(data.getStatus())){
+                } else if ("3".equals(data.getStatus())) {
                     winningIv.setImageResource(R.mipmap.order_wait);
                     orderStatusTv.setText("委托失败");
-                }else {
+                } else {
                     if ("0".equals(data.getOpenmatch())) {
                         winningIv.setImageResource(R.mipmap.order_wait);
                         orderStatusTv.setText("等待开奖");
@@ -190,72 +205,32 @@ public class BallOrderDetailActivity extends BaseActivity {
 
                 nameTv.setText(data.getName());
                 phaseTv.setText("第" + data.getPhase() + "期");
-                orderMoneyTv.setText(data.getPay_money_total());
-                if (TextUtils.isEmpty(data.getWinning_money())) {
-                    winningMoneyTv.setText("0.00");
-                } else {
-                    winningMoneyTv.setText(data.getWinning_money());
-                }
+                orderMoneyTv.setText(data.getPay_money_total()+"元");
 
-                String[] arr = data.getBonuscode().split("#");
-                if (arr.length>1){
-                    orderDetailTv1.setText(arr[0].replace(",", " "));
-                    orderDetailTv2.setText(arr[1].replace(",", " "));
+                //判断是否中大奖
+                if ("-1".equals(data.getWinning_money())){
+                    winningMoneyTv.setText("稍后会有工作人员主动联系您");
                 }else {
+                    winningMoneyTv.setText( data.getWinning_money()+ "元");
+                }
+
+                //显示开奖信息
+                if (TextUtils.isEmpty(data.getBonuscode())){
                     orderDetailTv1.setText("暂未开奖");
-                }
-
-                if (null!=data.getInfo()&&data.getInfo().size()>0){
-                    OrderDetail.DataProduct.InfoProduct infoProduct = data.getInfo().get(position);
-
-                    String playType = "";
-                    //101=单式 102=复式 103=胆拖 大乐透 101=单式 102=复式 106=胆拖 103=追加单式 104=追加复式 107=追加胆拖
-                    switch (infoProduct.getPlay_type()){
-                        case "101":
-                            playType="单式";
-                            break;
-                        case "102":
-                            playType="复式";
-                            break;
-                        case "103":
-                            playType="胆拖";
-                            break;
-                        case "104":
-                            playType="追加复式";
-                            break;
-                        case "106":
-                            playType="胆拖";
-                            break;
-                        case "107":
-                            playType="追加胆拖";
-                            break;
-                    }
-                    chooseDetailNumberTv.setText( playType+ "\n" + infoProduct.getMultiple() + "倍");
-
-
-                    String chooseBalls = infoProduct.getBouns();
-                    chooseBalls.replaceAll(",", " ");
-                    String[] arrBalls = chooseBalls.split("#");
-                    if (!chooseBalls.contains("$")) {
-                        if (arrBalls.length>1){
-                            chooseDetailTypeTv.setText(arrBalls[0] + ":" + arrBalls[1]);
-                        }else {
-                            chooseDetailTypeTv.setText(arrBalls[0]);
-                        }
-
+                }else {
+                    String[] arr = data.getBonuscode().split("#");
+                    if (arr.length > 1) {
+                        orderDetailTv1.setText(arr[0].replace(",", " "));
+                        orderDetailTv2.setText(arr[1].replace(",", " "));
                     } else {
-                        String[] arrRedBalls = arrBalls[0].split("$");
-                        String[] arrBlueBalls;
-                        if (!arrRedBalls[1].contains("$")) {
-                            chooseDetailTypeTv.setText("(" + arrRedBalls[0] + ")" + arrRedBalls[1] + ":" + arrBalls[1]);
-                        } else {
-                            arrBlueBalls = arrBalls[1].split("$");
-                            chooseDetailTypeTv.setText("(" + arrRedBalls[0] + ":" + arrBlueBalls[0] + ")" + arrRedBalls[1] + ":" + arrBlueBalls[1]);
-                        }
-
+                        orderDetailTv1.setText(arr[0].replace(",", " "));
                     }
                 }
 
+
+                chooseDetailTv.setText(infos.size()+"条");
+                //投注信息
+                infoAdapter.notifyDataSetChanged();
 
                 orderTimeTv.setText(data.getCreated_at());
                 orderNumberTv.setText(data.getOrder_id());
@@ -278,27 +253,51 @@ public class BallOrderDetailActivity extends BaseActivity {
             case R.id.choose_detail_ll1:
                 RoteteUtils.rotateArrow(dropDownIv, flag);
                 flag = !flag;
-                if (chooseDetailLl2.getVisibility() == View.GONE) {
-                    chooseDetailLl2.setVisibility(View.VISIBLE);
+                if (informationRv.getVisibility() == View.GONE) {
+                    informationRv.setVisibility(View.VISIBLE);
                 } else {
-                    chooseDetailLl2.setVisibility(View.GONE);
+                    informationRv.setVisibility(View.GONE);
                 }
                 break;
             case R.id.calculate_rl:
+                Intent intent=new Intent(BallOrderDetailActivity.this, WebViewActivity.class);
+                switch (lotid){
+                    case "ssq":
+                        intent.putExtra("url","http://p96a3nm36.bkt.clouddn.com/ssq.jpg");
+                        intent.putExtra("title","双色球玩法说明");
+                        break;
+                    case "dlt":
+                        intent.putExtra("url","http://p96a3nm36.bkt.clouddn.com/dlt.jpg");
+                        intent.putExtra("title","大乐透玩法说明");
+                        break;
+                    case "p3":
+                        intent.putExtra("url","http://p96a3nm36.bkt.clouddn.com/p3.jpg");
+                        intent.putExtra("title","排列3玩法说明");
+                        break;
+                    case "p5":
+                        intent.putExtra("url","http://p96a3nm36.bkt.clouddn.com/p5.jpg");
+                        intent.putExtra("title","排列5玩法说明");
+                        break;
+                    case "3d":
+                        intent.putExtra("url","http://p96a3nm36.bkt.clouddn.com/fc3d.jpg");
+                        intent.putExtra("title","3D玩法说明");
+                        break;
+                }
+                startActivity(intent);
                 break;
             case R.id.continue_btn:
                 break;
             case R.id.buy_btn:
                 //投注
-                if ("双色球".equals(ballName)){
+                if ("双色球".equals(ballName)) {
                     ActivityUtils.startActivity(DoubleBallActivity.class);
-                }else if ("大乐透".equals(ballName)){
+                } else if ("大乐透".equals(ballName)) {
                     ActivityUtils.startActivity(SuperLottoActivity.class);
-                }else if ("排列3".equals(ballName)){
+                } else if ("排列3".equals(ballName)) {
                     ActivityUtils.startActivity(Line3Activity.class);
-                }else if ("排列5".equals(ballName)){
+                } else if ("排列5".equals(ballName)) {
                     ActivityUtils.startActivity(Line5Activity.class);
-                }else if ("3D".equals(ballName)){
+                } else if ("3D".equals(ballName)) {
                     ActivityUtils.startActivity(Lottery3DActivity.class);
                 }
                 break;
@@ -338,7 +337,7 @@ public class BallOrderDetailActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
-                    if (0==code){
+                    if (0 == code) {
                         setResult(-1);
                         finish();
                     }

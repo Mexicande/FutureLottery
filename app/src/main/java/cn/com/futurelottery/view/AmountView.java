@@ -32,6 +32,7 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
     private RelativeLayout btnIncrease;
 
     private ImageView imageView;
+    private int currentValue=1;
 
     public AmountView(Context context) {
         this(context, null);
@@ -75,6 +76,15 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
 
     public void setGoodsStorage(int goodsStorage) {
         this.goodsStorage = goodsStorage;
+    }
+
+    public int getCurrentValue() {
+        return Integer.parseInt(etAmount.getText().toString());
+    }
+
+    public void setCurrentValue(int currentValue) {
+        this.currentValue = currentValue;
+        etAmount.setText(String.valueOf(currentValue));
     }
 
     @Override
@@ -121,7 +131,7 @@ public class AmountView extends LinearLayout implements View.OnClickListener, Te
             return;
         }
         if (amount<1){
-            ToastUtils.showToast("最少输入"+ goodsStorage );
+            ToastUtils.showToast("最少输入"+ 1 );
             etAmount.setText("1");
             return;
         }

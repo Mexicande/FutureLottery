@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/bg_color_f4"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="cn.com.futurelottery.ui.activity.PayActivity">
     <include layout="@layout/toolbar_back"/>
     <LinearLayout
@@ -150,7 +152,8 @@
         android:textColor="@color/text_color_32"
         android:gravity="center"
         android:digits="0123456789"
-        android:maxLength="8"/>
+        android:maxLength="8"
+        android:inputType="number"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -182,6 +185,7 @@
             android:id="@+id/wechat_rl"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:visibility="gone"
             >
             <ImageView
                 android:id="@+id/wechat_iv"
@@ -220,6 +224,7 @@
             android:id="@+id/alipay_rl"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:visibility="gone"
             >
             <ImageView
                 android:id="@+id/alipay_iv"

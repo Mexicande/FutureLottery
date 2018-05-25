@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="cn.com.futurelottery.ui.fragment.redpacket.RedPacketUsableFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/length_10"
+        >
+        <EditText
+            android:id="@+id/exchange_et"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="请输入邀请码"
+            android:textColor="@color/text_color_32"
+            android:textSize="@dimen/size_12"
+            android:background="@drawable/f4_bg_radius"
+            android:layout_marginLeft="@dimen/length_15"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/length_15"/>
+        <Button
+            android:id="@+id/exchange_btn"
+            android:layout_width="49dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/login_button_bg"
+            android:layout_marginLeft="@dimen/length_10"
+            android:layout_marginRight="@dimen/length_15"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/white"
+            android:text="兑换"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            >
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="99dp"
+                android:src="@mipmap/red_packet_null"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/length_17"
+                android:textColor="@color/color_a9"
+                android:text="空空如也"
+                android:textSize="@dimen/size_14"/>
+        </LinearLayout>
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/magic_indicator">
+
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/red_packet_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_color_f4"
+                android:layout_marginTop="@dimen/length_10"
+                android:visibility="gone"
+                >
+
+            </android.support.v7.widget.RecyclerView>
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

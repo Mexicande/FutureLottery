@@ -203,11 +203,13 @@ public class OrderDetail implements Serializable{
              * multiple : 1
              * play_type : 101
              * bouns : 01,04,10,11,16,31#11
+             * type:1
              */
 
             private String multiple;
             private String play_type;
             private String bouns;
+            private String type;
 
             public String getMultiple() {
                 return multiple;
@@ -231,6 +233,14 @@ public class OrderDetail implements Serializable{
 
             public void setBouns(String bouns) {
                 this.bouns = bouns;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String type) {
+                this.type = type;
             }
         }
     }

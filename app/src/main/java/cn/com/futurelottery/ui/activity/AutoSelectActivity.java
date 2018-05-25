@@ -140,9 +140,9 @@ public class AutoSelectActivity extends BaseActivity {
     }
 
     private void setListener() {
-        //每期机选
+        //注数
         AutoAmountZhu.setGoodsStorage(99);
-        //每期投
+        //倍数
         amountBei.setGoodsStorage(50);
         AutoAmountZhu.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
@@ -295,30 +295,17 @@ public class AutoSelectActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiService.GET_SERVICE(Api.Double_Ball.POST_MULTI, this, jsonObject, new OnRequestDataListener() {
-            @Override
-            public void requestSuccess(int code, JSONObject data) {
-                try {
-                    if (code==Api.Special_Code.notEnoughMoney){
-                        Intent intent=new Intent(AutoSelectActivity.this,PayActivity.class);
-                        intent.putExtra("information","双色球"+" 多期机选");
-                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
-                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
-                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
-                    }else if (code==0){
-                        ToastUtils.showToast("下单成功");
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void requestFailure(int code, String msg) {
-                ToastUtils.showToast(msg);
-            }
-        });
+        /**
+         * 跳转支付确认界面
+         */
+        Intent intent = new Intent(AutoSelectActivity.this, PayAffirmActivity.class);
+        intent.putExtra("information","双色球"+" 多期机选");
+        intent.putExtra("money", money);
+        intent.putExtra("lotid", "ssqM");
+        intent.putExtra("json", jsonObject.toString());
+        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
+
     }
 
 
@@ -337,30 +324,17 @@ public class AutoSelectActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiService.GET_SERVICE(Api.Super_Lotto.POST_MULTI, this, jsonObject, new OnRequestDataListener() {
-            @Override
-            public void requestSuccess(int code, JSONObject data) {
-                try {
-                    if (code==Api.Special_Code.notEnoughMoney){
-                        Intent intent=new Intent(AutoSelectActivity.this,PayActivity.class);
-                        intent.putExtra("information","大乐透"+" 多期机选");
-                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
-                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
-                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
-                    }else if (code==0){
-                        ToastUtils.showToast("下单成功");
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void requestFailure(int code, String msg) {
-                ToastUtils.showToast(msg);
-            }
-        });
+        /**
+         * 跳转支付确认界面
+         */
+        Intent intent = new Intent(AutoSelectActivity.this, PayAffirmActivity.class);
+        intent.putExtra("information","大乐透"+" 多期机选");
+        intent.putExtra("money", money);
+        intent.putExtra("lotid", "dltM");
+        intent.putExtra("json", jsonObject.toString());
+        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
+
     }
 
 

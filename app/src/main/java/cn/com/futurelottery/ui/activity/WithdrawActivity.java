@@ -30,6 +30,9 @@ import cn.com.futurelottery.model.BankInformation;
 import cn.com.futurelottery.utils.ToastUtils;
 import cn.com.futurelottery.view.progressdialog.KProgressHUD;
 
+/**
+ * 提现
+ */
 public class WithdrawActivity extends BaseActivity {
 
 
@@ -96,7 +99,7 @@ public class WithdrawActivity extends BaseActivity {
                 try {
                     if (code == 0) {
                         canMoney = data.getJSONObject("data").getString("amount");
-                        canMoneyTv.setText(canMoney);
+                        canMoneyTv.setText(canMoney+"元");
                         Gson gson = new Gson();
                         Type bannerType = new TypeToken<ArrayList<BankInformation>>() {
                         }.getType();

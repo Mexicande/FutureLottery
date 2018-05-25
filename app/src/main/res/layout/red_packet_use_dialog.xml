@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/length_30"
+        android:layout_marginRight="@dimen/length_30"
+        android:background="@drawable/white_bg"
+        android:gravity="center_horizontal"
+        >
+        <TextView
+            android:id="@+id/money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="@dimen/length_15"
+            android:textSize="@dimen/size_15"
+            android:textColor="@color/text_color_32"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="可投注以下彩种，请选择"
+            android:layout_marginTop="@dimen/length_5"
+            android:textSize="@dimen/size_9"
+            android:textColor="@color/color_a9"
+            android:layout_marginBottom="@dimen/length_10"
+            />
+        <include layout="@layout/line_e1"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/choose_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_color_e1"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:id="@+id/cancle_tv"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:text="取消"
+            android:background="@drawable/f4_bg_bottom_radius"
+            android:textColor="@color/color_64"
+            android:textSize="@dimen/size_15"
+            />
+    </LinearLayout>
+</RelativeLayout>

@@ -37,6 +37,7 @@ import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.listener.SaveDialogListener;
 import cn.com.futurelottery.model.SuperLotto;
+import cn.com.futurelottery.ui.activity.chipped.ChippedActivity;
 import cn.com.futurelottery.ui.adapter.SuperLottoPaymentAdapter;
 import cn.com.futurelottery.ui.dialog.QuitDialogFragment;
 import cn.com.futurelottery.utils.ActivityUtils;
@@ -86,6 +87,8 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
     TextView bottomResultMoneyTv;
     @BindView(R.id.bottom_result_btn)
     Button bottomResultBtn;
+    @BindView(R.id.right_tv)
+    TextView rightTv;
     private ArrayList<SuperLotto> balls = new ArrayList<>();
     private SuperLottoPaymentAdapter adapter;
     private long zhushu = 0;
@@ -99,7 +102,7 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
     String stop_money = "0";
     private String phase = "2018032";
     //单价
-    private int perMoney=2;
+    private int perMoney = 2;
 
 
     @Override
@@ -163,10 +166,10 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
         checkboxPlus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    perMoney=3;
-                }else {
-                    perMoney=2;
+                if (isChecked) {
+                    perMoney = 3;
+                } else {
+                    perMoney = 2;
                 }
                 adapter.updatePermoney(perMoney);
                 show();
@@ -199,7 +202,7 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
     }
 
 
-    @OnClick({R.id.choose_self_ll, R.id.choose_random_ll, R.id.choose_clear_ll, R.id.bottom_result_btn, R.id.layout_top_back,R.id.tip_iv})
+    @OnClick({R.id.choose_self_ll, R.id.choose_random_ll, R.id.choose_clear_ll, R.id.bottom_result_btn, R.id.layout_top_back, R.id.tip_iv,R.id.right_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.choose_self_ll:
@@ -214,11 +217,11 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
                 clearList();
                 break;
             case R.id.bottom_result_btn:
-                String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
-                if(TextUtils.isEmpty(string)){
+                String string = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                if (TextUtils.isEmpty(string)) {
                     ToastUtils.showToast(getString(R.string.login_please));
                     ActivityUtils.startActivity(LoginActivity.class);
-                }else {
+                } else {
                     pay();
                 }
                 break;
@@ -230,16 +233,88 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
                 }
                 break;
             case R.id.tip_iv:
-                showTipDialog();
+                showTipDialog("什么是中奖后停止追号","勾选后，当您的追号方案某一期中奖，则后续的追号订单将被撤销，资金返还到您的账户中。如不勾选，系统一直帮您购买所有的追号投注订单。");
                 break;
-            default:
+            case R.id.right_tv:
+                if (periods>1){
+                    ToastUtils.showToast("合买只能为一期");
+                    return;
+                }
+                String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                if (TextUtils.isEmpty(token)) {
+                    ToastUtils.showToast(getString(R.string.login_please));
+                    ActivityUtils.startActivity(LoginActivity.class);
+                } else {
+                    if (zhushu * periods * multiple * perMoney<8){
+                        showTipDialog("提示","合买方案金额不能小于8");
+                    }else {
+                        chipped();
+                    }
+                }
                 break;
         }
     }
 
+    //跳转合买
+    private void chipped() {
+        is_stop = checkbox.isChecked() ? "1" : "2";
 
-    private void showTipDialog() {
-        final AlertDialog alertDialog1 = new AlertDialog.Builder(this,R.style.CustomDialog).create();
+        JSONArray ja = new JSONArray();
+        JSONObject jo = new JSONObject();
+        for (int i = 0; i < balls.size(); i++) {
+            SuperLotto ball = balls.get(i);
+            Map<String, String> map = new HashMap<>();
+            if (ball.getType() > 1) {
+                map.put(Contacts.RED, ball.getDanRed());
+                map.put(Contacts.RED_TUO, ball.getRed());
+                map.put(Contacts.BLU, ball.getDanBlu());
+                map.put(Contacts.BLUE_TUO, ball.getBlu());
+                map.put(Contacts.TYPE, "2");
+            } else {
+                map.put(Contacts.RED, ball.getRed());
+                map.put(Contacts.BLU, ball.getBlu());
+                map.put(Contacts.TYPE, "1");
+            }
+
+            map.put(Contacts.MONEY, ball.getZhushu() * perMoney * periods * multiple + "");
+            map.put(Contacts.NOTES, ball.getZhushu() + "");
+
+            map.put(Contacts.PERIODS, periods + "");
+            map.put(Contacts.MULTIPLE, multiple + "");
+
+
+            JSONObject jsonObject = new JSONObject(map);
+            ja.put(jsonObject);
+        }
+        try {
+            jo.put(Contacts.TOTAL, ja);
+            jo.put(Contacts.NOTES, zhushu + "");
+            jo.put(Contacts.MONEY, zhushu * periods * multiple * perMoney + "");
+            jo.put(Contacts.PERIODS, periods + "");
+            jo.put(Contacts.MULTIPLE, multiple + "");
+            jo.put(Contacts.PHASE, phase);
+            jo.put(Contacts.IS_STOP, is_stop);
+            jo.put(Contacts.STOP_MONEY, stop_money);
+            if (perMoney == 2) {
+                jo.put(Contacts.IS_ADD, 2);
+            } else {
+                jo.put(Contacts.IS_ADD, 1);
+            }
+        } catch (JSONException e) {
+
+        }
+        Intent intent=new Intent(SuperLottoPaymentActivity.this,ChippedActivity.class);
+        intent.putExtra("totalMoney",zhushu * periods * multiple * perMoney );
+        intent.putExtra("information", "大乐透 第" + phase + "期");
+        intent.putExtra("name", "大乐透");
+        intent.putExtra("json", jo.toString());
+        intent.putExtra("lotid", "dlt");
+        startActivity(intent);
+    }
+
+
+    private void showTipDialog(String title,String content) {
+        final AlertDialog alertDialog1 = new AlertDialog.Builder(this, R.style.CustomDialog).create();
         alertDialog1.setCancelable(false);
         alertDialog1.setCanceledOnTouchOutside(false);
         alertDialog1.show();
@@ -249,8 +324,8 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
             TextView tvTip = window1.findViewById(R.id.tips_tv);
             TextView tvContent = window1.findViewById(R.id.tips_tv_content);
             TextView tvClick = window1.findViewById(R.id.click_tv);
-            tvTip.setText("什么是中奖后停止追号");
-            tvContent.setText("勾选后，当您的追号方案某一期中奖，则后续的追号订单将被撤销，资金返还到您的账户中。如不勾选，系统一直帮您购买所有的追号投注订单。");
+            tvTip.setText(title);
+            tvContent.setText(content);
             tvClick.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -281,7 +356,7 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
             ToastUtils.showToast("至少选一注");
             return;
         }
-        if (!DeviceUtil.IsNetWork(this)){
+        if (!DeviceUtil.IsNetWork(this)) {
             ToastUtils.showToast("网络异常，检查网络后重试");
             return;
         }
@@ -305,7 +380,7 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
                 map.put(Contacts.TYPE, "1");
             }
 
-            map.put(Contacts.MONEY, ball.getZhushu()*perMoney*periods*multiple + "");
+            map.put(Contacts.MONEY, ball.getZhushu() * perMoney * periods * multiple + "");
             map.put(Contacts.NOTES, ball.getZhushu() + "");
 
             map.put(Contacts.PERIODS, periods + "");
@@ -324,45 +399,28 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
             jo.put(Contacts.PHASE, phase);
             jo.put(Contacts.IS_STOP, is_stop);
             jo.put(Contacts.STOP_MONEY, stop_money);
-            if (perMoney==2){
+            if (perMoney == 2) {
                 jo.put(Contacts.IS_ADD, 2);
-            }else {
+            } else {
                 jo.put(Contacts.IS_ADD, 1);
             }
         } catch (JSONException e) {
 
         }
 
-        ApiService.GET_SERVICE(Api.Super_Lotto.POST_DOUBLE_BALL, this, jo, new OnRequestDataListener() {
-            @Override
-            public void requestSuccess(int code, JSONObject data) {
-                try {
-                    if (code==Api.Special_Code.notEnoughMoney){
-                        Intent intent=new Intent(SuperLottoPaymentActivity.this,PayActivity.class);
-                        intent.putExtra("information","大乐透 第"+phase+"期");
-                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
-                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
-                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
-                    }else if (code==0){
-                        ToastUtils.showToast("下单成功");
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+        Intent intent = new Intent(SuperLottoPaymentActivity.this, PayAffirmActivity.class);
+        intent.putExtra("information", "大乐透 第" + phase + "期");
+        intent.putExtra("money", zhushu * periods * multiple * perMoney+"");
+        intent.putExtra("lotid", "dlt");
+        intent.putExtra("json", jo.toString());
+        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
 
-            @Override
-            public void requestFailure(int code, String msg) {
-                ToastUtils.showToast(msg);
-            }
-        });
     }
 
     //机选一注
     private void randomChoose() {
         ArrayList<String> randomRed = RandomMadeBall.getManyBall(35, 5);
-        ArrayList<String> randomBlue = RandomMadeBall.getManyBall(12,2);
+        ArrayList<String> randomBlue = RandomMadeBall.getManyBall(12, 2);
         SuperLotto db = new SuperLotto();
         String red = "";
         String blue = "";
@@ -421,8 +479,12 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
 
 
     private void initView() {
+        //合买
+        rightTv.setVisibility(View.VISIBLE);
+        rightTv.setText("发起合买");
+
         //每期机选
-        periodsCount.setGoodsStorage(99);
+        periodsCount.setGoodsStorage(15);
         //每期投
         multiplyCount.setGoodsStorage(50);
 
@@ -436,7 +498,6 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
         adapter.addFooterView(view);
 
 
-
     }
 
 
@@ -448,7 +509,7 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
 
     @Override
     public void clearDate() {
-        SPUtil.remove(this,Contacts.superLottoSave);
+        SPUtil.remove(this, Contacts.superLottoSave);
         finish();
     }
 

@@ -1,8 +1,8 @@
 package cn.com.futurelottery.ui.activity.Football;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 
 import org.json.JSONArray;
@@ -44,15 +44,15 @@ import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.ClearDialogListener;
 import cn.com.futurelottery.listener.DialogListener;
 import cn.com.futurelottery.listener.OnRequestDataListener;
-import cn.com.futurelottery.model.FootPay;
 import cn.com.futurelottery.model.ScoreList;
 import cn.com.futurelottery.ui.activity.LoginActivity;
 import cn.com.futurelottery.ui.activity.PayActivity;
+import cn.com.futurelottery.ui.activity.PayAffirmActivity;
+import cn.com.futurelottery.ui.activity.PaySucessActivity;
+import cn.com.futurelottery.ui.activity.chipped.ChippedActivity;
 import cn.com.futurelottery.ui.adapter.football.FootChooseScoreAdapter;
 import cn.com.futurelottery.ui.dialog.ClearDialogFragment;
 import cn.com.futurelottery.ui.dialog.MixtureBetDialog;
-import cn.com.futurelottery.ui.dialog.MixtureDialog;
-import cn.com.futurelottery.ui.dialog.PayMentFragment;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.CommonUtil;
 import cn.com.futurelottery.utils.MenuDecoration;
@@ -94,6 +94,8 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
     ImageView ivArrow;
     @BindView(R.id.predict_money)
     TextView predictMoney;
+    @BindView(R.id.right_tv)
+    TextView rightTv;
     private SlideUp slideUp;
     private TRMenuAdapter mBottomTRMenuAdapter;
     private FootChooseScoreAdapter mScoreAdapter;
@@ -364,6 +366,11 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
     }
 
     private void initView() {
+        //合买
+        rightTv.setVisibility(View.VISIBLE);
+        rightTv.setText("发起合买");
+
+
         mScoreBeanList = (List<ScoreList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
         mScoreAdapter = new FootChooseScoreAdapter(mScoreBeanList);
         chooseRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -392,7 +399,7 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                         break;
                     case R.id.tv_score:
                         ScoreList.DataBean.MatchBean item = mScoreAdapter.getItem(position);
-                        MixtureBetDialog adialogFragment = MixtureBetDialog.newInstance(item, position,Api.FOOTBALL.FT005);
+                        MixtureBetDialog adialogFragment = MixtureBetDialog.newInstance(item, position, Api.FOOTBALL.FT005);
                         adialogFragment.show(getSupportFragmentManager(), "timePicker");
                         break;
                     default:
@@ -536,9 +543,14 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
 
     /**
      * 串数标签
+     *
      */
     private void initSlideLabel() {
         int size = mScoreBeanList.size();
+        //合买这里大于四串的写成4
+        if (size>4){
+            size=4;
+        }
         mSrceenList = new ArrayList<>();
         for (int i = 2; i <= size; i++) {
             if (i <= 8) {
@@ -570,25 +582,17 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
         ArrayList<Double> list = new ArrayList<>();
         for (ScoreList.DataBean.MatchBean s : mScoreBeanList) {
             List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(0);
+
             ArrayList<Double> maxlist = new ArrayList<>();
-            for (ScoreList.DataBean.MatchBean.OddsBean max : oddsOne) {
-                if (max.getType() == 1) {
-                    maxlist.add(Double.parseDouble(max.getOdds()));
+            for (int i=0;i<odds.size();i++){
+                List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(i);
+                for (ScoreList.DataBean.MatchBean.OddsBean max : oddsOne) {
+                    if (max.getType() == 1) {
+                        maxlist.add(Double.parseDouble(max.getOdds()));
+                    }
                 }
             }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsTwo = odds.get(1);
-            for (ScoreList.DataBean.MatchBean.OddsBean max : oddsTwo) {
-                if (max.getType() == 1) {
-                    maxlist.add(Double.parseDouble(max.getOdds()));
-                }
-            }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsThree = odds.get(2);
-            for (ScoreList.DataBean.MatchBean.OddsBean max : oddsThree) {
-                if (max.getType() == 1) {
-                    maxlist.add(Double.parseDouble(max.getOdds()));
-                }
-            }
+
 
 
             if (maxlist.size() != 0) {
@@ -645,25 +649,16 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
         for (ScoreList.DataBean.MatchBean s : mScoreBeanList) {
             List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = s.getOdds();
 
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(0);
             ArrayList<Double> maxlist = new ArrayList<>();
-            for (ScoreList.DataBean.MatchBean.OddsBean max : oddsOne) {
-                if (max.getType() == 1) {
-                    maxlist.add(Double.parseDouble(max.getOdds()));
+            for (int i=0;i<odds.size();i++){
+                List<ScoreList.DataBean.MatchBean.OddsBean> oddsOne = odds.get(i);
+                for (ScoreList.DataBean.MatchBean.OddsBean max : oddsOne) {
+                    if (max.getType() == 1) {
+                        maxlist.add(Double.parseDouble(max.getOdds()));
+                    }
                 }
             }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsTwo = odds.get(1);
-            for (ScoreList.DataBean.MatchBean.OddsBean max : oddsTwo) {
-                if (max.getType() == 1) {
-                    maxlist.add(Double.parseDouble(max.getOdds()));
-                }
-            }
-            List<ScoreList.DataBean.MatchBean.OddsBean> oddsThree = odds.get(2);
-            for (ScoreList.DataBean.MatchBean.OddsBean max : oddsThree) {
-                if (max.getType() == 1) {
-                    maxlist.add(Double.parseDouble(max.getOdds()));
-                }
-            }
+
 
             if (maxlist.size() != 0) {
                 double maxStr = Collections.max(maxlist);
@@ -711,7 +706,7 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
 
 
     @OnClick({R.id.add_choose, R.id.choose_clear, R.id.layout_top_back, R.id.layout_bet, R.id.layoutGo
-            , R.id.layout_slide_bet, R.id.bottom_result_btn})
+            , R.id.layout_slide_bet, R.id.bottom_result_btn,R.id.right_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_top_back:
@@ -747,35 +742,25 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                     paySubmit();
                 }
                 break;
-            default:
+            case R.id.right_tv:
+                String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                if (TextUtils.isEmpty(token)) {
+                    ToastUtils.showToast(getString(R.string.login_please));
+                    ActivityUtils.startActivity(LoginActivity.class);
+                } else {
+                    if (Integer.parseInt(bottomResultMoneyTv.getText().toString())<8){
+                        showTipDialog("提示","合买方案金额不能小于8");
+                    }else {
+                        chipped();
+                    }
+                }
                 break;
         }
     }
 
-    /**
-     * 提交订单
-     */
-    private void paySubmit() {
-        String text = bottomResultCountTv.getText().toString();
-        String string = (String) SPUtils.get(this, Contacts.TOKEN, "");
-        if (!"0".equals(text)) {
-            if (TextUtils.isEmpty(string)) {
-                ToastUtils.showToast(getString(R.string.login_please));
-                ActivityUtils.startActivity(LoginActivity.class);
-            } else {
-                payMent(text);
-            }
-        } else {
-            if (type % 2 != 0) {
-                slideUp.show();
-                ToastUtils.showToast("请至少选择2场比赛");
-            } else {
-                ToastUtils.showToast("请至少选择1场比赛");
-            }
-        }
-    }
-
-    private void payMent(String number) {
+    //跳转合买
+    private void chipped() {
+        String number = bottomResultCountTv.getText().toString();
         List<ScoreList.DataBean.MatchBean> data = mScoreAdapter.getData();
 
         JSONArray titleBean = new JSONArray();
@@ -869,7 +854,7 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                 }
                                 break;
                         }
-                        if (null!=select&&!TextUtils.isEmpty(select.toString())&&!"{}".equals(select.toString())){
+                        if (null != select && !TextUtils.isEmpty(select.toString()) && !"{}".equals(select.toString())) {
                             type.put(select);
                         }
                     }
@@ -903,44 +888,230 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
             String money = bottomResultMoneyTv.getText().toString();
             //倍数
             String bet = edMultiple.getText().toString();
-            message.put("money",money);
-            message.put("multiple",bet);
-            message.put("number",number);
-            message.put("play_rules",Api.FOOTBALL.FT005);
+            message.put("money", money);
+            message.put("multiple", bet);
+            message.put("number", number);
+            message.put("play_rules", Api.FOOTBALL.FT005);
 
             footPay = new JSONObject();
-            footPay.put("title",titleBean);
-            footPay.put("message",message);
+            footPay.put("title", titleBean);
+            footPay.put("message", message);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiService.GET_SERVICE(Api.FootBall_Api.blend, this, footPay, new OnRequestDataListener() {
+        Intent intent=new Intent(MixtureBetActivity.this,ChippedActivity.class);
+        intent.putExtra("totalMoney",Long.parseLong(bottomResultMoneyTv.getText().toString()));
+        intent.putExtra("information", "精彩足球混合投注");
+        intent.putExtra("name", "竞彩足球");
+        intent.putExtra("json", footPay.toString());
+        intent.putExtra("lotid", "FT005");
+        startActivity(intent);
+    }
+
+    private void showTipDialog(String title,String content) {
+        final AlertDialog alertDialog1 = new AlertDialog.Builder(this, R.style.CustomDialog).create();
+        alertDialog1.setCancelable(false);
+        alertDialog1.setCanceledOnTouchOutside(false);
+        alertDialog1.show();
+        Window window1 = alertDialog1.getWindow();
+        window1.setContentView(R.layout.tip_dialog);
+        TextView tvTip = (TextView) window1.findViewById(R.id.tips_tv);
+        TextView tvContent = (TextView) window1.findViewById(R.id.tips_tv_content);
+        TextView tvClick = (TextView) window1.findViewById(R.id.click_tv);
+        tvTip.setText(title);
+        tvContent.setText(content);
+        tvClick.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void requestSuccess(int code, JSONObject data) {
-                if (code == 0) {
-                    ToastUtils.showToast(getString(R.string.checkout_success));
-                    finish();
-
-                } else {
-                    Intent intent = new Intent(MixtureBetActivity.this, PayActivity.class);
-                    intent.putExtra("information", "精彩足球混合投注");
-                    try {
-                        intent.putExtra("money", data.getJSONObject("data").getString(Contacts.Order.MONEY));
-                        intent.putExtra(Contacts.Order.ORDERID, data.getJSONObject("data").getString(Contacts.Order.ORDERID));
-                        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
-                        ToastUtils.showToast(data.getString("error_message"));
-                    } catch (JSONException e) {
-
-                    }
-
-                }
-            }
-
-            @Override
-            public void requestFailure(int code, String msg) {
-                ToastUtils.showToast(msg);
+            public void onClick(View v) {
+                alertDialog1.dismiss();
             }
         });
+    }
+
+
+
+    /**
+     * 提交订单
+     */
+    private void paySubmit() {
+        String text = bottomResultCountTv.getText().toString();
+        String string = (String) SPUtils.get(this, Contacts.TOKEN, "");
+        if (!"0".equals(text)) {
+            if (TextUtils.isEmpty(string)) {
+                ToastUtils.showToast(getString(R.string.login_please));
+                ActivityUtils.startActivity(LoginActivity.class);
+            } else {
+                payMent(text);
+            }
+        } else {
+            if (type % 2 != 0) {
+                slideUp.show();
+                ToastUtils.showToast("请至少选择2场比赛");
+            } else {
+                ToastUtils.showToast("请至少选择1场比赛");
+            }
+        }
+    }
+
+    private void payMent(String number) {
+        List<ScoreList.DataBean.MatchBean> data = mScoreAdapter.getData();
+
+        JSONArray titleBean = new JSONArray();
+
+        String s1 = data.get(0).toString();
+        try {
+            for (int i = 0; i < data.size(); i++) {
+                ScoreList.DataBean.MatchBean matchBean = data.get(i);
+                List<List<ScoreList.DataBean.MatchBean.OddsBean>> odds = matchBean.getOdds();
+
+                JSONObject team = new JSONObject();
+                JSONArray type = new JSONArray();
+
+                for (int j = 0; j < odds.size(); j++) {
+                    List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(j);
+
+                    for (int k = 0; k < oddsBeans.size(); k++) {
+                        JSONObject select = new JSONObject();
+                        ScoreList.DataBean.MatchBean.OddsBean oddsBean = oddsBeans.get(k);
+                        switch (j) {
+                            case 0:
+                                if (null != oddsBean) {
+                                    if (oddsBean.getType() == 1) {
+                                        select.put("lotid", "FT001");
+                                        if ("主胜".equals(oddsBean.getName())) {
+                                            select.put("selected", "3");
+                                        } else if ("平".equals(oddsBean.getName())) {
+                                            select.put("selected", "1");
+                                        } else if ("客胜".equals(oddsBean.getName())) {
+                                            select.put("selected", "0");
+                                        }
+                                    }
+                                }
+                                break;
+                            case 1:
+                                if (null != oddsBean) {
+                                    if (oddsBean.getType() == 1) {
+                                        select.put("lotid", "FT006");
+                                        if ("主胜".equals(oddsBean.getName())) {
+                                            select.put("selected", "3");
+                                        } else if ("平".equals(oddsBean.getName())) {
+                                            select.put("selected", "1");
+                                        } else if ("客胜".equals(oddsBean.getName())) {
+                                            select.put("selected", "0");
+                                        }
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (null != oddsBean) {
+                                    if (oddsBean.getType() == 1) {
+                                        select.put("lotid", "FT002");
+                                        if ("平其它".equals(oddsBeans.get(k).getName())) {
+                                            select.put("selected", "99");
+                                        } else if ("负其它".equals(oddsBeans.get(k).getName())) {
+                                            select.put("selected", "09");
+                                        } else if ("胜其它".equals(oddsBeans.get(k).getName())) {
+                                            select.put("selected", "90");
+                                        } else {
+                                            select.put("selected", oddsBean.getName());
+                                        }
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (null != oddsBean) {
+                                    if (oddsBean.getType() == 1) {
+                                        if ("7+".equals(oddsBean.getName())) {
+                                            select.put("selected", "7");
+                                        } else {
+                                            select.put("selected", oddsBean.getName());
+                                        }
+                                        select.put("lotid", "FT003");
+                                    }
+                                }
+                                break;
+                            case 4:
+                                if (null != oddsBean) {
+                                    if (oddsBean.getType() == 1) {
+                                        select.put("lotid", "FT004");
+                                        if ("胜胜".equals(oddsBean.getName())) {
+                                            select.put("selected", "33");
+                                        } else if ("胜负".equals(oddsBean.getName())) {
+                                            select.put("selected", "30");
+                                        } else if ("负胜".equals(oddsBean.getName())) {
+                                            select.put("selected", "03");
+                                        } else if ("负负".equals(oddsBean.getName())) {
+                                            select.put("selected", "00");
+                                        } else if ("负平".equals(oddsBean.getName())) {
+                                            select.put("selected", "01");
+                                        } else if ("平负".equals(oddsBean.getName())) {
+                                            select.put("selected", "10");
+                                        } else if ("平胜".equals(oddsBean.getName())) {
+                                            select.put("selected", "13");
+                                        } else if ("胜平".equals(oddsBean.getName())) {
+                                            select.put("selected", "31");
+                                        } else if ("平平".equals(oddsBean.getName())) {
+                                            select.put("selected", "11");
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                        if (null != select && !TextUtils.isEmpty(select.toString()) && !"{}".equals(select.toString())) {
+                            type.put(select);
+                        }
+                    }
+                }
+                team.put("type", type);
+                team.put("match", matchBean.getMatch_id());
+                team.put("team", matchBean.getHomeTeam() + ":" + matchBean.getAwayTeam());
+                titleBean.put(team);
+
+            }
+
+            JSONObject message = new JSONObject();
+
+
+            if (mSrceenList != null) {
+                if (mSrceenList.size() != 0) {
+                    StringBuilder sb = new StringBuilder();
+                    for (MenuItem s : mSrceenList) {
+                        if (s.getIcon() == 1) {
+                            String content = s.getContent();
+                            String substring = content.substring(0, 1);
+                            sb.append(substring).append(",");
+                        }
+                    }
+                    String string = sb.toString();
+                    String substring = string.substring(0, string.length() - 1);
+                    message.put("strand", substring);
+                }
+            }
+            //钱数
+            String money = bottomResultMoneyTv.getText().toString();
+            //倍数
+            String bet = edMultiple.getText().toString();
+            message.put("money", money);
+            message.put("multiple", bet);
+            message.put("number", number);
+            message.put("play_rules", Api.FOOTBALL.FT005);
+
+            footPay = new JSONObject();
+            footPay.put("title", titleBean);
+            footPay.put("message", message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        Intent intent = new Intent(MixtureBetActivity.this, PayAffirmActivity.class);
+        intent.putExtra("information", "精彩足球混合投注");
+        intent.putExtra("money", bottomResultMoneyTv.getText().toString());
+        intent.putExtra("lotid", "FT005");
+        intent.putExtra("json", footPay.toString());
+        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
+
     }
 
     private void getSelectBet() {
@@ -1010,6 +1181,7 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
         if (resultCode == -1) {
             switch (requestCode) {
                 case Contacts.REQUEST_CODE_TO_PAY:
+                    setResult(-1);
                     finish();
                     break;
             }

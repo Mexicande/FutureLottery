@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">幸运彩</string>
     <string name="buy_lottery">购彩</string>
+    <string name="chipped">合买</string>
     <string name="open_lottery">开奖</string>
     <string name="user_center">我的</string>
     <string name="login">登录</string>

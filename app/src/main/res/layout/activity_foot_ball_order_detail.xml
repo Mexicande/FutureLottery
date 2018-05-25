@@ -11,7 +11,8 @@
 
     <include layout="@layout/toolbar_back"/>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nest_sv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -42,7 +43,7 @@
                         android:id="@+id/name_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="双色球"
+                        android:text=""
                         android:layout_marginLeft="@dimen/length_10"
                         android:textColor="@color/black"
                         android:textSize="@dimen/size_15"
@@ -117,6 +118,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/length_10"
+                    android:background="@mipmap/order_wait"
                     />
                 <ImageView
                     android:layout_width="match_parent"
@@ -209,7 +211,7 @@
                     android:layout_weight="94"
                     android:textSize="@dimen/size_11"
                     android:textColor="@color/color_666"
-                    android:text="投注(出票赔率)"
+                    android:text="投注(赔率)"
                     android:gravity="center"
                     />
                 <TextView
@@ -379,7 +381,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/length_10"/>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 
 

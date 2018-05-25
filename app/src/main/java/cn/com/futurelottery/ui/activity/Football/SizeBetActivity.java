@@ -3,6 +3,7 @@ package cn.com.futurelottery.ui.activity.Football;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,6 +48,9 @@ import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.model.FootPay;
 import cn.com.futurelottery.ui.activity.LoginActivity;
 import cn.com.futurelottery.ui.activity.PayActivity;
+import cn.com.futurelottery.ui.activity.PayAffirmActivity;
+import cn.com.futurelottery.ui.activity.PaySucessActivity;
+import cn.com.futurelottery.ui.activity.chipped.ChippedActivity;
 import cn.com.futurelottery.ui.adapter.football.FootChooseSizeAdapter;
 import cn.com.futurelottery.ui.dialog.ClearDialogFragment;
 import cn.com.futurelottery.ui.dialog.SizeBetDialogFragment;
@@ -58,7 +63,7 @@ import cn.com.futurelottery.view.topRightMenu.MenuItem;
 import cn.com.futurelottery.view.topRightMenu.TRMenuAdapter;
 
 
-public class SizeBetActivity extends BaseActivity implements SizeDialogListener,ClearDialogListener{
+public class SizeBetActivity extends BaseActivity implements SizeDialogListener, ClearDialogListener {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -92,13 +97,15 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
     ImageView ivArrow;
     @BindView(R.id.predict_money)
     TextView predictMoney;
+    @BindView(R.id.right_tv)
+    TextView rightTv;
     private SlideUp slideUp;
     private TRMenuAdapter mBottomTRMenuAdapter;
     private FootChooseSizeAdapter mSizeAdapter;
     private List<FootBallList.DataBean.MatchBean> mSizeBeanList;
     private List<MenuItem> mSrceenList;
     private int type = 0;
-    private  View view;
+    private View view;
 
     @Override
     public int getLayoutResource() {
@@ -110,10 +117,10 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         super.onCreate(savedInstanceState);
         type = getIntent().getIntExtra("type", 0);
         initView();
-        if(type%2!=0){
+        if (type % 2 != 0) {
             //过关
             initAllPass();
-        }else {
+        } else {
             //单关
             initOnePass();
         }
@@ -123,7 +130,7 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
     private void initOnePass() {
         int bet = Integer.parseInt(edMultiple.getText().toString());
         //注数
-        bottomResultTvBet.setText(bet+"倍");
+        bottomResultTvBet.setText(bet + "倍");
 
         //单关预计奖金
         double oneMinMoney;
@@ -131,33 +138,38 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
         OnePass();
         //单关最大预计奖金
-        oneMaxMoney = getOneMax()*2*bet;
+        oneMaxMoney = getOneMax() * 2 * bet;
         //单关最小预计奖金
-        oneMinMoney = getOneMoney()*2*bet;
+        oneMinMoney = getOneMoney() * 2 * bet;
 
-        double max=oneMaxMoney;
+        double max = oneMaxMoney;
 
 
-        DecimalFormat decimalFormat =new DecimalFormat("#.00");
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
         String strMin = decimalFormat.format(oneMinMoney);
         String strMax = decimalFormat.format(max);
-        if(oneMaxMoney==oneMinMoney){
-            predictMoney.setText(strMin+"");
-        }else {
-            predictMoney.setText(strMin+"~"+strMax);
+        if (oneMaxMoney == oneMinMoney) {
+            predictMoney.setText(strMin + "");
+        } else {
+            predictMoney.setText(strMin + "~" + strMax);
         }
 
 
     }
 
     private void initView() {
+        //合买
+        rightTv.setVisibility(View.VISIBLE);
+        rightTv.setText("发起合买");
+
+
         mSizeBeanList = (List<FootBallList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
         mSizeAdapter = new FootChooseSizeAdapter(mSizeBeanList);
         chooseRecycler.setLayoutManager(new LinearLayoutManager(this));
         chooseRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         ((SimpleItemAnimator) chooseRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
         chooseRecycler.setAdapter(mSizeAdapter);
-         view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
+        view = getLayoutInflater().inflate(R.layout.payment_rv_footor, null);
         mSizeAdapter.addFooterView(view);
 
         slideUp = new SlideUp.Builder(slideView)
@@ -168,6 +180,7 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                 .build();
 
     }
+
     private void initAllPass() {
         initSlideLabel();
         trmRecyclerview.setLayoutManager(new GridLayoutManager(this, 4));
@@ -178,10 +191,11 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String len = s.toString();
-                if (len.startsWith("0")&&len.length()>1) {
+                if (len.startsWith("0") && len.length() > 1) {
                     String substring = len.substring(1, len.length() - 1);
                     slideMultiple.setText(substring);
                 }
@@ -200,16 +214,16 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                     slideMultiple.setText("50");
                     return;
                 }
-                if (amount<1){
+                if (amount < 1) {
                     slideMultiple.setText("1");
                     return;
                 }
 
                 edMultiple.setText(s);
-                if(type%2!=0){
+                if (type % 2 != 0) {
                     //过关
                     upDate();
-                }else {
+                } else {
                     //单关
                     initOnePass();
                 }
@@ -228,10 +242,10 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                     item.setIcon(0);
                 }
                 mBottomTRMenuAdapter.notifyItemChanged(position);
-                if(type%2!=0){
+                if (type % 2 != 0) {
                     //过关
                     upDate();
-                }else {
+                } else {
                     //单关
                     initOnePass();
                 }
@@ -242,11 +256,22 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
     }
 
     /**
-     *
      * 串数标签
      */
-    private void initSlideLabel(){
+    private void initSlideLabel() {
         int size = mSizeBeanList.size();
+        if (type==9||type==10){
+            //半全场大于四串的写成4
+            if (size>4){
+                size=4;
+            }
+        }
+        if (type==7||type==8){
+            //总进球大于六串的写成6
+            if (size>6){
+                size=6;
+            }
+        }
         mSrceenList = new ArrayList<>();
         for (int i = 2; i <= size; i++) {
             if (i <= 8) {
@@ -258,10 +283,10 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
             }
         }
         ivArrow.setVisibility(View.VISIBLE);
-        if(mSrceenList.size()==1){
+        if (mSrceenList.size() == 1) {
             tvSelectBet.setText(mSrceenList.get(0).getContent());
             mSrceenList.get(0).setIcon(1);
-        }else {
+        } else {
             tvSelectBet.setText("投注方式(必选)");
             ivArrow.setVisibility(View.VISIBLE);
         }
@@ -274,14 +299,14 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         mSizeAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.iv_delete:
                         mSizeAdapter.remove(position);
                         delectDate();
                         break;
                     case R.id.tv_score:
                         FootBallList.DataBean.MatchBean item = mSizeAdapter.getItem(position);
-                        SizeBetDialogFragment adialogFragment = SizeBetDialogFragment.newInstance(item,position);
+                        SizeBetDialogFragment adialogFragment = SizeBetDialogFragment.newInstance(item, position);
                         adialogFragment.show(getSupportFragmentManager(), "timePicker");
                         break;
                     default:
@@ -299,8 +324,8 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String len = s.toString();
-                if(len.startsWith("0")&&len.length()>1){
-                    String substring = len.substring(1, len.length()-1);
+                if (len.startsWith("0") && len.length() > 1) {
+                    String substring = len.substring(1, len.length() - 1);
                     edMultiple.setText(substring);
                 }
             }
@@ -317,15 +342,15 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                     edMultiple.setText("50");
                     return;
                 }
-                if (amount<1){
+                if (amount < 1) {
                     edMultiple.setText("1");
                     return;
                 }
 
-                if(type%2!=0){
+                if (type % 2 != 0) {
                     //过关
                     upDate();
-                }else {
+                } else {
                     //单关
                     initOnePass();
                 }
@@ -334,9 +359,9 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         slideUp.addSlideListener(new SlideUp.Listener.Visibility() {
             @Override
             public void onVisibilityChanged(int visibility) {
-                if(visibility==View.VISIBLE){
+                if (visibility == View.VISIBLE) {
                     slideMultiple.setText(edMultiple.getText().toString());
-                }else {
+                } else {
                     edMultiple.setText(slideMultiple.getText().toString());
                 }
             }
@@ -347,14 +372,14 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
      * 删除数据
      */
     private void delectDate() {
-        if(type%2!=0){
+        if (type % 2 != 0) {
             //过关
-            if(mSizeAdapter.getData().size()>0){
-                if(mSizeAdapter.getData().size()==mBottomTRMenuAdapter.getData().size()){
-                    mBottomTRMenuAdapter.remove(mBottomTRMenuAdapter.getData().size()-1);
+            if (mSizeAdapter.getData().size() > 0) {
+                if (mSizeAdapter.getData().size() == mBottomTRMenuAdapter.getData().size()) {
+                    mBottomTRMenuAdapter.remove(mBottomTRMenuAdapter.getData().size() - 1);
                     mBottomTRMenuAdapter.notifyDataSetChanged();
                 }
-                if(mSizeAdapter.getData().size()==0){
+                if (mSizeAdapter.getData().size() == 0) {
                     tvSelectBet.setText("投注方式(必选)");
                     chooseRecycler.setVisibility(View.GONE);
                     emptyLayout.setVisibility(View.VISIBLE);
@@ -363,29 +388,30 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                 getSelectBet();
                 upDate();
             }
-        }else {
+        } else {
             //单关
             initOnePass();
         }
     }
+
     /**
      * 刷新数据
      */
     private void upDate() {
-        int select=0;
+        int select = 0;
         //注数
         int bet = Integer.parseInt(edMultiple.getText().toString());
-        int allCount=0;
+        int allCount = 0;
 
 
-        for(MenuItem s:mSrceenList){
-            if(s.getIcon()==1){
+        for (MenuItem s : mSrceenList) {
+            if (s.getIcon() == 1) {
                 select++;
             }
         }
 
-        if(select!=0){
-            for(int i=0;i<mSrceenList.size();i++){
+        if (select != 0) {
+            for (int i = 0; i < mSrceenList.size(); i++) {
                 if (mSrceenList.get(i).getIcon() == 1) {
                     String content = mSrceenList.get(i).getContent();
                     String substring = content.substring(0, 1);
@@ -395,14 +421,13 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                 }
             }
             updateMinOddsAll();
-        }else {
+        } else {
             predictMoney.setText("0.00");
         }
 
-        bottomResultTvBet.setText(bet+"倍");
+        bottomResultTvBet.setText(bet + "倍");
         bottomResultCountTv.setText(String.valueOf(allCount));
         bottomResultMoneyTv.setText(allCount * Integer.valueOf(bet) * 2 + "");
-
 
 
     }
@@ -411,17 +436,17 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
     /**
      * 单关注数---钱数
      */
-    private void  OnePass() {
+    private void OnePass() {
         String bet = edMultiple.getText().toString();
         int count = 0;
 
-        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
+        for (FootBallList.DataBean.MatchBean matchBean : mSizeBeanList) {
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
-                for(int i=0;i<odds.size();i++){
-                    if(odds.get(i).getType()==1){
-                        count++;
-                    }
+            for (int i = 0; i < odds.size(); i++) {
+                if (odds.get(i).getType() == 1) {
+                    count++;
                 }
+            }
         }
 
         bottomResultCountTv.setText(String.valueOf(count));
@@ -431,17 +456,15 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
     }
 
     /**
-     *
      * 单关奖金
-     *
      */
     private double getOneMoney() {
-        double min=0;
-        ArrayList<Double>mlist=new ArrayList<>();
-        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
+        double min = 0;
+        ArrayList<Double> mlist = new ArrayList<>();
+        for (FootBallList.DataBean.MatchBean matchBean : mSizeBeanList) {
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
-            for(int i=0;i<odds.size();i++){
-                if(odds.get(i).getType()==1){
+            for (int i = 0; i < odds.size(); i++) {
+                if (odds.get(i).getType() == 1) {
                     mlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
 
@@ -449,9 +472,9 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
         }
 
-        if(mlist.size()!=0){
+        if (mlist.size() != 0) {
             int i = Integer.parseInt(edMultiple.getText().toString());
-            min= Collections.min(mlist);
+            min = Collections.min(mlist);
 
         }
         return min;
@@ -459,31 +482,30 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
     /**
      * 单关最大奖金
+     *
      * @return
      */
     private double getOneMax() {
-        double money=0;
+        double money = 0;
 
-        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
+        for (FootBallList.DataBean.MatchBean matchBean : mSizeBeanList) {
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
-            ArrayList<Double>mlist=new ArrayList<>();
-            for(int i=0;i<odds.size();i++){
-                if(odds.get(i).getType()==1){
+            ArrayList<Double> mlist = new ArrayList<>();
+            for (int i = 0; i < odds.size(); i++) {
+                if (odds.get(i).getType() == 1) {
                     mlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
 
             }
-            if(mlist.size()!=0){
-                double max  = Collections.max(mlist);
-                money+=max;
+            if (mlist.size() != 0) {
+                double max = Collections.max(mlist);
+                money += max;
             }
         }
 
 
         return money;
     }
-
-
 
 
     /**
@@ -494,13 +516,13 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
      */
     private Integer nuBet(int nu) {
         Integer integer = 0;
-        int number=0;
+        int number = 0;
         ArrayList<Integer> mArrays = new ArrayList<>();
-        for(FootBallList.DataBean.MatchBean matchBean:mSizeBeanList){
-            number=0;
+        for (FootBallList.DataBean.MatchBean matchBean : mSizeBeanList) {
+            number = 0;
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
-            for(int i=0;i<odds.size();i++){
-                if(odds.get(i).getType()==1){
+            for (int i = 0; i < odds.size(); i++) {
+                if (odds.get(i).getType() == 1) {
                     number++;
                 }
 
@@ -513,7 +535,6 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
         return integer;
     }
-
 
 
     /**
@@ -565,14 +586,14 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         ArrayList<Double> list = new ArrayList<>();
         list.clear();
         for (FootBallList.DataBean.MatchBean s : mSizeBeanList) {
-            ArrayList<Double>maxlist=new ArrayList<>();
+            ArrayList<Double> maxlist = new ArrayList<>();
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = s.getOdds();
-            for(int i=0;i<odds.size();i++){
-                if(odds.get(i).getType()==1){
+            for (int i = 0; i < odds.size(); i++) {
+                if (odds.get(i).getType() == 1) {
                     maxlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
             }
-            if(maxlist.size()!=0){
+            if (maxlist.size() != 0) {
                 Double minStr = Collections.min(maxlist);
                 list.add(minStr);
             }
@@ -580,34 +601,35 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         }
         Collections.sort(list);
 
-        ArrayList<Integer>mList=new ArrayList<>();
+        ArrayList<Integer> mList = new ArrayList<>();
         for (int j = 0; j < mSrceenList.size(); j++) {
             if (mSrceenList.get(j).getIcon() == 1) {
-                    String content = mSrceenList.get(j).getContent();
-                    String substring = content.substring(0, 1);
-                    Integer integer = Integer.valueOf(substring);
-                    mList.add(integer);
+                String content = mSrceenList.get(j).getContent();
+                String substring = content.substring(0, 1);
+                Integer integer = Integer.valueOf(substring);
+                mList.add(integer);
             }
         }
 
-            double money=1;
-            Integer integer = mList.get(0);
-            for(int k=0;k<integer;k++){
-                money=money*list.get(k);
-            }
-            min = money*2*bet;
-            double v = updateMaxOddsAll() * 2 * bet;
+        double money = 1;
+        Integer integer = mList.get(0);
+        for (int k = 0; k < integer; k++) {
+            money = money * list.get(k);
+        }
+        min = money * 2 * bet;
+        double v = updateMaxOddsAll() * 2 * bet;
 
-            DecimalFormat decimalFormat =new DecimalFormat("#.00");
-            String strMin = decimalFormat.format(min);
-            String strMax = decimalFormat.format(v);
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String strMin = decimalFormat.format(min);
+        String strMax = decimalFormat.format(v);
 
-            if(v!=min){
-                predictMoney.setText(strMin+"~"+strMax);
-            } else {
-                predictMoney.setText(strMax+"");
-            }
+        if (v != min) {
+            predictMoney.setText(strMin + "~" + strMax);
+        } else {
+            predictMoney.setText(strMax + "");
+        }
     }
+
     /**
      * 多注最大奖金
      */
@@ -616,49 +638,49 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         ArrayList<Double> mlist = new ArrayList<>();
         for (FootBallList.DataBean.MatchBean s : mSizeBeanList) {
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = s.getOdds();
-            ArrayList<Double>maxlist=new ArrayList<>();
-            for(int i=0;i<odds.size();i++){
-                if(odds.get(i).getType()==1){
+            ArrayList<Double> maxlist = new ArrayList<>();
+            for (int i = 0; i < odds.size(); i++) {
+                if (odds.get(i).getType() == 1) {
                     maxlist.add(Double.parseDouble(odds.get(i).getOdds()));
                 }
             }
-            if(maxlist.size()!=0){
+            if (maxlist.size() != 0) {
                 Double max = Collections.max(maxlist);
                 mlist.add(max);
             }
         }
 
-        double money=0;
+        double money = 0;
 
         for (int i = 0; i < mSrceenList.size(); i++) {
             if (mSrceenList.get(i).getIcon() == 1) {
                 String content = mSrceenList.get(i).getContent();
                 String substring = content.substring(0, 1);
                 Integer integer = Integer.valueOf(substring);
-                money += setMaX(mlist,integer);
+                money += setMaX(mlist, integer);
             }
         }
         return money;
     }
 
-    private Double setMaX(ArrayList<Double>mList,int bunch){
+    private Double setMaX(ArrayList<Double> mList, int bunch) {
 
         if (bunch == 1) {
             double count = 0;
-            for(int i=0;i<mList.size();i++){
+            for (int i = 0; i < mList.size(); i++) {
 
-                count+=mList.get(i)*1;
+                count += mList.get(i) * 1;
             }
             return count;
-        }else {
-            double money=0;
+        } else {
+            double money = 0;
             ArrayList<Double> mArrays = new ArrayList<>();
 
             mArrays.addAll(mList);
 
-            for(int j=0;j<mList.size()-bunch+1;j++){
+            for (int j = 0; j < mList.size() - bunch + 1; j++) {
                 mArrays.remove(0);
-                money+=mList.get(j)*setMaX(mArrays,bunch-1);
+                money += mList.get(j) * setMaX(mArrays, bunch - 1);
             }
             return money;
         }
@@ -666,9 +688,8 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
     }
 
 
-
     @OnClick({R.id.add_choose, R.id.choose_clear, R.id.layout_top_back, R.id.layout_bet, R.id.layoutGo
-            , R.id.layout_slide_bet, R.id.bottom_result_btn})
+            , R.id.layout_slide_bet, R.id.bottom_result_btn,R.id.right_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_top_back:
@@ -679,12 +700,12 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                 break;
             case R.id.choose_clear:
 
-                ClearDialogFragment quitDialogFragment=ClearDialogFragment.newInstance(1);
-                quitDialogFragment.show(getSupportFragmentManager(),"footAll");
+                ClearDialogFragment quitDialogFragment = ClearDialogFragment.newInstance(1);
+                quitDialogFragment.show(getSupportFragmentManager(), "footAll");
 
                 break;
             case R.id.layout_bet:
-                if (type%2!=0) {
+                if (type % 2 != 0) {
                     slideUp.show();
                     if (mSrceenList.size() == 0) {
                         ToastUtils.showToast("请选择投注方式");
@@ -693,42 +714,192 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
                 break;
             case R.id.layout_slide_bet:
             case R.id.layoutGo:
-                if (type%2!=0) {
+                if (type % 2 != 0) {
                     slideUp.hide();
                     getSelectBet();
                 }
                 break;
             case R.id.bottom_result_btn:
-                if(slideUp.isVisible()){
+                if (slideUp.isVisible()) {
                     slideUp.hide();
                     getSelectBet();
-                }else {
+                } else {
                     paySubmit();
                 }
                 break;
-            default:
+            case R.id.right_tv:
+                String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                if (TextUtils.isEmpty(token)) {
+                    ToastUtils.showToast(getString(R.string.login_please));
+                    ActivityUtils.startActivity(LoginActivity.class);
+                } else {
+                    if (Integer.parseInt(bottomResultMoneyTv.getText().toString())<8){
+                        showTipDialog("提示","合买方案金额不能小于8");
+                    }else {
+                        chipped();
+                    }
+                }
                 break;
         }
+    }
+
+
+    //跳转合买
+    private void chipped() {
+        String number = bottomResultCountTv.getText().toString();
+        ArrayList<FootPay.TitleBean> list = new ArrayList<>();
+        for (int i = 0; i < mSizeBeanList.size(); i++) {
+            FootBallList.DataBean.MatchBean matchBean = mSizeBeanList.get(i);
+            List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
+
+            FootPay.TitleBean titleBean = new FootPay.TitleBean();
+            StringBuilder type = new StringBuilder();
+            for (int j = 0; j < odds.size(); j++) {
+                if (odds.get(j).getType() == 1) {
+                    if ("7+".equals(odds.get(j).getName())) {
+                        type.append("7").append(",");
+                    } else if ("胜胜".equals(odds.get(j).getName())) {
+                        type.append("33").append(",");
+                    } else if ("胜负".equals(odds.get(j).getName())) {
+                        type.append("30").append(",");
+                    } else if ("负胜".equals(odds.get(j).getName())) {
+                        type.append("03").append(",");
+                    } else if ("负负".equals(odds.get(j).getName())) {
+                        type.append("00").append(",");
+                    } else if ("负平".equals(odds.get(j).getName())) {
+                        type.append("01").append(",");
+                    } else if ("平负".equals(odds.get(j).getName())) {
+                        type.append("10").append(",");
+                    } else if ("平胜".equals(odds.get(j).getName())) {
+                        type.append("13").append(",");
+                    } else if ("胜平".equals(odds.get(j).getName())) {
+                        type.append("31").append(",");
+                    } else if ("平平".equals(odds.get(j).getName())) {
+                        type.append("11").append(",");
+                    } else {
+                        type.append(odds.get(j).getName()).append(",");
+                    }
+                }
+            }
+            String s = type.toString();
+            String substring = s.substring(0, s.length() - 1);
+            titleBean.setType(substring);
+            titleBean.setMatch(mSizeBeanList.get(i).getMatch_id());
+            titleBean.setTeam(matchBean.getHomeTeam() + ":" + matchBean.getAwayTeam());
+            list.add(titleBean);
+        }
+        FootPay.MessageBean messageBean = new FootPay.MessageBean();
+
+        if (mSrceenList != null) {
+            if (mSrceenList.size() != 0) {
+                StringBuilder sb = new StringBuilder();
+                for (MenuItem s : mSrceenList) {
+                    if (s.getIcon() == 1) {
+                        String content = s.getContent();
+                        String substring = content.substring(0, 1);
+                        sb.append(substring).append(",");
+                    }
+                }
+                String string = sb.toString();
+                String substring = string.substring(0, string.length() - 1);
+                messageBean.setStrand(substring);
+            }
+        }
+
+        //钱数
+        String money = bottomResultMoneyTv.getText().toString();
+        //倍数
+        String bet = edMultiple.getText().toString();
+        messageBean.setMoney(Integer.parseInt(money));
+        messageBean.setMultiple(Integer.parseInt(bet));
+        messageBean.setNumber(Integer.parseInt(number));
+        switch (type) {
+            case 7:
+                //队伍
+                messageBean.setPlay_rules(Api.FOOTBALL.FT003);
+                break;
+            case 8:
+                messageBean.setStrand("0");
+                messageBean.setPlay_rules(Api.FOOTBALL.FT003);
+                break;
+            case 9:
+                messageBean.setPlay_rules(Api.FOOTBALL.FT004);
+                break;
+            case 10:
+                messageBean.setStrand("0");
+                messageBean.setPlay_rules(Api.FOOTBALL.FT004);
+                break;
+            default:
+                break;
+
+        }
+
+
+        FootPay footPay = new FootPay();
+        footPay.setMessage(messageBean);
+        footPay.setTitle(list);
+        Gson gson = new Gson();
+
+        String json = gson.toJson(footPay);
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Intent intent=new Intent(SizeBetActivity.this,ChippedActivity.class);
+        intent.putExtra("totalMoney",Long.parseLong(bottomResultMoneyTv.getText().toString()));
+        if (type < 9) {
+            intent.putExtra("information", "竞彩足球总进球");
+        } else {
+            intent.putExtra("information", "竞彩足球半全场");
+        }
+        intent.putExtra("name", "竞彩足球");
+        intent.putExtra("json", jsonObject.toString());
+        intent.putExtra("lotid", "ftb");
+        startActivity(intent);
+    }
+
+    private void showTipDialog(String title,String content) {
+        final AlertDialog alertDialog1 = new AlertDialog.Builder(this, R.style.CustomDialog).create();
+        alertDialog1.setCancelable(false);
+        alertDialog1.setCanceledOnTouchOutside(false);
+        alertDialog1.show();
+        Window window1 = alertDialog1.getWindow();
+        window1.setContentView(R.layout.tip_dialog);
+        TextView tvTip = (TextView) window1.findViewById(R.id.tips_tv);
+        TextView tvContent = (TextView) window1.findViewById(R.id.tips_tv_content);
+        TextView tvClick = (TextView) window1.findViewById(R.id.click_tv);
+        tvTip.setText(title);
+        tvContent.setText(content);
+        tvClick.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                alertDialog1.dismiss();
+            }
+        });
     }
 
     /**
      * 提交订单
      */
     private void paySubmit() {
-        String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
+        String string = (String) SPUtils.get(this, Contacts.TOKEN, "");
         String text = bottomResultCountTv.getText().toString();
-        if(!"0".equals(text)){
-            if(TextUtils.isEmpty(string)){
+        if (!"0".equals(text)) {
+            if (TextUtils.isEmpty(string)) {
                 ToastUtils.showToast(getString(R.string.login_please));
                 ActivityUtils.startActivity(LoginActivity.class);
-            }else {
+            } else {
                 payMent(text);
             }
-        }else {
-            if (type%2!=0) {
+        } else {
+            if (type % 2 != 0) {
                 slideUp.show();
                 ToastUtils.showToast("请至少选择2场比赛");
-            }else {
+            } else {
                 ToastUtils.showToast("请至少选择1场比赛");
             }
         }
@@ -755,39 +926,40 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
     /**
      * 支付
+     *
      * @param
      */
     private void payMent(String str) {
-        ArrayList<FootPay.TitleBean>list=new ArrayList<>();
-        for(int i=0;i<mSizeBeanList.size();i++){
+        ArrayList<FootPay.TitleBean> list = new ArrayList<>();
+        for (int i = 0; i < mSizeBeanList.size(); i++) {
             FootBallList.DataBean.MatchBean matchBean = mSizeBeanList.get(i);
             List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
 
-            FootPay.TitleBean titleBean=new FootPay.TitleBean();
-            StringBuilder type=new StringBuilder();
-            for(int j=0;j<odds.size();j++){
-                if(odds.get(j).getType()==1){
-                    if("7+".equals(odds.get(j).getName())){
+            FootPay.TitleBean titleBean = new FootPay.TitleBean();
+            StringBuilder type = new StringBuilder();
+            for (int j = 0; j < odds.size(); j++) {
+                if (odds.get(j).getType() == 1) {
+                    if ("7+".equals(odds.get(j).getName())) {
                         type.append("7").append(",");
-                    }else if("胜胜".equals(odds.get(j).getName())){
+                    } else if ("胜胜".equals(odds.get(j).getName())) {
                         type.append("33").append(",");
-                    }else if("胜负".equals(odds.get(j).getName())){
+                    } else if ("胜负".equals(odds.get(j).getName())) {
                         type.append("30").append(",");
-                    }else if("负胜".equals(odds.get(j).getName())){
+                    } else if ("负胜".equals(odds.get(j).getName())) {
                         type.append("03").append(",");
-                    }else if("负负".equals(odds.get(j).getName())){
+                    } else if ("负负".equals(odds.get(j).getName())) {
                         type.append("00").append(",");
-                    }else if("负平".equals(odds.get(j).getName())){
+                    } else if ("负平".equals(odds.get(j).getName())) {
                         type.append("01").append(",");
-                    }else if("平负".equals(odds.get(j).getName())){
+                    } else if ("平负".equals(odds.get(j).getName())) {
                         type.append("10").append(",");
-                    }else if("平胜".equals(odds.get(j).getName())){
+                    } else if ("平胜".equals(odds.get(j).getName())) {
                         type.append("13").append(",");
-                    }else if("胜平".equals(odds.get(j).getName())){
+                    } else if ("胜平".equals(odds.get(j).getName())) {
                         type.append("31").append(",");
-                    }else if("平平".equals(odds.get(j).getName())){
+                    } else if ("平平".equals(odds.get(j).getName())) {
                         type.append("11").append(",");
-                    }else {
+                    } else {
                         type.append(odds.get(j).getName()).append(",");
                     }
                 }
@@ -796,16 +968,16 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
             String substring = s.substring(0, s.length() - 1);
             titleBean.setType(substring);
             titleBean.setMatch(mSizeBeanList.get(i).getMatch_id());
-            titleBean.setTeam(matchBean.getHomeTeam()+":"+matchBean.getAwayTeam());
+            titleBean.setTeam(matchBean.getHomeTeam() + ":" + matchBean.getAwayTeam());
             list.add(titleBean);
         }
-        FootPay.MessageBean messageBean=new FootPay.MessageBean();
+        FootPay.MessageBean messageBean = new FootPay.MessageBean();
 
-        if(mSrceenList!=null){
-            if(mSrceenList.size()!=0){
-                StringBuilder sb=new StringBuilder();
-                for(MenuItem s:mSrceenList){
-                    if(s.getIcon()==1){
+        if (mSrceenList != null) {
+            if (mSrceenList.size() != 0) {
+                StringBuilder sb = new StringBuilder();
+                for (MenuItem s : mSrceenList) {
+                    if (s.getIcon() == 1) {
                         String content = s.getContent();
                         String substring = content.substring(0, 1);
                         sb.append(substring).append(",");
@@ -824,7 +996,7 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         messageBean.setMoney(Integer.parseInt(money));
         messageBean.setMultiple(Integer.parseInt(bet));
         messageBean.setNumber(Integer.parseInt(str));
-        switch (type){
+        switch (type) {
             case 7:
                 //队伍
                 messageBean.setPlay_rules(Api.FOOTBALL.FT003);
@@ -846,84 +1018,66 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
         }
 
 
-        FootPay footPay=new FootPay();
+        FootPay footPay = new FootPay();
         footPay.setMessage(messageBean);
         footPay.setTitle(list);
-        Gson gson=new Gson();
+        Gson gson = new Gson();
 
         String json = gson.toJson(footPay);
 
         JSONObject jsonObject = null;
         try {
-            jsonObject=new JSONObject(json);
+            jsonObject = new JSONObject(json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ApiService.GET_SERVICE(Api.FootBall_Api.Payment, this, jsonObject, new OnRequestDataListener() {
-            @Override
-            public void requestSuccess(int code, JSONObject data) {
-                if(code==0){
-                    ToastUtils.showToast(getString(R.string.checkout_success));
-                    finish();
-                }else {
-                    Intent intent=new Intent(SizeBetActivity.this,PayActivity.class);
-                    if(type<9){
-                        intent.putExtra("information","精彩足球总进球");
-                    }else {
-                        intent.putExtra("information","精彩足球半全场");
-                    }
-                    try {
-                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
-                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
-                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
-                        ToastUtils.showToast(data.getString("error_message"));
-                    } catch (JSONException e) {
 
-                    }
-
-                }
-            }
-
-            @Override
-            public void requestFailure(int code, String msg) {
-                ToastUtils.showToast(msg);
-            }
-        });
+        Intent intent = new Intent(SizeBetActivity.this, PayAffirmActivity.class);
+        if (type < 9) {
+            intent.putExtra("information", "精彩足球总进球");
+        } else {
+            intent.putExtra("information", "精彩足球半全场");
+        }
+        intent.putExtra("money", bottomResultMoneyTv.getText().toString());
+        intent.putExtra("lotid", "ftb");
+        intent.putExtra("json", jsonObject.toString());
+        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
     }
 
     @Override
     public void onDefeateComplete(int index, FootBallList.DataBean.MatchBean matchBean) {
-            int number=0;
+        int number = 0;
         List<FootBallList.DataBean.MatchBean.OddsBean> odds = matchBean.getOdds();
-            for(int i=0;i<odds.size();i++){
-                for(int k=0;k<odds.size();k++){
-                    if(odds.get(k).getType()==1){
-                        number++;
-                    }
-                }
-            }
-            if(number==0){
-                mSizeAdapter.remove(index);
-                    delectDate();
-            }else {
-                mSizeAdapter.setData(index,matchBean);
-                mSizeAdapter.notifyItemChanged(index);
-                if(type%2!=0){
-                    //过关
-                    upDate();
-                }else {
-                    //单关
-                    initOnePass();
+        for (int i = 0; i < odds.size(); i++) {
+            for (int k = 0; k < odds.size(); k++) {
+                if (odds.get(k).getType() == 1) {
+                    number++;
                 }
             }
         }
+        if (number == 0) {
+            mSizeAdapter.remove(index);
+            delectDate();
+        } else {
+            mSizeAdapter.setData(index, matchBean);
+            mSizeAdapter.notifyItemChanged(index);
+            if (type % 2 != 0) {
+                //过关
+                upDate();
+            } else {
+                //单关
+                initOnePass();
+            }
+        }
+    }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==-1){
-            switch (requestCode){
+        if (resultCode == -1) {
+            switch (requestCode) {
                 case Contacts.REQUEST_CODE_TO_PAY:
+                    setResult(-1);
                     finish();
                     break;
             }
@@ -933,34 +1087,35 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
     @Override
     public void onBackPressed() {
-        if(mSizeBeanList.size()!=0){
-            ClearDialogFragment quitDialogFragment=ClearDialogFragment.newInstance(2);
-            quitDialogFragment.show(getSupportFragmentManager(),"footAll");
-        }else {
+        if (mSizeBeanList.size() != 0) {
+            ClearDialogFragment quitDialogFragment = ClearDialogFragment.newInstance(2);
+            quitDialogFragment.show(getSupportFragmentManager(), "footAll");
+        } else {
             finish();
         }
     }
+
     @Override
     public void sure(int type) {
-        if(type==1){
+        if (type == 1) {
             mSizeAdapter.getData().clear();
             mSizeAdapter.notifyDataSetChanged();
             mSizeBeanList.clear();
-            if(mSrceenList!=null){
+            if (mSrceenList != null) {
                 mSrceenList.clear();
                 mBottomTRMenuAdapter.getData().clear();
                 mBottomTRMenuAdapter.notifyDataSetChanged();
             }
-            if(type%2==0){
+            if (type % 2 == 0) {
                 //过关
                 upDate();
-            }else {
+            } else {
                 //单关
                 initOnePass();
             }
             emptyLayout.setVisibility(View.VISIBLE);
             mSizeAdapter.removeFooterView(view);
-        }else {
+        } else {
             finish();
         }
 

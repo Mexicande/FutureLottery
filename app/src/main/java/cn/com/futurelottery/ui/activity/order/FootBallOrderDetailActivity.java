@@ -3,6 +3,7 @@ package cn.com.futurelottery.ui.activity.order;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +36,7 @@ import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallOrder;
 import cn.com.futurelottery.ui.activity.FootBallOrderItemActivity;
 import cn.com.futurelottery.ui.activity.Football.FootBallActivity;
+import cn.com.futurelottery.ui.activity.WebViewActivity;
 import cn.com.futurelottery.ui.adapter.FootBallOrderAdapter;
 import cn.com.futurelottery.utils.ActivityUtils;
 import cn.com.futurelottery.utils.ToastUtils;
@@ -90,6 +91,8 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     Button buyBtn;
     @BindView(R.id.icon_iv)
     ImageView iconIv;
+    @BindView(R.id.nest_sv)
+    NestedScrollView nestSv;
     private String id;
     private String ballName;
     private String iconURL;
@@ -102,13 +105,14 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     private String tc_order_num;
     private String count;
     private String strand;
-    private List<FootBallOrder.DataProduct.ArrProduct> orders=new ArrayList<>();
+    private List<FootBallOrder.DataProduct.ArrProduct> orders = new ArrayList<>();
     private FootBallOrderAdapter adapter;
     private AlertDialog alertDialog;
     //开奖情况
     private String lottery;
     private String lotid;
     private String url;
+    private String mess;
 
     @Override
     public int getLayoutResource() {
@@ -123,7 +127,9 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        adapter=new FootBallOrderAdapter(orders);
+        nestSv.setNestedScrollingEnabled(false);
+
+        adapter = new FootBallOrderAdapter(orders);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
     }
@@ -138,10 +144,10 @@ public class FootBallOrderDetailActivity extends BaseActivity {
         tvTitle.setText(type);
         buyBtn.setText(ballName + "投注");
 
-        if ("FT005".equals(lotid)){
-            url=Api.Order.footDeteails;
-        }else {
-            url=Api.Order.deteails;
+        if ("FT005".equals(lotid)) {
+            url = Api.Order.footDeteails;
+        } else {
+            url = Api.Order.deteails;
         }
 
         JSONObject jsonObject = new JSONObject();
@@ -157,7 +163,7 @@ public class FootBallOrderDetailActivity extends BaseActivity {
                     Gson gson = new Gson();
                     FootBallOrder footBallOrder = gson.fromJson(data.toString(), FootBallOrder.class);
                     List<FootBallOrder.DataProduct> data1 = footBallOrder.getData();
-                    if (null!=data1&&data1.size()>0){
+                    if (null != data1 && data1.size() > 0) {
                         FootBallOrder.DataProduct dataProduct = data1.get(0);
                         iconURL = dataProduct.getLogo();
                         name = dataProduct.getName();
@@ -178,6 +184,8 @@ public class FootBallOrderDetailActivity extends BaseActivity {
                         strand = dataProduct.getStrand();
                         //多场比赛
                         orders.addAll(dataProduct.getArr());
+                        //订单状态
+                        mess = dataProduct.getMess();
                     }
                     setView();
                 } catch (Exception e) {
@@ -199,28 +207,34 @@ public class FootBallOrderDetailActivity extends BaseActivity {
                     .apply(new RequestOptions())
                     .into(iconIv);
             if ("0".equals(openmatch)) {
-                lottery="等待开奖";
+                lottery = "等待开奖";
                 winningIv.setImageResource(R.mipmap.order_wait);
             } else if ("2".equals(openmatch)) {
-                lottery="未中奖";
+                lottery = "未中奖";
                 winningIv.setImageResource(R.mipmap.order_unwinning);
-            }else if ("3".equals(openmatch)) {
-                lottery="中奖";
+            } else if ("3".equals(openmatch)) {
+                lottery = "中奖";
                 winningIv.setImageResource(R.mipmap.order_winning);
                 winningMoneyTv.setTextColor(getResources().getColor(R.color.red_ball));
                 orderStatusTv.setTextColor(getResources().getColor(R.color.red_ball));
             }
-            orderStatusTv.setText(lottery);
+            orderStatusTv.setText(mess);
             nameTv.setText(name);
 //            phaseTv.setText("第" + phase + "期");
             orderMoneyTv.setText(pay_money);
-            if (TextUtils.isEmpty(winning_money)) {
-                winningMoneyTv.setText("0.00");
-            } else {
-                winningMoneyTv.setText(winning_money);
+
+            //判断是否中大奖
+            if ("-1".equals(winning_money)){
+                winningMoneyTv.setText("稍后会有工作人员主动联系您");
+            }else {
+                winningMoneyTv.setText( winning_money+ "元");
             }
 
-            orderDetailTv1.setText(count+"场，"+strand+"串1，方案"+multiple+"倍");
+            if ("0".equals(strand)) {
+                orderDetailTv1.setText(count + "场，单关，方案" + multiple + "倍");
+            } else {
+                orderDetailTv1.setText(count + "场，" + strand + "串1，方案" + multiple + "倍");
+            }
 
 
             orderTimeTv.setText(created_at);
@@ -233,7 +247,7 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout_top_back, R.id.delet, R.id.buy_btn,R.id.choose_detail_ll1})
+    @OnClick({R.id.layout_top_back, R.id.delet, R.id.buy_btn, R.id.choose_detail_ll1,R.id.calculate_rl})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_top_back:
@@ -247,11 +261,17 @@ public class FootBallOrderDetailActivity extends BaseActivity {
                 ActivityUtils.startActivity(FootBallActivity.class);
                 break;
             case R.id.choose_detail_ll1:
-                Intent intent=new Intent(this,FootBallOrderItemActivity.class);
-                intent.putExtra("data",(Serializable) orders);
-                intent.putExtra("type",count+"场  "+strand+"串1  "+multiple+"倍");
-                intent.putExtra("lottery",lottery);
+                Intent intent = new Intent(this, FootBallOrderItemActivity.class);
+                intent.putExtra("data", (Serializable) orders);
+                intent.putExtra("type", count + "场  " + strand + "串1  " + multiple + "倍");
+                intent.putExtra("lottery", lottery);
                 startActivity(intent);
+                break;
+            case R.id.calculate_rl:
+                Intent intent4=new Intent(FootBallOrderDetailActivity.this, WebViewActivity.class);
+                intent4.putExtra("url","http://p96a3nm36.bkt.clouddn.com/jczq.jpg");
+                intent4.putExtra("title","竞彩足球玩法说明");
+                startActivity(intent4);
                 break;
         }
     }
@@ -289,7 +309,7 @@ public class FootBallOrderDetailActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
-                    if (0==code){
+                    if (0 == code) {
                         setResult(-1);
                         finish();
                     }

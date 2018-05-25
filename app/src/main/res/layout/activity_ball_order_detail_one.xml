@@ -101,6 +101,14 @@ tools:context="cn.com.futurelottery.ui.activity.order.BallOrderDetailActivity">
             />
     </LinearLayout>
     <ImageView
+        android:id="@+id/winning_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/length_10"
+        />
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@mipmap/payment_bg_bottom"
@@ -108,13 +116,36 @@ tools:context="cn.com.futurelottery.ui.activity.order.BallOrderDetailActivity">
         />
 </RelativeLayout>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/length_15"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单状态"
+            android:layout_marginLeft="@dimen/length_10"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_12"
+            />
+        <TextView
+            android:id="@+id/order_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginLeft="@dimen/length_25"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_13"
+            />
+    </LinearLayout>
 
 <LinearLayout
     android:id="@+id/choose_detail_ll1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/length_15"
+    android:layout_marginTop="@dimen/length_10"
     android:layout_marginBottom="@dimen/length_10"
     android:gravity="center_vertical"
     >
@@ -146,7 +177,8 @@ tools:context="cn.com.futurelottery.ui.activity.order.BallOrderDetailActivity">
 <include layout="@layout/line_cc"/>
 
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nest_sv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -190,7 +222,8 @@ tools:context="cn.com.futurelottery.ui.activity.order.BallOrderDetailActivity">
                 android:id="@+id/have_chased_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_color_f4">
+                android:background="@color/bg_color_f4"
+                android:visibility="gone">
 
             </android.support.v7.widget.RecyclerView>
             <include layout="@layout/line_cc"/>
@@ -221,7 +254,8 @@ tools:context="cn.com.futurelottery.ui.activity.order.BallOrderDetailActivity">
                 android:id="@+id/wait_chased_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_color_f4">
+                android:background="@color/bg_color_f4"
+                android:visibility="gone">
 
             </android.support.v7.widget.RecyclerView>
 
@@ -243,7 +277,7 @@ tools:context="cn.com.futurelottery.ui.activity.order.BallOrderDetailActivity">
                 android:background="@color/red_ball"
                 android:layout_gravity="center_horizontal"/>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 
 

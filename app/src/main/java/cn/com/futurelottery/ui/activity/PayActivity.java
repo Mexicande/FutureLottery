@@ -12,9 +12,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
@@ -49,9 +51,13 @@ public class PayActivity extends BaseActivity {
     ImageView alipayCheckIv;
     @BindView(R.id.pay_btn)
     Button payBtn;
+    @BindView(R.id.wechat_rl)
+    RelativeLayout wechatRl;
+    @BindView(R.id.alipay_rl)
+    RelativeLayout alipayRl;
     private String orderid;
     //付款类型1微信2支付宝
-    private int payType=1;
+    private int payType = 0;
     private String money;
     private SwitchHandler mHandler = new SwitchHandler(this);
     private static final int SDK_PAY_FLAG = 1;
@@ -88,12 +94,59 @@ public class PayActivity extends BaseActivity {
     }
 
     private void getData() {
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         String information = intent.getStringExtra("information");
         money = intent.getStringExtra("money");
         orderid = intent.getStringExtra(Contacts.Order.ORDERID);
         informationTv.setText(information);
-        moneyTv.setText(money+"元");
+        moneyTv.setText(money + "元");
+
+        //获取支付方式
+        getPayType();
+    }
+
+    private void getPayType() {
+        Map<String, String> map = new HashMap<>();
+
+        map.put(Contacts.Order.TYPE, "1");
+
+
+        JSONObject jsonObject = new JSONObject(map);
+        ApiService.GET_SERVICE(Api.Pay.mode, this, jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONArray data1 = data.getJSONArray("data");
+                    if (null != data1 && data1.length() > 0) {
+                        for (int i = 0; i < data1.length(); i++) {
+                            switch (data1.getJSONObject(i).getString("type")) {
+                                case "1":
+                                    payType = 1;
+                                    wechatCheckIv.setImageResource(R.mipmap.pay_check);
+                                    alipayCheckIv.setImageResource(R.mipmap.pay_uncheck);
+                                    wechatRl.setVisibility(View.VISIBLE);
+                                    break;
+                                case "2":
+                                    alipayRl.setVisibility(View.VISIBLE);
+                                    if (wechatRl.getVisibility()==View.GONE){
+                                        payType = 2;
+                                        wechatCheckIv.setImageResource(R.mipmap.pay_uncheck);
+                                        alipayCheckIv.setImageResource(R.mipmap.pay_check);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+            }
+        });
     }
 
     @OnClick({R.id.layout_top_back, R.id.wechat_rl, R.id.alipay_rl, R.id.pay_btn})
@@ -105,12 +158,12 @@ public class PayActivity extends BaseActivity {
             case R.id.wechat_rl:
                 wechatCheckIv.setImageResource(R.mipmap.pay_check);
                 alipayCheckIv.setImageResource(R.mipmap.pay_uncheck);
-                payType=1;
+                payType = 1;
                 break;
             case R.id.alipay_rl:
                 wechatCheckIv.setImageResource(R.mipmap.pay_uncheck);
                 alipayCheckIv.setImageResource(R.mipmap.pay_check);
-                payType=2;
+                payType = 2;
                 break;
             case R.id.pay_btn:
                 submit();
@@ -123,7 +176,7 @@ public class PayActivity extends BaseActivity {
 
         map.put(Contacts.Order.ORDERID, orderid);
         map.put(Contacts.Order.MONEY, money);
-        map.put(Contacts.Order.TYPE, payType+"");
+        map.put(Contacts.Order.TYPE, payType + "");
 
 
         JSONObject jsonObject = new JSONObject(map);
@@ -131,15 +184,17 @@ public class PayActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
-                    if (payType==1){
+                    if (payType == 1) {
                         JSONObject payInfo1 = data.getJSONObject("data");
                         Wechat wechat = new Wechat(PayActivity.this);
                         wechat.pay(payInfo1.toString());
-                    }else if (payType==2){
+                    } else if (payType == 2) {
                         String payInfo = data.getString("data");
                         Alipay alipay = new Alipay(PayActivity.this);
                         alipay.setHander(mHandler);
                         alipay.pay(payInfo);
+                    } else if (payType == 0) {
+                        ToastUtils.showToast("当前暂无可用支付方式");
                     }else {
                         String payInfo2 = data.getString("data");
                         Intent intent = new Intent();
@@ -220,8 +275,8 @@ public class PayActivity extends BaseActivity {
             String action = intent.getAction();
             // 判断Action
             if (Contacts.INTENT_EXTRA_PAY_SUCESS.equals(action)) {
-               PayActivity.this.setResult(-1);
-               finish();
+                PayActivity.this.setResult(-1);
+                finish();
             }
         }
 

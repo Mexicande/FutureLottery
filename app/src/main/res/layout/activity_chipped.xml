@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="cn.com.futurelottery.ui.activity.chipped.ChippedActivity">
+
+    <include layout="@layout/toolbar_back" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/total_money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="@dimen/size_14"
+            android:textColor="@color/black"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/length_10"
+            android:layout_marginBottom="@dimen/length_10"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/length_1"
+            android:layout_marginRight="@dimen/length_30"
+            android:layout_marginLeft="@dimen/length_30"
+            android:background="@color/divider"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/length_15"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我要认购:"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/buy_money_et"
+                android:layout_width="wrap_content"
+                android:layout_height="29dp"
+                android:paddingLeft="@dimen/length_10"
+                android:paddingRight="@dimen/length_10"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/length_5"
+                android:layout_marginRight="@dimen/length_3"
+                android:hint="0.00元"
+                android:maxLength="15"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:background="@drawable/et_line_radius_bg"
+                android:inputType="number"
+                android:digits="0123456789"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元，最少认购"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/buy_money_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0元"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/length_15">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="保密设置:"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <cn.com.futurelottery.view.SwitchMultiButton
+                android:id="@+id/switchmultibutton"
+                android:layout_marginRight="55dp"
+                android:layout_marginLeft="@dimen/length_5"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                app:strokeRadius="5dp"
+                app:strokeWidth="1dp"
+                app:selectedTab="0"
+                app:selectedColor="@color/red_ball"
+                app:textSize="13sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="提成比例:"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/length_5"
+                android:spinnerMode="dropdown"
+                android:overlapAnchor="false"
+                android:background="@null"
+                >
+
+            </Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/length_15"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我要保底:"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/minimum_et"
+                android:layout_width="wrap_content"
+                android:layout_height="29dp"
+                android:paddingLeft="@dimen/length_10"
+                android:paddingRight="@dimen/length_10"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/length_5"
+                android:layout_marginRight="@dimen/length_3"
+                android:hint="默认0元"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:background="@drawable/et_line_radius_bg"
+                android:maxLength="15"
+                android:inputType="number"
+                android:digits="0123456789"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元，可不保底"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/length_15"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合买宣言:"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/manifesto_et"
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:paddingLeft="@dimen/length_10"
+                android:paddingRight="@dimen/length_10"
+                android:layout_marginLeft="@dimen/length_5"
+                android:layout_marginRight="55dp"
+                android:hint="想中奖，跟我来！"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:background="@drawable/et_line_radius_bg"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
+        <include layout="@layout/line_e1"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/length_15"
+            android:layout_centerVertical="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="共"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_13"
+                />
+            <TextView
+                android:id="@+id/money_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/red"
+                android:textSize="@dimen/size_13"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_13"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="应支付金额"
+                android:textSize="@dimen/size_13"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/pay_money_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="@dimen/size_13"
+                android:textColor="@color/red"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元"
+                android:textSize="@dimen/size_13"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+        <Button
+            android:id="@+id/buy_btn"
+            android:layout_width="61dp"
+            android:layout_height="31dp"
+            android:background="@drawable/login_button_bg"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/length_15"
+            android:text="发起合买"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_13"/>
+    </RelativeLayout>
+</LinearLayout>

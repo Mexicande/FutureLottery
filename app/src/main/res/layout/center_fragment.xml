@@ -238,14 +238,13 @@
         android:background="@color/white"
         android:layout_marginTop="@dimen/length_10">
 
-        <!--红包暂时不需要-->
         <RelativeLayout
             android:id="@+id/center_fragment_rl1"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
-            android:visibility="gone">
+            >
 
             <ImageView
                 android:id="@+id/center_fragment_record_iv"
@@ -279,7 +278,7 @@
             android:layout_height="@dimen/length_1"
             android:background="@color/bg_color_e1"
             android:layout_marginLeft="@dimen/length_13"
-            android:visibility="gone"/>
+            />
 
 
 

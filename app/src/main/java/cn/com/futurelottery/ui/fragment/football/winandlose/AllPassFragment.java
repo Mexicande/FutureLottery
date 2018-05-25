@@ -29,6 +29,7 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.FootBallList;
 import cn.com.futurelottery.presenter.CompetitionSelectType;
@@ -230,7 +231,7 @@ public class AllPassFragment extends BaseFragment {
                 }
                 if(list.size()>=2){
                     intent.putExtra("bean",(Serializable)list);
-                    startActivity(intent);
+                    startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
                 }else {
                     ToastUtils.showToast("请至少选择2场比赛");
                 }
@@ -280,7 +281,17 @@ public class AllPassFragment extends BaseFragment {
 
 
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    getActivity().finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
 
 }

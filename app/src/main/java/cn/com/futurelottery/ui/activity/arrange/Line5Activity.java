@@ -39,6 +39,8 @@ import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.Arrange;
 import cn.com.futurelottery.model.AwardPeriod;
+import cn.com.futurelottery.ui.activity.LotteryInformationActivity;
+import cn.com.futurelottery.ui.activity.WebViewActivity;
 import cn.com.futurelottery.ui.adapter.arrange.ArrangeAdapter;
 import cn.com.futurelottery.ui.adapter.PastLotteryAdapter;
 import cn.com.futurelottery.utils.AppBarStateChangeListener;
@@ -424,6 +426,7 @@ public class Line5Activity extends BaseActivity {
         //右上菜单
         list.add(new MenuItem(0, "走势图"));
         list.add(new MenuItem(0, "显示遗漏"));
+        list.add(new MenuItem(0, "近期开奖"));
         list.add(new MenuItem(0, "玩法说明"));
         mtopRightMenu = new TopRightMenu(this);
         mtopRightMenu.addMenuItems(list);
@@ -457,8 +460,11 @@ public class Line5Activity extends BaseActivity {
             @Override
             public void onTopRightMenuItemClick(int position) {
                 switch (position) {
-                    case 0:
-
+                    case 0://走势图
+                        Intent intent1=new Intent(Line5Activity.this, WebViewActivity.class);
+                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/p5");
+                        intent1.putExtra("title","排列5走势图");
+                        startActivity(intent1);
                         break;
                     case 1:
                         if (isShow == 2) {
@@ -472,7 +478,16 @@ public class Line5Activity extends BaseActivity {
                         }
                         showOmit();
                         break;
-                    default:
+                    case 2://开奖信息
+                        Intent intent2 = new Intent(Line5Activity.this, LotteryInformationActivity.class);
+                        intent2.putExtra("type", "p5");
+                        startActivity(intent2);
+                        break;
+                    case 3://玩法说明
+                        Intent intent4=new Intent(Line5Activity.this, WebViewActivity.class);
+                        intent4.putExtra("url","http://p96a3nm36.bkt.clouddn.com/p5.jpg");
+                        intent4.putExtra("title","排列5玩法说明");
+                        startActivity(intent4);
                         break;
                 }
 

@@ -31,6 +31,7 @@ import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.BaseFragment;
+import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.DialogListener;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.model.ScoreList;
@@ -274,11 +275,21 @@ public class ScoreOneFragment extends BaseFragment implements DialogListener {
             if(list.size()>=1){
                 intent.putExtra("bean",(Serializable)list);
                 intent.putExtra("type",6);
-                startActivity(intent);
+                startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
             }else {
                 ToastUtils.showToast("请至少选择1场比赛");
             }
         }
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    getActivity().finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

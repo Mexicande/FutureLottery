@@ -1,5 +1,6 @@
 package cn.com.futurelottery.ui.activity.arrange;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +32,8 @@ import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
 import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
+import cn.com.futurelottery.ui.activity.LotteryInformationActivity;
+import cn.com.futurelottery.ui.activity.WebViewActivity;
 import cn.com.futurelottery.ui.fragment.arrange.Lottery3DCommonFragment;
 import cn.com.futurelottery.ui.fragment.arrange.Lottery3DSixFragment;
 import cn.com.futurelottery.ui.fragment.arrange.Lottery3DThreeCompoundFragment;
@@ -114,6 +117,7 @@ public class Lottery3DActivity extends BaseActivity {
 
         list.add(new MenuItem(0, "走势图"));
         list.add(new MenuItem(0, "显示遗漏"));
+        list.add(new MenuItem(0, "近期开奖"));
         list.add(new MenuItem(0, "玩法说明"));
         //右上菜单
         mtopRightMenu = new TopRightMenu(this);
@@ -203,8 +207,11 @@ public class Lottery3DActivity extends BaseActivity {
             @Override
             public void onTopRightMenuItemClick(int position) {
                 switch (position) {
-                    case 0:
-
+                    case 0://走势图
+                        Intent intent1=new Intent(Lottery3DActivity.this, WebViewActivity.class);
+                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/fc3d");
+                        intent1.putExtra("title","3D走势图");
+                        startActivity(intent1);
                         break;
                     case 1:
                         if (isShow==0){
@@ -223,7 +230,16 @@ public class Lottery3DActivity extends BaseActivity {
                             sixFragment.unShowOmit();
                         }
                         break;
-                    default:
+                    case 2://开奖信息
+                        Intent intent2 = new Intent(Lottery3DActivity.this, LotteryInformationActivity.class);
+                        intent2.putExtra("type", "3d");
+                        startActivity(intent2);
+                        break;
+                    case 3://玩法说明
+                        Intent intent4=new Intent(Lottery3DActivity.this, WebViewActivity.class);
+                        intent4.putExtra("url","http://p96a3nm36.bkt.clouddn.com/fc3d.jpg");
+                        intent4.putExtra("title","3D玩法说明");
+                        startActivity(intent4);
                         break;
                 }
 

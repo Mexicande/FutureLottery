@@ -10,6 +10,10 @@ public interface Api {
     String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
 
     /**
+     * 版本更新
+     */
+     String VERSION=HOST+"user/version";
+    /**
      * 弹窗广告
      */
      String GET_POPUP=HOST+"home/popup";
@@ -145,6 +149,8 @@ public interface Api {
         String pay   =      HOST+"pay/pay";
         //充值
         String recharge   =      HOST+"recharge/pay";
+        //充值方式
+        String mode   =      HOST+"recharge/mode";
     }
 
     //特殊code码
@@ -183,6 +189,8 @@ public interface Api {
         String footDeteails   =      HOST+"order/footDeteails";
         //删除订单
         String del   =      HOST+"order/del";
+        //合买订单
+        String documentary   =      HOST+"order/documentary";
     }
     //提现
     interface Withdraw{
@@ -221,6 +229,31 @@ public interface Api {
         String miss   =      HOST+"3d/miss";
         //下单
         String order   =      HOST+"3d/order";
+    }
+    //合买
+    interface Together{
+        //合买顶部接口
+        String top   =      HOST+"together/top";
+        //合买列表
+        String list   =      HOST+"together/list";
+        //合买详情
+        String details   =      HOST+"together/details";
+        //合买跟单
+        String documentary   =      HOST+"together/documentary";
+    }
+    //红包
+    interface RedPacket{
+        //用户红包
+        String envelopes   =      HOST+"user/envelopes";
+        //可用列表
+        String rightoff   =      HOST+"user/rightoff";
+        //邀请码
+        String code   =      HOST+"user/code";
+    }
+    //浏览统计
+    interface record{
+        //浏览统计
+        String envelopes   =      HOST+"StatisticalColor/statistical";
     }
 
 }

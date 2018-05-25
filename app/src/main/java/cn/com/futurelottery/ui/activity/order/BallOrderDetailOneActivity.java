@@ -3,19 +3,17 @@ package cn.com.futurelottery.ui.activity.order;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,12 +21,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -90,6 +86,12 @@ public class BallOrderDetailOneActivity extends BaseActivity {
     Button buyBtn;
     @BindView(R.id.drop_down_iv)
     ImageView dropDownIv;
+    @BindView(R.id.nest_sv)
+    NestedScrollView nestSv;
+    @BindView(R.id.order_status_tv)
+    TextView orderStatusTv;
+    @BindView(R.id.winning_iv)
+    ImageView winningIv;
     private String id;
     private String iconURL;
     private String name;
@@ -102,7 +104,7 @@ public class BallOrderDetailOneActivity extends BaseActivity {
     private String already_periods;
     private String remaining_periods;
     private String total_periods;
-    private ArrayList<ChaseOrder.DataProduct.InfoProduct> info=new ArrayList<>();
+    private ArrayList<ChaseOrder.DataProduct.InfoProduct> info = new ArrayList<>();
     private String stop_money;
     private int tip;
     private ChaseOrderAdapter chaseOrderAdapter;
@@ -124,17 +126,19 @@ public class BallOrderDetailOneActivity extends BaseActivity {
         chaseOrderAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent=new Intent(BallOrderDetailOneActivity.this,FootBallOrderDetailActivity.class);
-                intent.putExtra("id",info.get(position).getChasing_id());
-                intent.putExtra("lotid",info.get(position).getLotid());
-                intent.putExtra("type",TextUtils.isEmpty(info.get(position).getChasing_id())?"普通投注":"追号投注");
-                intent.putExtra("ballName",data1.getName());
+                Intent intent = new Intent(BallOrderDetailOneActivity.this, BallOrderDetailActivity.class);
+                intent.putExtra("id", info.get(position).getOrder_id());
+                intent.putExtra("lotid", info.get(position).getLotid());
+                intent.putExtra("type", TextUtils.isEmpty(info.get(position).getChasing_id()) ? "普通投注" : "追号投注");
+                intent.putExtra("ballName", data1.getName());
                 startActivity(intent);
             }
         });
     }
 
     private void initView() {
+        nestSv.setNestedScrollingEnabled(false);
+
         chaseOrderAdapter = new ChaseOrderAdapter(info);
         haveChasedRv.setLayoutManager(new LinearLayoutManager(this));
         haveChasedRv.setAdapter(chaseOrderAdapter);
@@ -160,7 +164,7 @@ public class BallOrderDetailOneActivity extends BaseActivity {
             public void requestSuccess(int code, JSONObject data) {
                 try {
 
-                    Gson gson=new Gson();
+                    Gson gson = new Gson();
                     ChaseOrder chaseOrder = gson.fromJson(data.toString(), ChaseOrder.class);
                     data1 = chaseOrder.getData();
 
@@ -175,7 +179,7 @@ public class BallOrderDetailOneActivity extends BaseActivity {
                     remaining_periods = data1.getRemaining_periods();
                     total_periods = data1.getTotal_periods();
 
-                    info .addAll(data1.getInfo()) ;
+                    info.addAll(data1.getInfo());
 
                     setView();
                 } catch (Exception e) {
@@ -200,19 +204,47 @@ public class BallOrderDetailOneActivity extends BaseActivity {
 
             nameTv.setText(name);
             phaseTv.setText("追号共" + total_periods + "期");
-            orderMoneyTv.setText(pay_money);
+            orderMoneyTv.setText(pay_money+"元");
 
-            if (TextUtils.isEmpty(winning_money)||"0".equals(winning_money)) {
-                winningMoneyTv.setText("0.00");
-            } else {
-                winningMoneyTv.setText(winning_money);
+
+            //判断是否中大奖
+            if ("-1".equals(winning_money)){
+                winningMoneyTv.setText("稍后会有工作人员主动联系您");
+            }else {
+                winningMoneyTv.setText( winning_money+ "元");
             }
-            if (TextUtils.isEmpty(stop_money)||"0".equals(stop_money)||"0.00".equals(stop_money)) {
-                orderDetailTv.setText("到期后停止");
-                tip=0;
+
+
+            //订单状态
+            if ("2".equals(data1.getStatus())) {
+                winningIv.setImageResource(R.mipmap.order_wait);
+                orderStatusTv.setText("正在委托中");
+            } else if ("3".equals(data1.getStatus())) {
+                winningIv.setImageResource(R.mipmap.order_wait);
+                orderStatusTv.setText("委托失败");
             } else {
-                tip=1;
-                orderDetailTv.setText("累计金额"+stop_money+"停止");
+                if ("0".equals(data1.getOpenmatch())) {
+                    winningIv.setImageResource(R.mipmap.order_wait);
+                    orderStatusTv.setText("等待开奖");
+                } else if ("2".equals(data1.getOpenmatch())) {
+                    winningIv.setImageResource(R.mipmap.order_unwinning);
+                    orderStatusTv.setText("未中奖");
+                }
+                if ("3".equals(data1.getOpenmatch())) {
+                    winningIv.setImageResource(R.mipmap.order_winning);
+                    winningMoneyTv.setTextColor(getResources().getColor(R.color.red_ball));
+                    orderStatusTv.setTextColor(getResources().getColor(R.color.red_ball));
+                    orderStatusTv.setText("中奖");
+                }
+            }
+
+            //停追条件
+            if (TextUtils.isEmpty(stop_money) || "0".equals(stop_money) || "0.00".equals(stop_money)) {
+                orderDetailTv.setText("到期后停止");
+                tip = 0;
+            } else {
+                tip = 1;
+                orderDetailTv.setText("累计金额" + stop_money + "停止");
             }
             haveChasedTv.setText(already_periods);
             waitChasedTv.setText(remaining_periods);
@@ -221,7 +253,7 @@ public class BallOrderDetailOneActivity extends BaseActivity {
         }
     }
 
-    private void showTipDialog(String tital,String content) {
+    private void showTipDialog(String tital, String content) {
         final AlertDialog alertDialog1 = new AlertDialog.Builder(this, R.style.CustomDialog).create();
         alertDialog1.setCancelable(false);
         alertDialog1.setCanceledOnTouchOutside(false);
@@ -242,14 +274,14 @@ public class BallOrderDetailOneActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.order_detail_iv,R.id.layout_top_back, R.id.delet, R.id.continue_btn, R.id.buy_btn, R.id.have_chased_ll})
+    @OnClick({R.id.order_detail_iv, R.id.layout_top_back, R.id.delet, R.id.continue_btn, R.id.buy_btn, R.id.have_chased_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.order_detail_iv:
-                if (0==tip){
-                    showTipDialog("什么是到期后停止","您的追号方案会按照您设定的期次进行完毕，不会因某一期中奖而停止");
-                }else {
-                    showTipDialog("什么是累计金额停止","当累计的中奖金额大于您设定的金额后，后续的期次将被撤销，资金返还到您的账户中。");
+                if (0 == tip) {
+                    showTipDialog("什么是到期后停止", "您的追号方案会按照您设定的期次进行完毕，不会因某一期中奖而停止");
+                } else {
+                    showTipDialog("什么是累计金额停止", "当累计的中奖金额大于您设定的金额后，后续的期次将被撤销，资金返还到您的账户中。");
                 }
                 break;
             case R.id.layout_top_back:
@@ -272,15 +304,15 @@ public class BallOrderDetailOneActivity extends BaseActivity {
                 break;
             case R.id.buy_btn:
                 //投注
-                if ("双色球".equals(ballName)){
+                if ("双色球".equals(ballName)) {
                     ActivityUtils.startActivity(DoubleBallActivity.class);
-                }else if ("大乐透".equals(ballName)){
+                } else if ("大乐透".equals(ballName)) {
                     ActivityUtils.startActivity(SuperLottoActivity.class);
-                }else if ("排列3".equals(ballName)){
+                } else if ("排列3".equals(ballName)) {
                     ActivityUtils.startActivity(Line3Activity.class);
-                }else if ("排列5".equals(ballName)){
+                } else if ("排列5".equals(ballName)) {
                     ActivityUtils.startActivity(Line5Activity.class);
-                }else if ("3D".equals(ballName)){
+                } else if ("3D".equals(ballName)) {
                     ActivityUtils.startActivity(Lottery3DActivity.class);
                 }
                 break;
@@ -320,7 +352,7 @@ public class BallOrderDetailOneActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 try {
-                    if (0==code){
+                    if (0 == code) {
                         setResult(-1);
                         finish();
                     }

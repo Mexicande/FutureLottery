@@ -8,7 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
@@ -31,6 +34,7 @@ import cn.com.futurelottery.R;
 import cn.com.futurelottery.base.Api;
 import cn.com.futurelottery.base.ApiService;
 import cn.com.futurelottery.base.BaseActivity;
+import cn.com.futurelottery.base.BaseApplication;
 import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.pay.alipay.Alipay;
@@ -38,6 +42,9 @@ import cn.com.futurelottery.pay.alipay.PayResult;
 import cn.com.futurelottery.pay.wechat.Wechat;
 import cn.com.futurelottery.utils.ToastUtils;
 
+/**
+ * 充值
+ */
 public class RechargeActivity extends BaseActivity {
 
 
@@ -81,7 +88,7 @@ public class RechargeActivity extends BaseActivity {
     EditText inputMoneyEt;
     private int money=50;
     //付款类型1微信2支付宝
-    private int payType=1;
+    private int payType=0;
     private InnerReceiver receiver;
     private SwitchHandler mHandler = new SwitchHandler(this);
     private static final int SDK_PAY_FLAG = 1;
@@ -106,15 +113,17 @@ public class RechargeActivity extends BaseActivity {
 
     private void setListener() {
 
-        inputMoneyEt.setOnClickListener(new View.OnClickListener() {
+        inputMoneyEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                inputMoneyEt.setFocusableInTouchMode(true);
-                inputMoneyEt.setFocusable(true);
-                inputMoneyEt.requestFocus();
-                chooseProfessionRg.clearCheck();
-                inputMoneyEt.setBackgroundResource(R.drawable.money_check);
-                money=0;
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus==true){
+                    chooseProfessionRg.clearCheck();
+                    inputMoneyEt.setBackgroundResource(R.drawable.money_check);
+                    money=0;
+                    inputMoneyEt.setHint("");
+                }else {
+                    inputMoneyEt.setHint("自定义金额");
+                }
             }
         });
         chooseProfessionRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -122,32 +131,22 @@ public class RechargeActivity extends BaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.rb50:
-                        inputMoneyEt.setFocusable(false);
-                        inputMoneyEt.setFocusableInTouchMode(false);
                         inputMoneyEt.setBackgroundResource(R.drawable.money_uncheck);
                         money=50;
                         break;
                     case R.id.rb100:
-                        inputMoneyEt.setFocusable(false);
-                        inputMoneyEt.setFocusableInTouchMode(false);
                         inputMoneyEt.setBackgroundResource(R.drawable.money_uncheck);
                         money=100;
                         break;
                     case R.id.rb200:
-                        inputMoneyEt.setFocusable(false);
-                        inputMoneyEt.setFocusableInTouchMode(false);
                         inputMoneyEt.setBackgroundResource(R.drawable.money_uncheck);
                         money=200;
                         break;
                     case R.id.rb300:
-                        inputMoneyEt.setFocusable(false);
-                        inputMoneyEt.setFocusableInTouchMode(false);
                         inputMoneyEt.setBackgroundResource(R.drawable.money_uncheck);
                         money=300;
                         break;
                     case R.id.rb500:
-                        inputMoneyEt.setFocusable(false);
-                        inputMoneyEt.setFocusableInTouchMode(false);
                         inputMoneyEt.setBackgroundResource(R.drawable.money_uncheck);
                         money=500;
                         break;
@@ -165,7 +164,55 @@ public class RechargeActivity extends BaseActivity {
         registerReceiver(receiver, filter);
 
 
-        inputMoneyEt.setFocusable(false);
+        accountTv.setText(BaseApplication.getInstance().userName);
+        moneyTv.setText(BaseApplication.getInstance().amount);
+
+        //获取支付方式
+        getPayType();
+    }
+
+    private void getPayType() {
+        Map<String, String> map = new HashMap<>();
+
+        map.put(Contacts.Order.TYPE, "1");
+
+
+        JSONObject jsonObject = new JSONObject(map);
+        ApiService.GET_SERVICE(Api.Pay.mode, this, jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    JSONArray data1 = data.getJSONArray("data");
+                    if (null != data1 && data1.length() > 0) {
+                        for (int i = 0; i < data1.length(); i++) {
+                            switch (data1.getJSONObject(i).getString("type")) {
+                                case "1":
+                                    payType = 1;
+                                    wechatCheckIv.setImageResource(R.mipmap.pay_check);
+                                    alipayCheckIv.setImageResource(R.mipmap.pay_uncheck);
+                                    wechatRl.setVisibility(View.VISIBLE);
+                                    break;
+                                case "2":
+                                    alipayRl.setVisibility(View.VISIBLE);
+                                    if (wechatRl.getVisibility()==View.GONE){
+                                        payType = 2;
+                                        wechatCheckIv.setImageResource(R.mipmap.pay_uncheck);
+                                        alipayCheckIv.setImageResource(R.mipmap.pay_check);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+            }
+        });
     }
 
     @OnClick({R.id.layout_top_back, R.id.question_mark_iv, R.id.wechat_rl, R.id.alipay_rl, R.id.pay_btn})
@@ -220,6 +267,8 @@ public class RechargeActivity extends BaseActivity {
                         Alipay alipay = new Alipay(RechargeActivity.this);
                         alipay.setHander(mHandler);
                         alipay.pay(payInfo);
+                    } else if (payType == 0) {
+                        ToastUtils.showToast("当前暂无可用支付方式");
                     }else {
                         String payInfo2 = data.getString("data");
                         Intent intent = new Intent();

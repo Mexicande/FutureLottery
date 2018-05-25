@@ -26,6 +26,7 @@ import cn.com.futurelottery.base.Contacts;
 import cn.com.futurelottery.listener.OnRequestDataListener;
 import cn.com.futurelottery.pay.wechat.Share;
 import cn.com.futurelottery.ui.activity.LoginActivity;
+import cn.com.futurelottery.ui.activity.RedPacketActivity;
 import cn.com.futurelottery.ui.activity.order.OrderActivity;
 import cn.com.futurelottery.ui.activity.PersonalInformationActivity;
 import cn.com.futurelottery.ui.activity.RechargeActivity;
@@ -43,6 +44,7 @@ import cn.com.futurelottery.utils.ToastUtils;
 public class CenterFragment extends BaseFragment {
     @BindView(R.id.center_fragment_iv)
     ImageView centerFragmentIv;
+    //刷新余额
     private final int WITHDRAW_REQUEST_CODE = 1001;
     private final int SET_REQUEST_CODE = 1002;
     private final int RESULT_CODE = -1;
@@ -158,7 +160,8 @@ public class CenterFragment extends BaseFragment {
                 if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
                     ActivityUtils.startActivity(LoginActivity.class);
                 }else {
-                    ActivityUtils.startActivity(RechargeActivity.class);
+                    Intent intent=new Intent(getContext(),RechargeActivity.class);
+                    startActivityForResult(intent,WITHDRAW_REQUEST_CODE);
                 }
                 break;
             case R.id.center_fragment_money_ll2:
@@ -207,7 +210,11 @@ public class CenterFragment extends BaseFragment {
                 startActivity(intent6);
                 break;
             case R.id.center_fragment_rl1:
-                //红包，暂时不做
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }else {
+                    ActivityUtils.startActivity(RedPacketActivity.class);
+                }
                 break;
             case R.id.center_fragment_rl2:
                 Share share=new Share(getContext());
@@ -303,10 +310,18 @@ public class CenterFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden){
+        if (!hidden){
             if (!TextUtils.isEmpty(BaseApplication.getInstance().token)){
                 getBalance();
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!TextUtils.isEmpty(BaseApplication.getInstance().token)){
+            getBalance();
         }
     }
 }

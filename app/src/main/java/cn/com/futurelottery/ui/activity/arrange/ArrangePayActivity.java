@@ -38,6 +38,9 @@ import cn.com.futurelottery.listener.SaveDialogListener;
 import cn.com.futurelottery.model.Arrange;
 import cn.com.futurelottery.ui.activity.LoginActivity;
 import cn.com.futurelottery.ui.activity.PayActivity;
+import cn.com.futurelottery.ui.activity.PayAffirmActivity;
+import cn.com.futurelottery.ui.activity.PaySucessActivity;
+import cn.com.futurelottery.ui.activity.chipped.ChippedActivity;
 import cn.com.futurelottery.ui.adapter.arrange.ArrangePayAdapter;
 import cn.com.futurelottery.ui.dialog.QuitDialogFragment;
 import cn.com.futurelottery.utils.ActivityUtils;
@@ -92,20 +95,22 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
     TextView bottomResultMoneyTv;
     @BindView(R.id.bottom_result_btn)
     Button bottomResultBtn;
+    @BindView(R.id.right_tv)
+    TextView rightTv;
     private ArrayList<Arrange> balls = new ArrayList<>();
-    private long zhushu=0;
-    private String phase="";
+    private long zhushu = 0;
+    private String phase = "";
     //期数
     private long periods = 1;
     //倍数
     private long multiple = 1;
     private String kind;
     private ArrangePayAdapter adapter;
-    private int REQUEST_CODE_PAYMENT_TO_CHOOSE=101;
-    private String is_stop="2";
+    private int REQUEST_CODE_PAYMENT_TO_CHOOSE = 101;
+    private String is_stop = "2";
     String sp = "";
-    private String url;
     private String information;
+    private String lotid;
 
     @Override
     public int getLayoutResource() {
@@ -159,13 +164,17 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
     }
 
     private void initView() {
+        //合买
+        rightTv.setVisibility(View.VISIBLE);
+        rightTv.setText("发起合买");
+
         //每期机选
-        periodsCount.setGoodsStorage(99);
+        periodsCount.setGoodsStorage(15);
         //每期投
         multiplyCount.setGoodsStorage(50);
 
 
-        adapter = new ArrangePayAdapter(balls,kind);
+        adapter = new ArrangePayAdapter(balls, kind);
         chooseZhuRv.setLayoutManager(new LinearLayoutManager(this));
         chooseZhuRv.setAdapter(adapter);
         //设置分割线
@@ -181,24 +190,25 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
         phase = intent.getStringExtra("phase");
         kind = intent.getStringExtra("kind");
         tvTitle.setText(kind);
-        if (Contacts.Lottery.P5name.equals(kind)){
-            sp=Contacts.line5;
-        }else if (Contacts.Lottery.P3name.equals(kind)){
-            sp=Contacts.line3;
-        }else if (Contacts.Lottery.D3name.equals(kind)){
-            sp=Contacts.D3;
+        if (Contacts.Lottery.P5name.equals(kind)) {
+            sp = Contacts.line5;
+            lotid="p5";
+        } else if (Contacts.Lottery.P3name.equals(kind)) {
+            sp = Contacts.line3;
+            lotid="p3";
+        } else if (Contacts.Lottery.D3name.equals(kind)) {
+            sp = Contacts.D3;
+            lotid="3d";
         }
         //本地数据
-        if (SPUtil.contains(this, sp)){
-            ArrayList<Arrange> getBalls = (ArrayList<Arrange>) ((Serializable)SPUtil.getList(this,sp));
+        if (SPUtil.contains(this, sp)) {
+            ArrayList<Arrange> getBalls = (ArrayList<Arrange>) ((Serializable) SPUtil.getList(this, sp));
             balls.addAll(0, getBalls);
             for (int i = 0; i < getBalls.size(); i++) {
                 Arrange db = getBalls.get(i);
                 zhushu = zhushu + db.getNotes();
             }
         }
-
-
 
 
         ArrayList<Arrange> getBalls = (ArrayList<Arrange>) intent.getSerializableExtra("balls");
@@ -222,22 +232,22 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
         bottomResultMoneyTv.setText(zhushu * periods * multiple * 2 + "");
     }
 
-    @OnClick({R.id.choose_self_ll,R.id.choose_random_ll,R.id.choose_clear_ll,R.id.layout_top_back, R.id.bottom_result_btn,R.id.tip_iv})
+    @OnClick({R.id.choose_self_ll, R.id.choose_random_ll, R.id.choose_clear_ll, R.id.layout_top_back, R.id.bottom_result_btn, R.id.tip_iv,R.id.right_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.choose_self_ll:
-                if (Contacts.Lottery.P5name.equals(kind)){
-                    Intent intent=new Intent(this,Line5Activity.class);
-                    intent.putExtra("data",1);
-                    startActivityForResult(intent,REQUEST_CODE_PAYMENT_TO_CHOOSE);
-                }else if (Contacts.Lottery.P3name.equals(kind)){
-                    Intent intent=new Intent(this,Line3Activity.class);
-                    intent.putExtra("data",1);
-                    startActivityForResult(intent,REQUEST_CODE_PAYMENT_TO_CHOOSE);
-                }else if (Contacts.Lottery.D3name.equals(kind)){
-                    Intent intent=new Intent(this,Lottery3DActivity.class);
-                    intent.putExtra("data",1);
-                    startActivityForResult(intent,REQUEST_CODE_PAYMENT_TO_CHOOSE);
+                if (Contacts.Lottery.P5name.equals(kind)) {
+                    Intent intent = new Intent(this, Line5Activity.class);
+                    intent.putExtra("data", 1);
+                    startActivityForResult(intent, REQUEST_CODE_PAYMENT_TO_CHOOSE);
+                } else if (Contacts.Lottery.P3name.equals(kind)) {
+                    Intent intent = new Intent(this, Line3Activity.class);
+                    intent.putExtra("data", 1);
+                    startActivityForResult(intent, REQUEST_CODE_PAYMENT_TO_CHOOSE);
+                } else if (Contacts.Lottery.D3name.equals(kind)) {
+                    Intent intent = new Intent(this, Lottery3DActivity.class);
+                    intent.putExtra("data", 1);
+                    startActivityForResult(intent, REQUEST_CODE_PAYMENT_TO_CHOOSE);
                 }
                 break;
             case R.id.choose_random_ll:
@@ -247,46 +257,52 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
                 clearList();
                 break;
             case R.id.layout_top_back:
-                if (balls.size()>0){
+                if (balls.size() > 0) {
                     showMyDialog();
-                }else {
+                } else {
                     finish();
                 }
                 break;
             case R.id.bottom_result_btn:
-                String string = (String) SPUtils.get(this, Contacts.TOKEN,"");
-                if(TextUtils.isEmpty(string)){
+                String string = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                if (TextUtils.isEmpty(string)) {
                     ToastUtils.showToast(getString(R.string.login_please));
                     ActivityUtils.startActivity(LoginActivity.class);
-                }else {
+                } else {
                     pay();
                 }
                 break;
             case R.id.tip_iv:
-                showTipDialog();
+                showTipDialog("什么是中奖后停止追号","勾选后，当您的追号方案某一期中奖，则后续的追号订单将被撤销，资金返还到您的账户中。如不勾选，系统一直帮您购买所有的追号投注订单。");
+                break;
+            case R.id.right_tv:
+                if (periods>1){
+                    ToastUtils.showToast("合买只能为一期");
+                    return;
+                }
+                String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                if (TextUtils.isEmpty(token)) {
+                    ToastUtils.showToast(getString(R.string.login_please));
+                    ActivityUtils.startActivity(LoginActivity.class);
+                } else {
+                    if (zhushu * periods * multiple * 2<8){
+                        showTipDialog("提示","合买方案金额不能小于8");
+                    }else {
+                        chipped();
+                    }
+                }
                 break;
         }
     }
 
-
-    //付款
-    private void pay() {
-        if (zhushu <= 0) {
-            ToastUtils.showToast("至少选一注");
-            return;
-        }
-        if (!DeviceUtil.IsNetWork(this)){
-            ToastUtils.showToast("网络异常，检查网络后重试");
-            return;
-        }
-
+    //跳转合买
+    private void chipped() {
         is_stop = checkbox.isChecked() ? "1" : "2";
 
         JSONArray ja = new JSONArray();
         JSONObject jo = new JSONObject();
-        if (Contacts.Lottery.P5name.equals(kind)){
-            url=Api.Line.five;
-            information=kind+" 第"+phase+"期";
+        if (Contacts.Lottery.P5name.equals(kind)) {
+            information = kind + " 第" + phase + "期";
 
             for (int i = 0; i < balls.size(); i++) {
                 Arrange ball = balls.get(i);
@@ -297,52 +313,151 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
                 map.put(Contacts.Arrange.hundred, ball.getHundred());
                 map.put(Contacts.Arrange.thousand, ball.getThousand());
                 map.put(Contacts.Arrange.absolutely, ball.getAbsolutely());
-                map.put(Contacts.MONEY, ball.getNotes()*2*periods*multiple + "");
+                map.put(Contacts.MONEY, ball.getNotes() * 2 * periods * multiple + "");
                 map.put(Contacts.NOTES, ball.getNotes() + "");
 
                 JSONObject jsonObject = new JSONObject(map);
                 ja.put(jsonObject);
             }
-        }else if (Contacts.Lottery.P3name.equals(kind)){
-            url=Api.Line.order;
-            information=kind+" 第"+phase+"期";
+        } else if (Contacts.Lottery.P3name.equals(kind)) {
+            information = kind + " 第" + phase + "期";
 
             for (int i = 0; i < balls.size(); i++) {
                 Arrange ball = balls.get(i);
                 Map<String, String> map = new HashMap<>();
 
-                map.put(Contacts.TYPE, ball.getType()+"");
+                map.put(Contacts.TYPE, ball.getType() + "");
                 map.put(Contacts.Arrange.individual, ball.getIndividual());
                 map.put(Contacts.Arrange.ten, ball.getTen());
                 map.put(Contacts.Arrange.hundred, ball.getHundred());
-                map.put(Contacts.MONEY, ball.getNotes()*2*periods*multiple + "");
+                map.put(Contacts.MONEY, ball.getNotes() * 2 * periods * multiple + "");
                 map.put(Contacts.NOTES, ball.getNotes() + "");
 
                 JSONObject jsonObject = new JSONObject(map);
                 ja.put(jsonObject);
             }
 
-        }else if (Contacts.Lottery.D3name.equals(kind)){
-            url=Api.Lottery3D.order;
-            information=kind+" 第"+phase+"期";
+        } else if (Contacts.Lottery.D3name.equals(kind)) {
+            information = kind + " 第" + phase + "期";
 
             for (int i = 0; i < balls.size(); i++) {
                 Arrange ball = balls.get(i);
                 Map<String, String> map = new HashMap<>();
 
-                map.put(Contacts.TYPE, ball.getType()+"");
+                map.put(Contacts.TYPE, ball.getType() + "");
 
-                if (1==ball.getType()){
+                if (1 == ball.getType()) {
                     map.put("zhi", ball.getZhi());
-                }else if (2==ball.getType()){
+                } else if (2 == ball.getType()) {
 
-                }else if (3==ball.getType()){
+                } else if (3 == ball.getType()) {
                     map.put("three_fu", ball.getThree_fu());
-                }else if (4==ball.getType()){
+                } else if (4 == ball.getType()) {
                     map.put("six", ball.getSix());
                 }
 
-                map.put(Contacts.MONEY, ball.getNotes()*2*periods*multiple + "");
+                map.put(Contacts.MONEY, ball.getNotes() * 2 * periods * multiple + "");
+                map.put(Contacts.NOTES, ball.getNotes() + "");
+
+                JSONObject jsonObject = new JSONObject(map);
+                ja.put(jsonObject);
+            }
+
+        }
+
+        try {
+            jo.put(Contacts.TOTAL, ja);
+            jo.put(Contacts.NOTES, zhushu + "");
+            jo.put(Contacts.MONEY, zhushu * periods * multiple * 2 + "");
+            jo.put(Contacts.PERIODS, periods + "");
+            jo.put(Contacts.MULTIPLE, multiple + "");
+            jo.put(Contacts.PHASE, phase);
+            jo.put(Contacts.IS_STOP, is_stop);
+            jo.put(Contacts.STOP_MONEY, "");
+        } catch (JSONException e) {
+
+        }
+        Intent intent=new Intent(ArrangePayActivity.this,ChippedActivity.class);
+        intent.putExtra("totalMoney",zhushu * periods * multiple * 2);
+        intent.putExtra("information", information);
+        intent.putExtra("name", kind);
+        intent.putExtra("json", jo.toString());
+        intent.putExtra("lotid", sp);
+        startActivity(intent);
+    }
+
+
+    //付款
+    private void pay() {
+        if (zhushu <= 0) {
+            ToastUtils.showToast("至少选一注");
+            return;
+        }
+        if (!DeviceUtil.IsNetWork(this)) {
+            ToastUtils.showToast("网络异常，检查网络后重试");
+            return;
+        }
+
+        is_stop = checkbox.isChecked() ? "1" : "2";
+
+        JSONArray ja = new JSONArray();
+        JSONObject jo = new JSONObject();
+        if (Contacts.Lottery.P5name.equals(kind)) {
+            information = kind + " 第" + phase + "期";
+
+            for (int i = 0; i < balls.size(); i++) {
+                Arrange ball = balls.get(i);
+                Map<String, String> map = new HashMap<>();
+
+                map.put(Contacts.Arrange.individual, ball.getIndividual());
+                map.put(Contacts.Arrange.ten, ball.getTen());
+                map.put(Contacts.Arrange.hundred, ball.getHundred());
+                map.put(Contacts.Arrange.thousand, ball.getThousand());
+                map.put(Contacts.Arrange.absolutely, ball.getAbsolutely());
+                map.put(Contacts.MONEY, ball.getNotes() * 2 * periods * multiple + "");
+                map.put(Contacts.NOTES, ball.getNotes() + "");
+
+                JSONObject jsonObject = new JSONObject(map);
+                ja.put(jsonObject);
+            }
+        } else if (Contacts.Lottery.P3name.equals(kind)) {
+            information = kind + " 第" + phase + "期";
+
+            for (int i = 0; i < balls.size(); i++) {
+                Arrange ball = balls.get(i);
+                Map<String, String> map = new HashMap<>();
+
+                map.put(Contacts.TYPE, ball.getType() + "");
+                map.put(Contacts.Arrange.individual, ball.getIndividual());
+                map.put(Contacts.Arrange.ten, ball.getTen());
+                map.put(Contacts.Arrange.hundred, ball.getHundred());
+                map.put(Contacts.MONEY, ball.getNotes() * 2 * periods * multiple + "");
+                map.put(Contacts.NOTES, ball.getNotes() + "");
+
+                JSONObject jsonObject = new JSONObject(map);
+                ja.put(jsonObject);
+            }
+
+        } else if (Contacts.Lottery.D3name.equals(kind)) {
+            information = kind + " 第" + phase + "期";
+
+            for (int i = 0; i < balls.size(); i++) {
+                Arrange ball = balls.get(i);
+                Map<String, String> map = new HashMap<>();
+
+                map.put(Contacts.TYPE, ball.getType() + "");
+
+                if (1 == ball.getType()) {
+                    map.put("zhi", ball.getZhi());
+                } else if (2 == ball.getType()) {
+
+                } else if (3 == ball.getType()) {
+                    map.put("three_fu", ball.getThree_fu());
+                } else if (4 == ball.getType()) {
+                    map.put("six", ball.getSix());
+                }
+
+                map.put(Contacts.MONEY, ball.getNotes() * 2 * periods * multiple + "");
                 map.put(Contacts.NOTES, ball.getNotes() + "");
 
                 JSONObject jsonObject = new JSONObject(map);
@@ -364,34 +479,16 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
 
         }
 
-        ApiService.GET_SERVICE(url, this, jo, new OnRequestDataListener() {
-            @Override
-            public void requestSuccess(int code, JSONObject data) {
-                try {
-                    if (code==Api.Special_Code.notEnoughMoney){
-                        Intent intent=new Intent(ArrangePayActivity.this,PayActivity.class);
-                        intent.putExtra("information",information);
-                        intent.putExtra("money",data.getJSONObject("data").getString(Contacts.Order.MONEY));
-                        intent.putExtra(Contacts.Order.ORDERID,data.getJSONObject("data").getString(Contacts.Order.ORDERID));
-                        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
-                    }else if (code==0){
-                        ToastUtils.showToast("下单成功");
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void requestFailure(int code, String msg) {
-                ToastUtils.showToast(msg);
-            }
-        });
+        Intent intent = new Intent(ArrangePayActivity.this, PayAffirmActivity.class);
+        intent.putExtra("information", information);
+        intent.putExtra("money", zhushu * periods * multiple * 2+"");
+        intent.putExtra("lotid", lotid);
+        intent.putExtra("json", jo.toString());
+        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
     }
 
-    private void showTipDialog() {
-        final AlertDialog alertDialog1 = new AlertDialog.Builder(this,R.style.CustomDialog).create();
+    private void showTipDialog(String title,String content) {
+        final AlertDialog alertDialog1 = new AlertDialog.Builder(this, R.style.CustomDialog).create();
         alertDialog1.setCancelable(false);
         alertDialog1.setCanceledOnTouchOutside(false);
         alertDialog1.show();
@@ -400,8 +497,8 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
         TextView tvTip = (TextView) window1.findViewById(R.id.tips_tv);
         TextView tvContent = (TextView) window1.findViewById(R.id.tips_tv_content);
         TextView tvClick = (TextView) window1.findViewById(R.id.click_tv);
-        tvTip.setText("什么是中奖后停止追号");
-        tvContent.setText("勾选后，当您的追号方案某一期中奖，则后续的追号订单将被撤销，资金返还到您的账户中。如不勾选，系统一直帮您购买所有的追号投注订单。");
+        tvTip.setText(title);
+        tvContent.setText(content);
         tvClick.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -412,8 +509,8 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
     }
 
     private void showMyDialog() {
-        QuitDialogFragment qt=new QuitDialogFragment();
-        qt.show(getSupportFragmentManager(),"是否保存");
+        QuitDialogFragment qt = new QuitDialogFragment();
+        qt.show(getSupportFragmentManager(), "是否保存");
     }
 
     //清空列表
@@ -426,8 +523,8 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
 
     //机选一注
     private void randomChoose() {
-        Arrange arrange=new Arrange();
-        if (Contacts.Lottery.P5name.equals(kind)){
+        Arrange arrange = new Arrange();
+        if (Contacts.Lottery.P5name.equals(kind)) {
             arrange.setAbsolutely((int) (Math.random() * 10) + "");
             arrange.setThousand((int) (Math.random() * 10) + "");
             arrange.setHundred((int) (Math.random() * 10) + "");
@@ -437,8 +534,8 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
             arrange.setNotes(1);
             arrange.setMoney(2);
 
-        }else if (Contacts.Lottery.P3name.equals(kind)){
-            if (balls.size()==0||balls.get(0).getType()==1){
+        } else if (Contacts.Lottery.P3name.equals(kind)) {
+            if (balls.size() == 0 || balls.get(0).getType() == 1) {
                 arrange.setHundred((int) (Math.random() * 10) + "");
                 arrange.setTen((int) (Math.random() * 10) + "");
                 arrange.setIndividual((int) (Math.random() * 10) + "");
@@ -446,38 +543,38 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
                 arrange.setType(1);
                 arrange.setNotes(1);
                 arrange.setMoney(2);
-            }else if (balls.get(0).getType()==2){
+            } else if (balls.get(0).getType() == 2) {
                 ArrayList<String> random = RandomMadeBall.getManyBall(10, 2);
-                arrange.setIndividual(random.get(0)+random.get(1));
+                arrange.setIndividual(random.get(0) + random.get(1));
 
                 arrange.setType(2);
                 arrange.setNotes(2);
                 arrange.setMoney(4);
-            }else if (balls.get(0).getType()==3){
+            } else if (balls.get(0).getType() == 3) {
                 ArrayList<String> random = RandomMadeBall.getManyBall(10, 3);
-                arrange.setIndividual(random.get(0) + random.get(1)+random.get(2));
+                arrange.setIndividual(random.get(0) + random.get(1) + random.get(2));
 
                 arrange.setType(3);
                 arrange.setNotes(1);
                 arrange.setMoney(2);
             }
-        }else if (Contacts.Lottery.D3name.equals(kind)){
-            if (balls.size()==0||balls.get(0).getType()==1){
-                arrange.setZhi((int) (Math.random() * 10) + ","+(int) (Math.random() * 10) + ","+(int) (Math.random() * 10));
+        } else if (Contacts.Lottery.D3name.equals(kind)) {
+            if (balls.size() == 0 || balls.get(0).getType() == 1) {
+                arrange.setZhi((int) (Math.random() * 10) + "," + (int) (Math.random() * 10) + "," + (int) (Math.random() * 10));
 
                 arrange.setType(1);
                 arrange.setNotes(1);
                 arrange.setMoney(2);
-            }else if (balls.get(0).getType()==3){
+            } else if (balls.get(0).getType() == 3) {
                 ArrayList<String> random = RandomMadeBall.getManyBall(10, 2);
-                arrange.setThree_fu(random.get(0)+","+random.get(1));
+                arrange.setThree_fu(random.get(0) + "," + random.get(1));
 
                 arrange.setType(3);
                 arrange.setNotes(2);
                 arrange.setMoney(4);
-            }else if (balls.get(0).getType()==4){
+            } else if (balls.get(0).getType() == 4) {
                 ArrayList<String> random = RandomMadeBall.getManyBall(10, 3);
-                arrange.setSix(random.get(0) + ","+random.get(1)+","+random.get(2));
+                arrange.setSix(random.get(0) + "," + random.get(1) + "," + random.get(2));
 
                 arrange.setType(4);
                 arrange.setNotes(1);
@@ -495,22 +592,22 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
 
     @Override
     public void saveDate() {
-        SPUtil.putList(this,sp,balls);
+        SPUtil.putList(this, sp, balls);
         finish();
     }
 
     @Override
     public void clearDate() {
-        SPUtil.remove(this,sp);
+        SPUtil.remove(this, sp);
         finish();
     }
 
 
     @Override
     public void onBackPressed() {
-        if (balls.size()>0){
+        if (balls.size() > 0) {
             showMyDialog();
-        }else {
+        } else {
             finish();
         }
 
@@ -518,11 +615,11 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==-1){
-            switch (requestCode){
+        if (resultCode == -1) {
+            switch (requestCode) {
                 case Contacts.REQUEST_CODE_PAYMENT_TO_CHOOSE:
                     ArrayList<Arrange> getBalls = (ArrayList<Arrange>) data.getSerializableExtra("balls");
-                    phase=data.getStringExtra("phase");
+                    phase = data.getStringExtra("phase");
                     balls.addAll(0, getBalls);
                     for (int i = 0; i < getBalls.size(); i++) {
                         Arrange db = getBalls.get(i);

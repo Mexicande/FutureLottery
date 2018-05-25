@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/bg_color_f4"
+android:orientation="vertical"
+tools:context="cn.com.futurelottery.ui.activity.PayAffirmActivity">
+<include layout="@layout/toolbar_back"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/length_30"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/length_13"
+            android:text="彩种信息"
+            android:textColor="@color/text_color_32"
+            android:textSize="@dimen/size_12"/>
+        <TextView
+            android:id="@+id/information_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/length_13"
+            android:text="双色球"
+            android:textColor="@color/text_color_32"
+            android:textSize="@dimen/size_12"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/length_13"
+            />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/bg_color_e1"
+        android:layout_marginLeft="@dimen/length_13"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/length_30"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/length_13"
+            android:text="订单金额"
+            android:textColor="@color/text_color_32"
+            android:textSize="@dimen/size_12"
+            android:id="@+id/textView" />
+        <TextView
+            android:id="@+id/money_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/length_13"
+            android:text="2"
+            android:textColor="@color/text_color_32"
+            android:textSize="@dimen/size_12"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/length_13"
+            />
+
+    </RelativeLayout>
+</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/red_packet_ll"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/length_10"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="红包抵用券"
+            android:textSize="@dimen/size_13"
+            android:textColor="@color/text_color_32"
+            android:layout_marginLeft="@dimen/length_13"
+            />
+        <TextView
+            android:id="@+id/red_packet_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="-￥0.00"
+            android:textSize="@dimen/size_13"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/length_13"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/enter"
+            android:layout_marginRight="@dimen/length_13"
+            android:layout_marginLeft="@dimen/length_3"/>
+    </LinearLayout>
+
+<Button
+    android:id="@+id/pay_btn"
+    android:layout_width="210dp"
+    android:layout_height="45dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="50dp"
+    android:gravity="center"
+    android:background="@drawable/login_button_bg"
+    android:text="立即支付"
+    android:textColor="@color/white"
+    android:textSize="@dimen/size_15"
+    />
+
+</LinearLayout>
