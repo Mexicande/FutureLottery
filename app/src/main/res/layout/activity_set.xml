@@ -7,18 +7,20 @@
     xmlns:lh2="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_color_f4"
     android:orientation="vertical"
-    tools:context="cn.com.futurelottery.ui.activity.SetActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.SetActivity">
 
     <include layout="@layout/toolbar_back"/>
 
 
+    <!--部分设置隐藏-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
+        android:visibility="gone"
         >
-        <cn.com.futurelottery.view.supertextview.SuperTextView
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperTextView
             android:id="@+id/tip_stv"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -36,7 +38,7 @@
             android:layout_height="@dimen/length_1"
             android:background="@color/bg_color_e1"
             android:layout_marginLeft="@dimen/length_13"/>
-        <cn.com.futurelottery.view.supertextview.SuperTextView
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperTextView
             android:id="@+id/shake_stv"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -58,7 +60,7 @@
             android:layout_height="@dimen/length_1"
             android:background="@color/bg_color_e1"
             android:layout_marginLeft="@dimen/length_13"/>
-        <cn.com.futurelottery.view.supertextview.SuperTextView
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperTextView
             android:id="@+id/voice_stv"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -83,7 +85,7 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/length_10"
         >
-        <cn.com.futurelottery.view.supertextview.SuperTextView
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperTextView
             android:id="@+id/agreement_stv"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -101,7 +103,7 @@
             android:layout_height="@dimen/length_1"
             android:background="@color/bg_color_e1"
             android:layout_marginLeft="@dimen/length_13"/>
-        <cn.com.futurelottery.view.supertextview.SuperTextView
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperTextView
             android:id="@+id/about_stv"
             android:layout_width="match_parent"
             android:layout_height="45dp"

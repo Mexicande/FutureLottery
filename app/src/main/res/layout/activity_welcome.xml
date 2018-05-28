@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.com.futurelottery.base.WelcomeActivity">
+    tools:context="com.xinhe.haoyuncaipiao.base.WelcomeActivity">
     <cn.bingoogolapple.bgabanner.BGAGuideLinkageLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,7 +36,7 @@
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/button_shape"
         style="?android:attr/borderlessButtonStyle"
         android:text="进入主界面"

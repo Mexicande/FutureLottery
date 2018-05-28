@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="cn.com.futurelottery.ui.activity.DoubleBallActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.DoubleBallActivity">
     <include layout="@layout/toolbar_ball"/>
     <FrameLayout
         android:id="@+id/fragment"

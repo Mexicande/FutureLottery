@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="cn.com.futurelottery.ui.fragment.DoubleBallDuplexFragment">
+    tools:context="com.xinhe.haoyuncaipiao.ui.fragment.DoubleBallDuplexFragment">
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_weight="1"

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/bg_color_f4"
-    tools:context="cn.com.futurelottery.ui.fragment.HomeFragment">
+    tools:context="com.xinhe.haoyuncaipiao.ui.fragment.HomeFragment">
    <include layout="@layout/toolbar_normal"/>
    <com.scwang.smartrefresh.layout.SmartRefreshLayout
        android:id="@+id/refreshLayout"

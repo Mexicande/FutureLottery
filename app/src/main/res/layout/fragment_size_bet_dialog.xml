@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="cn.com.futurelottery.ui.dialog.SizeBetDialogFragment">
+    tools:context="com.xinhe.haoyuncaipiao.ui.dialog.SizeBetDialogFragment">
 
    <android.support.v7.widget.CardView
        android:layout_marginRight="20dp"
@@ -84,7 +84,7 @@
                android:layout_marginBottom="20dp"
                android:layout_width="match_parent"
                android:layout_height="wrap_content">
-               <cn.com.futurelottery.view.supertextview.SuperButton
+               <com.xinhe.haoyuncaipiao.view.supertextview.SuperButton
                    android:id="@+id/bt_cancel"
                    android:layout_width="wrap_content"
                    android:text="取消"
@@ -95,7 +95,7 @@
                    app:sSolidColor="@color/white"
                    android:textColor="@color/black"
                    android:layout_height="30dp" />
-               <cn.com.futurelottery.view.supertextview.SuperButton
+               <com.xinhe.haoyuncaipiao.view.supertextview.SuperButton
                    android:id="@+id/bt_sure"
                    android:layout_toRightOf="@id/bt_cancel"
                    android:layout_width="wrap_content"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/bg_color_f4"
-    tools:context="cn.com.futurelottery.ui.activity.order.FootBallOrderDetailActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.order.FootBallOrderDetailActivity">
 
 
     <include layout="@layout/toolbar_back"/>
@@ -18,9 +18,11 @@
         android:layout_weight="1"
         >
         <LinearLayout
+            android:id="@+id/corp_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/bg_color_f4">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="119dp"
@@ -118,7 +120,6 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/length_10"
-                    android:background="@mipmap/order_wait"
                     />
                 <ImageView
                     android:layout_width="match_parent"

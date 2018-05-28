@@ -12,7 +12,7 @@
         android:layout_height="30dp"
         android:contentDescription="@null"
         />
-    <cn.com.futurelottery.view.supertextview.SuperButton
+    <com.xinhe.haoyuncaipiao.view.supertextview.SuperButton
         android:id="@+id/super_bt"
         android:layout_width="wrap_content"
         app:sSolidColor="@color/white"

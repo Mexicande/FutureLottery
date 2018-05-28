@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_color_f4"
     android:orientation="vertical"
-    tools:context="cn.com.futurelottery.ui.activity.WithdrawActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.WithdrawActivity">
 
     <include layout="@layout/toolbar_back"/>
 

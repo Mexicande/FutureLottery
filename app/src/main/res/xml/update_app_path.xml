@@ -13,7 +13,7 @@
 
 
         <!--表示Environment.getExternalStorageDirectory() 下的所有路径都申请权限-->
-        <external-path name="camera_photos" path="" />
+        <external-path name="xingyuncai" path="" />
     </paths>
 
 </resources>

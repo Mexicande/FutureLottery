@@ -4,20 +4,20 @@
     android:background="@color/white_bg"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.com.futurelottery.ui.fragment.football.conwinandlose.ConWinAndFragment">
+    tools:context="com.xinhe.haoyuncaipiao.ui.fragment.football.conwinandlose.ConWinAndFragment">
     <net.lucode.hackware.magicindicator.MagicIndicator
         android:id="@+id/magic_indicator"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal" />
-    <cn.com.futurelottery.ui.adapter.NoTouchViewPager
+    <com.xinhe.haoyuncaipiao.ui.adapter.NoTouchViewPager
         android:layout_marginTop="10dp"
         android:id="@+id/viewPager"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-    </cn.com.futurelottery.ui.adapter.NoTouchViewPager>
+    </com.xinhe.haoyuncaipiao.ui.adapter.NoTouchViewPager>
     <include layout="@layout/football_bottom"/>
 
 </LinearLayout>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.com.futurelottery.ui.fragment.football.scorefootball.ScoreAllFragment">
+    tools:context="com.xinhe.haoyuncaipiao.ui.fragment.football.scorefootball.ScoreAllFragment">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/AllRecycler"
         android:layout_width="match_parent"

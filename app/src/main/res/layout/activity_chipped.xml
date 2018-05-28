@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="cn.com.futurelottery.ui.activity.chipped.ChippedActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.chipped.ChippedActivity">
 
     <include layout="@layout/toolbar_back" />
 
@@ -98,7 +98,7 @@
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
-            <cn.com.futurelottery.view.SwitchMultiButton
+            <com.xinhe.haoyuncaipiao.view.SwitchMultiButton
                 android:id="@+id/switchmultibutton"
                 android:layout_marginRight="55dp"
                 android:layout_marginLeft="@dimen/length_5"
@@ -200,6 +200,7 @@
                 android:hint="想中奖，跟我来！"
                 android:textColor="@color/black"
                 android:textSize="13sp"
+                android:maxLength="50"
                 android:background="@drawable/et_line_radius_bg"/>
 
         </LinearLayout>

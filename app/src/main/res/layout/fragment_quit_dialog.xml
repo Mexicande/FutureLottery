@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="cn.com.futurelottery.ui.dialog.QuitDialogFragment">
+    tools:context="com.xinhe.haoyuncaipiao.ui.dialog.QuitDialogFragment">
 
     <android.support.v7.widget.CardView
         android:layout_marginRight="20dp"

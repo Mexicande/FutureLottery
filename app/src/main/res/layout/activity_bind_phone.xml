@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.com.futurelottery.ui.activity.BindPhoneActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.BindPhoneActivity">
     <include layout="@layout/toolbar_back"/>
     <RelativeLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <cn.com.futurelottery.view.editext.PowerfulEditText
+        <com.xinhe.haoyuncaipiao.view.editext.PowerfulEditText
             android:id="@+id/et_phone"
             android:layout_marginLeft="@dimen/length_15"
             android:layout_marginRight="@dimen/length_15"
@@ -96,7 +96,7 @@
             android:background="@color/bg_color_d4"
             />
 
-        <cn.com.futurelottery.view.supertextview.SuperButton
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperButton
             android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_below="@+id/login_phone_r2"

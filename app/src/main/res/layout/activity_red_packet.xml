@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="cn.com.futurelottery.ui.activity.RedPacketActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.RedPacketActivity">
 
     <include layout="@layout/toolbar_back"/>
 
@@ -16,7 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal" />
-    <cn.com.futurelottery.ui.adapter.NoTouchViewPager
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/bg_color_f4"/>
+    <com.xinhe.haoyuncaipiao.ui.adapter.NoTouchViewPager
         android:layout_marginTop="10dp"
         android:id="@+id/viewPager"
         android:layout_weight="1"

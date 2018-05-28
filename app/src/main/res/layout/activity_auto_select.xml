@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/white_bg"
     android:layout_height="match_parent"
-    tools:context="cn.com.futurelottery.ui.activity.AutoSelectActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.AutoSelectActivity">
     <include layout="@layout/toolbar_back"/>
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:text="每期机选 :"/>
-            <cn.com.futurelottery.view.AmountView
+            <com.xinhe.haoyuncaipiao.view.AmountView
                 android:id="@+id/AutoAmount_zhu"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:text="每  期  投 :"/>
-            <cn.com.futurelottery.view.AmountView
+            <com.xinhe.haoyuncaipiao.view.AmountView
                 android:id="@+id/amount_bei"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
@@ -193,7 +193,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
             <CheckBox
                 android:id="@+id/checkbox_plus"
                 android:gravity="center_vertical"

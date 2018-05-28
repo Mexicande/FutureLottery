@@ -1,0 +1,298 @@
+package com.xinhe.haoyuncaipiao.ui.fragment.football.sizefootball;
+
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.google.gson.Gson;
+import com.xinhe.haoyuncaipiao.base.Api;
+import com.xinhe.haoyuncaipiao.base.ApiService;
+import com.xinhe.haoyuncaipiao.base.BaseApplication;
+import com.xinhe.haoyuncaipiao.base.BaseFragment;
+import com.xinhe.haoyuncaipiao.base.Contacts;
+import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
+import com.xinhe.haoyuncaipiao.model.FootBallList;
+import com.xinhe.haoyuncaipiao.presenter.FootSureType;
+import com.xinhe.haoyuncaipiao.ui.activity.Football.SizeBetActivity;
+import com.xinhe.haoyuncaipiao.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import com.xinhe.haoyuncaipiao.R;
+
+import com.xinhe.haoyuncaipiao.presenter.CompetitionSelectType;
+import com.xinhe.haoyuncaipiao.presenter.FootCleanType;
+import com.xinhe.haoyuncaipiao.ui.adapter.football.SizeAdapter;
+import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
+import com.xinhe.haoyuncaipiao.view.topRightMenu.OnTopRightMenuItemClickListener;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ *
+ * @author apple
+ *         总进球 过关
+ */
+public class SizeAllFragment extends BaseFragment {
+
+
+    @BindView(R.id.sizeAllRecycler)
+    RecyclerView sizeAllRecycler;
+    private SizeAdapter mSizeAdapter;
+    private ArrayList<MultiItemEntity> res;
+    private List<FootBallList.DataBean> beans;
+    private int nu=0;
+    private boolean mTrue =false;
+    private View notDataView;
+    private KProgressHUD hud;
+
+    public SizeAllFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.fragment_size_all;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initView();
+        getDate();
+        setListener();
+
+    }
+
+    private void initView() {
+        mSizeAdapter = new SizeAdapter(null);
+        sizeAllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        sizeAllRecycler.setAdapter(mSizeAdapter);
+        ((SimpleItemAnimator)sizeAllRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
+        notDataView = getLayoutInflater().inflate(R.layout.empty_layout, (ViewGroup) sizeAllRecycler.getParent(), false);
+
+    }
+
+    private void getDate() {
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put(Api.FOOTBALL.PASS_RULE,Api.FOOTBALL.PASS_RULES_1);
+            jsonObject.put(Api.FOOTBALL.PLAY_RULE,Api.FOOTBALL.FT003);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        hud = KProgressHUD.create(getContext())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(getString(R.string.progress_str_jiazai))
+                .setDimAmount(0.5f)
+                .show();
+        ApiService.GET_SERVICE(Api.FootBall_Api.FOOTBALL_LSIT, getActivity(), jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                Gson gson=new Gson();
+                FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
+                beans = footBallList.getData();
+                res = new ArrayList<>();
+                for (int i = 0; i < beans.size(); i++) {
+                    FootBallList.DataBean dataBean = beans.get(i);
+                    dataBean.setSubItems(beans.get(i).getMatch());
+                    res.add(dataBean);
+                }
+                if(beans.size()==0){
+                    mSizeAdapter.setEmptyView(notDataView);
+                }
+                mSizeAdapter.addData(res);
+                mSizeAdapter.expandAll();
+                hud.dismiss();
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+                hud.dismiss();
+            }
+        });
+
+
+    }
+
+    private void setListener() {
+
+        mSizeAdapter.setOnTopRightMenuItemClickListener(new OnTopRightMenuItemClickListener() {
+            @Override
+            public void onTopRightMenuItemClick(int position) {
+               // update();
+            }
+        });
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 筛选
+     * @param league
+     */
+    private void setSelect(String league){
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("pass_rules",1);
+            jsonObject.put("play_rules",Api.FOOTBALL.FT002);
+            jsonObject.put("league",league);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        hud = KProgressHUD.create(getContext())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(getString(R.string.progress_str_jiazai))
+                .setDimAmount(0.5f)
+                .show();
+        ApiService.GET_SERVICE(Api.FootBall_Api.PAY_SCREEN, BaseApplication.getInstance(), jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                Gson gson=new Gson();
+                FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
+                beans = footBallList.getData();
+                res = new ArrayList<>();
+                for (int i = 0; i < beans.size(); i++) {
+                    FootBallList.DataBean dataBean = beans.get(i);
+                    dataBean.setSubItems(beans.get(i).getMatch());
+                    res.add(dataBean);
+                }
+                if(res.size()!=0){
+                    mSizeAdapter.getData().clear();
+                    mSizeAdapter.addData(res);
+                    mSizeAdapter.expandAll();
+                }
+                hud.dismiss();
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+                hud.dismiss();
+            }
+        });
+
+    }
+    @Subscribe
+    public void setSelect(CompetitionSelectType type){
+        if(type.getmSelect()==7){
+            setSelect(type.getmLeague());
+        }
+
+    }
+
+    /**
+     * 清除
+     */
+    @Subscribe
+    public void cleanSelected(FootCleanType type){
+        if(type.getmMeeage()==7){
+            for (int i = 0; i < beans.size(); i++) {
+                FootBallList.DataBean dataBean = beans.get(i);
+                for(int j=0;j<dataBean.getMatch().size();j++){
+                    FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                    if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
+                            ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
+                            ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
+                        matchBean.setFistfrom(0);
+                        matchBean.setSecondfrom(0);
+                        matchBean.setThirdfrom(0);
+                        matchBean.setFourthfrom(0);
+                        matchBean.setFifthfrom(0);
+                        matchBean.setSixthfrom(0);
+                        matchBean.setSeventhfrom(0);
+                        matchBean.setEighthfrom(0);
+
+                    }
+
+                }
+            }
+            mSizeAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    /**
+     * 提交
+     */
+    @Subscribe
+    public void nextSubmit(FootSureType type){
+        if(type.getmType()==7){
+                nextDate();
+                Intent intent=new Intent(getActivity(),SizeBetActivity.class);
+                intent.putExtra("type",7);
+                List<FootBallList.DataBean.MatchBean> list=new ArrayList<>();
+                for(FootBallList.DataBean s:beans){
+                    for(int i=0;i<s.getMatch().size();i++){
+                        FootBallList.DataBean.MatchBean matchBean = s.getMatch().get(i);
+                        if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
+                                ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
+                                ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
+                            list.add(matchBean);
+                        }
+                    }
+                }
+                if(nu>=2){
+                    intent.putExtra("bean",(Serializable)list);
+                    startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
+                }else {
+                    ToastUtils.showToast("请至少选择2场比赛");
+                }
+        }
+    }
+
+    private void nextDate(){
+
+        for (int i = 0; i < beans.size(); i++) {
+            FootBallList.DataBean dataBean = beans.get(i);
+            for(int j=0;j<dataBean.getMatch().size();j++){
+                FootBallList.DataBean.MatchBean matchBean = dataBean.getMatch().get(j);
+                if(matchBean.getFistfrom()==1||matchBean.getSecondfrom()==1||matchBean.getThirdfrom()==1
+                        ||matchBean.getFourthfrom()==1||matchBean.getFifthfrom()==1||matchBean.getSixthfrom()==1
+                        ||matchBean.getSecondfrom()==1||matchBean.getEighthfrom()==1){
+                    nu++;
+                }
+            }
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==-1){
+            switch (requestCode){
+                case Contacts.REQUEST_CODE_TO_PAY:
+                    getActivity().finish();
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+}

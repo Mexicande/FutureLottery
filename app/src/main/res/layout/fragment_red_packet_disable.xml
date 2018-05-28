@@ -4,7 +4,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@color/white"
 android:orientation="vertical"
-tools:context="cn.com.futurelottery.ui.fragment.redpacket.RedPacketDisableFragment">
+tools:context="com.xinhe.haoyuncaipiao.ui.fragment.redpacket.RedPacketDisableFragment">
 
 
 <RelativeLayout

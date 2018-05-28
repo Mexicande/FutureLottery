@@ -1,0 +1,13 @@
+package com.xinhe.haoyuncaipiao.listener;
+
+import org.json.JSONObject;
+
+/**
+ * Created by apple on 2018/4/13.
+ */
+
+public interface OnRequestDataListener {
+    void requestSuccess(int code, JSONObject data);
+
+    void requestFailure(int code, String msg);
+}

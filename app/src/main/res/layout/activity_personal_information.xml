@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/bg_color_f4"
-    tools:context="cn.com.futurelottery.ui.activity.PersonalInformationActivity">
+    tools:context="com.xinhe.haoyuncaipiao.ui.activity.PersonalInformationActivity">
 
     <include layout="@layout/toolbar_back"/>
 
@@ -36,7 +36,7 @@
                 android:textSize="@dimen/size_12"
                 android:layout_marginLeft="@dimen/length_13"
                 />
-            <cn.com.futurelottery.view.editext.PowerfulEditText
+            <com.xinhe.haoyuncaipiao.view.editext.PowerfulEditText
                 android:id="@+id/name_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -71,7 +71,7 @@
                 android:textSize="@dimen/size_12"
                 android:layout_marginLeft="@dimen/length_13"
                 />
-            <cn.com.futurelottery.view.editext.PowerfulEditText
+            <com.xinhe.haoyuncaipiao.view.editext.PowerfulEditText
                 android:id="@+id/IDcard_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -108,7 +108,7 @@
                 android:textSize="@dimen/size_12"
                 android:layout_marginLeft="@dimen/length_13"
                 />
-            <cn.com.futurelottery.view.editext.PowerfulEditText
+            <com.xinhe.haoyuncaipiao.view.editext.PowerfulEditText
                 android:id="@+id/bank_card_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -209,7 +209,7 @@
                 android:textSize="@dimen/size_12"
                 android:layout_marginLeft="@dimen/length_13"
                 />
-            <cn.com.futurelottery.view.editext.PowerfulEditText
+            <com.xinhe.haoyuncaipiao.view.editext.PowerfulEditText
                 android:id="@+id/phone_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

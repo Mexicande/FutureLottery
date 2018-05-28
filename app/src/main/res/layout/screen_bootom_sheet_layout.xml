@@ -125,7 +125,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <cn.com.futurelottery.view.supertextview.SuperButton
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperButton
             android:id="@+id/super_cancel"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -134,7 +134,7 @@
             app:sSolidColor="@color/color_999"
             android:textSize="15sp"
             android:text="取消"/>
-        <cn.com.futurelottery.view.supertextview.SuperButton
+        <com.xinhe.haoyuncaipiao.view.supertextview.SuperButton
             android:id="@+id/super_sure"
             android:layout_width="0dp"
             android:layout_weight="1"

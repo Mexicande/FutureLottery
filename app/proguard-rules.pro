@@ -24,10 +24,10 @@
 
 #--------------------------1.实体类---------------------------------
 
--keep class cn.com.futurelottery.model.**{*;}
--keep class cn.com.futurelottery.utils.**{*;}
--keep class cn.com.futurelottery.view.**{*;}
--keep class cn.com.futurelottery.listener.**{*;}
+-keep class com.xinhe.haoyuncaipiao.model.**{*;}
+-keep class com.xinhe.haoyuncaipiao.utils.**{*;}
+-keep class com.xinhe.haoyuncaipiao.view.**{*;}
+-keep class com.xinhe.haoyuncaipiao.listener.**{*;}
 
 
 #--------------------------2.第三方包-------------------------------
@@ -120,7 +120,7 @@
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);
 }
--keep public class [cn.com.futurelottery].R$*{
+-keep public class [com.xinhe.haoyuncaipiao].R$*{
 public static final int *;
 }
 -keepclassmembers enum * {
@@ -133,29 +133,29 @@ public static final int *;
 #-keepclasscom.nineoldandroids.**{*;}
 
 #weixin
-#-keep class com.tencent.mm.opensdk.** {*;}
-#-keep class com.tencent.wxop.** {*;}
-#-keep class com.tencent.mm.sdk.** {*;}
+-keep class com.tencent.mm.opensdk.** {*;}
+-keep class com.tencent.wxop.** {*;}
+-keep class com.tencent.mm.sdk.** {*;}
 
 
-#sharesdk
--keep class cn.sharesdk.**{*;}
--keep class com.sina.**{*;}
--keep class **.R$* {*;}
--keep class **.R{*;}
--keep class com.mob.**{*;}
--keep class m.framework.**{*;}
--dontwarn cn.sharesdk.**
--dontwarn com.sina.**
--dontwarn **.R$*
-
-
-#JGPUSH
--dontwarn cn.jpush.**
--keep class cn.jpush.** { *; }
--dontwarn com.google.**
--keep class com.google.protobuf.** {*;}
--keep class com.google.gson.** {*;}
+##sharesdk
+#-keep class cn.sharesdk.**{*;}
+#-keep class com.sina.**{*;}
+#-keep class **.R$* {*;}
+#-keep class **.R{*;}
+#-keep class com.mob.**{*;}
+#-keep class m.framework.**{*;}
+#-dontwarn cn.sharesdk.**
+#-dontwarn com.sina.**
+#-dontwarn **.R$*
+#
+#
+##JGPUSH
+#-dontwarn cn.jpush.**
+#-keep class cn.jpush.** { *; }
+#-dontwarn com.google.**
+#-keep class com.google.protobuf.** {*;}
+#-keep class com.google.gson.** {*;}
 
 #-------------------------3.与js互相调用的类------------------------
 

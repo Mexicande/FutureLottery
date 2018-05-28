@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/cn/com/futurelottery/view/AmountView.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/xinhe/haoyuncaipiao/view/AmountView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_amount_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_foot_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/btn_amount.xml" charset="GBK" />

@@ -6,7 +6,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@color/bg_color_f4"
 android:orientation="vertical"
-tools:context="cn.com.futurelottery.ui.activity.arrange.ArrangePayActivity">
+tools:context="com.xinhe.haoyuncaipiao.ui.activity.arrange.ArrangePayActivity">
 
 <include layout="@layout/toolbar_back"/>
 
@@ -165,7 +165,7 @@ tools:context="cn.com.futurelottery.ui.activity.arrange.ArrangePayActivity">
             android:layout_centerInParent="true"
             android:layout_toLeftOf="@+id/periods_count"
             android:textColor="@color/black"/>
-        <cn.com.futurelottery.view.AmountView
+        <com.xinhe.haoyuncaipiao.view.AmountView
             android:id="@+id/periods_count"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
@@ -199,7 +199,7 @@ tools:context="cn.com.futurelottery.ui.activity.arrange.ArrangePayActivity">
             android:textColor="@color/black"
             android:layout_centerInParent="true"
             android:layout_toLeftOf="@+id/multiply_count"/>
-        <cn.com.futurelottery.view.AmountView
+        <com.xinhe.haoyuncaipiao.view.AmountView
             android:id="@+id/multiply_count"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
