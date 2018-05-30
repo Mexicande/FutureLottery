@@ -67,6 +67,9 @@ public class FootRunActivity extends BaseActivity {
     }
 
     private void initView() {
+        tvTitle.setText("竞彩足球");
+
+
         res = new ArrayList<>();
         hud = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)

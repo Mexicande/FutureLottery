@@ -273,7 +273,7 @@ public class DoubleBallActivity extends BaseActivity {
                         break;
                     case 3://走势图
                         Intent intent1=new Intent(DoubleBallActivity.this, WebViewActivity.class);
-                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/ssq");
+                        intent1.putExtra("url",Contacts.H5.ssq);
                         intent1.putExtra("title","双色球走势图");
                         startActivity(intent1);
                         break;

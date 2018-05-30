@@ -215,7 +215,7 @@ public class CenterFragment extends BaseFragment {
 
         hud = KProgressHUD.create(getContext())
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("验证中...")
+                .setLabel("上传中...")
                 .setDimAmount(0.5f)
                 .show();
 
@@ -359,7 +359,7 @@ public class CenterFragment extends BaseFragment {
     private void getShareContent() {
         hud = KProgressHUD.create(getContext())
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("修改中...")
+                .setLabel("加载中...")
                 .setDimAmount(0.5f)
                 .show();
         JSONObject jsonObject = new JSONObject();

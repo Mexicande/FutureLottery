@@ -101,7 +101,7 @@ public class Lottery3DSixFragment extends BaseFragment {
     private int isShow = 2;
     private ArrayList<String> omits = new ArrayList<>();
     private int intentType;
-    private String phase;
+    private String phase="";
     private ArrayList<AwardPeriod> jsonArray;
     private Vibrator mVibrator;
     private ShakeListener mShakeListener;
@@ -210,8 +210,14 @@ public class Lottery3DSixFragment extends BaseFragment {
                 try {
                     JSONObject jo = data.getJSONArray("data").getJSONObject(0);
                     phase = jo.getString(Contacts.PHASE);
-                    tvAward.setText("第" + phase + "期");
-                    limiteDate.setText(jo.getString(Contacts.END_TIME) + " 截止");
+                    //判断是否有奖期
+                    if ("-1".equals(phase)){
+                        tvAward.setText("开奖中，请20点以后再来");
+                        phase ="";
+                    }else {
+                        tvAward.setText("第" + phase + "期");
+                        limiteDate.setText(jo.getString(Contacts.END_TIME) + " 截止");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

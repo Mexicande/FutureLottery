@@ -210,7 +210,7 @@ public class Lottery3DActivity extends BaseActivity {
                 switch (position) {
                     case 0://走势图
                         Intent intent1=new Intent(Lottery3DActivity.this, WebViewActivity.class);
-                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/fc3d");
+                        intent1.putExtra("url",Contacts.H5.fc3d);
                         intent1.putExtra("title","3D走势图");
                         startActivity(intent1);
                         break;

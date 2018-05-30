@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -17,18 +18,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.xinhe.haoyuncaipiao.base.Api;
-import com.xinhe.haoyuncaipiao.utils.IsChineseUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
-
-import butterknife.BindView;
-import butterknife.OnClick;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xinhe.haoyuncaipiao.R;
-
+import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
 import com.xinhe.haoyuncaipiao.base.BaseActivity;
 import com.xinhe.haoyuncaipiao.base.Contacts;
@@ -38,10 +34,24 @@ import com.xinhe.haoyuncaipiao.utils.CodeUtils;
 import com.xinhe.haoyuncaipiao.utils.CommonUtil;
 import com.xinhe.haoyuncaipiao.utils.DeviceUtil;
 import com.xinhe.haoyuncaipiao.utils.IDCardCheckUtil;
+import com.xinhe.haoyuncaipiao.utils.IsChineseUtil;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.editext.PowerfulEditText;
 import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+
+/**
+ * 绑定银行卡
+ */
 public class PersonalInformationActivity extends BaseActivity {
 
     @BindView(R.id.layout_top_back)
@@ -66,6 +76,8 @@ public class PersonalInformationActivity extends BaseActivity {
     Button submitBtn;
     @BindView(R.id.city_et)
     EditText cityEt;
+    @BindView(R.id.bank_tv)
+    TextView bankTv;
     private CaptchaTimeCount captchaTimeCount;
     private String phone;
     private AlertDialog alertDialog;
@@ -83,6 +95,8 @@ public class PersonalInformationActivity extends BaseActivity {
     private KProgressHUD hud;
     private String city;
     private final int WITHDRAW_REQUEST_CODE = 1001;
+    private ArrayList<String> banks = new ArrayList<>();
+    private String bankZhi;
 
     @Override
     protected void setTitle() {
@@ -97,14 +111,42 @@ public class PersonalInformationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getBanks();
         initView();
+    }
+
+    //获取银行列表
+    private void getBanks() {
+        if (!DeviceUtil.IsNetWork(this)) {
+            ToastUtils.showToast("网络异常，请检查网络后重试");
+            return;
+        }
+        //验证请求
+        ApiService.GET_SERVICE(Api.Withdraw.opening, this, new JSONObject(), new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                try {
+                    Gson gson = new Gson();
+                    Type bankType = new TypeToken<ArrayList<String>>() {
+                    }.getType();
+                    banks = gson.fromJson(data.getJSONArray("data").toString(), bankType);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+            }
+        });
     }
 
     private void initView() {
         captchaTimeCount = new CaptchaTimeCount(Contacts.Times.MILLIS_IN_TOTAL, Contacts.Times.COUNT_DOWN_INTERVAL, codeTv, this);
     }
 
-    @OnClick({R.id.layout_top_back, R.id.code_tv, R.id.submit_btn})
+    @OnClick({R.id.layout_top_back, R.id.code_tv, R.id.submit_btn, R.id.bank_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_top_back:
@@ -118,6 +160,9 @@ public class PersonalInformationActivity extends BaseActivity {
                 break;
             case R.id.submit_btn:
                 submit();
+                break;
+            case R.id.bank_ll:
+                chooseBank();
                 break;
         }
     }
@@ -164,9 +209,15 @@ public class PersonalInformationActivity extends BaseActivity {
             return;
         }
         //银行
-        bank = bankEt.getText().toString().trim();
+        bank = bankTv.getText().toString().trim();
         if (TextUtils.isEmpty(bank)) {
-            ToastUtils.showToast("请输入开户银行");
+            ToastUtils.showToast("请选择开户银行");
+            return;
+        }
+        //支行
+        bankZhi = bankEt.getText().toString().trim();
+        if (TextUtils.isEmpty(bankZhi)) {
+            ToastUtils.showToast("请输入开户支行");
             return;
         }
         //银行所在地
@@ -227,7 +278,7 @@ public class PersonalInformationActivity extends BaseActivity {
             jsonObject.put("customerNm", name);
             jsonObject.put("phoneNo", phone);
             jsonObject.put("location", city);
-            jsonObject.put("open_bank", bank);
+            jsonObject.put("open_bank", bank+"-"+bankZhi);
             jsonObject.put("cardholder", name);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -239,8 +290,9 @@ public class PersonalInformationActivity extends BaseActivity {
                 if (code == 0) {
                     Intent intent = new Intent(PersonalInformationActivity.this, WithdrawActivity.class);
                     startActivityForResult(intent, WITHDRAW_REQUEST_CODE);
+                    finish();
                 }
-                if (null!=hud){
+                if (null != hud) {
                     hud.dismiss();
                 }
 
@@ -249,7 +301,7 @@ public class PersonalInformationActivity extends BaseActivity {
             @Override
             public void requestFailure(int code, String msg) {
                 ToastUtils.showToast(msg);
-                if (null!=hud){
+                if (null != hud) {
                     hud.dismiss();
                 }
             }
@@ -398,10 +450,34 @@ public class PersonalInformationActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 选择银行
+     */
+    private void chooseBank() {
+        int color = getResources().getColor(R.color.colorPrimary);
+        OptionsPickerBuilder opb = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                bankTv.setText(banks.get(options1));
+            }
+        })
+
+                .setTitleText("开户银行")
+                .setTitleColor(color)//标题文字颜色
+                .setDividerColor(color)
+                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                .setContentTextSize(20)
+                .setSubmitColor(color)
+                .setCancelColor(color);
+        OptionsPickerView<String> pvOptions = opb.build();
+        pvOptions.setPicker(banks);//一级选择器
+        pvOptions.show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==-1){
-            switch (requestCode){
+        if (resultCode == -1) {
+            switch (requestCode) {
                 case WITHDRAW_REQUEST_CODE:
                     setResult(-1);
                     finish();

@@ -133,6 +133,7 @@
             android:background="@color/bg_color_e1"
             android:layout_marginLeft="@dimen/length_13"/>
         <LinearLayout
+            android:id="@+id/bank_ll"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:gravity="center_vertical"
@@ -141,6 +142,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="开户银行"
+                android:textColor="@color/text_color_32"
+                android:textSize="@dimen/size_12"
+                android:layout_marginLeft="@dimen/length_13"
+                />
+            <TextView
+                android:id="@+id/bank_tv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/length_18"
+                android:paddingRight="@dimen/length_13"
+                android:lines="1"
+                android:textSize="12sp"
+                android:hint="请选择开户银行"
+                android:textColor="@color/text_color_32"
+                android:gravity="center_vertical"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/enter"
+                android:layout_marginRight="@dimen/length_15"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/length_1"
+            android:background="@color/bg_color_e1"
+            android:layout_marginLeft="@dimen/length_13"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开户支行"
                 android:textColor="@color/text_color_32"
                 android:textSize="@dimen/size_12"
                 android:layout_marginLeft="@dimen/length_13"

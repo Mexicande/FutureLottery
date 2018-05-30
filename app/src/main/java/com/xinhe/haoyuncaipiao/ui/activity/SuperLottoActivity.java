@@ -274,7 +274,7 @@ public class SuperLottoActivity extends BaseActivity {
                         break;
                     case 3://走势图
                         Intent intent1=new Intent(SuperLottoActivity.this, WebViewActivity.class);
-                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/dlt");
+                        intent1.putExtra("url",Contacts.H5.dlt);
                         intent1.putExtra("title","大乐透走势图");
                         startActivity(intent1);
                         break;

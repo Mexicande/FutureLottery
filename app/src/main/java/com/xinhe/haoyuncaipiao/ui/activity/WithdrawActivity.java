@@ -1,10 +1,12 @@
 package com.xinhe.haoyuncaipiao.ui.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -173,9 +175,7 @@ public class WithdrawActivity extends BaseActivity {
             public void requestSuccess(int code, JSONObject data) {
                 try {
                     if (code == 0) {
-                        ToastUtils.showToast("提现成功");
-                        setResult(-1);
-                        finish();
+                        showTipDialog();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -187,6 +187,29 @@ public class WithdrawActivity extends BaseActivity {
             public void requestFailure(int code, String msg) {
                 ToastUtils.showToast(msg);
                 hud.dismiss();
+            }
+        });
+    }
+
+    private void showTipDialog() {
+        final AlertDialog alertDialog1 = new AlertDialog.Builder(this, R.style.CustomDialog).create();
+        alertDialog1.setCancelable(false);
+        alertDialog1.setCanceledOnTouchOutside(false);
+        alertDialog1.show();
+        Window window1 = alertDialog1.getWindow();
+        window1.setContentView(R.layout.tip_dialog);
+        TextView tvTip = (TextView) window1.findViewById(R.id.tips_tv);
+        TextView tvContent = (TextView) window1.findViewById(R.id.tips_tv_content);
+        TextView tvClick = (TextView) window1.findViewById(R.id.click_tv);
+        tvTip.setText("提示");
+        tvContent.setText("提现成功，资金将在1-3个工作日到账");
+        tvClick.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                setResult(-1);
+                finish();
+                alertDialog1.dismiss();
             }
         });
     }

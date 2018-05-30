@@ -191,10 +191,21 @@ public   interface    Contacts {
      * h5页面
      */
     interface H5{
-        String H5="http://test.m.lottery.anwenqianbao.com/#";
+        String H5="http://m.lottery.anwenqianbao.com/#";
         //关于
         String about= H5+"/about";
+        //服务
         String service= H5+"/service";
+        //大乐透走势图
+        String dlt=H5+"/zst/dlt";
+        //双色球走势图
+        String ssq=H5+"/zst/ssq";
+        //排列3走势图
+        String p3=H5+"/zst/p3";
+        //排列5走势图
+        String p5=H5+"/zst/p5";
+        //3D走势图
+        String fc3d=H5+"/zst/fc3d";
     }
 
     //余额不足时支付成功

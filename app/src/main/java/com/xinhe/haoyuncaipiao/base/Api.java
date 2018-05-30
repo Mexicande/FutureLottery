@@ -207,6 +207,8 @@ public interface Api {
         String amount   =      HOST+"extract/amount";
         //提现
         String take   =      HOST+"extract/take";
+        //获取银行列表
+        String opening   =      HOST+"extract/opening";
     }
 
     //排列3,5

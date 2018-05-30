@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.umeng.analytics.MobclickAgent;
 import com.xinhe.haoyuncaipiao.utils.StatusBarUtil;
 
 import butterknife.ButterKnife;
@@ -93,5 +94,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                 im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

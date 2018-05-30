@@ -211,7 +211,7 @@ public class Line3Activity extends BaseActivity {
                 switch (position) {
                     case 0://走势图
                         Intent intent1=new Intent(Line3Activity.this, WebViewActivity.class);
-                        intent1.putExtra("url","http://test.m.lottery.anwenqianbao.com/#/zst/p3");
+                        intent1.putExtra("url",Contacts.H5.p3);
                         intent1.putExtra("title","排列3走势图");
                         startActivity(intent1);
                         break;

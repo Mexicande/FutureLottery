@@ -154,7 +154,7 @@ public class Share {
             view.buildDrawingCache();
             //获取缓存Bitmap
             Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
-            Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.logo);
+            Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.share_qr_code);
             int width = bmp.getWidth();
             int secreenWidth = ((Activity)mContext).getWindowManager().getDefaultDisplay().getWidth();
             float scaleWidth = ((float) secreenWidth) / width;
@@ -163,7 +163,7 @@ public class Share {
             matrix.postScale(scaleWidth, scaleWidth);
             Bitmap visiableBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
                     bmp.getHeight(), matrix, true);
-            Bitmap bitmap1 = splitVertical(visiableBitmap, bitmap);
+            mBitmap= splitVertical(visiableBitmap, bitmap);
         } catch (Exception e) {
             e.printStackTrace();
         }
