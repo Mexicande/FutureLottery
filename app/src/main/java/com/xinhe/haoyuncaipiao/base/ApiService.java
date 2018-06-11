@@ -1,5 +1,6 @@
 package com.xinhe.haoyuncaipiao.base;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.lzy.okgo.OkGo;
@@ -49,6 +50,8 @@ public class ApiService {
                                 if(code==0||code==Api.Special_Code.notEnoughMoney){
                                     listener.requestSuccess(code, jsonObject);
                                 }else if (code==600||code==1003){
+                                    SPUtils.clear(context);
+                                    BaseApplication.getInstance().token="";
                                     ActivityUtils.startActivity(LoginActivity.class);
                                     listener.requestFailure(code, jsonObject.getString("error_message"));
                                 }else {

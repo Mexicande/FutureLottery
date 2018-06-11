@@ -414,7 +414,18 @@ public class FootBallOrder implements Serializable{
             private String team;
             private String selected;
             private String result;
+            private List<ChippedDetail.DataFootball.InfoBean> info;
+
             private int letpoint;
+
+            public List<ChippedDetail.DataFootball.InfoBean> getInfo() {
+                return info;
+            }
+
+            public void setInfo(List<ChippedDetail.DataFootball.InfoBean> info) {
+                this.info = info;
+            }
+
 
             public String getWeek() {
                 return week;
@@ -464,5 +475,9 @@ public class FootBallOrder implements Serializable{
                 this.letpoint = letpoint;
             }
         }
+
+
     }
+
+
 }

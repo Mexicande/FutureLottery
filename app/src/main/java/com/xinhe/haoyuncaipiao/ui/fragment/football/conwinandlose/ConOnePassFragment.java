@@ -267,6 +267,8 @@ public class ConOnePassFragment extends BaseFragment {
         ApiService.GET_SERVICE(Api.FootBall_Api.FOOTBALL_LSIT, getActivity(), jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                hud.dismiss();
+
                 Gson gson=new Gson();
                 FootBallList footBallList = gson.fromJson(data.toString(), FootBallList.class);
                 beans = footBallList.getData();
@@ -280,7 +282,6 @@ public class ConOnePassFragment extends BaseFragment {
                 if(beans.size()==0){
                     mWinAndLoseAdapter.setEmptyView(notDataView);
                 }
-                hud.dismiss();
             }
 
             @Override

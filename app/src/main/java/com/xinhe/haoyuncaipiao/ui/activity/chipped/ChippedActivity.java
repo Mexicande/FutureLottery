@@ -307,6 +307,7 @@ public class ChippedActivity extends BaseActivity {
         ApiService.GET_SERVICE(url, this, jo, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                hud.dismiss();
                 try {
                     if (code == Api.Special_Code.notEnoughMoney) {
                         Intent intent = new Intent(ChippedActivity.this, PayActivity.class);
@@ -331,7 +332,7 @@ public class ChippedActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                hud.dismiss();
+
             }
 
             @Override

@@ -259,6 +259,8 @@ public class LoginActivity extends BaseActivity {
                 ApiService.GET_SERVICE(Api.Login.LOGIN, this, jsonObject, new OnRequestDataListener() {
                     @Override
                     public void requestSuccess(int code, JSONObject data) {
+                        hud.dismiss();
+
                         try {
                             JSONObject jo = data.getJSONObject("data");
                             BaseApplication.getInstance().mobile = jo.getString("mobile");
@@ -284,7 +286,6 @@ public class LoginActivity extends BaseActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        hud.dismiss();
                     }
 
                     @Override

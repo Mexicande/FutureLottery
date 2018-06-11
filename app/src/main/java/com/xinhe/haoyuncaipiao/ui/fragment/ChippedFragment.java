@@ -73,7 +73,7 @@ import com.xinhe.haoyuncaipiao.utils.MenuDecoration;
 import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
 /**
- * 合买
+ * 合买列表
  */
 public class ChippedFragment extends BaseFragment {
 

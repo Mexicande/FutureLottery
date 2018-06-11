@@ -58,6 +58,10 @@ import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.topRightMenu.MenuItem;
 
+/**
+ * @author apple
+ * 混合投注
+ */
 public class MixtureBetActivity extends BaseActivity implements DialogListener, ClearDialogListener {
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -823,6 +827,7 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                         }
                                     }
                                 }
+                                break;
                             case 3:
                                 if (null != oddsBean) {
                                     if (oddsBean.getType() == 1) {
@@ -834,6 +839,7 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                         select.put("lotid", "FT003");
                                     }
                                 }
+                                break;
                             case 4:
                                 if (null != oddsBean) {
                                     if (oddsBean.getType() == 1) {
@@ -861,7 +867,7 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                 }
                                 break;
                         }
-                        if (null != select && !TextUtils.isEmpty(select.toString()) && !"{}".equals(select.toString())) {
+                        if (!TextUtils.isEmpty(select.toString()) && !"{}".equals(select.toString())) {
                             type.put(select);
                         }
                     }

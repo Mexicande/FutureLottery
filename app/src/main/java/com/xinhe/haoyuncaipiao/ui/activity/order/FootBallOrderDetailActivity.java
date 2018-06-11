@@ -26,6 +26,7 @@ import com.xinhe.haoyuncaipiao.ui.activity.FootBallOrderItemActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.Football.FootBallActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.WebViewActivity;
 import com.xinhe.haoyuncaipiao.ui.adapter.FootBallOrderAdapter;
+import com.xinhe.haoyuncaipiao.ui.adapter.FootBallOtherOrderAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 
@@ -112,7 +113,8 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     private String count;
     private String strand;
     private List<FootBallOrder.DataProduct.ArrProduct> orders = new ArrayList<>();
-    private FootBallOrderAdapter adapter;
+    private FootBallOtherOrderAdapter adapter;
+    private FootBallOrderAdapter mAdapter;
     private AlertDialog alertDialog;
     //开奖情况
     private String lottery;
@@ -134,15 +136,22 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        Intent intent = getIntent();
+        lotid = intent.getStringExtra("lotid");
+
         //分享显示
         questionMarkIv.setVisibility(View.VISIBLE);
         questionMarkIv.setImageResource(R.mipmap.share);
 
         nestSv.setNestedScrollingEnabled(false);
-
-        adapter = new FootBallOrderAdapter(orders);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setAdapter(adapter);
+        if("FT005".equals(lotid)){
+            mAdapter = new FootBallOrderAdapter(orders,lotid);
+            rv.setAdapter(mAdapter);
+        }else {
+            adapter = new FootBallOtherOrderAdapter(orders,lotid);
+            rv.setAdapter(adapter);
+        }
     }
 
     private void getData() {
@@ -259,7 +268,11 @@ public class FootBallOrderDetailActivity extends BaseActivity {
             orderTimeTv.setText(created_at);
             orderNumberTv.setText(tc_order_num);
 
-            adapter.notifyDataSetChanged();
+            if("FT005".equals(lotid)){
+                mAdapter.notifyDataSetChanged();
+            }else {
+                adapter.notifyDataSetChanged();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -228,7 +228,9 @@ public class CenterFragment extends BaseFragment {
             public void requestSuccess(int code, JSONObject data) {
                 try {
                     if (0==code){
-                        getBalance();
+                        Glide.with(getContext()).load(bitmap)
+                                .apply(new RequestOptions())
+                                .into(centerFragmentIv);
                     }else {
                         ToastUtils.showToast("修改失败");
                     }
@@ -301,7 +303,9 @@ public class CenterFragment extends BaseFragment {
                     getWithdrawStatus();
                 }
                 break;
+
             case R.id.center_fragment_order_ll1:
+                //全部订单
                 if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
                     ActivityUtils.startActivity(LoginActivity.class);
                     return;
@@ -687,6 +691,7 @@ public class CenterFragment extends BaseFragment {
         ApiService.GET_SERVICE(Api.user.name, getContext(), jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                hud.dismiss();
                 try {
                     if (0==code){
                         BaseApplication.getInstance().userName = nickname;
@@ -698,7 +703,6 @@ public class CenterFragment extends BaseFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                hud.dismiss();
             }
 
             @Override
@@ -722,6 +726,8 @@ public class CenterFragment extends BaseFragment {
         ApiService.GET_SERVICE(Api.Withdraw.binding, getContext(), jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                hud.dismiss();
+
                 try {
                     if (0==code){
                         String status = data.getJSONObject("data").getString("status");
@@ -736,7 +742,6 @@ public class CenterFragment extends BaseFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                hud.dismiss();
             }
 
             @Override

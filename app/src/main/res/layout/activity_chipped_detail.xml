@@ -31,54 +31,61 @@
                     android:layout_width="47dp"
                     android:layout_height="47dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/length_20"
+                    android:layout_marginLeft="@dimen/length_10"
                     />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/logo_iv"
-                    android:layout_marginLeft="@dimen/length_20"
-                    >
-                    <TextView
-                        android:id="@+id/name_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/size_19"
-                        android:textColor="@color/color_33"
-                        android:text=""/>
 
-                    <TextView
-                        android:id="@+id/phase_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/color_33"
-                        android:textSize="@dimen/size_14" />
-                </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/layout_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/length_30"
+                    android:layout_marginRight="@dimen/length_10"
                     android:gravity="center"
                     >
                     <TextView
                         android:id="@+id/time_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/size_17"
+                        android:textSize="@dimen/size_13"
                         android:textColor="@color/black"
                         android:text="0:0:0"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/size_15"
+                        android:textSize="@dimen/size_13"
                         android:textColor="@color/color_666"
                         android:text="距离截止"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/layout_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/logo_iv"
+                    android:layout_marginLeft="@dimen/length_10"
+                    >
+                    <TextView
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:id="@+id/name_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/size_19"
+                        android:textColor="@color/color_33"
+                        android:text=""/>
+                    <TextView
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:id="@+id/phase_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/color_33"
+                        android:textSize="@dimen/size_14" />
                 </LinearLayout>
             </RelativeLayout>
             <LinearLayout
@@ -287,12 +294,33 @@
                     android:layout_marginRight="@dimen/length_10"
                     />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/information_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:background="@color/divider"
+                    android:layout_height="0.5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/infomation"
+                        android:layout_marginLeft="@dimen/length_15"
+                        android:textColor="@color/color_666"
+                        android:textSize="@dimen/size_14"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/information_foot_ll"
                     android:layout_width="match_parent"
@@ -305,7 +333,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="64"
+                        android:layout_weight="1"
                         android:textSize="@dimen/size_11"
                         android:textColor="@color/color_666"
                         android:text="场次"
@@ -314,7 +342,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="84"
+                        android:layout_weight="1"
                         android:textSize="@dimen/size_11"
                         android:textColor="@color/color_666"
                         android:text="主队VS客队"
@@ -323,16 +351,25 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="94"
+                        android:layout_weight="1"
                         android:textSize="@dimen/size_11"
                         android:textColor="@color/color_666"
-                        android:text="投注(赔率)"
+                        android:text="玩法"
                         android:gravity="center"
                         />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="64"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/size_11"
+                        android:textColor="@color/color_666"
+                        android:text="出票赔率"
+                        android:gravity="center"
+                        />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:textSize="@dimen/size_11"
                         android:textColor="@color/color_666"
                         android:text="彩果"

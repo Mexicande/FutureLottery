@@ -2,6 +2,7 @@ package com.xinhe.haoyuncaipiao.base;
 
 import android.app.Application;
 
+import com.avos.avoscloud.AVOSCloud;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.HttpHeaders;
@@ -48,6 +49,7 @@ public class BaseApplication extends Application {
         MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this,Contacts.UMENG_KEY
                 ,channel));
         versionName = AppUtils.getAppVersionName();
+        AVOSCloud.initialize(this, Contacts.LEAN_ID, Contacts.LEAN_KEY);
 
     }
 

@@ -17,14 +17,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xinhe.haoyuncaipiao.R;
 import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
+import com.xinhe.haoyuncaipiao.base.BaseActivity;
 import com.xinhe.haoyuncaipiao.base.Contacts;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
 import com.xinhe.haoyuncaipiao.model.ChippedDetail;
 import com.xinhe.haoyuncaipiao.ui.activity.LoginActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.PayActivity;
+import com.xinhe.haoyuncaipiao.ui.activity.PaySucessActivity;
 import com.xinhe.haoyuncaipiao.ui.adapter.chipped.ChippedDetailFootAdapter;
+import com.xinhe.haoyuncaipiao.ui.adapter.chipped.ChippedOtherDetailFootAdapter;
 import com.xinhe.haoyuncaipiao.ui.adapter.chipped.FollowPeopleAdapter;
 import com.xinhe.haoyuncaipiao.ui.adapter.chipped.InformationAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
@@ -33,6 +37,7 @@ import com.xinhe.haoyuncaipiao.utils.RoteteUtils;
 import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.AmountView;
+import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,12 +48,11 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import com.xinhe.haoyuncaipiao.R;
 
-import com.xinhe.haoyuncaipiao.base.BaseActivity;
-import com.xinhe.haoyuncaipiao.ui.activity.PaySucessActivity;
-import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
-
+/**
+ * @author apple
+ *         合买详情
+ */
 public class ChippedDetailActivity extends BaseActivity {
 
     @BindView(R.id.layout_top_back)
@@ -133,6 +137,10 @@ public class ChippedDetailActivity extends BaseActivity {
     LinearLayout informationLl;
     @BindView(R.id.NestedScrollView)
     NestedScrollView NestedScrollView;
+    @BindView(R.id.layout_time)
+    LinearLayout layoutTime;
+    @BindView(R.id.infomation)
+    TextView infomation;
     private KProgressHUD hud;
     private String together_id;
     /**
@@ -152,6 +160,7 @@ public class ChippedDetailActivity extends BaseActivity {
     private String lotid;
     private JSONObject data1;
     private ChippedDetailFootAdapter footAdapter;
+    private ChippedOtherDetailFootAdapter otherFootAdapter;
     private InformationAdapter ballAdapter;
     private boolean flagInformation;
 
@@ -189,18 +198,22 @@ public class ChippedDetailActivity extends BaseActivity {
         lotid = intent.getStringExtra("lotid");
 
         footAdapter = new ChippedDetailFootAdapter(dataFoot);
+        otherFootAdapter = new ChippedOtherDetailFootAdapter(dataFoot);
+
         ballAdapter = new InformationAdapter(dataBall);
         infromationRv.setLayoutManager(new LinearLayoutManager(this));
 
 
-        if ("FT001".equals(lotid) || "FT002".equals(lotid) || "FT003".equals(lotid) || "FT004".equals(lotid) || "FT005".equals(lotid) || "FT006".equals(lotid)) {
+        if ("FT001".equals(lotid) || "FT002".equals(lotid) || "FT003".equals(lotid) || "FT004".equals(lotid) || "FT006".equals(lotid)) {
+            infromationRv.setAdapter(otherFootAdapter);
+            informationFootLl.setVisibility(View.VISIBLE);
+        } else if ("FT005".equals(lotid)) {
             infromationRv.setAdapter(footAdapter);
             informationFootLl.setVisibility(View.VISIBLE);
         } else {
             infromationRv.setAdapter(ballAdapter);
             informationFootLl.setVisibility(View.GONE);
         }
-
 
         followAdapter = new FollowPeopleAdapter(info);
         followRv.setLayoutManager(new LinearLayoutManager(this));
@@ -227,6 +240,8 @@ public class ChippedDetailActivity extends BaseActivity {
         ApiService.GET_SERVICE(Api.Together.details, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                hud.dismiss();
+
                 try {
                     Gson gson = new Gson();
                     data1 = data.getJSONObject("data");
@@ -255,9 +270,7 @@ public class ChippedDetailActivity extends BaseActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (null != hud) {
-                    hud.dismiss();
-                }
+
             }
 
             @Override
@@ -306,11 +319,25 @@ public class ChippedDetailActivity extends BaseActivity {
         guaranteeTv.setText(data1.getString("baseline_money") + "元");
         rateTv.setText(data1.getString("cut") + "%");
 
+
+
+        String multiple = data1.getString("multiple");
+        String strand = data1.getString("strand");
+        String notes = data1.getString("notes");
+
+      /*  if("0".equals(strand)){
+            infomation.setText("单关"+" "+multiple+"倍");
+        }else {
+            infomation.setText(strand+"串1"+" "+multiple+"倍");
+        }*/
+
+
         switch (data1.getString("type")) {
             case "1":
                 infromationTv.setText("完全公开");
                 isShowInformation = true;
                 dropDownInformationIv.setVisibility(View.VISIBLE);
+
                 break;
             case "2":
                 infromationTv.setText("参与可见");
@@ -323,6 +350,13 @@ public class ChippedDetailActivity extends BaseActivity {
                 dropDownInformationIv.setVisibility(View.GONE);
                 break;
         }
+
+        if ("0".equals(strand)) {
+            infomation.setText("单关" + " "+ notes+"注"+ multiple + "倍");
+        } else {
+            infomation.setText(strand + "串1" + " "+notes+"注" + multiple + "倍");
+        }
+
         followPeopleTv.setText(data1.getString("number") + "人跟单");
 
         orderidTv.setText(data1.getString("together_id"));

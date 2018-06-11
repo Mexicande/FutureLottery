@@ -276,15 +276,14 @@ public class MainActivity extends BaseActivity {
                      */
                     @Override
                     public void onBefore() {
-                        CProgressDialogUtils.showProgressDialog(MainActivity.this);
-
+                       // CProgressDialogUtils.showProgressDialog(MainActivity.this);
                     }
                     /**
                      * 网路请求之后
                      */
                     @Override
                     public void onAfter() {
-                        CProgressDialogUtils.cancelProgressDialog(MainActivity.this);
+                        //CProgressDialogUtils.cancelProgressDialog(MainActivity.this);
 
                     }
                 });

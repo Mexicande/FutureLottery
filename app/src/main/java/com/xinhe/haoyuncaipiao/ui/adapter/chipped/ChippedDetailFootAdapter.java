@@ -1,6 +1,10 @@
 package com.xinhe.haoyuncaipiao.ui.adapter.chipped;
 
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -11,10 +15,14 @@ import com.xinhe.haoyuncaipiao.R;
 import com.xinhe.haoyuncaipiao.model.ChippedDetail;
 
 /**
- * Created by tantan on 2018/5/19.
+ *
+ * @author apple
+ * @date 2018/5/19
+ * 混合
  */
 
 public class ChippedDetailFootAdapter extends BaseQuickAdapter<ChippedDetail.DataFootball,BaseViewHolder>{
+    private ChippInfoAdapte mChippInfoAdapte;
     public ChippedDetailFootAdapter(@Nullable List<ChippedDetail.DataFootball> data) {
         super(R.layout.football_order_detail_item,data);
     }
@@ -25,18 +33,15 @@ public class ChippedDetailFootAdapter extends BaseQuickAdapter<ChippedDetail.Dat
         helper.setText(R.id.session_tv,item.getWeek()+"\n"+item.getTe());
         String[] arr1 = item.getNa().split("[*]");
         String[] arr2 = arr1[0].split(":");
-        helper.setText(R.id.vs_tv,arr2[0]+"\n"+arr1[1]+"\n"+arr2[1]);
-        //赔率
-        String select = item.getSelected();
-        String rate = "";
-        if (select.contains(",")){
-            rate=select.replace(",","\n");
-        }else {
-            rate=select;
-        }
-        helper.setText(R.id.bet_tv,rate);
-        String result = item.getResult();
-        helper.setText(R.id.caiguo_tv,result);
+
+        helper.setText(R.id.vs_tv,"("+item.getLetpoint()+")"+arr2[0]+"\n"+arr1[1]+"\n"+arr2[1]);
+        RecyclerView recyclerView = helper.getView(R.id.id_info_recyler);
+        mChippInfoAdapte=new ChippInfoAdapte(null);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManager.setAutoMeasureEnabled(true);
+        recyclerView.setAdapter(mChippInfoAdapte);
+        mChippInfoAdapte.addData(item.getInfo());
 
     }
 }

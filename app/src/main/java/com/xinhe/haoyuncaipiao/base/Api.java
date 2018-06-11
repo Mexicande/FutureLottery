@@ -8,7 +8,7 @@ package com.xinhe.haoyuncaipiao.base;
 public interface Api {
 
     //正式线
-    String HOST="http://api.lottery.anwenqianbao.com/v1/";
+    String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
 //    //测试线
 //    String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
 
@@ -158,6 +158,7 @@ public interface Api {
 
     //特殊code码
     interface Special_Code{
+        /**余额不足 **/
         int notEnoughMoney   =      1004;
     }
 

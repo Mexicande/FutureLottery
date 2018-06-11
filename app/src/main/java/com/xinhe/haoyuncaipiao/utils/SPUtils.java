@@ -3,6 +3,9 @@ package com.xinhe.haoyuncaipiao.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.avos.avoscloud.AVObject;
+import com.xinhe.haoyuncaipiao.base.Contacts;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -34,7 +37,12 @@ public class SPUtils {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-
+        //存入数据
+        if(Contacts.MOBILE.equals(key)){
+            AVObject testObject = new AVObject("phone");
+            testObject.put("phone",object);
+            testObject.saveInBackground();
+        }
         if (object instanceof String) {
             editor.putString(key, (String) object);
         } else if (object instanceof Integer) {

@@ -11,6 +11,8 @@ public   interface    Contacts {
     String   UMENG_KEY                 ="5ad03215a40fa366560000eb";
     String   BUGLY_KEY                  ="f21ec220a3";
 
+    String LEAN_KEY="1Xractc2sikvNt5m6r9GP7sK";
+    String LEAN_ID="9zeHS4F8GAHi97Fkg0p80FYV-gzGzoHsz";
     int TOP_RIGHT=              1;
     int TOP_MENU=               2;
 

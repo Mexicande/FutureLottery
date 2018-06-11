@@ -1,6 +1,7 @@
 package com.xinhe.haoyuncaipiao.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by tantan on 2018/5/18.
@@ -109,21 +110,54 @@ public class ChippedDetail implements Serializable{
     }
     public static class DataFootball implements Serializable{
 
+
         /**
          * week : 2
          * te : 001
          * na : 鹿岛鹿角:水原三星*VS
-         * play : 胜平负
-         * selected : 主胜,平,sp:--
-         * result : 未开奖
+         * info : [{"selected":"主胜sp:--,","result":"待定","play":"胜平负,"},{"selected":"主平sp:--,","result":"待定","play":"胜平负,"},{"selected":"主平sp:--,让球胜,","result":"待定","play":"让球胜平负,"}]
          */
 
         private int week;
         private String te;
         private String na;
-        private String play;
+        private List<InfoBean> info;
         private String selected;
         private String result;
+        private String play;
+        private String letpoint;
+
+        public String getLetpoint() {
+            return letpoint;
+        }
+
+        public void setLetpoint(String letpoint) {
+            this.letpoint = letpoint;
+        }
+
+        public String getSelected() {
+            return selected;
+        }
+
+        public void setSelected(String selected) {
+            this.selected = selected;
+        }
+
+        public String getResult() {
+            return result;
+        }
+
+        public void setResult(String result) {
+            this.result = result;
+        }
+
+        public String getPlay() {
+            return play;
+        }
+
+        public void setPlay(String play) {
+            this.play = play;
+        }
 
         public int getWeek() {
             return week;
@@ -149,28 +183,56 @@ public class ChippedDetail implements Serializable{
             this.na = na;
         }
 
-        public String getPlay() {
-            return play;
+        public List<InfoBean> getInfo() {
+            return info;
         }
 
-        public void setPlay(String play) {
-            this.play = play;
+        public void setInfo(List<InfoBean> info) {
+            this.info = info;
         }
 
-        public String getSelected() {
-            return selected;
-        }
+        public static class InfoBean implements Serializable{
+            /**
+             * selected : 主胜sp:--,
+             * result : 待定
+             * play : 胜平负,
+             */
+            private String play_type;
+            private String selected;
+            private String result;
+            private String play;
 
-        public void setSelected(String selected) {
-            this.selected = selected;
-        }
+            public String getPlay_type() {
+                return play_type;
+            }
 
-        public String getResult() {
-            return result;
-        }
+            public void setPlay_type(String play_type) {
+                this.play_type = play_type;
+            }
 
-        public void setResult(String result) {
-            this.result = result;
+            public String getSelected() {
+                return selected;
+            }
+
+            public void setSelected(String selected) {
+                this.selected = selected;
+            }
+
+            public String getResult() {
+                return result;
+            }
+
+            public void setResult(String result) {
+                this.result = result;
+            }
+
+            public String getPlay() {
+                return play;
+            }
+
+            public void setPlay(String play) {
+                this.play = play;
+            }
         }
     }
 }

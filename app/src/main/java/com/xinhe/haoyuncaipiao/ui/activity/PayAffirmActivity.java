@@ -157,6 +157,7 @@ public class PayAffirmActivity extends BaseActivity {
         ApiService.GET_SERVICE(url, this, jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                hud.dismiss();
                 try {
                     if (code == Api.Special_Code.notEnoughMoney) {
                         Intent intent = new Intent(PayAffirmActivity.this, PayActivity.class);
@@ -181,7 +182,6 @@ public class PayAffirmActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                hud.dismiss();
             }
 
             @Override
