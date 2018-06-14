@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -108,11 +109,13 @@ public class HomeFragment extends BaseFragment {
         mConvenientBanner.setDelegate(new BGABanner.Delegate<ImageView, Banner>() {
             @Override
             public void onBannerItemClick(BGABanner banner, ImageView itemView, Banner model, int position) {
+                if(!TextUtils.isEmpty(model.getLink_url())){
+                    Intent intent=new Intent(getContext(), WebViewActivity.class);
+                    intent.putExtra("url",model.getLink_url());
+                    intent.putExtra("title",model.getTitle());
+                    startActivity(intent);
+                }
 
-                Intent intent=new Intent(getContext(), WebViewActivity.class);
-                intent.putExtra("url",model.getLink_url());
-                intent.putExtra("title",model.getTitle());
-                startActivity(intent);
             }
         });
         mProductAdapter = new LotteryAdapter(null);

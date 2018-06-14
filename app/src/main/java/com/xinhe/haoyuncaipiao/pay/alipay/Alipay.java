@@ -26,13 +26,6 @@ import java.util.Random;
  * Created by fengjh on 16/9/9.
  */
 public class Alipay {
-    // 商户PID
-    public static final String PARTNER = Contacts.Alipay.ALI_PID;
-    // 商户收款账号
-    public static final String SELLER = Contacts.Alipay.SELLER;
-    // 商户私钥，pkcs8格式
-    public static final String RSA_PRIVATE = Contacts.Alipay.RSA_PRIVATE;
-    // 支付宝公钥
     private static final int SDK_PAY_FLAG = 1;
     private Activity mContext;
    private Handler mHandler;

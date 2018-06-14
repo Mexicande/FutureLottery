@@ -356,6 +356,14 @@ public class ChippedOrderDetailActivity extends BaseActivity {
         //跟单
         followAdapter.refresh(openmatch, status);
 
+        leftMoney = data1.getString("remaining_money");
+        if ("0".equals(leftMoney) || "0.00".equals(leftMoney)) {
+            payLl.setVisibility(View.GONE);
+        } else {
+            payLl.setVisibility(View.VISIBLE);
+            leftCountTv.setText(leftMoney);
+            moneyAv.setGoodsStorage(Integer.parseInt(leftMoney));
+        }
         if ("2".equals(status)) {
             statusTv.setText("正在委托中");
         } else if ("3".equals(status)) {
@@ -364,14 +372,14 @@ public class ChippedOrderDetailActivity extends BaseActivity {
             if ("0".equals(openmatch)) {
                 statusTv.setText("待开奖");
                 //是否显示合买支付
-                leftMoney = data1.getString("remaining_money");
+              /*  leftMoney = data1.getString("remaining_money");
                 if ("0".equals(leftMoney) || "0.00".equals(leftMoney)) {
                     payLl.setVisibility(View.GONE);
                 } else {
                     payLl.setVisibility(View.VISIBLE);
                     leftCountTv.setText(leftMoney);
                     moneyAv.setGoodsStorage(Integer.parseInt(leftMoney));
-                }
+                }*/
             } else {
                 //是否显示合买支付
                 payLl.setVisibility(View.GONE);

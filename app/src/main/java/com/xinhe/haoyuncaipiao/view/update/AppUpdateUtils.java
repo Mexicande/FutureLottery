@@ -78,7 +78,7 @@ public class AppUpdateUtils {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Uri fileUri = FileProvider.getUriForFile(context,  BaseApplication.getInstance().getPackageName() + ".fileprovider", appFile);
+                Uri fileUri = FileProvider.getUriForFile(context,  BaseApplication.getInstance().getPackageName() + ".provider", appFile);
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
             } else {

@@ -8,7 +8,8 @@ package com.xinhe.haoyuncaipiao.base;
 public interface Api {
 
     //正式线
-    String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
+    String HOST="http://api.lottery.anwenqianbao.com/v1/";
+
 //    //测试线
 //    String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
 
@@ -264,11 +265,14 @@ public interface Api {
     //用户
     interface user{
         //修改昵称
-        String name   =      HOST+"user/name";
+        String name     =       HOST+"user/name";
         //修改头像
-        String avatar   =      HOST+"user/avatar";
+        String avatar   =     HOST+"user/avatar";
         //分享内容
-        String share   =      HOST+"user/share";
+        String share    =      HOST+"user/share";
+
+        String SHARE_CALL_BACK = HOST+"user/sharesend";
     }
+
 
 }

@@ -39,7 +39,6 @@ public class Share {
     private String title="幸运彩";
     private String content="带给你不一样的中奖体验";
     private Context mContext;
-    private Activity activity;
     private IWXAPI api;
     private BottomSheetDialog dialog;
     private Bitmap mBitmap;
@@ -61,7 +60,13 @@ public class Share {
         api = WXAPIFactory.createWXAPI(mContext, null);
         api.registerApp(Contacts.WeChat.WX_APP_ID);
         initView();
+        setListener();
     }
+
+    private void setListener() {
+
+    }
+
     //截图分享
     public Share(Context mContext, LinearLayout view) {
         this.mContext = mContext;
@@ -113,11 +118,10 @@ public class Share {
             WXWebpageObject webpage = new WXWebpageObject();
             webpage.webpageUrl = url;
             WXMediaMessage msg = new WXMediaMessage(webpage);
-
             msg.title = title;
             msg.description = content;
-//            Bitmap thumb = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher);
-//            msg.thumbData = Util.bmpToByteArray(thumb, true);
+           Bitmap thumb = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.share_logo);
+           msg.thumbData = Util.bmpToByteArray(thumb, true);
 
             SendMessageToWX.Req req = new SendMessageToWX.Req();
             req.transaction = buildTransaction("webpage");
@@ -137,6 +141,7 @@ public class Share {
             req.message = msg;
             req.scene = isShareFriend ? SendMessageToWX.Req.WXSceneSession : SendMessageToWX.Req.WXSceneTimeline;
             api.sendReq(req);
+
         }
     }
 

@@ -64,6 +64,7 @@ public class BaseApplication extends Application {
         HttpHeaders headers = new HttpHeaders();
         headers.put("channel", channel);
         headers.put("os", versionName);
+        headers.put("terminal", "Android");
         headers.put(Contacts.TOKEN, token);
         OkGo.getInstance()
                 .init(this)

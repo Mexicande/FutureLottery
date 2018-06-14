@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.meituan.android.walle.WalleChannelReader;
 import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
@@ -188,9 +189,11 @@ public class MainActivity extends BaseActivity {
     private int NewVersionCode=0;
     public void update() {
         NewVersionCode = AppUpdateUtils.getVersionCode(this);
+        String channel = WalleChannelReader.getChannel(this.getApplicationContext());
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("qudao", "luck");
-        params.put("channel", "tencent");
+        params.put("channel", channel);
         new UpdateAppManager.Builder()
                 .setActivity(this)
                 //必须设置，实现httpManager接口的对象

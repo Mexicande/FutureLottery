@@ -81,7 +81,6 @@ public class FootBallOtherOrderAdapter extends BaseQuickAdapter<FootBallOrder.Da
             }else {
                 helper.setText(R.id.vs_tv,arr2[0]+"\n"+arr1[1]+"\n"+arr2[1]);
             }
-
         //赔率
         String select = item.getSelected();
         String[] split = select.split("[*]");
@@ -89,6 +88,8 @@ public class FootBallOtherOrderAdapter extends BaseQuickAdapter<FootBallOrder.Da
         String result = item.getResult();
         helper.setText(R.id.caiguo_tv,result)
                 .setText(R.id.play,name);
+        helper.setTextColor(R.id.caiguo_tv,"2".equals(item.getIs_prize())?
+                mContext.getResources().getColor(R.color.red_ball):mContext.getResources().getColor(R.color.color_666));
         RecyclerView recyclerView = helper.getView(R.id.form_recycler);
         mFormChippedAdapter=new FormChippedAdapter(null);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL));

@@ -13,11 +13,9 @@ public   interface    Contacts {
 
     String LEAN_KEY="1Xractc2sikvNt5m6r9GP7sK";
     String LEAN_ID="9zeHS4F8GAHi97Fkg0p80FYV-gzGzoHsz";
-    int TOP_RIGHT=              1;
-    int TOP_MENU=               2;
 
 
-    String  fileprovider                    =              "com.xinhe.haoyuncaipiao.fileprovider";
+    String  fileprovider                    =              BaseApplication.getInstance().getPackageName()+".provider";
 
 
 
@@ -178,17 +176,7 @@ public   interface    Contacts {
         //secret
         String SECRET   = "391890c4186f9d9ce2ae91aa8f17b0c6";
 }
-    /**
-     * 支付宝
-     */
-    interface Alipay{
 
-        String ALI_PID         = "2018041602568031";
-        String SELLER = "inkey@gmail.com";
-
-        String RSA_PRIVATE ="dsdsdsds+iQAorePmYvdq0x+wew/ivXc1ofgo4S88/rere/Qo9jw+oZUdxLc/K76PhT4R9gpk/C/L09x8sLun8Ym6vRWOUzX4AIEkxOOKA9zzHNzpHYsioDG8D6/1pyHhHlI0On82mUoqIZ6wvXWb8pSOuByClvkQiwzH21ajnuYSZm2PiIWk0eb/G/OqRgCb0zJokMVnCA8K0nINUOx4uIF2UnMyO0no/zLd8IY9FBncknQ8Ha8Uqwd1uahm/05cLAgMBAAECggEAKfgAHcjPqnle/37TUOxImZEPDwHPn3wCM705CwWkn+MlwFObrghUIZEhF/vas2SrbhT0d4DcX/ciLmxRMUAx08iqJyUEoRUDh3lA2Ad7gnZ1WOvaEqLj9NVowLGVv6X9SqzDeYAkU7JMcQQ2HiPNiB9W7QypBI3uhCHwaE4WH7GWnysT3+okPX8oxoAJ2AMTnwKsx1d1Bru7MUMlybPb/DVQdMF5Xz0JBr6XL0UN/sXlWv8muxMtK1xSHkwwNCI98dDU81BWpeQITcqhrvL3gSaOjEQkRAERLbN9zF+kDmT9MoWuLHAWm+gop8NxnWiXCyaHDmrfeaRAkavj3ZjmYQKBgQD9uYPQlIoBAWrF8geS/0zZsszAlEE89r2EjX/0JJF2CJxm1yZsErBSpzgIYJWHsshm0NeT6WbDPo7pMqMRP/L7lED8wQmy4pa62uqbxAkgUkTBxcawBHWG8XMmA874ZyIFKrS74n93cIzyztYZMTQj0S8XCFCVuzT8EQrhwxLgIwKBgQDQkME/DztKDk319X1qSW4i21iWNlbop2eVDw+qrESi5N2CVXNWZ3O7DvHh9C14eeyqYIEhVjh8HBXbg1D7J9Mdx3bS8b0iNdKVwpLCq6sAjY74NqeadibRZFYzuJh3i1TG24SLnGOTQmbQQrTUEJ+3kYEWuRNz/sYiAr7PJGjn+QKBgQCnC9jpHqKtfs1ZfbvW4BcszTdZI0LAbILiHnc7uke6uniejNBTHwrPoCCYA17vdJnUd3M3gteRfEKC7j/GP6AuWrFet4k3KU+rvi3wV+TaTs/N8/SYNpdaPOVfBeriSKRxWmibusfJT2S9B8iV1XtKiZLDS0ojCpobyuyrLs/imQKBgAX2va/h7Z4WfqAz3tw1MVMJ1qSk9SM99jZK8fW9a1EFHlhlvSCRYLvOl5gQdWRmiB/vFoIvhvn1i6J1RNGJt/24AGvTwcbCpzzlDXFHm2IuqhHq7iv6iO2f4t8jvihc8ZWmHUootKg3U91MqwMNXqPPI1PVAvtkI6JBVddygRVxAoGADKwbOKWGjsZNrOMvP3uGT5CZYrfNxs2rTfL4LmvhnSTa98JrePffmDJl4E19MmjjnHt9HhaNsuSlC2al5cKrg9N6YwOIVyvOy0bpwTXHO+xbuD62FjFeTfVAmsb2We5eK3wYKysl7FbpAsLVRIva3jOOJ/gYrhvqPqtWuoRqVNQ=";
-
-    }
     /**
      * h5页面
      */

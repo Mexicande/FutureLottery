@@ -408,13 +408,22 @@ public class FootBallOrder implements Serializable{
              * result : 平
              * letpoint : 0
              */
-
+            //2 红色 3默认
+            private String is_prize;
             private String week;
             private String team_id;
             private String team;
             private String selected;
             private String result;
             private List<ChippedDetail.DataFootball.InfoBean> info;
+
+            public String getIs_prize() {
+                return is_prize;
+            }
+
+            public void setIs_prize(String is_prize) {
+                this.is_prize = is_prize;
+            }
 
             private int letpoint;
 

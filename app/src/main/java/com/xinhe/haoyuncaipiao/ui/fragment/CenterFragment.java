@@ -375,6 +375,8 @@ public class CenterFragment extends BaseFragment {
         ApiService.GET_SERVICE(Api.user.share, getContext(), jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                hud.dismiss();
+
                 try {
                     if (0==code){
                         JSONObject data1 = data.getJSONObject("data");
@@ -390,7 +392,6 @@ public class CenterFragment extends BaseFragment {
                     e.printStackTrace();
                     ToastUtils.showToast("分享失败");
                 }
-                hud.dismiss();
             }
 
             @Override
@@ -657,7 +658,7 @@ public class CenterFragment extends BaseFragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (DeviceUtil.IsNetWork(getContext()) == false) {
+                if (!DeviceUtil.IsNetWork(getContext())) {
                     ToastUtils.showToast("网络未连接");
                     return;
                 }

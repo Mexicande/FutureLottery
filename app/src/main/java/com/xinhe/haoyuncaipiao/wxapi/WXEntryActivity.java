@@ -29,6 +29,7 @@ import com.xinhe.haoyuncaipiao.R;
 
 import com.xinhe.haoyuncaipiao.base.ApiService;
 import com.xinhe.haoyuncaipiao.ui.activity.MainActivity;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
@@ -111,6 +112,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             switch (resp.errCode) {
                 case BaseResp.ErrCode.ERR_OK:
                     result = R.string.errcode_success;
+                    getCallBack();
                     break;
                 case BaseResp.ErrCode.ERR_USER_CANCEL:
                     result = R.string.errcode_cancel;
@@ -143,6 +145,31 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
         Toast.makeText(this, result, Toast.LENGTH_LONG).show();
         finish();
+    }
+
+    /**
+     * 分享成功回调
+     */
+    private void getCallBack() {
+        String token = SPUtil.getString(BaseApplication.getInstance(), Contacts.TOKEN);
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put(Contacts.TOKEN,token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiService.GET_SERVICE(Api.user.SHARE_CALL_BACK, BaseApplication.getInstance(), jsonObject, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
+
     }
 
     /**
