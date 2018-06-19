@@ -42,6 +42,9 @@ import com.xinhe.haoyuncaipiao.view.topRightMenu.OnTopRightMenuItemClickListener
 import com.xinhe.haoyuncaipiao.view.topRightMenu.TRMenuAdapter;
 import com.xinhe.haoyuncaipiao.view.topRightMenu.TopRightMenu;
 
+/**
+ * 大乐透
+ */
 
 public class SuperLottoActivity extends BaseActivity {
 

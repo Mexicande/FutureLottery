@@ -169,10 +169,6 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
             bottomResultBtn.setText("发起合买");
         }
 
-        //每期机选
-        periodsCount.setGoodsStorage(15);
-        //每期投
-        multiplyCount.setGoodsStorage(50);
 
 
         adapter = new ArrangePayAdapter(balls, kind);
@@ -190,16 +186,27 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
         Intent intent = getIntent();
         phase = intent.getStringExtra("phase");
         kind = intent.getStringExtra("kind");
+
+
+        periodsCount.setGoodsStorage(15);
+
         tvTitle.setText(kind);
         if (Contacts.Lottery.P5name.equals(kind)) {
             sp = Contacts.line5;
             lotid="p5";
+            //每期机选
+            //每期投
+            multiplyCount.setGoodsStorage(99);
         } else if (Contacts.Lottery.P3name.equals(kind)) {
             sp = Contacts.line3;
             lotid="p3";
+            //每期机选
+            //每期投
+            multiplyCount.setGoodsStorage(99);
         } else if (Contacts.Lottery.D3name.equals(kind)) {
             sp = Contacts.D3;
             lotid="3d";
+            multiplyCount.setGoodsStorage(50);
         }
         //本地数据
         if (SPUtil.contains(this, sp)) {

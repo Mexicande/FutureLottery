@@ -214,8 +214,8 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
                 int amount = Integer.valueOf(s.toString());
 
-                if (amount > 50) {
-                    slideMultiple.setText("50");
+                if (amount > 99) {
+                    slideMultiple.setText("99");
                     return;
                 }
                 if (amount < 1) {
@@ -342,8 +342,8 @@ public class SizeBetActivity extends BaseActivity implements SizeDialogListener,
 
                 int amount = Integer.valueOf(s.toString());
 
-                if (amount > 50) {
-                    edMultiple.setText("50");
+                if (amount > 99) {
+                    edMultiple.setText("99");
                     return;
                 }
                 if (amount < 1) {

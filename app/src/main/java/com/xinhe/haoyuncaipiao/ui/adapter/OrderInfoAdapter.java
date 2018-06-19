@@ -1,6 +1,10 @@
 package com.xinhe.haoyuncaipiao.ui.adapter;
 
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -91,6 +95,13 @@ public class OrderInfoAdapter extends BaseQuickAdapter<OrderDetail.DataProduct.I
                 }else {
                     blue=blueBalls1[0].replace(","," ");
                 }
+                if(!TextUtils.isEmpty(blue)){
+                    SpannableString spannableString1 = new SpannableString(red+"\n"+blue);
+                    spannableString1.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.blue_ball)), red.length(), red.length()+blue.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    helper.setText(R.id.ball_red_tv,spannableString1);
+                }else {
+                    helper.setText(R.id.ball_red_tv,red);
+                }
                 break;
             case "dlt":
                 name="大乐透";
@@ -107,10 +118,16 @@ public class OrderInfoAdapter extends BaseQuickAdapter<OrderDetail.DataProduct.I
                 }else {
                     blue=blueBalls[0].replace(","," ");
                 }
+                if(!TextUtils.isEmpty(blue)){
+                    SpannableString spannableString1 = new SpannableString(red+"\n"+blue);
+                    spannableString1.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.blue_ball)), red.length(), red.length()+blue.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    helper.setText(R.id.ball_red_tv,spannableString1);
+                }else {
+                    helper.setText(R.id.ball_red_tv,red);
+                }
                 break;
             case "p3":
                 //篮球消失
-                helper.setVisible(R.id.ball_blu_tv,false);
                 name="排列3";
                 if ("201".equals(item.getPlay_type())){
                     String[] balls = chooseBalls.split(",");
@@ -133,10 +150,11 @@ public class OrderInfoAdapter extends BaseQuickAdapter<OrderDetail.DataProduct.I
                 }else {
                     red=chooseBalls;
                 }
+                helper.setText(R.id.ball_red_tv,red);
+
                 break;
             case "p5":
                 //篮球消失
-                helper.setVisible(R.id.ball_blu_tv,false);
                 name="排列5";
                 String[] balls1 = chooseBalls.split(",");
                 for (int i=0;i<balls1.length;i++){
@@ -155,10 +173,11 @@ public class OrderInfoAdapter extends BaseQuickAdapter<OrderDetail.DataProduct.I
                         red=red+"|"+a;
                     }
                 }
+                helper.setText(R.id.ball_red_tv,red);
+
                 break;
             case "3d":
                 //篮球消失
-                helper.setVisible(R.id.ball_blu_tv,false);
                 name="3D";
                 if ("201".equals(item.getPlay_type())||"215".equals(item.getPlay_type())||"221".equals(item.getPlay_type())){
                     String[] balls = chooseBalls.split(",");
@@ -181,6 +200,8 @@ public class OrderInfoAdapter extends BaseQuickAdapter<OrderDetail.DataProduct.I
                 }else {
                     red=chooseBalls;
                 }
+                helper.setText(R.id.ball_red_tv,red);
+
                 break;
         }
 
@@ -192,9 +213,7 @@ public class OrderInfoAdapter extends BaseQuickAdapter<OrderDetail.DataProduct.I
         }
 
         helper.setText(R.id.type_tv,playType)
-                .setText(R.id.count_tv,item.getMultiple()+"倍")
-                .setText(R.id.ball_red_tv,red)
-                .setText(R.id.ball_blu_tv,blue);
+                .setText(R.id.count_tv,item.getMultiple()+"倍");
 
     }
 }

@@ -1,6 +1,11 @@
 package com.xinhe.haoyuncaipiao.ui.adapter.chipped;
 
+import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -73,6 +78,7 @@ public class InformationAdapter extends BaseQuickAdapter<ChippedDetail.DataProdu
         String blue = "";
         String name="";
         String chooseBalls = item.getBouns();
+
         switch (item.getLotid()){
             case "ssq":
                 name="双色球";
@@ -88,6 +94,13 @@ public class InformationAdapter extends BaseQuickAdapter<ChippedDetail.DataProdu
                     blue="("+blueBalls1[0].replace(","," ")+")"+blueBalls1[1].replace(","," ");
                 }else {
                     blue=blueBalls1[0].replace(","," ");
+                }
+                if(!TextUtils.isEmpty(blue)){
+                    SpannableString spannableString1 = new SpannableString(red+"\n"+blue);
+                    spannableString1.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.blue_ball)), red.length(), red.length()+blue.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    helper.setText(R.id.ball_red_tv,spannableString1);
+                }else {
+                    helper.setText(R.id.ball_red_tv,red);
                 }
                 break;
             case "dlt":
@@ -105,10 +118,16 @@ public class InformationAdapter extends BaseQuickAdapter<ChippedDetail.DataProdu
                 }else {
                     blue=blueBalls[0].replace(","," ");
                 }
+                if(!TextUtils.isEmpty(blue)){
+                    SpannableString spannableString1 = new SpannableString(red+"\n"+blue);
+                    spannableString1.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.blue_ball)), red.length(), red.length()+blue.length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    helper.setText(R.id.ball_red_tv,spannableString1);
+                }else {
+                    helper.setText(R.id.ball_red_tv,red);
+                }
                 break;
             case "p3":
                 //篮球消失
-                helper.setVisible(R.id.ball_blu_tv,false);
                 name="排列3";
                 if ("201".equals(item.getPlay_type())){
                     String[] balls = chooseBalls.split(",");
@@ -131,10 +150,12 @@ public class InformationAdapter extends BaseQuickAdapter<ChippedDetail.DataProdu
                 }else {
                     red=chooseBalls;
                 }
+                helper.setText(R.id.ball_red_tv,red);
+                helper.setText(R.id.ball_red_tv,red);
+
                 break;
             case "p5":
                 //篮球消失
-                helper.setVisible(R.id.ball_blu_tv,false);
                 name="排列5";
                 String[] balls1 = chooseBalls.split(",");
                 for (int i=0;i<balls1.length;i++){
@@ -153,10 +174,11 @@ public class InformationAdapter extends BaseQuickAdapter<ChippedDetail.DataProdu
                         red=red+"|"+a;
                     }
                 }
+                helper.setText(R.id.ball_red_tv,red);
+
                 break;
             case "3d":
                 //篮球消失
-                helper.setVisible(R.id.ball_blu_tv,false);
                 name="3D";
                 if ("201".equals(item.getPlay_type())||"215".equals(item.getPlay_type())||"221".equals(item.getPlay_type())){
                     String[] balls = chooseBalls.split(",");
@@ -179,6 +201,8 @@ public class InformationAdapter extends BaseQuickAdapter<ChippedDetail.DataProdu
                 }else {
                     red=chooseBalls;
                 }
+                helper.setText(R.id.ball_red_tv,red);
+
                 break;
         }
 
@@ -190,9 +214,8 @@ public class InformationAdapter extends BaseQuickAdapter<ChippedDetail.DataProdu
         }
 
         helper.setText(R.id.type_tv,name)
-        .setText(R.id.count_tv,playType+item.getMultiple()+"倍")
-        .setText(R.id.ball_red_tv,red)
-        .setText(R.id.ball_blu_tv,blue);
+        .setText(R.id.count_tv,playType+item.getMultiple()+"倍");
+
 
     }
 }

@@ -511,7 +511,7 @@ public class SuperLottoPaymentActivity extends BaseActivity implements SaveDialo
         //每期机选
         periodsCount.setGoodsStorage(15);
         //每期投
-        multiplyCount.setGoodsStorage(50);
+        multiplyCount.setGoodsStorage(99);
 
 
         adapter = new SuperLottoPaymentAdapter(balls);

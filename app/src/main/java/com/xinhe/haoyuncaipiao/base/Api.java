@@ -8,7 +8,7 @@ package com.xinhe.haoyuncaipiao.base;
 public interface Api {
 
     //正式线
-    String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
+    String HOST="http://api.lottery.anwenqianbao.com/v1/";
 
 //    //测试线
 //    String HOST="http://test.api.lottery.anwenqianbao.com/v1/";
