@@ -20,13 +20,16 @@ import com.xinhe.haoyuncaipiao.R;
 import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
 import com.xinhe.haoyuncaipiao.base.BaseActivity;
+import com.xinhe.haoyuncaipiao.base.BaseApplication;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
 import com.xinhe.haoyuncaipiao.model.Order;
 import com.xinhe.haoyuncaipiao.ui.adapter.OrderAdapter;
 import com.xinhe.haoyuncaipiao.utils.DeviceUtil;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -152,6 +155,38 @@ public class OrderActivity extends BaseActivity {
                 .setLabel(getString(R.string.progress_str_jiazai))
                 .setDimAmount(0.5f)
                 .show();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("type","2");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiService.GET_SERVICE(Api.user.share, BaseApplication.getInstance(), json, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+
+                try {
+                    if (0==code){
+                        JSONObject data1 = data.getJSONObject("data");
+                        String url = data1.getString("url");
+                        SPUtil.putString(OrderActivity.this,"qr",url);
+                    }else {
+                        ToastUtils.showToast("分享失败");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.showToast("分享失败");
+                }
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showToast(msg);
+            }
+        });
+
+
+
         orders.clear();
         JSONObject jsonObject = new JSONObject();
         ApiService.GET_SERVICE(url, this, jsonObject, new OnRequestDataListener() {

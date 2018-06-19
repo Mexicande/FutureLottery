@@ -259,7 +259,7 @@ public class MainActivity extends BaseActivity {
                                         //大小，不设置不显示大小，可以不设置
                                         .setTargetSize(String.valueOf(format)+"M")
                                         //是否强制更新，可以不设置
-                                        .setConstraint((jsonObject.getInt("is_force")==1)?true:false)
+                                        .setConstraint(jsonObject.getBoolean("isForce"))
                                         //设置md5，可以不设置
                                         .setNewMd5(jsonObject.getString("md5"));
                             }

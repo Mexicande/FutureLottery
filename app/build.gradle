@@ -8,8 +8,8 @@ android {
         applicationId "com.xinhe.haoyuncaipiao"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 3
-        versionName "2.0.1"
+        versionCode 5
+        versionName "2.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -73,6 +73,9 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.31'
+    compile project(':lib')
+    compile project(':form')
+
     implementation 'com.android.support:cardview-v7:26.1.0'
     //banner
     implementation 'cn.bingoogolapple:bga-banner:2.1.9@aar'
@@ -114,4 +117,5 @@ dependencies {
     compile 'com.yanzhenjie:permission:1.0.8'
     //Imageview
     compile 'com.github.open-android:RoundedImageView:v1.0.0'
+   // compile 'com.github.huangyanbin:SmartTable:2.2.0'
 }

@@ -40,6 +40,7 @@ import com.xinhe.haoyuncaipiao.ui.dialog.ClearDialogFragment;
 import com.xinhe.haoyuncaipiao.ui.dialog.PayMentFragment;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.CommonUtil;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.topRightMenu.MenuItem;
@@ -151,11 +152,21 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener, Cl
 
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         String strMin = decimalFormat.format(oneMinMoney);
-        String strMax = decimalFormat.format(max);
-        if (oneMaxMoney == oneMinMoney) {
+        if(max!=0){
+            String strMax = decimalFormat.format(max);
+            if (oneMaxMoney == oneMinMoney) {
+                predictMoney.setText(strMin + "");
+            } else {
+                predictMoney.setText(strMin + "~" + strMax);
+            }
+        }else {
             predictMoney.setText(strMin + "");
-        } else {
-            predictMoney.setText(strMin + "~" + strMax);
+/*
+            if (oneMaxMoney == oneMinMoney) {
+                predictMoney.setText(strMin + "");
+            } else {
+                predictMoney.setText(strMin );
+            }*/
         }
     }
 
@@ -368,9 +379,16 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener, Cl
     }
 
     private void initView() {
-        //合买
-        rightTv.setVisibility(View.VISIBLE);
-        rightTv.setText("发起合买");
+        //合买大厅or普通
+        boolean chip = SPUtil.contains(this, "chip");
+
+        if (!chip) {
+            rightTv.setVisibility(View.VISIBLE);
+            rightTv.setText("发起合买");
+        }else {
+            rightTv.setVisibility(View.GONE);
+            bottomResultBtn.setText("发起合买");
+        }
 
         mScoreBeanList = (List<ScoreList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
         mScoreAdapter = new FootChooseScoreAdapter(mScoreBeanList);
@@ -753,11 +771,27 @@ public class ScoreBetActivity extends BaseActivity implements DialogListener, Cl
                 }
                 break;
             case R.id.bottom_result_btn:
-                if (slideUp.isVisible()) {
-                    slideUp.hide();
-                    getSelectBet();
-                } else {
-                    paySubmit();
+                boolean chip = SPUtil.contains(this, "chip");
+                if (!chip) {
+                    if (slideUp.isVisible()) {
+                        slideUp.hide();
+                        getSelectBet();
+                    } else {
+                        paySubmit();
+                    }
+
+                }else {
+                    String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                    if (TextUtils.isEmpty(token)) {
+                        ToastUtils.showToast(getString(R.string.login_please));
+                        ActivityUtils.startActivity(LoginActivity.class);
+                    } else {
+                        if (Integer.parseInt(bottomResultMoneyTv.getText().toString()) < 8) {
+                            showTipDialog("提示", "合买方案金额不能小于8");
+                        } else {
+                            chipped();
+                        }
+                    }
                 }
                 break;
             case R.id.right_tv:

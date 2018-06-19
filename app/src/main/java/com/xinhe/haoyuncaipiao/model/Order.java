@@ -25,7 +25,7 @@ public class Order implements Serializable{
     private String pay_money_total;
     private String name;
     private String status;
-    private int winning_money;
+    private String winning_money;
     private String created_at;
     private String order_id;
     private int type;
@@ -63,11 +63,11 @@ public class Order implements Serializable{
         this.status = status;
     }
 
-    public int getWinning_money() {
+    public String getWinning_money() {
         return winning_money;
     }
 
-    public void setWinning_money(int winning_money) {
+    public void setWinning_money(String winning_money) {
         this.winning_money = winning_money;
     }
 

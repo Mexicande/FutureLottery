@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xinhe.haoyuncaipiao.model.PaySucessEvent;
 import com.xinhe.haoyuncaipiao.view.pagerBottomTab.ItemController;
 import com.xinhe.haoyuncaipiao.view.pagerBottomTab.listener.OnTabItemSelectedListener;
 
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.xinhe.haoyuncaipiao.view.pagerBottomTab.item.BaseTabItem;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 /**
@@ -125,6 +128,9 @@ public class CustomItemLayout extends ViewGroup implements ItemController {
                 listener.onRepeat(mSelected);
             }
             return;
+        }
+        if(index==1){
+            EventBus.getDefault().post(new PaySucessEvent());
         }
 
         //记录前一个选中项和当前选中项

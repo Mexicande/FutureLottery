@@ -53,6 +53,7 @@ import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.CommonUtil;
 import com.xinhe.haoyuncaipiao.utils.DeviceUtil;
 import com.xinhe.haoyuncaipiao.utils.ProductItemDecoration;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.marqueeview.MarqueeView;
@@ -218,6 +219,8 @@ public class HomeFragment extends BaseFragment {
                 Lottery item = mProductAdapter.getItem(position);
                 if (item != null&&"1".equals(item.getStatus())) {
                     String  lotid = item.getLotid();
+                    //SPUtil.putString(getActivity(),"chip","3d");
+                    SPUtil.remove(getActivity(),"chip");
                     if(Contacts.Lottery.SSQ.equals(lotid)){
                         //双色球
                         ActivityUtils.startActivity(DoubleBallActivity.class);

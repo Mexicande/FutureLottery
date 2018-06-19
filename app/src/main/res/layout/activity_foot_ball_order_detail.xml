@@ -10,7 +10,49 @@
 
 
     <include layout="@layout/toolbar_back"/>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/crop_ivew"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/qr_header"
+            android:layout_height="100dp">
+            <TextView
+                android:id="@+id/tv"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="长按扫描下载客户端"/>
+            <ImageView
+                android:id="@+id/iv_er"
+                android:layout_marginBottom="5dp"
+                android:layout_above="@id/tv"
+                android:layout_marginLeft="20dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/er_bg"
+                android:layout_width="70dp"
+                android:layout_height="70dp">
+            </ImageView>
+            <View
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/tv"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nest_sv"
         android:layout_width="match_parent"
@@ -434,6 +476,8 @@
                 android:text="双色球投注"
                 />
         </RelativeLayout>
-    </LinearLayout>
 
+    </LinearLayout>
+    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

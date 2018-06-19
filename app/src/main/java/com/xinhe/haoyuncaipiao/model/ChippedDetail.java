@@ -233,6 +233,32 @@ public class ChippedDetail implements Serializable{
             public void setPlay(String play) {
                 this.play = play;
             }
+
+            @Override
+            public String toString() {
+                return "InfoBean{" +
+                        "play_type='" + play_type + '\'' +
+                        ", selected='" + selected + '\'' +
+                        ", result='" + result + '\'' +
+                        ", play='" + play + '\'' +
+                        '}';
+            }
+
+        }
+
+        @Override
+        public String toString() {
+            return "DataFootball{" +
+                    "week=" + week +
+                    ", te='" + te + '\'' +
+                    ", na='" + na + '\'' +
+                    ", info=" + info +
+                    ", selected='" + selected + '\'' +
+                    ", result='" + result + '\'' +
+                    ", play='" + play + '\'' +
+                    ", letpoint='" + letpoint + '\'' +
+                    '}';
         }
     }
+
 }

@@ -2,10 +2,6 @@ package com.xinhe.haoyuncaipiao.ui.activity.order;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.lib.QRCodeUtil.QRCodeUtil;
 import com.google.gson.Gson;
 import com.xinhe.haoyuncaipiao.R;
 import com.xinhe.haoyuncaipiao.base.Api;
@@ -39,6 +36,7 @@ import com.xinhe.haoyuncaipiao.ui.activity.arrange.Lottery3DActivity;
 import com.xinhe.haoyuncaipiao.ui.adapter.OrderInfoAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.RoteteUtils;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
@@ -113,6 +111,10 @@ public class BallOrderDetailActivity extends BaseActivity {
     NestedScrollView nestSv;
     @BindView(R.id.corp_layout)
     LinearLayout corpLayout;
+    @BindView(R.id.iv_er)
+    ImageView ivEr;
+    @BindView(R.id.crop_ivew)
+    LinearLayout cropIvew;
     private String id;
     private String ballName;
     private boolean flag = false;
@@ -140,6 +142,9 @@ public class BallOrderDetailActivity extends BaseActivity {
         //分享显示
         questionMarkIv.setVisibility(View.VISIBLE);
         questionMarkIv.setImageResource(R.mipmap.share);
+
+        String qr = SPUtil.getString(this, "qr");
+        ivEr.setImageBitmap(QRCodeUtil.createQRCodeBitmap(qr,600));
 
         nestSv.setNestedScrollingEnabled(false);
         RoteteUtils.rotateArrow(dropDownIv, flag);
@@ -322,7 +327,7 @@ public class BallOrderDetailActivity extends BaseActivity {
                 break;
             case R.id.question_mark_iv:
                 //分享截图
-                Share share=new Share(this,corpLayout);
+                Share share=new Share(this,cropIvew,corpLayout);
                 share.show();
                 break;
         }

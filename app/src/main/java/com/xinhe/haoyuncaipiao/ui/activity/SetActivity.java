@@ -36,6 +36,8 @@ public class SetActivity extends BaseActivity {
     SuperTextView aboutStv;
     @BindView(R.id.exit_btn)
     Button exitBtn;
+    //退出
+    private final int QUIT_CODE = 1002;
 
 
     @Override
@@ -67,7 +69,7 @@ public class SetActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.exit_btn:
-                setResult(-1);
+                setResult(QUIT_CODE);
                 finish();
                 break;
             case R.id.agreement_stv:

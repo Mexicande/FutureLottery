@@ -28,6 +28,7 @@ import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.Contacts;
 import com.xinhe.haoyuncaipiao.ui.activity.chipped.ChippedActivity;
 import com.xinhe.haoyuncaipiao.ui.dialog.ClearDialogFragment;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.view.topRightMenu.TRMenuAdapter;
 
 import org.json.JSONArray;
@@ -367,10 +368,16 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
     }
 
     private void initView() {
-        //合买
-        rightTv.setVisibility(View.VISIBLE);
-        rightTv.setText("发起合买");
+        //合买大厅or普通
+        boolean chip = SPUtil.contains(this, "chip");
 
+        if (!chip) {
+            rightTv.setVisibility(View.VISIBLE);
+            rightTv.setText("发起合买");
+        }else {
+            rightTv.setVisibility(View.GONE);
+            bottomResultBtn.setText("发起合买");
+        }
 
         mScoreBeanList = (List<ScoreList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
         mScoreAdapter = new FootChooseScoreAdapter(mScoreBeanList);
@@ -736,11 +743,28 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                 }
                 break;
             case R.id.bottom_result_btn:
-                if (slideUp.isVisible()) {
-                    slideUp.hide();
-                    getSelectBet();
-                } else {
-                    paySubmit();
+
+                boolean chip = SPUtil.contains(this, "chip");
+                if (!chip) {
+                    if (slideUp.isVisible()) {
+                        slideUp.hide();
+                        getSelectBet();
+                    } else {
+                        paySubmit();
+                    }
+
+                }else {
+                    String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                    if (TextUtils.isEmpty(token)) {
+                        ToastUtils.showToast(getString(R.string.login_please));
+                        ActivityUtils.startActivity(LoginActivity.class);
+                    } else {
+                        if (Integer.parseInt(bottomResultMoneyTv.getText().toString()) < 8) {
+                            showTipDialog("提示", "合买方案金额不能小于8");
+                        } else {
+                            chipped();
+                        }
+                    }
                 }
                 break;
             case R.id.right_tv:
@@ -983,21 +1007,29 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
 
                 for (int j = 0; j < odds.size(); j++) {
                     List<ScoreList.DataBean.MatchBean.OddsBean> oddsBeans = odds.get(j);
-
+                    StringBuffer ft01=new StringBuffer();
+                    StringBuffer ft02=new StringBuffer();
+                    StringBuffer ft03=new StringBuffer();
+                    StringBuffer ft04=new StringBuffer();
+                    StringBuffer ft06=new StringBuffer();
+                    JSONObject select = new JSONObject();
                     for (int k = 0; k < oddsBeans.size(); k++) {
-                        JSONObject select = new JSONObject();
                         ScoreList.DataBean.MatchBean.OddsBean oddsBean = oddsBeans.get(k);
                         switch (j) {
                             case 0:
                                 if (null != oddsBean) {
                                     if (oddsBean.getType() == 1) {
-                                        select.put("lotid", "FT001");
+                                       // select.put("lotid", "FT001");
                                         if ("主胜".equals(oddsBean.getName())) {
-                                            select.put("selected", "3");
+                                            ft01.append("3,");
+                                           // select.put("selected", "3");
                                         } else if ("平".equals(oddsBean.getName())) {
-                                            select.put("selected", "1");
+                                            ft01.append("1,");
+                                           // select.put("selected", "1");
                                         } else if ("客胜".equals(oddsBean.getName())) {
-                                            select.put("selected", "0");
+                                            //select.put("selected", "0");
+                                            ft01.append("0,");
+
                                         }
                                     }
                                 }
@@ -1007,11 +1039,14 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                     if (oddsBean.getType() == 1) {
                                         select.put("lotid", "FT006");
                                         if ("主胜".equals(oddsBean.getName())) {
-                                            select.put("selected", "3");
+                                            ft06.append("3,");
+                                            //select.put("selected", "3");
                                         } else if ("平".equals(oddsBean.getName())) {
-                                            select.put("selected", "1");
+                                            ft06.append("1,");
+                                           // select.put("selected", "1");
                                         } else if ("客胜".equals(oddsBean.getName())) {
-                                            select.put("selected", "0");
+                                            ft06.append("0,");
+                                            //select.put("selected", "0");
                                         }
                                     }
                                 }
@@ -1021,13 +1056,17 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                     if (oddsBean.getType() == 1) {
                                         select.put("lotid", "FT002");
                                         if ("平其它".equals(oddsBeans.get(k).getName())) {
-                                            select.put("selected", "99");
+                                            ft02.append("99,");
+                                            //select.put("selected", "99");
                                         } else if ("负其它".equals(oddsBeans.get(k).getName())) {
-                                            select.put("selected", "09");
+                                            ft02.append("09,");
+
+                                            //select.put("selected", "09");
                                         } else if ("胜其它".equals(oddsBeans.get(k).getName())) {
-                                            select.put("selected", "90");
+                                            ft02.append("90,");
+                                            // select.put("selected", "90");
                                         } else {
-                                            select.put("selected", oddsBean.getName().replace(":",""));
+                                            ft02.append(oddsBean.getName().replace(":", "")).append(",");
                                         }
                                     }
                                 }
@@ -1036,9 +1075,11 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                 if (null != oddsBean) {
                                     if (oddsBean.getType() == 1) {
                                         if ("7+".equals(oddsBean.getName())) {
-                                            select.put("selected", "7");
+                                            ft03.append("7,");
+                                           // select.put("selected", "7");
                                         } else {
-                                            select.put("selected", oddsBean.getName());
+                                            ft03.append(oddsBean.getName()).append(",");
+                                           // select.put("selected", oddsBean.getName());
                                         }
                                         select.put("lotid", "FT003");
                                     }
@@ -1049,31 +1090,72 @@ public class MixtureBetActivity extends BaseActivity implements DialogListener, 
                                     if (oddsBean.getType() == 1) {
                                         select.put("lotid", "FT004");
                                         if ("胜胜".equals(oddsBean.getName())) {
-                                            select.put("selected", "33");
+                                            ft04.append("33,");
+                                            //select.put("selected", "33");
                                         } else if ("胜负".equals(oddsBean.getName())) {
-                                            select.put("selected", "30");
+                                            ft04.append("30,");
+                                           // select.put("selected", "30");
                                         } else if ("负胜".equals(oddsBean.getName())) {
-                                            select.put("selected", "03");
+                                            ft04.append("03,");
+                                            //select.put("selected", "03");
                                         } else if ("负负".equals(oddsBean.getName())) {
-                                            select.put("selected", "00");
+                                            ft04.append("00,");
+                                            //select.put("selected", "00");
                                         } else if ("负平".equals(oddsBean.getName())) {
-                                            select.put("selected", "01");
+                                            ft04.append("01,");
+                                            //select.put("selected", "01");
                                         } else if ("平负".equals(oddsBean.getName())) {
-                                            select.put("selected", "10");
+                                            ft04.append("10,");
+                                            //select.put("selected", "10");
                                         } else if ("平胜".equals(oddsBean.getName())) {
-                                            select.put("selected", "13");
+                                            ft04.append("13,");
+                                            //select.put("selected", "13");
                                         } else if ("胜平".equals(oddsBean.getName())) {
-                                            select.put("selected", "31");
+                                            ft04.append("31,");
+                                          //  select.put("selected", "31");
                                         } else if ("平平".equals(oddsBean.getName())) {
-                                            select.put("selected", "11");
+                                            ft04.append("11,");
+                                           // select.put("selected", "11");
                                         }
                                     }
                                 }
                                 break;
+                            default:
+                                    break;
                         }
-                        if (null != select && !TextUtils.isEmpty(select.toString()) && !"{}".equals(select.toString())) {
-                            type.put(select);
-                        }
+                    }
+                    String ft1 = ft01.toString();
+                    String ft2 = ft02.toString();
+                    String ft3 = ft03.toString();
+                    String ft4 = ft04.toString();
+                    String ft6 = ft06.toString();
+                    if(!TextUtils.isEmpty(ft1)){
+                        select.put("lotid", "FT001");
+                        String st = ft1.substring(0, ft1.length() - 1);
+                        select.put("selected", st);
+                    }
+                    if(!TextUtils.isEmpty(ft2)){
+                        select.put("lotid", "FT002");
+                        String st = ft2.substring(0, ft2.length() - 1);
+                        select.put("selected", st);
+                    }
+                    if(!TextUtils.isEmpty(ft3)){
+                        select.put("lotid", "FT003");
+                        String st = ft3.substring(0, ft3.length() - 1);
+                        select.put("selected", st);
+                    }
+                    if(!TextUtils.isEmpty(ft4)){
+                        select.put("lotid", "FT004");
+                        String st = ft4.substring(0, ft4.length() - 1);
+                        select.put("selected", st);
+                    }
+                    if(!TextUtils.isEmpty(ft6)){
+                        select.put("lotid", "FT006");
+                        String st = ft6.substring(0, ft6.length() - 1);
+                        select.put("selected", st);
+                    }
+                    if (!TextUtils.isEmpty(select.toString()) && !"{}".equals(select.toString())) {
+                        type.put(select);
                     }
                 }
                 team.put("type", type);

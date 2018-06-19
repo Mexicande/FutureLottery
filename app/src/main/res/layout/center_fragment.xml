@@ -95,17 +95,17 @@
                 android:id="@+id/center_fragment_money_tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.00"
+                android:text="0.00元"
                 android:textColor="@color/text_color_32"
-                android:textSize="@dimen/size_18"
+                android:textSize="@dimen/size_16"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="余额(元)"
+                android:text="查询余额"
                 android:textColor="@color/text_color_90"
                 android:textSize="@dimen/size_11"
-                android:layout_marginTop="@dimen/length_5"
+                android:layout_marginTop="3dp"
                 />
         </LinearLayout>
 

@@ -28,14 +28,23 @@ import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 import com.xinhe.haoyuncaipiao.R;
 import com.xinhe.haoyuncaipiao.base.Api;
+import com.xinhe.haoyuncaipiao.base.BaseActivity;
 import com.xinhe.haoyuncaipiao.base.Contacts;
 import com.xinhe.haoyuncaipiao.listener.ClearDialogListener;
+import com.xinhe.haoyuncaipiao.model.FootBallList;
 import com.xinhe.haoyuncaipiao.model.FootPay;
+import com.xinhe.haoyuncaipiao.ui.activity.LoginActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.PayAffirmActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.chipped.ChippedActivity;
+import com.xinhe.haoyuncaipiao.ui.adapter.football.FootChooseWinAdapter;
 import com.xinhe.haoyuncaipiao.ui.dialog.ClearDialogFragment;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
+import com.xinhe.haoyuncaipiao.utils.CommonUtil;
+import com.xinhe.haoyuncaipiao.utils.MenuDecoration;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
+import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
+import com.xinhe.haoyuncaipiao.view.topRightMenu.MenuItem;
 import com.xinhe.haoyuncaipiao.view.topRightMenu.TRMenuAdapter;
 
 import org.json.JSONException;
@@ -48,15 +57,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import com.xinhe.haoyuncaipiao.base.BaseActivity;
-import com.xinhe.haoyuncaipiao.model.FootBallList;
-import com.xinhe.haoyuncaipiao.ui.activity.LoginActivity;
-import com.xinhe.haoyuncaipiao.ui.adapter.football.FootChooseWinAdapter;
-import com.xinhe.haoyuncaipiao.utils.CommonUtil;
-import com.xinhe.haoyuncaipiao.utils.MenuDecoration;
-import com.xinhe.haoyuncaipiao.utils.SPUtils;
-import com.xinhe.haoyuncaipiao.view.topRightMenu.MenuItem;
 
 /**
  * @author apple
@@ -73,8 +73,6 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
     TextView bottomResultCountTv;
     @BindView(R.id.bottom_result_money_tv)
     TextView bottomResultMoneyTv;
-    @BindView(R.id.bottom_result_btn)
-    Button bottomResultBtn;
     @BindView(R.id.empty_layout)
     LinearLayout emptyLayout;
     @BindView(R.id.foot_all)
@@ -97,6 +95,8 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
     TextView predictMoney;
     @BindView(R.id.right_tv)
     TextView rightTv;
+    @BindView(R.id.bottom_result_btn)
+    Button bottomResultBtn;
     private SlideUp slideUp;
     private TRMenuAdapter mBottomTRMenuAdapter;
     private FootChooseWinAdapter mAdapter;
@@ -126,9 +126,18 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
 
 
     private void initView() {
-        //合买
-        rightTv.setVisibility(View.VISIBLE);
-        rightTv.setText("发起合买");
+        //合买大厅or普通
+
+        boolean chip = SPUtil.contains(this, "chip");
+
+        if (!chip) {
+            rightTv.setVisibility(View.VISIBLE);
+            rightTv.setText("发起合买");
+        }else {
+            rightTv.setVisibility(View.GONE);
+            bottomResultBtn.setText("发起合买");
+        }
+
 
         bean = (List<FootBallList.DataBean.MatchBean>) getIntent().getSerializableExtra("bean");
         mAdapter = new FootChooseWinAdapter(bean);
@@ -729,7 +738,7 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
 
 
     @OnClick({R.id.add_choose, R.id.choose_clear, R.id.layout_top_back, R.id.layout_bet, R.id.layoutGo
-            , R.id.layout_slide_bet, R.id.bottom_result_btn,R.id.right_tv})
+            , R.id.layout_slide_bet, R.id.bottom_result_btn, R.id.right_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_top_back:
@@ -759,12 +768,32 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
                 }
                 break;
             case R.id.bottom_result_btn:
-                if (slideUp.isVisible()) {
-                    slideUp.hide();
-                    getSelectBet();
-                } else {
-                    paySubmit();
+
+                boolean chip = SPUtil.contains(this, "chip");
+                if (!chip) {
+                    if (slideUp.isVisible()) {
+                        slideUp.hide();
+                        getSelectBet();
+                    } else {
+                        paySubmit();
+                    }
+
+                }else {
+                    String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                    if (TextUtils.isEmpty(token)) {
+                        ToastUtils.showToast(getString(R.string.login_please));
+                        ActivityUtils.startActivity(LoginActivity.class);
+                    } else {
+                        if (Integer.parseInt(bottomResultMoneyTv.getText().toString()) < 8) {
+                            showTipDialog("提示", "合买方案金额不能小于8");
+                        } else {
+                            chipped();
+                        }
+                    }
                 }
+
+
+
                 break;
             case R.id.right_tv:
                 String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
@@ -772,9 +801,9 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
                     ToastUtils.showToast(getString(R.string.login_please));
                     ActivityUtils.startActivity(LoginActivity.class);
                 } else {
-                    if (Integer.parseInt(bottomResultMoneyTv.getText().toString())<8){
-                        showTipDialog("提示","合买方案金额不能小于8");
-                    }else {
+                    if (Integer.parseInt(bottomResultMoneyTv.getText().toString()) < 8) {
+                        showTipDialog("提示", "合买方案金额不能小于8");
+                    } else {
                         chipped();
                     }
                 }
@@ -864,8 +893,8 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Intent intent=new Intent(FootAllBetActivity.this,ChippedActivity.class);
-        intent.putExtra("totalMoney",Long.parseLong(money));
+        Intent intent = new Intent(FootAllBetActivity.this, ChippedActivity.class);
+        intent.putExtra("totalMoney", Long.parseLong(money));
         if (type <= 2) {
             intent.putExtra("information", "竞彩足球胜平负");
         } else {
@@ -874,10 +903,10 @@ public class FootAllBetActivity extends BaseActivity implements ClearDialogListe
         intent.putExtra("name", "竞彩足球");
         intent.putExtra("json", jsonObject.toString());
         intent.putExtra("lotid", "ftb");
-        startActivityForResult(intent,Contacts.REQUEST_CODE_TO_PAY);
+        startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
     }
 
-    private void showTipDialog(String title,String content) {
+    private void showTipDialog(String title, String content) {
         final AlertDialog alertDialog1 = new AlertDialog.Builder(this, R.style.CustomDialog).create();
         alertDialog1.setCancelable(false);
         alertDialog1.setCanceledOnTouchOutside(false);

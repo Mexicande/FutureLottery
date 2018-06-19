@@ -20,11 +20,15 @@ import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
 import com.xinhe.haoyuncaipiao.base.Contacts;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
+import com.xinhe.haoyuncaipiao.model.PaySucessEvent;
 import com.xinhe.haoyuncaipiao.pay.alipay.Alipay;
 import com.xinhe.haoyuncaipiao.pay.alipay.PayResult;
 import com.xinhe.haoyuncaipiao.pay.wechat.Wechat;
+import com.xinhe.haoyuncaipiao.ui.activity.chipped.ChippedActivity;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -261,6 +265,7 @@ public class PayActivity extends BaseActivity {
                         if (TextUtils.equals(resultStatus, "9000")) {
                             Toast.makeText(activity, "支付成功", Toast.LENGTH_SHORT).show();
                             // 发广播
+
                             Intent intent = new Intent();
                             intent.setAction(Contacts.INTENT_EXTRA_PAY_SUCESS);
                             activity.sendBroadcast(intent);
@@ -294,6 +299,10 @@ public class PayActivity extends BaseActivity {
             String action = intent.getAction();
             // 判断Action
             if (Contacts.INTENT_EXTRA_PAY_SUCESS.equals(action)) {
+                boolean chip = SPUtil.contains(PayActivity.this, "chip");
+                if(chip){
+                    EventBus.getDefault().post(new PaySucessEvent());
+                }
                 PayActivity.this.setResult(-1);
                 finish();
             }

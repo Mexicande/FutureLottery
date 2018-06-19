@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.xinhe.haoyuncaipiao.base.Api;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,11 +29,13 @@ import com.xinhe.haoyuncaipiao.base.ApiService;
 import com.xinhe.haoyuncaipiao.base.BaseActivity;
 import com.xinhe.haoyuncaipiao.base.Contacts;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
+import com.xinhe.haoyuncaipiao.model.PaySucessEvent;
 import com.xinhe.haoyuncaipiao.ui.activity.LoginActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.PayActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.PaySucessActivity;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.DeviceUtil;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.SwitchMultiButton;
@@ -317,6 +320,10 @@ public class ChippedActivity extends BaseActivity {
                         startActivityForResult(intent, Contacts.REQUEST_CODE_TO_PAY);
                     } else if (code == 0) {
                         try {
+                            boolean chip = SPUtil.contains(ChippedActivity.this, "chip");
+                            if(chip){
+                                EventBus.getDefault().post(new PaySucessEvent());
+                            }
                             JSONObject data1 = data.getJSONObject("data");
                             Intent intent=new Intent(ChippedActivity.this, PaySucessActivity.class);
                             intent.putExtra("kind",data1.getString("lotid"));

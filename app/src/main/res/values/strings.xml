@@ -84,4 +84,5 @@
     <string name="line3_three_compound">玩法提示：\n所选号码包括开奖号码中的2位（顺序不限），且开奖号码有任意两位相同，即中奖346元。</string>
     <!--排三组六提示-->
     <string name="line3_six">玩法提示：\n所选号码包括开奖号码相同（顺序不限），且开奖号码中3个号码各不相同，即中奖173元。</string>
+    <string name="money_detail">账户明细</string>
 </resources>

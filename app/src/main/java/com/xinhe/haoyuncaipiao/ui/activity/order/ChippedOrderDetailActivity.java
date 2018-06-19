@@ -10,13 +10,21 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.column.ArrayColumn;
+import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.style.FontStyle;
+import com.bin.david.form.data.table.TableData;
+import com.bin.david.form.utils.DensityUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.lib.QRCodeUtil.QRCodeUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xinhe.haoyuncaipiao.R;
@@ -26,6 +34,12 @@ import com.xinhe.haoyuncaipiao.base.BaseActivity;
 import com.xinhe.haoyuncaipiao.base.Contacts;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
 import com.xinhe.haoyuncaipiao.model.ChippedDetail;
+import com.xinhe.haoyuncaipiao.model.DayTime;
+import com.xinhe.haoyuncaipiao.model.FootMixture;
+import com.xinhe.haoyuncaipiao.model.Lesson;
+import com.xinhe.haoyuncaipiao.model.LessonPoint;
+import com.xinhe.haoyuncaipiao.model.MergeInfo;
+import com.xinhe.haoyuncaipiao.model.Week;
 import com.xinhe.haoyuncaipiao.pay.wechat.Share;
 import com.xinhe.haoyuncaipiao.ui.activity.DoubleBallActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.Football.FootBallActivity;
@@ -43,6 +57,7 @@ import com.xinhe.haoyuncaipiao.ui.adapter.chipped.InformationAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.DeviceUtil;
 import com.xinhe.haoyuncaipiao.utils.RoteteUtils;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.AmountView;
@@ -54,6 +69,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -101,8 +117,8 @@ public class ChippedOrderDetailActivity extends BaseActivity {
     LinearLayout informationClickLl;
     @BindView(R.id.information_foot_ll)
     LinearLayout informationFootLl;
-    @BindView(R.id.infromation_rv)
-    RecyclerView infromationRv;
+     @BindView(R.id.infromation_rv)
+      RecyclerView infromationRv;
     @BindView(R.id.information_ll)
     LinearLayout informationLl;
     @BindView(R.id.prize_tv)
@@ -173,6 +189,14 @@ public class ChippedOrderDetailActivity extends BaseActivity {
     LinearLayout corpLayout;
     @BindView(R.id.infomation)
     TextView infomation;
+    @BindView(R.id.crop_ivew)
+    LinearLayout cropIvew;
+    @BindView(R.id.name_ll)
+    LinearLayout nameLl;
+    @BindView(R.id.iv_er)
+    ImageView ivEr;
+ /*   @BindView(R.id.table)
+    SmartTable table;*/
     private KProgressHUD hud;
     private String together_id;
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
@@ -219,9 +243,15 @@ public class ChippedOrderDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+       // FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,11)); //设置全局字体大小
+
         //分享显示
+
         questionMarkIv.setVisibility(View.VISIBLE);
         questionMarkIv.setImageResource(R.mipmap.share);
+
+        String qr = SPUtil.getString(this, "qr");
+        ivEr.setImageBitmap(QRCodeUtil.createQRCodeBitmap(qr, 600));
 
 
         NestedScrollView.setNestedScrollingEnabled(false);
@@ -236,10 +266,7 @@ public class ChippedOrderDetailActivity extends BaseActivity {
 
         footAdapter = new ChippedDetailFootAdapter(dataFoot);
         otherFootAdapter = new ChippedOtherDetailFootAdapter(dataFoot);
-
         ballAdapter = new InformationAdapter(dataBall);
-        infromationRv.setLayoutManager(new LinearLayoutManager(this));
-
         infromationRv.setLayoutManager(new LinearLayoutManager(this));
         if ("FT001".equals(lotid) || "FT002".equals(lotid) || "FT003".equals(lotid) || "FT004".equals(lotid) || "FT006".equals(lotid)) {
             infromationRv.setAdapter(otherFootAdapter);
@@ -251,12 +278,11 @@ public class ChippedOrderDetailActivity extends BaseActivity {
             infromationRv.setAdapter(ballAdapter);
             informationFootLl.setVisibility(View.GONE);
         }
-
-
         followAdapter = new FollowPeopleAdapter(info);
         followRv.setLayoutManager(new LinearLayoutManager(this));
         followRv.setAdapter(followAdapter);
     }
+
 
     private void getData() {
         if (!DeviceUtil.IsNetWork(this)) {
@@ -355,9 +381,12 @@ public class ChippedOrderDetailActivity extends BaseActivity {
 
         //跟单
         followAdapter.refresh(openmatch, status);
+        long date = data1.getLong("date");
+
+        long l = System.currentTimeMillis();
 
         leftMoney = data1.getString("remaining_money");
-        if ("0".equals(leftMoney) || "0.00".equals(leftMoney)) {
+        if ("0".equals(leftMoney) || "0.00".equals(leftMoney) || date * 1000 < l) {
             payLl.setVisibility(View.GONE);
         } else {
             payLl.setVisibility(View.VISIBLE);
@@ -422,14 +451,19 @@ public class ChippedOrderDetailActivity extends BaseActivity {
             isShowInformation = true;
             dropDownInformationIv.setVisibility(View.VISIBLE);
         }
-        String multiple = data1.getString("multiple");
-        String strand = data1.getString("strand");
-        String notes = data1.getString("notes");
+        if ("FT001".equals(lotid) || "FT002".equals(lotid) || "FT003".equals(lotid) || "FT004".equals(lotid) || "FT005".equals(lotid) || "FT006".equals(lotid)) {
 
-        if ("0".equals(strand)) {
-            infomation.setText("单关" + " "+ notes+"注"+ multiple + "倍");
-        } else {
-            infomation.setText(strand + "串1" + " "+notes+"注" + multiple + "倍");
+            String multiple = data1.getString("multiple");
+            String strand = data1.getString("strand");
+            String notes = data1.getString("notes");
+
+
+            if ("0".equals(strand)) {
+                infomation.setVisibility(View.VISIBLE);
+                infomation.setText("单关" + " " + notes + "注" + multiple + "倍");
+            } else {
+                infomation.setText(strand + "串1" + " " + notes + "注" + multiple + "倍");
+            }
         }
         //派单详情
         orderMoneyTv.setText(data1.getString("pay_money_total"));
@@ -444,6 +478,53 @@ public class ChippedOrderDetailActivity extends BaseActivity {
         manifestoTv.setText(data1.getString("declaration"));
         startTimeTv.setText(data1.getString("created_at"));
         finishTimeTv.setText(format1.format(data1.getLong("date") * 1000));
+
+
+      /*  Gson gson=new Gson();
+
+        Type typeBall = new TypeToken<ArrayList<ChippedDetail.DataFootball>>() {
+        }.getType();
+        ArrayList<ChippedDetail.DataFootball> ball = gson.fromJson(data1.getJSONArray("data").toString(), typeBall);
+
+
+
+
+        table.getConfig().setShowXSequence(false);
+        table.getConfig().setShowYSequence(false);
+        final List<FootMixture> students  = new ArrayList<>();
+
+        for(int i = 0; i < ball.size();i++){
+
+
+            String[] arr1 = ball.get(i).getNa().split("[*]");
+            String[] arr2 = arr1[0].split(":");
+            List<Lesson>list=new ArrayList<>();
+
+            List<ChippedDetail.DataFootball.InfoBean> info = ball.get(i).getInfo();
+            for(int j=0;j<info.size();j++){
+                Lesson lesson = new Lesson(info.get(j).getPlay(),info.get(j).getSelected(),info.get(j).getResult());
+                list.add(lesson);
+            }
+            FootMixture student = new FootMixture("周"+ball.get(i).getWeek()+"\n"+ball.get(i).getTe()
+                    ,"("+ball.get(0).getLetpoint()+")"+arr2[0]+"\n"+arr1[1]+"\n"+arr2[1],list);
+            students.add(student);
+        }
+
+        Column<String> studentNameColumn = new Column<>("场次","name");
+        Column<String> weekNameColumn = new Column<>("主队VS客队","na");
+        ArrayColumn<String> lessonFavColumn = new ArrayColumn<>("玩法","lesson.name");
+        ArrayColumn<String> lessonNameColumn = new ArrayColumn<>("投注(出票赔率)","lesson.selected");
+        ArrayColumn<String> pointNameColumn = new ArrayColumn<>("彩果","lesson.result");
+
+        final TableData<FootMixture> tableData = new TableData<>("课程表",students,studentNameColumn,
+                weekNameColumn,lessonFavColumn,lessonNameColumn,pointNameColumn);
+        table.setTableData(tableData);
+        WindowManager wm = this.getWindowManager();
+        int screenWith = wm.getDefaultDisplay().getWidth();
+        table.getConfig().setMinTableWidth(screenWith);
+        table.getConfig().setShowTableTitle(false);
+*/
+
     }
 
     @OnClick({R.id.layout_top_back, R.id.question_mark_iv, R.id.pay_btn, R.id.follow_people_ll, R.id.all_tv, R.id.information_click_ll, R.id.prize_ll, R.id.go_chipped_tv, R.id.delet})
@@ -453,8 +534,7 @@ public class ChippedOrderDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.question_mark_iv:
-                //分享截图
-                Share share = new Share(this, corpLayout);
+                Share share = new Share(this, cropIvew, corpLayout);
                 share.show();
                 break;
             case R.id.pay_btn:

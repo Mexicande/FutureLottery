@@ -159,9 +159,15 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
     }
 
     private void initView() {
-        //合买
-        rightTv.setVisibility(View.VISIBLE);
-        rightTv.setText("发起合买");
+        boolean chip = SPUtil.contains(this, "chip");
+
+        if (!chip) {
+            rightTv.setVisibility(View.VISIBLE);
+            rightTv.setText("发起合买");
+        }else {
+            rightTv.setVisibility(View.GONE);
+            bottomResultBtn.setText("发起合买");
+        }
 
         //每期机选
         periodsCount.setGoodsStorage(15);
@@ -259,12 +265,31 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
                 }
                 break;
             case R.id.bottom_result_btn:
-                String string = (String) SPUtils.get(this, Contacts.TOKEN, "");
-                if (TextUtils.isEmpty(string)) {
-                    ToastUtils.showToast(getString(R.string.login_please));
-                    ActivityUtils.startActivity(LoginActivity.class);
-                } else {
-                    pay();
+                boolean chip = SPUtil.contains(this, "chip");
+                if (!chip) {
+                    String string = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                    if (TextUtils.isEmpty(string)) {
+                        ToastUtils.showToast(getString(R.string.login_please));
+                        ActivityUtils.startActivity(LoginActivity.class);
+                    } else {
+                        pay();
+                    }
+                }else {
+                    if (periods>1){
+                        ToastUtils.showToast("合买只能为一期");
+                        return;
+                    }
+                    String token = (String) SPUtils.get(this, Contacts.TOKEN, "");
+                    if (TextUtils.isEmpty(token)) {
+                        ToastUtils.showToast(getString(R.string.login_please));
+                        ActivityUtils.startActivity(LoginActivity.class);
+                    } else {
+                        if (zhushu * periods * multiple * 2<8){
+                            showTipDialog("提示","合买方案金额不能小于8");
+                        }else {
+                            chipped();
+                        }
+                    }
                 }
                 break;
             case R.id.tip_iv:
@@ -287,6 +312,8 @@ public class ArrangePayActivity extends BaseActivity implements SaveDialogListen
                     }
                 }
                 break;
+             default:
+                 break;
         }
     }
 

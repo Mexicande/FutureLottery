@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.lib.QRCodeUtil.QRCodeUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xinhe.haoyuncaipiao.R;
@@ -24,6 +25,7 @@ import com.xinhe.haoyuncaipiao.base.BaseActivity;
 import com.xinhe.haoyuncaipiao.base.Contacts;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
 import com.xinhe.haoyuncaipiao.model.ChippedDetail;
+import com.xinhe.haoyuncaipiao.pay.wechat.Share;
 import com.xinhe.haoyuncaipiao.ui.activity.LoginActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.PayActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.PaySucessActivity;
@@ -33,12 +35,15 @@ import com.xinhe.haoyuncaipiao.ui.adapter.chipped.FollowPeopleAdapter;
 import com.xinhe.haoyuncaipiao.ui.adapter.chipped.InformationAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.DeviceUtil;
+import com.xinhe.haoyuncaipiao.utils.LogUtils;
 import com.xinhe.haoyuncaipiao.utils.RoteteUtils;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.SPUtils;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.AmountView;
 import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -141,6 +146,8 @@ public class ChippedDetailActivity extends BaseActivity {
     LinearLayout layoutTime;
     @BindView(R.id.infomation)
     TextView infomation;
+    @BindView(R.id.information_click_ll)
+    LinearLayout informationClickLl;
     private KProgressHUD hud;
     private String together_id;
     /**
@@ -188,6 +195,12 @@ public class ChippedDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        //分享显示
+     /*   questionMarkIv.setVisibility(View.VISIBLE);
+        questionMarkIv.setImageResource(R.mipmap.share);
+        String qr = SPUtil.getString(this, "qr");
+        ivEr.setImageBitmap(QRCodeUtil.createQRCodeBitmap(qr, 500));
+*/
         NestedScrollView.setNestedScrollingEnabled(false);
 
         tvTitle.setText("合买详情");
@@ -241,6 +254,7 @@ public class ChippedDetailActivity extends BaseActivity {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 hud.dismiss();
+                LogUtils.i("lotid==",lotid);
 
                 try {
                     Gson gson = new Gson();
@@ -249,6 +263,7 @@ public class ChippedDetailActivity extends BaseActivity {
                     }.getType();
                     ArrayList<ChippedDetail.InfoProduct> in = gson.fromJson(data1.getJSONArray("info").toString(), typeInfo);
                     info.addAll(in);
+
                     //投注信息
                     if ("FT001".equals(lotid) || "FT002".equals(lotid) || "FT003".equals(lotid) || "FT004".equals(lotid) || "FT005".equals(lotid) || "FT006".equals(lotid)) {
                         Type typeFoot = new TypeToken<ArrayList<ChippedDetail.DataFootball>>() {
@@ -258,12 +273,16 @@ public class ChippedDetailActivity extends BaseActivity {
                         dataFoot.addAll(foot);
                         footAdapter.notifyDataSetChanged();
                     } else {
+
                         Type typeBall = new TypeToken<ArrayList<ChippedDetail.DataProduct>>() {
                         }.getType();
                         ArrayList<ChippedDetail.DataProduct> ball = gson.fromJson(data1.getJSONArray("data").toString(), typeBall);
+
                         dataBall.clear();
                         dataBall.addAll(ball);
                         ballAdapter.notifyDataSetChanged();
+
+
                     }
 
                     update();
@@ -305,6 +324,7 @@ public class ChippedDetailActivity extends BaseActivity {
             @Override
             public void onFinish() {
 
+
             }
         }.start();
 
@@ -321,15 +341,22 @@ public class ChippedDetailActivity extends BaseActivity {
 
 
 
-        String multiple = data1.getString("multiple");
-        String strand = data1.getString("strand");
-        String notes = data1.getString("notes");
 
-      /*  if("0".equals(strand)){
-            infomation.setText("单关"+" "+multiple+"倍");
-        }else {
-            infomation.setText(strand+"串1"+" "+multiple+"倍");
-        }*/
+        if ("FT001".equals(lotid) || "FT002".equals(lotid) || "FT003".equals(lotid) || "FT004".equals(lotid) || "FT005".equals(lotid) || "FT006".equals(lotid)) {
+
+            String multiple = data1.getString("multiple");
+            String strand = data1.getString("strand");
+            String notes = data1.getString("notes");
+
+
+            if ("0".equals(strand)) {
+                infomation.setVisibility(View.VISIBLE);
+                infomation.setText("单关" + " " + notes + "注" + multiple + "倍");
+            } else {
+                infomation.setText(strand + "串1" + " " + notes + "注" + multiple + "倍");
+            }
+        }
+
 
 
         switch (data1.getString("type")) {
@@ -351,11 +378,6 @@ public class ChippedDetailActivity extends BaseActivity {
                 break;
         }
 
-        if ("0".equals(strand)) {
-            infomation.setText("单关" + " "+ notes+"注"+ multiple + "倍");
-        } else {
-            infomation.setText(strand + "串1" + " "+notes+"注" + multiple + "倍");
-        }
 
         followPeopleTv.setText(data1.getString("number") + "人跟单");
 

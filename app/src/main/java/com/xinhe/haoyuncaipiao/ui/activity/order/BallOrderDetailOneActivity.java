@@ -3,10 +3,6 @@ package com.xinhe.haoyuncaipiao.ui.activity.order;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +19,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.lib.QRCodeUtil.QRCodeUtil;
 import com.google.gson.Gson;
+import com.xinhe.haoyuncaipiao.R;
 import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
 import com.xinhe.haoyuncaipiao.base.BaseActivity;
@@ -38,6 +36,7 @@ import com.xinhe.haoyuncaipiao.ui.activity.arrange.Lottery3DActivity;
 import com.xinhe.haoyuncaipiao.ui.adapter.ChaseOrderAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.RoteteUtils;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 
 import org.json.JSONException;
@@ -47,7 +46,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import com.xinhe.haoyuncaipiao.R;
 
 public class BallOrderDetailOneActivity extends BaseActivity {
 
@@ -99,6 +97,20 @@ public class BallOrderDetailOneActivity extends BaseActivity {
     ImageView winningIv;
     @BindView(R.id.corp_layout)
     LinearLayout corpLayout;
+    @BindView(R.id.iv_er)
+    ImageView ivEr;
+    @BindView(R.id.crop_ivew)
+    LinearLayout cropIvew;
+    @BindView(R.id.choose_detail_ll1)
+    LinearLayout chooseDetailLl1;
+    @BindView(R.id.have_chased_ll)
+    LinearLayout haveChasedLl;
+    @BindView(R.id.wait_chased_ll)
+    LinearLayout waitChasedLl;
+    @BindView(R.id.wait_chased_rv)
+    RecyclerView waitChasedRv;
+    @BindView(R.id.lion)
+    LinearLayout lion;
     private String id;
     private String iconURL;
     private String name;
@@ -147,7 +159,8 @@ public class BallOrderDetailOneActivity extends BaseActivity {
         //分享显示
         questionMarkIv.setVisibility(View.VISIBLE);
         questionMarkIv.setImageResource(R.mipmap.share);
-
+        String qr = SPUtil.getString(this, "qr");
+        ivEr.setImageBitmap(QRCodeUtil.createQRCodeBitmap(qr,600));
 
         nestSv.setNestedScrollingEnabled(false);
 
@@ -216,14 +229,14 @@ public class BallOrderDetailOneActivity extends BaseActivity {
 
             nameTv.setText(name);
             phaseTv.setText("追号共" + total_periods + "期");
-            orderMoneyTv.setText(pay_money+"元");
+            orderMoneyTv.setText(pay_money + "元");
 
 
             //判断是否中大奖
-            if ("-1".equals(winning_money)){
+            if ("-1".equals(winning_money)) {
                 winningMoneyTv.setText("稍后会有工作人员主动联系您");
-            }else {
-                winningMoneyTv.setText( winning_money+ "元");
+            } else {
+                winningMoneyTv.setText(winning_money + "元");
             }
 
 
@@ -286,7 +299,7 @@ public class BallOrderDetailOneActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.order_detail_iv, R.id.layout_top_back, R.id.delet, R.id.continue_btn, R.id.buy_btn, R.id.have_chased_ll,R.id.question_mark_iv})
+    @OnClick({R.id.order_detail_iv, R.id.layout_top_back, R.id.delet, R.id.continue_btn, R.id.buy_btn, R.id.have_chased_ll, R.id.question_mark_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.order_detail_iv:
@@ -330,7 +343,7 @@ public class BallOrderDetailOneActivity extends BaseActivity {
                 break;
             case R.id.question_mark_iv:
                 //分享截图
-                Share share=new Share(this,corpLayout);
+                Share share=new Share(this,cropIvew,corpLayout);
                 share.show();
                 break;
         }

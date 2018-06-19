@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.itheima.roundedimageview.RoundedImageView;
 import com.xinhe.haoyuncaipiao.pay.wechat.Share;
+import com.xinhe.haoyuncaipiao.ui.activity.MoneyDetailActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.WithdrawActivity;
 
 import org.json.JSONException;
@@ -148,14 +149,13 @@ public class CenterFragment extends BaseFragment {
             return;
         }
         centerFragmentNumberTv.setText(BaseApplication.getInstance().userName);
-        centerFragmentMoneyTv1.setText(BaseApplication.getInstance().amount);
+        centerFragmentMoneyTv1.setText(BaseApplication.getInstance().amount+"元");
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_CODE) {
             switch (requestCode) {
                 case WITHDRAW_REQUEST_CODE:
                     getBalance();
@@ -203,7 +203,8 @@ public class CenterFragment extends BaseFragment {
                         }
                     }
                     break;
-            }
+                default:
+                    break;
         }
     }
 
@@ -295,6 +296,11 @@ public class CenterFragment extends BaseFragment {
                 }
                 break;
             case R.id.center_fragment_money_ll2:
+                if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
+                    ActivityUtils.startActivity(LoginActivity.class);
+                }else {
+                    ActivityUtils.startActivity(MoneyDetailActivity.class);
+                }
                 break;
             case R.id.center_fragment_money_ll3:
                 if (TextUtils.isEmpty(BaseApplication.getInstance().token)){
@@ -355,6 +361,8 @@ public class CenterFragment extends BaseFragment {
             case R.id.me_fragment_rl3:
                 Intent intent8 = new Intent(getActivity(), SetActivity.class);
                 startActivityForResult(intent8,SET_REQUEST_CODE);
+                break;
+            default:
                 break;
         }
     }
@@ -770,7 +778,7 @@ public class CenterFragment extends BaseFragment {
                                     .apply(new RequestOptions())
                                     .into(centerFragmentIv);
                         }
-                        centerFragmentMoneyTv1.setText(BaseApplication.getInstance().amount);
+                        centerFragmentMoneyTv1.setText(BaseApplication.getInstance().amount+"元");
                         SPUtils.put(getContext(),Contacts.AMOUNT,BaseApplication.getInstance().amount);
                     }
                 } catch (Exception e) {

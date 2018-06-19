@@ -3,7 +3,10 @@ package com.xinhe.haoyuncaipiao.view.pagerBottomTab;
 
 import android.support.v4.view.ViewPager;
 
+import com.xinhe.haoyuncaipiao.model.PaySucessEvent;
 import com.xinhe.haoyuncaipiao.view.pagerBottomTab.listener.OnTabItemSelectedListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 public class NavigationController implements ItemController,BottomLayoutController{
@@ -18,6 +21,7 @@ public class NavigationController implements ItemController,BottomLayoutControll
 
     @Override
     public void setSelect(int index) {
+
         mItemController.setSelect(index);
     }
 

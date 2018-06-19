@@ -81,7 +81,6 @@ public class FootBallOrderAdapter extends BaseQuickAdapter<FootBallOrder.DataPro
 
             helper.setText(R.id.vs_tv,"("+item.getLetpoint()+")"+arr2[0]+"\n"+arr1[1]+"\n"+arr2[1]);
 
-
         RecyclerView recyclerView = helper.getView(R.id.id_info_recyler);
         mChippInfoAdapte=new ChippInfoAdapte(null);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);

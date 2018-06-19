@@ -16,33 +16,32 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.lib.QRCodeUtil.QRCodeUtil;
 import com.google.gson.Gson;
+import com.xinhe.haoyuncaipiao.R;
 import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
+import com.xinhe.haoyuncaipiao.base.BaseActivity;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
 import com.xinhe.haoyuncaipiao.model.FootBallOrder;
 import com.xinhe.haoyuncaipiao.pay.wechat.Share;
-import com.xinhe.haoyuncaipiao.ui.activity.FootBallOrderItemActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.Football.FootBallActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.WebViewActivity;
 import com.xinhe.haoyuncaipiao.ui.adapter.FootBallOrderAdapter;
 import com.xinhe.haoyuncaipiao.ui.adapter.FootBallOtherOrderAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
+import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import com.xinhe.haoyuncaipiao.R;
-
-import com.xinhe.haoyuncaipiao.base.BaseActivity;
-import com.xinhe.haoyuncaipiao.view.progressdialog.KProgressHUD;
 
 public class FootBallOrderDetailActivity extends BaseActivity {
 
@@ -100,6 +99,10 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     NestedScrollView nestSv;
     @BindView(R.id.corp_layout)
     LinearLayout corpLayout;
+    @BindView(R.id.iv_er)
+    ImageView ivEr;
+    @BindView(R.id.crop_ivew)
+    LinearLayout cropIvew;
     private String id;
     private String ballName;
     private String iconURL;
@@ -142,14 +145,15 @@ public class FootBallOrderDetailActivity extends BaseActivity {
         //分享显示
         questionMarkIv.setVisibility(View.VISIBLE);
         questionMarkIv.setImageResource(R.mipmap.share);
-
+        String qr = SPUtil.getString(this, "qr");
+        ivEr.setImageBitmap(QRCodeUtil.createQRCodeBitmap(qr,600));
         nestSv.setNestedScrollingEnabled(false);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        if("FT005".equals(lotid)){
-            mAdapter = new FootBallOrderAdapter(orders,lotid);
+        if ("FT005".equals(lotid)) {
+            mAdapter = new FootBallOrderAdapter(orders, lotid);
             rv.setAdapter(mAdapter);
-        }else {
-            adapter = new FootBallOtherOrderAdapter(orders,lotid);
+        } else {
+            adapter = new FootBallOtherOrderAdapter(orders, lotid);
             rv.setAdapter(adapter);
         }
     }
@@ -249,13 +253,13 @@ public class FootBallOrderDetailActivity extends BaseActivity {
             orderStatusTv.setText(mess);
             nameTv.setText(name);
 //            phaseTv.setText("第" + phase + "期");
-            orderMoneyTv.setText(pay_money+ "元");
+            orderMoneyTv.setText(pay_money + "元");
 
             //判断是否中大奖
-            if ("-1".equals(winning_money)){
+            if ("-1".equals(winning_money)) {
                 winningMoneyTv.setText("稍后会有工作人员主动联系您");
-            }else {
-                winningMoneyTv.setText( winning_money+ "元");
+            } else {
+                winningMoneyTv.setText(winning_money + "元");
             }
 
             if ("0".equals(strand)) {
@@ -268,9 +272,9 @@ public class FootBallOrderDetailActivity extends BaseActivity {
             orderTimeTv.setText(created_at);
             orderNumberTv.setText(tc_order_num);
 
-            if("FT005".equals(lotid)){
+            if ("FT005".equals(lotid)) {
                 mAdapter.notifyDataSetChanged();
-            }else {
+            } else {
                 adapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -279,7 +283,7 @@ public class FootBallOrderDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout_top_back, R.id.delet, R.id.buy_btn, R.id.choose_detail_ll1,R.id.calculate_rl,R.id.question_mark_iv})
+    @OnClick({R.id.layout_top_back, R.id.delet, R.id.buy_btn, R.id.choose_detail_ll1, R.id.calculate_rl, R.id.question_mark_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_top_back:
@@ -301,14 +305,16 @@ public class FootBallOrderDetailActivity extends BaseActivity {
 //                startActivity(intent);
                 break;
             case R.id.calculate_rl:
-                Intent intent4=new Intent(FootBallOrderDetailActivity.this, WebViewActivity.class);
-                intent4.putExtra("url","http://p96a3nm36.bkt.clouddn.com/jczq.jpg");
-                intent4.putExtra("title","竞彩足球玩法说明");
+                Intent intent4 = new Intent(FootBallOrderDetailActivity.this, WebViewActivity.class);
+                intent4.putExtra("url", "http://p96a3nm36.bkt.clouddn.com/jczq.jpg");
+                intent4.putExtra("title", "竞彩足球玩法说明");
                 startActivity(intent4);
                 break;
             case R.id.question_mark_iv:
                 //分享截图
-                Share share=new Share(this,corpLayout);
+              /*  Share share=new Share(this,corpLayout);
+                share.show();*/
+                Share share = new Share(this, cropIvew,corpLayout);
                 share.show();
                 break;
         }

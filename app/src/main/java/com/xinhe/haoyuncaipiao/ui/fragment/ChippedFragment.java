@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -27,9 +28,11 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.xinhe.haoyuncaipiao.base.Api;
 import com.xinhe.haoyuncaipiao.base.ApiService;
+import com.xinhe.haoyuncaipiao.base.BaseApplication;
 import com.xinhe.haoyuncaipiao.base.BaseFragment;
 import com.xinhe.haoyuncaipiao.listener.OnRequestDataListener;
 import com.xinhe.haoyuncaipiao.model.Chipped;
+import com.xinhe.haoyuncaipiao.model.PaySucessEvent;
 import com.xinhe.haoyuncaipiao.model.TogetherTop;
 import com.xinhe.haoyuncaipiao.ui.activity.DoubleBallActivity;
 import com.xinhe.haoyuncaipiao.ui.activity.Football.FootBallActivity;
@@ -40,6 +43,7 @@ import com.xinhe.haoyuncaipiao.ui.adapter.chipped.ChippedAdapter;
 import com.xinhe.haoyuncaipiao.utils.ActivityUtils;
 import com.xinhe.haoyuncaipiao.utils.DeviceUtil;
 import com.xinhe.haoyuncaipiao.utils.RoteteUtils;
+import com.xinhe.haoyuncaipiao.utils.SPUtil;
 import com.xinhe.haoyuncaipiao.utils.ToastUtils;
 import com.xinhe.haoyuncaipiao.view.topRightMenu.MenuItem;
 import com.xinhe.haoyuncaipiao.view.topRightMenu.TRMenuAdapter;
@@ -54,6 +58,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -123,6 +130,8 @@ public class ChippedFragment extends BaseFragment {
     //标记是否显示提示
     private int isTip;
 
+    private static final int REQUESTION_CODE=-1;
+
 
     @Override
     public int getLayoutResource() {
@@ -132,6 +141,7 @@ public class ChippedFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         getData();
         //顶部选择
         setTopTitlePop();
@@ -158,7 +168,7 @@ public class ChippedFragment extends BaseFragment {
                     TogetherTop togetherTop=new TogetherTop();
                     togetherTop.setLotid("all");
                     togetherTop.setTitle("全部彩种");
-
+                    togetherTops.clear();
                     togetherTops.add(togetherTop);
                     togetherTops.addAll((ArrayList<TogetherTop>) gson.fromJson(data.getJSONArray("data").toString(), bannerType));
                     for (int i=0;i<togetherTops.size();i++){
@@ -214,6 +224,9 @@ public class ChippedFragment extends BaseFragment {
         ApiService.GET_SERVICE(Api.Together.list, getContext(), jsonObject, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
+                if (null!=hud){
+                    hud.dismiss();
+                }
                 try {
                     Gson gson = new Gson();
                     chipped=gson.fromJson(data.toString(), Chipped.class);
@@ -240,9 +253,7 @@ public class ChippedFragment extends BaseFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (null!=hud){
-                    hud.dismiss();
-                }
+
                 //停止刷新、加载更多
                 if (refreshLayout.isLoading()){
                     refreshLayout.finishLoadMore();
@@ -488,6 +499,8 @@ public class ChippedFragment extends BaseFragment {
                     slideUp.hide();
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -522,22 +535,30 @@ public class ChippedFragment extends BaseFragment {
                 switch (togetherTops.get(position+1).getLotid()){
                     case "ssq":
                         ActivityUtils.startActivity(DoubleBallActivity.class);
+                        SPUtil.putString(getActivity(),"chip","ssq");
                         break;
                     case "dlt":
                         ActivityUtils.startActivity(SuperLottoActivity.class);
+                        SPUtil.putString(getActivity(),"chip","dlt");
                         break;
                     case "ftb":
+                        SPUtil.putString(getActivity(),"chip","ftb");
                         ActivityUtils.startActivity(FootBallActivity.class);
                         break;
                     case "p3":
-                        ActivityUtils.startActivity(Line3Activity.class);
+                        SPUtil.putString(getActivity(),"chip","p3");
+                         ActivityUtils.startActivity(Line3Activity.class);
                         break;
                     case "p5":
+                        SPUtil.putString(getActivity(),"chip","p5");
                         ActivityUtils.startActivity(Line5Activity.class);
                         break;
                     case "3d":
-                        ActivityUtils.startActivity(Lottery3DActivity.class);
+                        SPUtil.putString(getActivity(),"chip","3d");
+                         ActivityUtils.startActivity(Lottery3DActivity.class);
                         break;
+                    default:
+                         break;
                 }
                 alertDialog1.dismiss();
             }
@@ -558,4 +579,22 @@ public class ChippedFragment extends BaseFragment {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(PaySucessEvent event) {
+        getData();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }
